@@ -72,7 +72,7 @@ namespace thrust
 
     public:
         template <typename InputRange1>
-        merge_iterator (const InputRange1 & ranges, Compare compare):
+        explicit merge_iterator (const InputRange1 & ranges, Compare compare = Compare()):
             m_range_heap(),
             m_heap_order(compare)
         {
