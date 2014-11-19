@@ -14,7 +14,7 @@ cmake_minimum_required(VERSION 2.8)
 ###################################################################################################
 
 set(WARNING_FLAGS "-Wall -Wextra -Wpedantic -Wconversion -Werror")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y ${WARNING_FLAGS}")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 ${WARNING_FLAGS}")
 
 if(NOT CMAKE_BUILD_TYPE)
     message(WARNING "Тип сборки не выбран (см. опцию CMAKE_BUILD_TYPE).")

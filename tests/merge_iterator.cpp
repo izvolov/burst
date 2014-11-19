@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_SUITE(merge_iterator)
         std::list<char> second{'g', 'e', 'c', 'a'};
         auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
 
-        auto merged_range = thrust::merge(ranges, std::greater<>());
+        auto merged_range = thrust::merge(ranges, std::greater<char>());
 
         std::vector<char> expected_collection{'h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -60,7 +60,7 @@ BOOST_AUTO_TEST_SUITE(merge_iterator)
             boost::make_iterator_range(third)
         };
 
-        auto merged_range = thrust::merge(ranges, std::less<>());
+        auto merged_range = thrust::merge(ranges, std::less<int>());
 
         auto expected_collection = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -77,8 +77,8 @@ BOOST_AUTO_TEST_SUITE(merge_iterator)
 
         auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
 
-        auto merged_range = thrust::merge(ranges, std::greater<>());
-        boost::for_each(merged_range, [] (auto & x) { x /= 10; });
+        auto merged_range = thrust::merge(ranges, std::greater<int>());
+        boost::for_each(merged_range, [] (int & x) { x /= 10; });
 
         BOOST_CHECK_EQUAL(first[0], 10);
         BOOST_CHECK_EQUAL(first[1], 5);

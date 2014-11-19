@@ -49,7 +49,11 @@ namespace thrust
         Compare compare;
     };
 
-    template <typename InputRange, typename Compare = std::less<>>
+    template
+    <
+        typename InputRange,
+        typename Compare = std::less<typename InputRange::value_type>
+    >
     class merge_iterator: public boost::iterator_facade
                                  <
                                      merge_iterator<InputRange, Compare>,
