@@ -140,12 +140,12 @@ namespace thrust
     template <typename RangeRange>
     boost::iterator_range
     <
-        merge_iterator<typename RangeRange::value_type, std::less<>>
+        merge_iterator<typename RangeRange::value_type>
     >
     merge (const RangeRange & ranges)
     {
-        typedef merge_iterator<typename RangeRange::value_type, std::less<>> iterator;
-        return boost::make_iterator_range(iterator(ranges, std::less<>()), iterator());
+        typedef merge_iterator<typename RangeRange::value_type> iterator;
+        return boost::make_iterator_range(iterator(ranges), iterator());
     }
 } // namespace thrust
 
