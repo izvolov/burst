@@ -1,5 +1,5 @@
 #define BOOST_TEST_DYN_LINK
 #define BOOST_TEST_MAIN
-#define BOOST_TEST_MODULE Tries
+#define BOOST_TEST_MODULE Thrust
 
 #include <boost/test/unit_test.hpp>
