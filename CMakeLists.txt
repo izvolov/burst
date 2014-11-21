@@ -40,7 +40,7 @@ include_directories(${Boost_INCLUDE_DIRS})
 ###################################################################################################
 
 set(TEST_SOURCES tests/test_main.cpp
-                 tests/merge_iterator.cpp)
+                 tests/iterator/merge_iterator.cpp)
 
 set(TEST_EXECUTABLE tests)
 
