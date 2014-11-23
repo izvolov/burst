@@ -21,7 +21,7 @@ BOOST_AUTO_TEST_SUITE(merge_iterator)
 
     BOOST_AUTO_TEST_CASE(merging_one_range_results_the_same_range)
     {
-        int array[10] = {1, 2, 3, 4};
+        int array[] = {1, 2, 3, 4};
         auto ranges = {boost::make_iterator_range(array)};
 
         auto merged_range = thrust::merge(ranges);
