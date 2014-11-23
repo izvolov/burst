@@ -14,26 +14,10 @@
 #include <boost/type_traits/is_same.hpp>
 
 #include <thrust/iterator/detail/front_value_compare.hpp>
+#include <thrust/iterator/detail/invert_compare.hpp>
 
 namespace thrust
 {
-    template <typename Compare>
-    struct invert_comparison
-    {
-        invert_comparison (const Compare & compare):
-            compare(compare)
-        {
-        }
-
-        template <typename Object>
-        bool operator () (const Object & left, const Object & right) const
-        {
-            return compare(right, left);
-        }
-
-        Compare compare;
-    };
-
     template
     <
         typename InputRange,
@@ -111,7 +95,7 @@ namespace thrust
         std::vector<range_type> m_range_heap;
 
         // invert_comparison устраняет путаницу с обратным порядком в пирамиде при работе с std::make(push, pop)_heap.
-        typedef detail::front_value_comparator<invert_comparison<Compare>> heap_order_type;
+        typedef detail::front_value_comparator<detail::invert_comparison<Compare>> heap_order_type;
         heap_order_type m_heap_order;
     };
 
