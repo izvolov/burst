@@ -92,4 +92,16 @@ BOOST_AUTO_TEST_CASE(forward_iterator_is_enough_for_searching)
     BOOST_CHECK(match_position == std::find(text.begin(), text.end(), 1));
 }
 
+BOOST_AUTO_TEST_CASE(copied_search_object_performs_the_same_search)
+{
+    std::string pattern("два");
+    std::string text("дваждыдвачетыре");
+    thrust::algorithm::bitap<char, std::uint32_t, std::unordered_map<char, std::uint32_t>> search(pattern);
+    auto copied_search = search;
+
+    auto initial_search_result = search(text.begin(), text.end());
+    auto copied_search_result = copied_search(text.begin(), text.end());
+    BOOST_CHECK(initial_search_result == copied_search_result);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
