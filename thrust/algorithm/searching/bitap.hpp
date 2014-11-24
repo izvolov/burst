@@ -3,6 +3,7 @@
 
 #include <iterator>
 #include <map>
+#include <memory>
 #include <type_traits>
 
 #include <boost/assert.hpp>
@@ -38,16 +39,16 @@ namespace thrust
         public:
             template <typename InputIterator>
             bitap (InputIterator pattern_begin, InputIterator pattern_end):
-                m_bitmask_table(pattern_begin, pattern_end)
+                m_bitmask_table(std::make_shared<const bitmask_table_type>(pattern_begin, pattern_end))
             {
-                BOOST_ASSERT(m_bitmask_table.length() <= bitmask_size);
+                BOOST_ASSERT(m_bitmask_table->length() <= bitmask_size);
             }
 
             template <typename ForwardRange>
             explicit bitap (const ForwardRange & pattern):
-                m_bitmask_table(pattern.begin(), pattern.end())
+                m_bitmask_table(std::make_shared<const bitmask_table_type>(pattern.begin(), pattern.end()))
             {
-                BOOST_ASSERT(m_bitmask_table.length() <= bitmask_size);
+                BOOST_ASSERT(m_bitmask_table->length() <= bitmask_size);
             }
 
         public:
@@ -87,9 +88,9 @@ namespace thrust
             ForwardIterator dummy_search (ForwardIterator first, ForwardIterator last, bitmask_type & hint) const
             {
                 std::size_t dummy_iteration_count = 0;
-                while (first != last && dummy_iteration_count < m_bitmask_table.length())
+                while (first != last && dummy_iteration_count < m_bitmask_table->length())
                 {
-                    hint = bit_shift(hint) & m_bitmask_table[*first];
+                    hint = bit_shift(hint) & (*m_bitmask_table)[*first];
 
                     ++first;
                     ++dummy_iteration_count;
@@ -116,12 +117,12 @@ namespace thrust
             ForwardIterator active_search (ForwardIterator match_candidate, ForwardIterator corpus_current, ForwardIterator corpus_end, bitmask_type & hint) const
             {
                 // Индикатор совпадения — единица на N-м месте в битовой маске, где N — количество элементов в искомом образце.
-                const bitmask_type match_indicator = static_cast<bitmask_type>(0x01 << (m_bitmask_table.length() - 1));
+                const bitmask_type match_indicator = static_cast<bitmask_type>(0x01 << (m_bitmask_table->length() - 1));
                 bitmask_type & match_column = hint;
 
                 while (corpus_current != corpus_end && (match_column & match_indicator) == 0)
                 {
-                    match_column = bit_shift(match_column) & m_bitmask_table[*corpus_current];
+                    match_column = bit_shift(match_column) & (*m_bitmask_table)[*corpus_current];
                     ++corpus_current;
                     ++match_candidate;
                 }
@@ -147,7 +148,10 @@ namespace thrust
             static const std::size_t bitmask_size = detail::bitmask_traits<bitmask_type>::size;
 
         private:
-            bitmask_table_type m_bitmask_table;
+            // Для одинаковых образцов таблицы масок также одинаковые. Поэтому на все одинаковые
+            // образцы достаточно одной копии таблицы, указатель на которую можно смело копировать
+            // из одного объекта в другой.
+            const std::shared_ptr<const bitmask_table_type> m_bitmask_table;
         };
     } // namespace algorithm
 } // namespace thrust
