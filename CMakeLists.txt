@@ -40,7 +40,9 @@ include_directories(${Boost_INCLUDE_DIRS})
 ###################################################################################################
 
 set(TEST_SOURCES thrust/tests/test_main.cpp
-                 thrust/tests/iterator/merge_iterator.cpp)
+                 thrust/tests/iterator/merge_iterator.cpp
+                 thrust/tests/algorithm/searching/bitap.cpp
+                 thrust/tests/algorithm/searching/element_position_bitmask_table.cpp)
 
 set(TEST_EXECUTABLE tests)
 
