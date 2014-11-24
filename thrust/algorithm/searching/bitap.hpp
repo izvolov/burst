@@ -56,58 +56,77 @@ namespace thrust
                     Возвращает итератор на первое вхождение образца, которым проинициализирован
                 данный объект, в текст, заданный полуинтервалом [corpus_begin, corpus_end).
              */
-            template <typename RandomAccessIterator>
-            RandomAccessIterator operator () (RandomAccessIterator corpus_begin, RandomAccessIterator corpus_end) const
+            template <typename ForwardIterator>
+            ForwardIterator operator () (ForwardIterator corpus_begin, ForwardIterator corpus_end) const
             {
-                typedef typename std::iterator_traits<RandomAccessIterator>::value_type iterated_type;
+                typedef typename std::iterator_traits<ForwardIterator>::value_type iterated_type;
                 static_assert(std::is_same<iterated_type, value_type>::value, "Тип элементов обыскиваемой последовательности должен совпадать с типом элементов образца.");
 
                 return do_search(corpus_begin, corpus_end);
             }
 
-            //!     Поиск образца с подсказкой.
-            /*!
-                    Не только возвращает итератор на первое вхождение образца в текст, но и
-                сохраняет в переменной "hint" результат поиска. Таким образом, при поиске
-                следующего вхождения не нужно откатываться назад, а можно продолжить поиск со
-                следующей позиции после последнего найденного вхождения, передав в функцию
-                дополнительную "подсказку" — результат предыдущего поиска.
-             */
-            template <typename RandomAccessIterator>
-            RandomAccessIterator operator () (RandomAccessIterator corpus_begin, RandomAccessIterator corpus_end, bitmask_type & hint) const
-            {
-                typedef typename std::iterator_traits<RandomAccessIterator>::value_type iterated_type;
-                static_assert(std::is_same<iterated_type, value_type>::value, "Тип элементов обыскиваемой последовательности должен совпадать с типом элементов образца.");
-
-                return do_search(corpus_begin, corpus_end, hint);
-            }
-
         private:
-            template <typename RandomAccessIterator>
-            RandomAccessIterator do_search (RandomAccessIterator first, RandomAccessIterator last) const
+            template <typename ForwardIterator>
+            ForwardIterator do_search (ForwardIterator first, ForwardIterator last) const
             {
                 bitmask_type match_column = 0x00;
-                return do_search(first, last, match_column);
+                ForwardIterator match_candidate = first;
+                first = dummy_search(first, last, match_column);
+                return active_search(match_candidate, first, last, match_column);
             }
 
-            template <typename RandomAccessIterator>
-            RandomAccessIterator do_search (RandomAccessIterator first, RandomAccessIterator last, bitmask_type & hint) const
+            //!     "Холостой поиск".
+            /*!
+                    Первое вхождение образца в текст не может произойти ранее, чем на позиции
+                |P| - 1, где |P| — длина образца. Поэтому при первом поиске до тех пор, пока от
+                начала обыскиваемой последовательности не пройдено расстояние, равное длине образца
+                без единицы, можно просто пройти по тексту и подсчитать "подсказку" для дальнейшего
+                поиска.
+             */
+            template <typename ForwardIterator>
+            ForwardIterator dummy_search (ForwardIterator first, ForwardIterator last, bitmask_type & hint) const
+            {
+                std::size_t dummy_iteration_count = 0;
+                while (first != last && dummy_iteration_count < m_bitmask_table.length())
+                {
+                    hint = bit_shift(hint) & m_bitmask_table[*first];
+
+                    ++first;
+                    ++dummy_iteration_count;
+                }
+
+                return first;
+            }
+
+            //!     "Активный поиск".
+            /*!
+                    Принимает три итератора:
+                    1. Кандидат на совпадение ("match_candidate").
+                    2. Место в тексте, с которого будет продолжаться поиск ("corpus_current").
+                    3. Конец текста ("corpus_end").
+
+                    Кандидат на совпадение отстаёт от текущего места поиска ровно на |P| позиций.
+                Это позволяет сразу, без дополнительных вычислений, вернуть результат поиска в том
+                случае, когда найдено совпадение.
+                    При этом поиск начинается сразу же с итератора "corpus_current". Это возможно
+                благодаря тому, что для всех позиций в полуинтервале [match_candidate, corpus_current)
+                уже посчитана маска-индикатор совпадений — "подсказка" ("hint").
+             */
+            template <typename ForwardIterator>
+            ForwardIterator active_search (ForwardIterator match_candidate, ForwardIterator corpus_current, ForwardIterator corpus_end, bitmask_type & hint) const
             {
                 // Индикатор совпадения — единица на N-м месте в битовой маске, где N — количество элементов в искомом образце.
                 const bitmask_type match_indicator = static_cast<bitmask_type>(0x01 << (m_bitmask_table.length() - 1));
                 bitmask_type & match_column = hint;
 
-                while (first != last && (match_column & match_indicator) == 0)
+                while (corpus_current != corpus_end && (match_column & match_indicator) == 0)
                 {
-                    match_column = bit_shift(match_column) & m_bitmask_table[*first];
-                    ++first;
+                    match_column = bit_shift(match_column) & m_bitmask_table[*corpus_current];
+                    ++corpus_current;
+                    ++match_candidate;
                 }
 
-                // Если совпадение есть, то итератор first находится за его концом, поэтому нужно
-                // откатиться на количество слов в образце.
-                typedef typename std::iterator_traits<RandomAccessIterator>::difference_type difference_type;
-                difference_type rollback = static_cast<difference_type>(m_bitmask_table.length());
-                return (match_column & match_indicator) == 0 ? last : first - rollback;
+                return (match_column & match_indicator) == 0 ? corpus_end : match_candidate;
             }
 
             //!     Главная битовая операция алгоритма.

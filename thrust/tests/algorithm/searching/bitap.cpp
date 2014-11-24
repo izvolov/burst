@@ -1,6 +1,7 @@
 #include <bitset>
 #include <string>
 #include <unordered_map>
+#include <forward_list>
 
 #include <boost/test/unit_test.hpp>
 
@@ -78,6 +79,17 @@ BOOST_AUTO_TEST_CASE(first_of_two_overlapping_patterns_is_found)
     typedef typename std::iterator_traits<std::string::iterator>::difference_type difference_type;
     difference_type non_space_offset = static_cast<difference_type>(text.find_first_not_of(" "));
     BOOST_CHECK(match_position == text.begin() + non_space_offset);
+}
+
+BOOST_AUTO_TEST_CASE(forward_iterator_is_enough_for_searching)
+{
+    std::forward_list<int> pattern{1, 2, 3};
+    std::forward_list<int> text{0, 1, 2, 3, 4};
+    thrust::algorithm::bitap<int, std::bitset<32>, std::unordered_map<int, std::bitset<32>>> search(pattern);
+
+    auto match_position = search(text.begin(), text.end());
+
+    BOOST_CHECK(match_position == std::find(text.begin(), text.end(), 1));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
