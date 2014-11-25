@@ -59,7 +59,7 @@ namespace thrust
                         m_bitmasks[*first] |= position_indicator;
 
                         ++first;
-                        position_indicator <<= 1;
+                        position_indicator = static_cast<bitmask_type>(position_indicator << 1);
                         ++elements_count;
                     }
 

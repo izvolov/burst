@@ -138,7 +138,7 @@ namespace thrust
              */
             static bitmask_type bit_shift (bitmask_type bitmask)
             {
-                bitmask <<= 1;
+                bitmask = static_cast<bitmask_type>(bitmask << 1);
                 bitmask_type low_bit = 0x01;
 
                 return bitmask | low_bit;
