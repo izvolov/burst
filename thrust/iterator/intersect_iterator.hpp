@@ -140,28 +140,6 @@ namespace thrust
         std::vector<range_type> m_ranges;
         compare_type m_compare;
     };
-
-    template <typename RangeRange, typename Compare>
-    boost::iterator_range
-    <
-        intersect_iterator<typename RangeRange::value_type, Compare>
-    >
-    intersect (const RangeRange & ranges, Compare compare)
-    {
-        typedef intersect_iterator<typename RangeRange::value_type, Compare> iterator;
-        return boost::make_iterator_range(iterator(ranges, compare), iterator());
-    }
-
-    template <typename RangeRange>
-    boost::iterator_range
-    <
-        intersect_iterator<typename RangeRange::value_type>
-    >
-    intersect (const RangeRange & ranges)
-    {
-        typedef intersect_iterator<typename RangeRange::value_type> iterator;
-        return boost::make_iterator_range(iterator(ranges), iterator());
-    }
 } // namespace thrust
 
 #endif // THRUST_ITERATOR_INTERSECT_ITERATOR_HPP

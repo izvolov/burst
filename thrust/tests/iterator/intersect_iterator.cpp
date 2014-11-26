@@ -5,6 +5,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <thrust/iterator/intersect_iterator.hpp>
+#include <thrust/range/intersect.hpp>
 
 BOOST_AUTO_TEST_SUITE(intersect_iterator)
     BOOST_AUTO_TEST_CASE(intersecting_empty_ranges_results_empty_range)
