@@ -21,6 +21,12 @@ namespace thrust
 
             Compare compare;
         };
+
+        template <typename Compare>
+        front_value_comparator<Compare> compare_by_front_value (const Compare & compare)
+        {
+            return front_value_comparator<Compare>(compare);
+        }
     } // namespace detail
 } // namespace thrust
 
