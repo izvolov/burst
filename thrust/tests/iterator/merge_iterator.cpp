@@ -7,6 +7,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <thrust/iterator/merge_iterator.hpp>
+#include <thrust/range/merge.hpp>
 
 BOOST_AUTO_TEST_SUITE(merge_iterator)
     BOOST_AUTO_TEST_CASE(merging_empty_ranges_results_empty_range)

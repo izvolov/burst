@@ -98,28 +98,6 @@ namespace thrust
         typedef detail::front_value_comparator<detail::invert_comparison<Compare>> heap_order_type;
         heap_order_type m_heap_order;
     };
-
-    template <typename RangeRange, typename Compare>
-    boost::iterator_range
-    <
-        merge_iterator<typename RangeRange::value_type, Compare>
-    >
-    merge (const RangeRange & ranges, Compare compare)
-    {
-        typedef merge_iterator<typename RangeRange::value_type, Compare> iterator;
-        return boost::make_iterator_range(iterator(ranges, compare), iterator());
-    }
-
-    template <typename RangeRange>
-    boost::iterator_range
-    <
-        merge_iterator<typename RangeRange::value_type>
-    >
-    merge (const RangeRange & ranges)
-    {
-        typedef merge_iterator<typename RangeRange::value_type> iterator;
-        return boost::make_iterator_range(iterator(ranges), iterator());
-    }
 } // namespace thrust
 
 #endif // THRUST_ITERATOR_MERGE_ITERATOR_HPP
