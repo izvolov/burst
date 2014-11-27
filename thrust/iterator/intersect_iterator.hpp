@@ -91,7 +91,9 @@ namespace thrust
                 skip_to(m_ranges.front(), m_ranges.back().front(), m_compare);
                 if (not m_ranges.front().empty())
                 {
-                    put_front_range_to_its_place();
+                    auto second_range = ++m_ranges.begin();
+                    auto new_position = std::lower_bound(second_range, m_ranges.end(), m_ranges.front(), detail::compare_by_front_value(m_compare));
+                    std::rotate(m_ranges.begin(), second_range, new_position);
                 }
                 else
                 {
@@ -104,20 +106,6 @@ namespace thrust
         void scroll_to_end ()
         {
             m_ranges.clear();
-        }
-
-        void put_front_range_to_its_place ()
-        {
-            auto second_range = ++m_ranges.begin();
-
-            auto position_in_sorted_range = std::lower_bound
-            (
-                second_range,
-                m_ranges.end(),
-                m_ranges.front(),
-                detail::compare_by_front_value(m_compare)
-            );
-            std::rotate(m_ranges.begin(), second_range, position_in_sorted_range);
         }
 
     public:
