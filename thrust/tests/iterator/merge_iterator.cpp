@@ -51,9 +51,9 @@ BOOST_AUTO_TEST_SUITE(merge_iterator)
 
     BOOST_AUTO_TEST_CASE(merging_several_disjoint_sorted_ranges_results_correct_sorted_range)
     {
-        auto first = {1, 2, 3};
+        auto  first = {1, 2, 3};
         auto second = {4, 5, 6};
-        auto third = {7, 8, 9};
+        auto  third = {7, 8, 9};
         auto ranges =
         {
             boost::make_iterator_range(first),
