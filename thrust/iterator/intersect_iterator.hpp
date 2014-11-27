@@ -16,6 +16,7 @@
 #include <boost/type_traits/is_same.hpp>
 
 #include <thrust/iterator/detail/front_value_compare.hpp>
+#include <thrust/range/skip_to.hpp>
 
 namespace thrust
 {
@@ -87,7 +88,7 @@ namespace thrust
         {
             while (m_compare(m_ranges.front().front(), m_ranges.back().front()))
             {
-                scroll_range_to(m_ranges.front(), m_ranges.back().front());
+                skip_to(m_ranges.front(), m_ranges.back().front(), m_compare);
                 if (not m_ranges.front().empty())
                 {
                     put_front_range_to_its_place();
@@ -103,12 +104,6 @@ namespace thrust
         void scroll_to_end ()
         {
             m_ranges.clear();
-        }
-
-        void scroll_range_to (range_type & scrolling_range, const typename base_type::value_type & goal)
-        {
-            auto position_to_scroll = std::lower_bound(scrolling_range.begin(), scrolling_range.end(), goal, m_compare);
-            scrolling_range = boost::make_iterator_range(position_to_scroll, scrolling_range.end());
         }
 
         void put_front_range_to_its_place ()
