@@ -14,8 +14,11 @@ namespace thrust
     >
     intersect (const RangeRange & ranges, Compare compare)
     {
-        typedef intersect_iterator<typename RangeRange::value_type, Compare> iterator;
-        return boost::make_iterator_range(iterator(ranges, compare), iterator());
+        return boost::make_iterator_range
+        (
+            make_intersect_iterator(ranges, compare),
+            make_intersect_iterator(ranges, compare, iterator::end_tag)
+        );
     }
 
     template <typename RangeRange>
@@ -25,8 +28,11 @@ namespace thrust
     >
     intersect (const RangeRange & ranges)
     {
-        typedef intersect_iterator<typename RangeRange::value_type> iterator;
-        return boost::make_iterator_range(iterator(ranges), iterator());
+        return boost::make_iterator_range
+        (
+            make_intersect_iterator(ranges),
+            make_intersect_iterator(ranges, iterator::end_tag)
+        );
     }
 }
 
