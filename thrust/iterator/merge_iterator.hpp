@@ -15,6 +15,7 @@
 
 #include <thrust/iterator/detail/front_value_compare.hpp>
 #include <thrust/iterator/detail/invert_compare.hpp>
+#include <thrust/iterator/end_tag.hpp>
 
 namespace thrust
 {
@@ -98,6 +99,48 @@ namespace thrust
         typedef detail::front_value_comparator<detail::invert_comparison<Compare>> heap_order_type;
         heap_order_type m_heap_order;
     };
+
+    template <typename RangeRange, typename Compare>
+    merge_iterator
+    <
+        typename RangeRange::value_type,
+        Compare
+    >
+    make_merge_iterator (const RangeRange & ranges, Compare compare)
+    {
+        return merge_iterator<typename RangeRange::value_type, Compare>(ranges, compare);
+    }
+
+    template <typename RangeRange>
+    merge_iterator
+    <
+        typename RangeRange::value_type
+    >
+    make_merge_iterator (const RangeRange & ranges)
+    {
+        return merge_iterator<typename RangeRange::value_type>(ranges);
+    }
+
+    template <typename RangeRange, typename Compare>
+    merge_iterator
+    <
+        typename RangeRange::value_type,
+        Compare
+    >
+    make_merge_iterator (const RangeRange &, Compare, iterator::end_tag_t)
+    {
+        return merge_iterator<typename RangeRange::value_type, Compare>();
+    }
+
+    template <typename RangeRange>
+    merge_iterator
+    <
+        typename RangeRange::value_type
+    >
+    make_merge_iterator (const RangeRange &, iterator::end_tag_t)
+    {
+        return merge_iterator<typename RangeRange::value_type>();
+    }
 } // namespace thrust
 
 #endif // THRUST_ITERATOR_MERGE_ITERATOR_HPP

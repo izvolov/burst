@@ -86,4 +86,21 @@ BOOST_AUTO_TEST_SUITE(merge_iterator)
         BOOST_CHECK_EQUAL(second[0], 7);
         BOOST_CHECK_EQUAL(second[1], 3);
     }
+
+    BOOST_AUTO_TEST_CASE(merge_iterator_end_is_created_using_special_tag)
+    {
+        auto  first = {500, 100};
+        auto second = {600, 200};
+        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+
+        auto merged_begin = thrust::make_merge_iterator(ranges, std::greater<int>());
+        auto   merged_end = thrust::make_merge_iterator(ranges, std::greater<int>(), thrust::iterator::end_tag);
+
+        auto expected_collection = {600, 500, 200, 100};
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            merged_begin, merged_end,
+            boost::begin(expected_collection), boost::end(expected_collection)
+        );
+    }
 BOOST_AUTO_TEST_SUITE_END()
