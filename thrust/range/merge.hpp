@@ -14,8 +14,11 @@ namespace thrust
     >
     merge (const RangeRange & ranges, Compare compare)
     {
-        typedef merge_iterator<typename RangeRange::value_type, Compare> iterator;
-        return boost::make_iterator_range(iterator(ranges, compare), iterator());
+        return boost::make_iterator_range
+        (
+            make_merge_iterator(ranges, compare),
+            make_merge_iterator(ranges, compare, iterator::end_tag)
+        );
     }
 
     template <typename RangeRange>
@@ -25,8 +28,11 @@ namespace thrust
     >
     merge (const RangeRange & ranges)
     {
-        typedef merge_iterator<typename RangeRange::value_type> iterator;
-        return boost::make_iterator_range(iterator(ranges), iterator());
+        return boost::make_iterator_range
+        (
+            make_merge_iterator(ranges),
+            make_merge_iterator(ranges, iterator::end_tag)
+        );
     }
 }
 
