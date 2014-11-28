@@ -16,6 +16,7 @@
 #include <boost/type_traits/is_same.hpp>
 
 #include <thrust/iterator/detail/front_value_compare.hpp>
+#include <thrust/iterator/end_tag.hpp>
 #include <thrust/range/skip_to.hpp>
 
 namespace thrust
@@ -123,6 +124,48 @@ namespace thrust
         std::vector<range_type> m_ranges;
         compare_type m_compare;
     };
+
+    template <typename RangeRange, typename Compare>
+    intersect_iterator
+    <
+        typename RangeRange::value_type,
+        Compare
+    >
+    make_intersect_iterator (const RangeRange & ranges, Compare compare)
+    {
+        return intersect_iterator<typename RangeRange::value_type, Compare>(ranges, compare);
+    }
+
+    template <typename RangeRange>
+    intersect_iterator
+    <
+        typename RangeRange::value_type
+    >
+    make_intersect_iterator (const RangeRange & ranges)
+    {
+        return intersect_iterator<typename RangeRange::value_type>(ranges);
+    }
+
+    template <typename RangeRange, typename Compare>
+    intersect_iterator
+    <
+        typename RangeRange::value_type,
+        Compare
+    >
+    make_intersect_iterator (const RangeRange &, Compare, iterator::end_tag_t)
+    {
+        return intersect_iterator<typename RangeRange::value_type, Compare>();
+    }
+
+    template <typename RangeRange>
+    intersect_iterator
+    <
+        typename RangeRange::value_type
+    >
+    make_intersect_iterator (const RangeRange &, iterator::end_tag_t)
+    {
+        return intersect_iterator<typename RangeRange::value_type>();
+    }
 } // namespace thrust
 
 #endif // THRUST_ITERATOR_INTERSECT_ITERATOR_HPP

@@ -149,4 +149,21 @@ BOOST_AUTO_TEST_SUITE(intersect_iterator)
             boost::begin(first), boost::end(first)
         );
     }
+
+    BOOST_AUTO_TEST_CASE(intersect_iterator_end_is_created_using_special_tag)
+    {
+        auto  first = {1, 2, 3};
+        auto second = {0, 2, 4};
+        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+
+        auto intersected_begin = thrust::make_intersect_iterator(ranges);
+        auto   intersected_end = thrust::make_intersect_iterator(ranges, thrust::iterator::end_tag);
+
+        auto expected_collection = {2};
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            intersected_begin, intersected_end,
+            boost::begin(expected_collection), boost::end(expected_collection)
+        );
+    }
 BOOST_AUTO_TEST_SUITE_END()
