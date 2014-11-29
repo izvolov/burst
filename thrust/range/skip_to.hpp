@@ -5,6 +5,13 @@
 
 namespace thrust
 {
+    //!     "Прокрутить" диапазон до нужного значения.
+    /*!
+            Принимает на вход диапазон ("range"), упорядоченный относительно заданного отношения
+        порядка ("compare"), а также целевой элемент ("goal").
+            Продвигает диапазон таким образом, что он либо заканчивается, либо первый его элемент
+        становится не меньше целевого элемента.
+     */
     template <typename Range, typename Value, typename Compare>
     void skip_to (Range & range, const Value & goal, Compare compare)
     {
