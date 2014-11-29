@@ -2,7 +2,7 @@
 #include <list>
 
 #include <boost/bind.hpp>
-#include <boost/range.hpp>
+#include <boost/range/iterator_range.hpp>
 #include <boost/range/algorithm/for_each.hpp>
 #include <boost/test/unit_test.hpp>
 

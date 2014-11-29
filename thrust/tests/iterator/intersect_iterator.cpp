@@ -1,7 +1,7 @@
 #include <vector>
 #include <list>
 
-#include <boost/range.hpp>
+#include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
 #include <thrust/iterator/intersect_iterator.hpp>
