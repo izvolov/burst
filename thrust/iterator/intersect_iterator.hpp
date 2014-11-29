@@ -31,7 +31,7 @@ namespace thrust
                                      intersect_iterator<InputRange, Compare>,
                                      typename InputRange::value_type,
                                      boost::forward_traversal_tag,
-                                     typename InputRange::reference
+                                     const typename InputRange::value_type &
                                  >
     {
     private:
@@ -43,7 +43,7 @@ namespace thrust
             intersect_iterator,
             typename range_type::value_type,
             boost::forward_traversal_tag,
-            typename range_type::reference
+            const typename range_type::value_type &
         >
         base_type;
 
