@@ -15,6 +15,11 @@ namespace thrust
     {
         namespace detail
         {
+            //!     Характеристики битовой маски.
+            /*!
+                    Метафункция для выяснения информации о типе битовой маски.
+                    Сожержит поле "size", значение которого равно количеству битов в битовой маске.
+             */
             template <typename Bitmask>
             struct bitmask_traits
             {
@@ -22,6 +27,11 @@ namespace thrust
                 static const std::size_t size = sizeof(Bitmask) * CHAR_BIT;
             };
 
+            //!     Характеристики битовой маски типа std::bitset<S>.
+            /*!
+                    Специализация характеристик битовой маски для класса std::bitset<S>.
+                    Содержит все те же поля, что и общая реализация этой метафукции.
+             */
             template <std::size_t Bits>
             struct bitmask_traits <std::bitset<Bits>>
             {
