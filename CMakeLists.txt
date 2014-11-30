@@ -42,6 +42,7 @@ include_directories(${Boost_INCLUDE_DIRS})
 set(TEST_SOURCES thrust/tests/test_main.cpp
                  thrust/tests/iterator/merge_iterator.cpp
                  thrust/tests/iterator/intersect_iterator.cpp
+                 thrust/tests/iterator/join_iterator.cpp
                  thrust/tests/algorithm/searching/bitap.cpp
                  thrust/tests/algorithm/searching/element_position_bitmask_table.cpp)
 
