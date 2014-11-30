@@ -2,14 +2,15 @@
 #define THRUST_ITERATOR_MERGE_ITERATOR_HPP
 
 #include <algorithm>
+#include <functional>
 #include <vector>
 
 #include <boost/algorithm/cxx11/all_of.hpp>
 #include <boost/algorithm/cxx11/copy_if.hpp>
+#include <boost/algorithm/cxx11/is_sorted.hpp>
 #include <boost/assert.hpp>
 #include <boost/bind.hpp>
-#include <boost/range.hpp>
-#include <boost/range/algorithm_ext/is_sorted.hpp>
+#include <boost/iterator/iterator_facade.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 
@@ -78,7 +79,7 @@ namespace thrust
             m_heap_order(compare)
         {
             BOOST_STATIC_ASSERT(boost::is_same<typename InputRange1::value_type, range_type>::value);
-            BOOST_ASSERT(boost::algorithm::all_of(m_range_heap.begin(), m_range_heap.end(), boost::bind(&boost::is_sorted<range_type, Compare>, _1, compare)));
+            BOOST_ASSERT(boost::algorithm::all_of(m_range_heap.begin(), m_range_heap.end(), boost::bind(&boost::algorithm::is_sorted<range_type, Compare>, _1, compare)));
 
             m_range_heap.reserve(ranges.size());
             boost::algorithm::copy_if(ranges, std::back_inserter(m_range_heap), not boost::bind(&range_type::empty, _1));
