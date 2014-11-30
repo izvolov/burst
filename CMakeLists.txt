@@ -39,14 +39,14 @@ include_directories(${Boost_INCLUDE_DIRS})
 ##
 ###################################################################################################
 
-set(TEST_SOURCES thrust/tests/test_main.cpp
-                 thrust/tests/iterator/merge_iterator.cpp
-                 thrust/tests/iterator/intersect_iterator.cpp
-                 thrust/tests/iterator/join_iterator.cpp
-                 thrust/tests/algorithm/searching/bitap.cpp
-                 thrust/tests/algorithm/searching/element_position_bitmask_table.cpp)
+set(TEST_SOURCES test/test_main.cpp
+                 test/iterator/merge_iterator.cpp
+                 test/iterator/intersect_iterator.cpp
+                 test/iterator/join_iterator.cpp
+                 test/algorithm/searching/bitap.cpp
+                 test/algorithm/searching/element_position_bitmask_table.cpp)
 
-set(TEST_EXECUTABLE tests)
+set(TEST_EXECUTABLE test)
 
 add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
 target_link_libraries(${TEST_EXECUTABLE} ${Boost_LIBRARIES})
