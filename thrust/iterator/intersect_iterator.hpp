@@ -2,6 +2,7 @@
 #define THRUST_ITERATOR_INTERSECT_ITERATOR_HPP
 
 #include <algorithm>
+#include <functional>
 #include <vector>
 
 #include <boost/algorithm/cxx11/all_of.hpp>
@@ -9,8 +10,7 @@
 #include <boost/algorithm/cxx11/none_of.hpp>
 #include <boost/assert.hpp>
 #include <boost/bind.hpp>
-#include <boost/range.hpp>
-#include <boost/range/algorithm/copy.hpp>
+#include <boost/iterator/iterator_facade.hpp>
 #include <boost/range/algorithm/sort.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>
