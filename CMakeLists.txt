@@ -40,11 +40,12 @@ include_directories(${Boost_INCLUDE_DIRS})
 ###################################################################################################
 
 set(TEST_SOURCES test/test_main.cpp
-                 test/iterator/merge_iterator.cpp
+
+                 test/algorithm/searching/bitap.cpp
+                 test/algorithm/searching/element_position_bitmask_table.cpp
                  test/iterator/intersect_iterator.cpp
                  test/iterator/join_iterator.cpp
-                 test/algorithm/searching/bitap.cpp
-                 test/algorithm/searching/element_position_bitmask_table.cpp)
+                 test/iterator/merge_iterator.cpp)
 
 set(TEST_EXECUTABLE test)
 
