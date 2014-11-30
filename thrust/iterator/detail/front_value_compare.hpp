@@ -13,6 +13,8 @@ namespace thrust
             {
             }
 
+            front_value_comparator () = default;
+
             template <typename Range>
             bool operator () (const Range & left, const Range & right) const
             {

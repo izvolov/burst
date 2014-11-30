@@ -86,11 +86,7 @@ namespace thrust
             std::make_heap(m_range_heap.begin(), m_range_heap.end(), m_heap_order);
         }
 
-        merge_iterator ():
-            m_range_heap(),
-            m_heap_order(Compare())
-        {
-        }
+        merge_iterator () = default;
 
     public:
         void increment ()

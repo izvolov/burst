@@ -13,6 +13,8 @@ namespace thrust
             {
             }
 
+            invert_comparison () = default;
+
             template <typename Object>
             bool operator () (const Object & left, const Object & right) const
             {
