@@ -98,11 +98,7 @@ namespace thrust
             }
         }
 
-        intersect_iterator ():
-            m_ranges(),
-            m_compare(Compare())
-        {
-        }
+        intersect_iterator () = default;
 
     public:
         void increment ()
