@@ -3,6 +3,7 @@
 
 #include <boost/range/iterator_range.hpp>
 
+#include <thrust/iterator/end_tag.hpp>
 #include <thrust/iterator/intersect_iterator.hpp>
 
 namespace thrust
