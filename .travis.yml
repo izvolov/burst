@@ -1,0 +1,9 @@
+language: cpp
+compiler:
+  - gcc
+  - clang
+before_script:
+  - cmake . -DCMAKE_BUILD_TYPE=Debug
+  - cmake . -DCMAKE_BUILD_TYPE=Release
+script:
+  - make check
