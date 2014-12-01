@@ -39,17 +39,4 @@ include_directories(${Boost_INCLUDE_DIRS})
 ##
 ###################################################################################################
 
-set(TEST_SOURCES test/test_main.cpp
-
-                 test/algorithm/searching/bitap.cpp
-                 test/algorithm/searching/element_position_bitmask_table.cpp
-                 test/iterator/intersect_iterator.cpp
-                 test/iterator/join_iterator.cpp
-                 test/iterator/merge_iterator.cpp)
-
-set(TEST_EXECUTABLE test)
-
-add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
-target_link_libraries(${TEST_EXECUTABLE} ${Boost_LIBRARIES})
-
-add_custom_target(check COMMAND ${TEST_EXECUTABLE} --log_level=test_suite --report_level=short)
+add_subdirectory(test)
