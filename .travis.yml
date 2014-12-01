@@ -6,7 +6,7 @@ compiler:
 
 before_install:
   - sudo apt-get update -qq
-  - sudo apt-get install -qq libboost-dev
+  - sudo apt-get install -qq libboost1.54-dev
 
 before_script:
   - mkdir Debug
