@@ -17,6 +17,8 @@ Thrust
 
 Про более древние компиляторы и версии Буста мне ничего неизвестно.
 
+[![Статус сборки](https://travis-ci.org/izvolov/thrust.svg?branch=master)](https://travis-ci.org/izvolov/thrust)
+
 О проекте
 ------
 
