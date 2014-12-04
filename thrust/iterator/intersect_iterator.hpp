@@ -100,7 +100,9 @@ namespace thrust
 
         intersect_iterator () = default;
 
-    public:
+    private:
+        friend class boost::iterator_core_access;
+
         void increment ()
         {
             m_ranges.back().advance_begin(1);
@@ -114,7 +116,6 @@ namespace thrust
             }
         }
 
-    private:
         void scroll_to_next_intersection ()
         {
             while (m_compare(m_ranges.front().front(), m_ranges.back().front()))
@@ -139,7 +140,7 @@ namespace thrust
             m_ranges.clear();
         }
 
-    public:
+    private:
         typename base_type::reference dereference () const
         {
             return m_ranges.front().front();
