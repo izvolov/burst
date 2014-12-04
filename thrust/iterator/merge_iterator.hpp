@@ -88,7 +88,9 @@ namespace thrust
 
         merge_iterator () = default;
 
-    public:
+    private:
+        friend class boost::iterator_core_access;
+
         void increment ()
         {
             std::pop_heap(m_range_heap.begin(), m_range_heap.end(), m_heap_order);
@@ -105,7 +107,7 @@ namespace thrust
             }
         }
 
-    public:
+    private:
         typename base_type::reference dereference () const
         {
             return m_range_heap.front().front();
