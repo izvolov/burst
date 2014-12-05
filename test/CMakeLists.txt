@@ -3,7 +3,8 @@ set(TEST_SOURCES test_main.cpp
                  algorithm/searching/element_position_bitmask_table.cpp
                  iterator/intersect_iterator.cpp
                  iterator/join_iterator.cpp
-                 iterator/merge_iterator.cpp)
+                 iterator/merge_iterator.cpp
+                 range/skip_to.cpp)
 
 set(TEST_EXECUTABLE test)
 
