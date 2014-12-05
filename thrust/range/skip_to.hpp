@@ -5,7 +5,7 @@
 
 namespace thrust
 {
-    //!     "Прокрутить" диапазон до нужного значения.
+    //!     "Прокрутить" диапазон до нужного значения относительно предиката.
     /*!
             Принимает на вход диапазон ("range"), упорядоченный относительно заданного отношения
         порядка ("compare"), а также целевой элемент ("goal").
@@ -17,6 +17,17 @@ namespace thrust
     {
         auto new_begin = boost::lower_bound(range, goal, compare);
         range = boost::make_iterator_range(new_begin, range.end());
+    }
+
+    //!     "Прокрутить" диапазон до нужного значения.
+    /*!
+            Работает аналогично "прокрутке" с предикатом, только отношение порядка выбиарает
+        по-умолчанию — в данном случае это std::less.
+     */
+    template <typename Range, typename Value>
+    void skip_to (Range & range, const Value & goal)
+    {
+        skip_to(range, goal, std::less<Value>());
     }
 }
 
