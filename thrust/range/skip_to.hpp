@@ -2,6 +2,7 @@
 #define THRUST_RANGE_SKIP_TO_HPP
 
 #include <boost/range/algorithm/lower_bound.hpp>
+#include <boost/range/iterator_range.hpp>
 
 namespace thrust
 {
