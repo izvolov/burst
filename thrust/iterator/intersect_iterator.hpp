@@ -61,12 +61,12 @@ namespace thrust
         typename Compare = std::less<typename InputRange::value_type>
     >
     class intersect_iterator: public boost::iterator_facade
-                                 <
-                                     intersect_iterator<InputRange, Compare>,
-                                     typename InputRange::value_type,
-                                     boost::forward_traversal_tag,
-                                     const typename InputRange::value_type &
-                                 >
+                                     <
+                                         intersect_iterator<InputRange, Compare>,
+                                         typename InputRange::value_type,
+                                         boost::forward_traversal_tag,
+                                         const typename InputRange::value_type &
+                                     >
     {
     private:
         typedef InputRange range_type;
