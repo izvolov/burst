@@ -69,7 +69,9 @@ namespace thrust
 
         join_iterator () = default;
 
-    public:
+    private:
+        friend class boost::iterator_core_access;
+
         void increment ()
         {
             m_ranges.back().advance_begin(1);
@@ -79,7 +81,7 @@ namespace thrust
             }
         }
 
-    public:
+    private:
         typename base_type::reference dereference () const
         {
             return m_ranges.back().front();
