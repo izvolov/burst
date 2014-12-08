@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_SUITE(merge_iterator)
         );
     }
 
-    BOOST_AUTO_TEST_CASE(merging_two_intersecting_sorted_ranges_results_correct_sorted_range)
+    BOOST_AUTO_TEST_CASE(merging_saw_toothed_sorted_ranges_results_sorted_range_containing_all_elements_from_initial_ranges)
     {
         std::list<char> first{'h', 'f', 'd', 'b'};
         std::list<char> second{'g', 'e', 'c', 'a'};
@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_SUITE(merge_iterator)
         );
     }
 
-    BOOST_AUTO_TEST_CASE(merging_several_disjoint_sorted_ranges_results_correct_sorted_range)
+    BOOST_AUTO_TEST_CASE(merging_several_disjoint_sorted_ranges_results_sorted_range_composed_of_joined_initial_ranges)
     {
         auto  first = {1, 2, 3};
         auto second = {4, 5, 6};
