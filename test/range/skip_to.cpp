@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_SUITE(skip_to)
 
     BOOST_AUTO_TEST_CASE(skippin_to_value_less_than_all_elements_in_range_does_not_modify_range)
     {
-        auto values = {1, 2, 3};
+        auto values = {3, 2, 1};
         auto sorted_range = boost::make_iterator_range(values);
         auto sorted_range_copy = sorted_range;
 
