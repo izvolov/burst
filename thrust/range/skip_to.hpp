@@ -1,8 +1,10 @@
 #ifndef THRUST_RANGE_SKIP_TO_HPP
 #define THRUST_RANGE_SKIP_TO_HPP
 
-#include <boost/range/algorithm/lower_bound.hpp>
-#include <boost/range/iterator_range.hpp>
+#include <boost/algorithm/cxx11/is_sorted.hpp>
+#include <boost/assert.hpp>
+
+#include <thrust/range/detail/skip_to.hpp>
 
 namespace thrust
 {
@@ -16,8 +18,8 @@ namespace thrust
     template <typename Range, typename Value, typename Compare>
     void skip_to (Range & range, const Value & goal, Compare compare)
     {
-        auto new_begin = boost::lower_bound(range, goal, compare);
-        range = boost::make_iterator_range(new_begin, range.end());
+        BOOST_ASSERT(boost::algorithm::is_sorted(range, compare));
+        detail::skip_to(range, goal, compare);
     }
 
     //!     "Прокрутить" диапазон до нужного значения.
@@ -28,8 +30,9 @@ namespace thrust
     template <typename Range, typename Value>
     void skip_to (Range & range, const Value & goal)
     {
-        skip_to(range, goal, std::less<Value>());
+        detail::skip_to(range, goal, std::less<Value>());
     }
+
 }
 
 #endif // THRUST_RANGE_SKIP_TO_HPP
