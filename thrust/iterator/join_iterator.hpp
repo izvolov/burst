@@ -59,11 +59,11 @@ namespace thrust
         base_type;
 
     public:
-        template <typename InputRange1>
-        explicit join_iterator (const InputRange1 & ranges):
+        template <typename BidirectionalRange>
+        explicit join_iterator (const BidirectionalRange & ranges):
             m_ranges()
         {
-            BOOST_STATIC_ASSERT(boost::is_same<typename InputRange1::value_type, range_type>::value);
+            BOOST_STATIC_ASSERT(boost::is_same<typename BidirectionalRange::value_type, range_type>::value);
             boost::algorithm::copy_if(boost::adaptors::reverse(ranges), std::back_inserter(m_ranges), not boost::bind(&range_type::empty, _1));
         }
 
