@@ -24,19 +24,19 @@ BOOST_AUTO_TEST_CASE(sorting_descending_range_results_ascending_range)
 {
     std::vector<std::size_t> descending_by_low_byte{0x0104, 0x0203, 0x0302, 0x0401};
 
-    std::vector<std::size_t> ascending_by_first_byte(descending_by_low_byte.size());
+    std::vector<std::size_t> ascending_by_low_byte(descending_by_low_byte.size());
     thrust::counting_sort
     (
         descending_by_low_byte.begin(),
         descending_by_low_byte.end(),
-        ascending_by_first_byte.begin(),
+        ascending_by_low_byte.begin(),
         [] (const std::size_t & integer) -> unsigned char { return integer & 0xff; }
     );
 
     BOOST_CHECK_EQUAL_COLLECTIONS
     (
         boost::rbegin(descending_by_low_byte), boost::rend(descending_by_low_byte),
-        boost::begin(ascending_by_first_byte), boost::end(ascending_by_first_byte)
+        boost::begin(ascending_by_low_byte), boost::end(ascending_by_low_byte)
     );
 }
 
