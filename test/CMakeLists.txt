@@ -1,6 +1,7 @@
 set(TEST_SOURCES test_main.cpp
                  algorithm/searching/bitap.cpp
                  algorithm/searching/element_position_bitmask_table.cpp
+                 algorithm/sorting/counting_sort.cpp
                  iterator/intersect_iterator.cpp
                  iterator/join_iterator.cpp
                  iterator/merge_iterator.cpp
