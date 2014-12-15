@@ -11,7 +11,7 @@
 typedef thrust::algorithm::detail::element_position_bitmask_table<std::map<char, std::bitset<32>>> char_masks;
 typedef thrust::algorithm::detail::element_position_bitmask_table<std::map<int, std::bitset<64>>> integral_masks;
 
-BOOST_AUTO_TEST_SUITE(ElementPositionBitmaskTable)
+BOOST_AUTO_TEST_SUITE(element_position_bitmask_table)
     BOOST_AUTO_TEST_CASE(mask_created_from_empty_pattern_is_empty)
     {
         char_masks pattern_masks(std::string(""));

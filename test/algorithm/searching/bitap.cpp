@@ -7,7 +7,7 @@
 
 #include <thrust/algorithm/searching/bitap.hpp>
 
-BOOST_AUTO_TEST_SUITE(Bitap)
+BOOST_AUTO_TEST_SUITE(bitap)
     BOOST_AUTO_TEST_CASE(pattern_is_found_when_equal_to_whole_text)
     {
         std::string pattern("Привет!");
