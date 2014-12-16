@@ -2,8 +2,9 @@
 #define THRUST_ALGORITHM_SORTING_COUNTING_SORT_HPP
 
 #include <algorithm>
-#include <climits>
 #include <iterator>
+#include <limits>
+#include <numeric>
 #include <type_traits>
 
 #include <boost/range/begin.hpp>

@@ -1,3 +1,4 @@
+#include <limits>
 #include <vector>
 
 #include <boost/range/begin.hpp>
