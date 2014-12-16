@@ -51,13 +51,14 @@ namespace thrust
         typedef typename std::iterator_traits<ForwardIterator>::value_type preimage_type;
         typedef typename std::decay<typename std::result_of<Map(preimage_type)>::type>::type image_type;
         static_assert(std::is_integral<image_type>::value, "Сортируемые элементы должны быть отображены в целые числа.");
+        typedef typename std::iterator_traits<RandomAccessIterator>::difference_type difference_type;
 
         constexpr const auto min_value = std::numeric_limits<image_type>::min();
         constexpr const auto max_value = std::numeric_limits<image_type>::max();
         constexpr const auto value_range = max_value - min_value + 1;
 
         // Единица для дополнительного нуля в начале массива.
-        std::size_t counters[value_range + 1] = {0};
+        difference_type counters[value_range + 1] = {0};
 
         std::for_each(first, last,
             [& counters, & map] (const preimage_type & preimage)
@@ -70,8 +71,7 @@ namespace thrust
         std::for_each(first, last,
             [& result, & counters, & map] (const preimage_type & preimage)
             {
-                typedef typename std::iterator_traits<RandomAccessIterator>::difference_type difference_type;
-                auto index = static_cast<difference_type>(counters[map(preimage) - min_value]++);
+                auto index = counters[map(preimage) - min_value]++;
                 result[index] = preimage;
             });
     }
