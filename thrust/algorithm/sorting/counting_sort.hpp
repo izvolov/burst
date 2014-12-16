@@ -57,8 +57,7 @@ namespace thrust
         constexpr const auto value_range = max_value - min_value + 1;
 
         // Единица для дополнительного нуля в начале массива.
-        constexpr const std::size_t counters_size = value_range + 1;
-        std::size_t counters[counters_size] = {0};
+        std::size_t counters[value_range + 1] = {0};
 
         std::for_each(first, last,
             [& counters, & map] (const preimage_type & preimage)
