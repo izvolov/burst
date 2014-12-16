@@ -6,6 +6,9 @@
 #include <iterator>
 #include <type_traits>
 
+#include <boost/range/begin.hpp>
+#include <boost/range/end.hpp>
+
 #include <thrust/algorithm/identity.hpp>
 
 namespace thrust
@@ -66,10 +69,7 @@ namespace thrust
                 ++counters[map(preimage) + 1];
             });
 
-        for (std::size_t i = 1; i < counters_size; ++i)
-        {
-            counters[i] += counters[i - 1];
-        }
+        std::partial_sum(boost::begin(counters), boost::end(counters), boost::begin(counters));
 
         std::for_each(first, last,
             [& result, & counters, & map] (const preimage_type & preimage)
