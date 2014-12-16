@@ -19,6 +19,20 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
         BOOST_CHECK(values == sorted_values);
     }
 
+    BOOST_AUTO_TEST_CASE(sorting_already_sorted_range_results_the_same_range)
+    {
+        std::vector<std::uint8_t> initial{0, 1, 2, 3, 4};
+
+        std::vector<std::uint8_t> sorted(initial.size());
+        thrust::counting_sort(initial.begin(), initial.end(), sorted.begin());
+
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            boost::begin(sorted), boost::end(sorted),
+            boost::begin(initial), boost::end(initial)
+        );
+    }
+
     BOOST_AUTO_TEST_CASE(sorting_descending_range_results_ascending_range)
     {
         std::vector<std::size_t> descending_by_low_byte{0x0104, 0x0203, 0x0302, 0x0401};
