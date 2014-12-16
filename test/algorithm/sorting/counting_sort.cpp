@@ -108,4 +108,41 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
             boost::begin(expected), boost::end(expected)
         );
     }
+
+    BOOST_AUTO_TEST_CASE(sorting_algorithm_is_stable)
+    {
+        std::vector<std::uint16_t> unsorted
+        {
+            0x3301,
+            0x3300,
+            0x2201,
+            0x2200,
+            0x1101,
+            0x1100
+        };
+
+        std::vector<std::uint16_t> sorted(unsorted.size());
+        thrust::counting_sort
+        (
+            unsorted.begin(),
+            unsorted.end(),
+            sorted.begin(),
+            [] (const std::uint16_t & integer) -> std::uint8_t { return integer & 0xff; }
+        );
+
+        std::vector<std::uint16_t> expected
+        {
+            0x3300,
+            0x2200,
+            0x1100,
+            0x3301,
+            0x2201,
+            0x1101
+        };
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            boost::begin(sorted), boost::end(sorted),
+            boost::begin(expected), boost::end(expected)
+        );
+    }
 BOOST_AUTO_TEST_SUITE_END()
