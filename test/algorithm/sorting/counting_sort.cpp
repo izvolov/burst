@@ -82,4 +82,29 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
             boost::begin(expected), boost::end(expected)
         );
     }
+
+    BOOST_AUTO_TEST_CASE(extreme_values_are_sorted_properly)
+    {
+        std::vector<std::int8_t> unsorted
+        {
+            0,
+            std::numeric_limits<std::int8_t>::min(),
+            std::numeric_limits<std::int8_t>::max()
+        };
+
+        std::vector<std::int8_t> sorted(unsorted.size());
+        thrust::counting_sort(unsorted.begin(), unsorted.end(), sorted.begin());
+
+        std::vector<std::int8_t> expected
+        {
+            std::numeric_limits<std::int8_t>::min(),
+            0,
+            std::numeric_limits<std::int8_t>::max()
+        };
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            boost::begin(sorted), boost::end(sorted),
+            boost::begin(expected), boost::end(expected)
+        );
+    }
 BOOST_AUTO_TEST_SUITE_END()
