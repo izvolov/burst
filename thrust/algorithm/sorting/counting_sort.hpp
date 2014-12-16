@@ -50,23 +50,20 @@ namespace thrust
     {
         typedef typename std::iterator_traits<ForwardIterator>::value_type preimage_type;
         typedef typename std::decay<typename std::result_of<Map(preimage_type)>::type>::type image_type;
-        static_assert
-        (
-            std::is_integral<image_type>::value && std::is_unsigned<image_type>::value,
-            "Сортируемые элементы должны быть отображены в беззнаковые целые числа."
-        );
+        static_assert(std::is_integral<image_type>::value, "Сортируемые элементы должны быть отображены в целые числа.");
 
-        constexpr const std::size_t bits_in_image = sizeof(image_type) * CHAR_BIT;
-        constexpr const std::size_t max_value = (1ul << bits_in_image) - 1;
+        constexpr const auto min_value = std::numeric_limits<image_type>::min();
+        constexpr const auto max_value = std::numeric_limits<image_type>::max();
+        constexpr const auto value_range = max_value - min_value + 1;
 
-        // Единица за счёт индексации с нуля и единица для дополнительного нуля в начале массива.
-        constexpr const std::size_t counters_size = max_value + 1 + 1;
+        // Единица для дополнительного нуля в начале массива.
+        constexpr const std::size_t counters_size = value_range + 1;
         std::size_t counters[counters_size] = {0};
 
         std::for_each(first, last,
             [& counters, & map] (const preimage_type & preimage)
             {
-                ++counters[map(preimage) + 1];
+                ++counters[map(preimage) - min_value + 1];
             });
 
         std::partial_sum(boost::begin(counters), boost::end(counters), boost::begin(counters));
@@ -75,7 +72,7 @@ namespace thrust
             [& result, & counters, & map] (const preimage_type & preimage)
             {
                 typedef typename std::iterator_traits<RandomAccessIterator>::difference_type difference_type;
-                auto index = static_cast<difference_type>(counters[map(preimage)]++);
+                auto index = static_cast<difference_type>(counters[map(preimage) - min_value]++);
                 result[index] = preimage;
             });
     }

@@ -53,4 +53,19 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
             boost::begin(expected), boost::end(expected)
         );
     }
+
+    BOOST_AUTO_TEST_CASE(negative_values_are_sorted_correctly)
+    {
+        std::vector<std::int8_t> unsorted{0, -1, 1, -2, 2};
+
+        std::vector<std::int8_t> sorted(unsorted.size());
+        thrust::counting_sort(unsorted.begin(), unsorted.end(), sorted.begin());
+
+        std::vector<std::int8_t> expected{-2, -1, 0, 1, 2};
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            boost::begin(sorted), boost::end(sorted),
+            boost::begin(expected), boost::end(expected)
+        );
+    }
 BOOST_AUTO_TEST_SUITE_END()
