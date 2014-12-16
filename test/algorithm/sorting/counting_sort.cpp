@@ -38,4 +38,19 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
             boost::begin(ascending_by_low_byte), boost::end(ascending_by_low_byte)
         );
     }
+
+    BOOST_AUTO_TEST_CASE(sorting_chaotic_range_results_sorted_range)
+    {
+        std::vector<unsigned char> chaos{0x12, 0xfd, 0x00, 0x15, 0x66};
+
+        std::vector<unsigned char> sorted(chaos.size());
+        thrust::counting_sort(chaos.begin(), chaos.end(), sorted.begin());
+
+        std::vector<unsigned char> expected{0x00, 0x12, 0x15, 0x66, 0xfd};
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            boost::begin(sorted), boost::end(sorted),
+            boost::begin(expected), boost::end(expected)
+        );
+    }
 BOOST_AUTO_TEST_SUITE_END()
