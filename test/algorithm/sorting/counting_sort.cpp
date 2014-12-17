@@ -111,7 +111,7 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
 
     BOOST_AUTO_TEST_CASE(sorting_algorithm_is_stable)
     {
-        std::vector<std::uint16_t> unsorted
+        std::vector<std::uint32_t> unsorted
         {
             0x3301,
             0x3300,
@@ -121,16 +121,16 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
             0x1100
         };
 
-        std::vector<std::uint16_t> sorted(unsorted.size());
+        std::vector<std::uint32_t> sorted(unsorted.size());
         thrust::counting_sort
         (
             unsorted.begin(),
             unsorted.end(),
             sorted.begin(),
-            [] (const std::uint16_t & integer) -> std::uint8_t { return integer & 0xff; }
+            [] (const std::uint32_t & integer) -> std::uint8_t { return integer & 0xff; }
         );
 
-        std::vector<std::uint16_t> expected
+        std::vector<std::uint32_t> expected
         {
             0x3300,
             0x2200,
