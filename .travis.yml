@@ -19,7 +19,8 @@ before_install:
 before_script:
   - mkdir Debug
   - cd Debug
-  - cmake .. -DCMAKE_BUILD_TYPE=Debug
+  - if [ "$CXX" = "g++" ]; then cmake .. -DCMAKE_BUILD_TYPE=Debug; fi
+  - if [ "$CXX" = "clang++" ]; then cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS=-stdlib=libc++; fi
 
 script:
   - make check
