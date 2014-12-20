@@ -47,7 +47,12 @@ namespace thrust
                 m_ranges()
             {
                 BOOST_STATIC_ASSERT(boost::is_same<typename BidirectionalRange::value_type, range_type>::value);
-                boost::algorithm::copy_if(boost::adaptors::reverse(ranges), std::back_inserter(m_ranges), not boost::bind(&range_type::empty, _1));
+                boost::algorithm::copy_if
+                (
+                    boost::adaptors::reverse(ranges),
+                    std::back_inserter(m_ranges),
+                    not boost::bind(&range_type::empty, _1)
+                );
             }
 
             template <typename BidirectionalRange>
@@ -133,7 +138,12 @@ namespace thrust
             {
                 BOOST_STATIC_ASSERT(boost::is_same<typename InputRange::value_type, range_type>::value);
                 boost::algorithm::copy_if(ranges, std::back_inserter(*m_ranges), not boost::bind(&range_type::empty, _1));
-                m_items_passed = boost::accumulate(*m_ranges, 0u, boost::bind(std::plus<typename range_type::size_type>(), _1, boost::bind(&range_type::size, _2)));
+                m_items_passed = boost::accumulate
+                (
+                    *m_ranges,
+                    0u,
+                    boost::bind(std::plus<typename range_type::size_type>(), _1, boost::bind(&range_type::size, _2))
+                );
                 m_outer_range_index = m_ranges->size();
             }
 
@@ -161,7 +171,12 @@ namespace thrust
                 while (n > 0)
                 {
                     auto items_remaining_in_current_range = (*m_ranges)[m_outer_range_index].size() - m_inner_range_index;
-                    auto items_to_scroll_in_current_range = std::min(static_cast<typename range_type::size_type>(n), items_remaining_in_current_range);
+                    auto items_to_scroll_in_current_range =
+                        std::min
+                        (
+                            static_cast<typename range_type::size_type>(n),
+                            items_remaining_in_current_range
+                        );
                     n -= items_to_scroll_in_current_range;
 
                     m_inner_range_index += items_to_scroll_in_current_range;
@@ -178,7 +193,12 @@ namespace thrust
                 while (n < 0)
                 {
                     auto items_remaining_in_current_range = m_inner_range_index;
-                    auto items_to_scroll_in_current_range = std::min(static_cast<typename range_type::size_type>(std::abs(n)), items_remaining_in_current_range);
+                    auto items_to_scroll_in_current_range =
+                        std::min
+                        (
+                            static_cast<typename range_type::size_type>(std::abs(n)),
+                            items_remaining_in_current_range
+                        );
                     n += items_to_scroll_in_current_range;
 
                     m_inner_range_index -= items_to_scroll_in_current_range;
@@ -216,7 +236,8 @@ namespace thrust
         private:
             typename base_type::reference dereference () const
             {
-                return (*m_ranges)[m_outer_range_index][static_cast<typename base_type::difference_type>(m_inner_range_index)];
+                auto inner_range_index = static_cast<typename base_type::difference_type>(m_inner_range_index);
+                return (*m_ranges)[m_outer_range_index][inner_range_index];
             }
 
             bool equal (const join_iterator_base & that) const
