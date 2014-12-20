@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <iterator>
+#include <memory>
 #include <vector>
 
 #include <boost/algorithm/cxx11/copy_if.hpp>
@@ -100,6 +101,7 @@ namespace thrust
         {
         private:
             typedef RandomAccessRange range_type;
+            typedef std::vector<range_type> range_container_type;
 
             typedef boost::iterator_facade
             <
@@ -113,26 +115,26 @@ namespace thrust
         public:
             template <typename InputRange>
             explicit join_iterator_base (const InputRange & ranges):
-                m_ranges(),
+                m_ranges(std::make_shared<range_container_type>()),
                 m_outer_range_index(0),
                 m_inner_range_index(0),
                 m_items_remaining(0)
             {
                 BOOST_STATIC_ASSERT(boost::is_same<typename InputRange::value_type, range_type>::value);
-                boost::algorithm::copy_if(ranges, std::back_inserter(m_ranges), not boost::bind(&range_type::empty, _1));
-                m_items_remaining = boost::accumulate(m_ranges, 0u, boost::bind(std::plus<typename range_type::size_type>(), _1, boost::bind(&range_type::size, _2)));
+                boost::algorithm::copy_if(ranges, std::back_inserter(*m_ranges), not boost::bind(&range_type::empty, _1));
+                m_items_remaining = boost::accumulate(*m_ranges, 0u, boost::bind(std::plus<typename range_type::size_type>(), _1, boost::bind(&range_type::size, _2)));
             }
 
             template <typename InputRange>
             explicit join_iterator_base (const InputRange & ranges, iterator::end_tag_t):
-                m_ranges(),
+                m_ranges(std::make_shared<range_container_type>()),
                 m_outer_range_index(0),
                 m_inner_range_index(0),
                 m_items_remaining(0)
             {
                 BOOST_STATIC_ASSERT(boost::is_same<typename InputRange::value_type, range_type>::value);
-                boost::algorithm::copy_if(ranges, std::back_inserter(m_ranges), not boost::bind(&range_type::empty, _1));
-                m_outer_range_index = m_ranges.size();
+                boost::algorithm::copy_if(ranges, std::back_inserter(*m_ranges), not boost::bind(&range_type::empty, _1));
+                m_outer_range_index = m_ranges->size();
             }
 
             join_iterator_base () = default;
@@ -158,12 +160,12 @@ namespace thrust
             {
                 while (n > 0)
                 {
-                    auto items_remaining_in_current_range = m_ranges[m_outer_range_index].size() - m_inner_range_index;
+                    auto items_remaining_in_current_range = (*m_ranges)[m_outer_range_index].size() - m_inner_range_index;
                     auto items_to_scroll_in_current_range = std::min(static_cast<typename range_type::size_type>(n), items_remaining_in_current_range);
                     n -= items_to_scroll_in_current_range;
 
                     m_inner_range_index += items_to_scroll_in_current_range;
-                    if (m_inner_range_index == m_ranges[m_outer_range_index].size())
+                    if (m_inner_range_index == (*m_ranges)[m_outer_range_index].size())
                     {
                         ++m_outer_range_index;
                         m_inner_range_index = 0;
@@ -183,7 +185,7 @@ namespace thrust
                     if (m_inner_range_index == 0)
                     {
                         --m_outer_range_index;
-                        m_inner_range_index = m_ranges[m_outer_range_index].size();
+                        m_inner_range_index = (*m_ranges)[m_outer_range_index].size();
                     }
                 }
             }
@@ -191,7 +193,7 @@ namespace thrust
             void increment ()
             {
                 ++m_inner_range_index;
-                if (m_inner_range_index == m_ranges[m_outer_range_index].size())
+                if (m_inner_range_index == (*m_ranges)[m_outer_range_index].size())
                 {
                     ++m_outer_range_index;
                     m_inner_range_index = 0;
@@ -205,7 +207,7 @@ namespace thrust
                 if (m_inner_range_index == 0)
                 {
                     --m_outer_range_index;
-                    m_inner_range_index = m_ranges[m_outer_range_index].size() - 1;
+                    m_inner_range_index = (*m_ranges)[m_outer_range_index].size() - 1;
                 }
 
                 ++m_items_remaining;
@@ -214,7 +216,7 @@ namespace thrust
         private:
             typename base_type::reference dereference () const
             {
-                return m_ranges[m_outer_range_index][static_cast<typename base_type::difference_type>(m_inner_range_index)];
+                return (*m_ranges)[m_outer_range_index][static_cast<typename base_type::difference_type>(m_inner_range_index)];
             }
 
             bool equal (const join_iterator_base & that) const
@@ -228,7 +230,7 @@ namespace thrust
             }
 
         private:
-            std::vector<range_type> m_ranges;
+            std::shared_ptr<range_container_type> m_ranges;
 
             typename std::vector<range_type>::size_type m_outer_range_index;
             typename range_type::size_type m_inner_range_index;

@@ -145,4 +145,19 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
 
         BOOST_CHECK_EQUAL(*joined_end, 0);
     }
+
+    BOOST_AUTO_TEST_CASE(modifying_a_copy_of_join_iterator_does_not_affect_the_original_iterator)
+    {
+        std::vector<int> first{100, 50};
+        std::vector<int> second{70, 30};
+        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+
+        auto join_iterator = thrust::make_join_iterator(ranges);
+
+        auto join_iterator_copy = join_iterator;
+        join_iterator_copy += 2;
+
+        BOOST_CHECK_EQUAL(*join_iterator_copy, 70);
+        BOOST_CHECK_EQUAL(*join_iterator, 100);
+    }
 BOOST_AUTO_TEST_SUITE_END()
