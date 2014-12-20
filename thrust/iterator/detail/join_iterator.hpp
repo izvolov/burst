@@ -158,15 +158,15 @@ namespace thrust
 
                 if (n > 0)
                 {
-                    advance_forward(n);
+                    forward(n);
                 }
                 else
                 {
-                    advance_backward(n);
+                    backward(n);
                 }
             }
 
-            void advance_forward (typename base_type::difference_type n)
+            void forward (typename base_type::difference_type n)
             {
                 while (n > 0)
                 {
@@ -188,7 +188,7 @@ namespace thrust
                 }
             }
 
-            void advance_backward (typename base_type::difference_type n)
+            void backward (typename base_type::difference_type n)
             {
                 while (n < 0)
                 {
