@@ -118,11 +118,10 @@ namespace thrust
                 m_ranges(std::make_shared<range_container_type>()),
                 m_outer_range_index(0),
                 m_inner_range_index(0),
-                m_items_remaining(0)
+                m_items_passed(0)
             {
                 BOOST_STATIC_ASSERT(boost::is_same<typename InputRange::value_type, range_type>::value);
                 boost::algorithm::copy_if(ranges, std::back_inserter(*m_ranges), not boost::bind(&range_type::empty, _1));
-                m_items_remaining = boost::accumulate(*m_ranges, 0u, boost::bind(std::plus<typename range_type::size_type>(), _1, boost::bind(&range_type::size, _2)));
             }
 
             template <typename InputRange>
@@ -130,10 +129,11 @@ namespace thrust
                 m_ranges(std::make_shared<range_container_type>()),
                 m_outer_range_index(0),
                 m_inner_range_index(0),
-                m_items_remaining(0)
+                m_items_passed(0)
             {
                 BOOST_STATIC_ASSERT(boost::is_same<typename InputRange::value_type, range_type>::value);
                 boost::algorithm::copy_if(ranges, std::back_inserter(*m_ranges), not boost::bind(&range_type::empty, _1));
+                m_items_passed = boost::accumulate(*m_ranges, 0u, boost::bind(std::plus<typename range_type::size_type>(), _1, boost::bind(&range_type::size, _2)));
                 m_outer_range_index = m_ranges->size();
             }
 
@@ -144,7 +144,7 @@ namespace thrust
 
             void advance (typename base_type::difference_type n)
             {
-                m_items_remaining -= static_cast<typename range_type::size_type>(n);
+                m_items_passed += static_cast<typename range_type::size_type>(n);
 
                 if (n > 0)
                 {
@@ -199,7 +199,7 @@ namespace thrust
                     m_inner_range_index = 0;
                 }
 
-                --m_items_remaining;
+                ++m_items_passed;
             }
 
             void decrement ()
@@ -210,7 +210,7 @@ namespace thrust
                     m_inner_range_index = (*m_ranges)[m_outer_range_index].size() - 1;
                 }
 
-                ++m_items_remaining;
+                --m_items_passed;
             }
 
         private:
@@ -221,12 +221,12 @@ namespace thrust
 
             bool equal (const join_iterator_base & that) const
             {
-                return this->m_items_remaining == that.m_items_remaining;
+                return this->m_items_passed == that.m_items_passed;
             }
 
             typename base_type::difference_type distance_to (const join_iterator_base & that) const
             {
-                return static_cast<typename base_type::difference_type>(this->m_items_remaining - that.m_items_remaining);
+                return static_cast<typename base_type::difference_type>(that.m_items_passed - this->m_items_passed);
             }
 
         private:
@@ -235,7 +235,7 @@ namespace thrust
             typename std::vector<range_type>::size_type m_outer_range_index;
             typename range_type::size_type m_inner_range_index;
 
-            typename range_type::size_type m_items_remaining;
+            typename range_type::size_type m_items_passed;
         };
     }
 }
