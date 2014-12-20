@@ -1,15 +1,9 @@
 #ifndef THRUST_ITERATOR_JOIN_ITERATOR_HPP
 #define THRUST_ITERATOR_JOIN_ITERATOR_HPP
 
-#include <vector>
+#include <iterator>
 
-#include <boost/algorithm/cxx11/copy_if.hpp>
-#include <boost/bind.hpp>
-#include <boost/iterator/iterator_facade.hpp>
-#include <boost/range/adaptor/reversed.hpp>
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_same.hpp>
-
+#include <thrust/iterator/detail/join_iterator.hpp>
 #include <thrust/iterator/end_tag.hpp>
 
 namespace thrust
@@ -24,76 +18,61 @@ namespace thrust
         прочитать значения, но можно и записать в него. В результате записи в итератор будет
         изменено значение в исходном хранилище.
 
-        \tparam InputRange
-            Тип принимаемого на вход диапазона. Он должен быть однопроходным, то есть удовлетворять
-            требованиям понятия "Single Pass Range".
+        \tparam Range
+            Тип принимаемого на вход диапазона.
+            Если принимаемый диапазон произвольного доступа, то итератор слияния будет итератором
+            произвольного доступа, правда, с одной оговоркой: продвижение итератора на n шагов
+            будет происходить не за O(1), а за O(количества склеенных списков).
+            Если принимаемый диапазон не произвольного доступа, а любой другой, то итератор слияния
+            будет обычным однонаправленным итератором.
 
             Алгоритм работы.
 
-        1. Входные диапазоны складываются в массив в обратном порядке.
-        2. Каждый раз, когда требуется перейти к новому элементу, последний диапазон в массиве
-           (первый в исходном наборе) продвигается ровно на один элемент вперёд.
-           а. Если диапазон опустел, то он выбрасывается из массива.
-           б. Если не опустел, то переход завершён.
-        3. Пустой массив диапазонов означает, что пройдены все элементы всех входных диапазонов.
+        I. Итератор произвольного доступа.
+            1. Входные диапазоны складываются в массив.
+            2. Заводятся два индекса: индекс текущего диапазона в массиве и индекс в текущем
+               диапазоне.
+            3. При продвижении итератора в какую-либо сторону изменяются только эти два индекса, а
+               сами диапазоны остаются нетронутыми.
+
+        II. Все остальные итераторы.
+            1. Входные диапазоны складываются в массив в обратном порядке.
+            2. Каждый раз, когда требуется перейти к новому элементу, последний диапазон в массиве
+               (первый в исходном наборе) продвигается ровно на один элемент вперёд.
+               а. Если диапазон опустел, то он выбрасывается из массива.
+               б. Если не опустел, то переход завершён.
+            3. Пустой массив диапазонов означает, что пройдены все элементы всех входных
+               диапазонов.
      */
-    template <typename InputRange>
-    class join_iterator: public boost::iterator_facade
+    template <typename Range>
+    class join_iterator: public detail::join_iterator_base
                                 <
-                                    join_iterator<InputRange>,
-                                    typename InputRange::value_type,
-                                    boost::forward_traversal_tag,
-                                    typename InputRange::reference
+                                    Range,
+                                    typename std::iterator_traits<typename Range::iterator>::iterator_category
                                 >
     {
     private:
-        typedef InputRange range_type;
-
-        typedef boost::iterator_facade
+        typedef detail::join_iterator_base
         <
-            join_iterator,
-            typename range_type::value_type,
-            boost::forward_traversal_tag,
-            typename range_type::reference
+            Range,
+            typename std::iterator_traits<typename Range::iterator>::iterator_category
         >
         base_type;
 
     public:
         template <typename BidirectionalRange>
         explicit join_iterator (const BidirectionalRange & ranges):
-            m_ranges()
+            base_type(ranges)
         {
-            BOOST_STATIC_ASSERT(boost::is_same<typename BidirectionalRange::value_type, range_type>::value);
-            boost::algorithm::copy_if(boost::adaptors::reverse(ranges), std::back_inserter(m_ranges), not boost::bind(&range_type::empty, _1));
+        }
+
+        template <typename BidirectionalRange>
+        join_iterator (const BidirectionalRange & ranges, iterator::end_tag_t):
+            base_type(ranges, iterator::end_tag)
+        {
         }
 
         join_iterator () = default;
-
-    private:
-        friend class boost::iterator_core_access;
-
-        void increment ()
-        {
-            m_ranges.back().advance_begin(1);
-            if (m_ranges.back().empty())
-            {
-                m_ranges.pop_back();
-            }
-        }
-
-    private:
-        typename base_type::reference dereference () const
-        {
-            return m_ranges.back().front();
-        }
-
-        bool equal (const join_iterator & that) const
-        {
-            return this->m_ranges == that.m_ranges;
-        }
-
-    private:
-        std::vector<range_type> m_ranges;
     };
 
     //!     Функция для создания итератора склеивания.
@@ -115,9 +94,9 @@ namespace thrust
             Возвращает итератор на конец склеенного списка.
      */
     template <typename RangeRange>
-    join_iterator<typename RangeRange::value_type> make_join_iterator (const RangeRange &, iterator::end_tag_t)
+    join_iterator<typename RangeRange::value_type> make_join_iterator (const RangeRange & ranges, iterator::end_tag_t)
     {
-        return join_iterator<typename RangeRange::value_type>();
+        return join_iterator<typename RangeRange::value_type>(ranges, iterator::end_tag);
     }
 } // namespace thrust
 

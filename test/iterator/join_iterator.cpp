@@ -104,4 +104,45 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
             boost::begin(expected_collection), boost::end(expected_collection)
         );
     }
+
+    BOOST_AUTO_TEST_CASE(join_iterator_created_from_random_access_ranges_is_random_access_iterator)
+    {
+        auto  first = {3, 2};
+        auto second = {1, 0};
+        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+
+        auto joined_begin = thrust::make_join_iterator(ranges);
+        auto joined_end   = thrust::make_join_iterator(ranges, thrust::iterator::end_tag);
+
+        joined_begin += 3;
+        BOOST_CHECK_EQUAL(*joined_begin, 0);
+        BOOST_CHECK_EQUAL(joined_end - joined_begin, 1);
+
+        joined_begin -= 2;
+        BOOST_CHECK_EQUAL(*joined_begin, 2);
+        BOOST_CHECK_EQUAL(joined_end - joined_begin, 3);
+    }
+
+    BOOST_AUTO_TEST_CASE(random_access_joined_range_has_size_method)
+    {
+        std::vector<int>  first{1, 0};
+        std::vector<int> second{3, 2};
+        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+
+        auto joint_range = thrust::join(ranges);
+
+        BOOST_CHECK_EQUAL(joint_range.size(), 4);
+    }
+
+    BOOST_AUTO_TEST_CASE(decrementing_random_access_join_iterator_end_is_legal)
+    {
+        auto  first = {3, 2};
+        auto second = {1, 0};
+        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+
+        auto joined_end = thrust::make_join_iterator(ranges, thrust::iterator::end_tag);
+        --joined_end;
+
+        BOOST_CHECK_EQUAL(*joined_end, 0);
+    }
 BOOST_AUTO_TEST_SUITE_END()
