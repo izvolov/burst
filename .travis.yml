@@ -8,7 +8,7 @@ before_install:
   - tar xf boost_1_57_0.tar.gz
   - cd boost_1_57_0
   - ./bootstrap.sh
-  - sudo ./b2 --with-test install -d0
+  - sudo ./b2 --with-test --with-program_options install -d0
   - cd ..
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get update -qq
