@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <numeric>
 #include <vector>
 
 #include <boost/test/unit_test.hpp>
@@ -112,5 +113,15 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
         thrust::k_ary_search_set<int, std::greater<int>> set(numbers.begin(), numbers.end(), 4);
 
         BOOST_CHECK_EQUAL(*set.find(3), 3);
+    }
+
+    BOOST_AUTO_TEST_CASE(no_logarithm_rounding_error)
+    {
+        std::vector<int> numbers(1000);
+        std::iota(numbers.rbegin(), numbers.rend(), 0);
+
+        thrust::k_ary_search_set<int, std::greater<int>> set(numbers.begin(), numbers.end(), 10);
+
+        BOOST_CHECK_EQUAL(*set.find(50), 50);
     }
 BOOST_AUTO_TEST_SUITE_END()
