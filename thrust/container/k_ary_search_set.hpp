@@ -67,7 +67,7 @@ namespace thrust
             while (node_index < m_values.size())
             {
                 iterator first = begin() + static_cast<difference_type>(node_index);
-                iterator last = begin() + std::min(static_cast<difference_type>(node_index + m_arity - 1), std::distance(begin(), end()));
+                iterator last = first + std::min(static_cast<difference_type>(m_arity - 1), std::distance(first, end()));
 
                 iterator search_result = std::lower_bound(first, last, value, m_compare);
                 if (search_result != last && not m_compare(value, *search_result))
