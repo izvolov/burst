@@ -66,11 +66,11 @@ namespace thrust
 
             while (node_index < m_values.size())
             {
-                iterator first = begin() + static_cast<difference_type>(node_index);
-                iterator last = first + std::min(static_cast<difference_type>(m_arity - 1), std::distance(first, end()));
+                iterator node_begin = begin() + static_cast<difference_type>(node_index);
+                iterator node_end = node_begin + std::min(static_cast<difference_type>(m_arity - 1), std::distance(node_begin, end()));
 
-                iterator search_result = std::lower_bound(first, last, value, m_compare);
-                if (search_result != last && not m_compare(value, *search_result))
+                iterator search_result = std::lower_bound(node_begin, node_end, value, m_compare);
+                if (search_result != node_end && not m_compare(value, *search_result))
                 {
                     return search_result;
                 }
@@ -80,7 +80,7 @@ namespace thrust
                     (
                         m_arity,
                         node_index,
-                        static_cast<std::size_t>(std::distance(first, search_result))
+                        static_cast<std::size_t>(std::distance(node_begin, search_result))
                     );
                 }
             }
