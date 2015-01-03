@@ -89,7 +89,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
         std::vector<int> numbers{3, 4, 6, 1, 7, 8, 2};
         std::sort(numbers.begin(), numbers.end());
 
-        thrust::k_ary_search_set<int> set(numbers.begin(), numbers.end());
+        thrust::k_ary_search_set<int> set(numbers.begin(), numbers.end(), 2);
 
         BOOST_CHECK(set.find(26) == set.end());
     }
@@ -99,7 +99,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
         std::vector<int> numbers{3, 4, 6, 1, 7, 8, 2};
         std::sort(numbers.begin(), numbers.end());
 
-        thrust::k_ary_search_set<int> set(numbers.begin(), numbers.end());
+        thrust::k_ary_search_set<int> set(numbers.begin(), numbers.end(), 3);
 
         BOOST_CHECK(set.find(8) != set.end());
     }
@@ -109,7 +109,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
         std::vector<int> numbers{3, 4, 6, 1, 7, 8, 2};
         std::sort(numbers.begin(), numbers.end(), std::greater<int>());
 
-        thrust::k_ary_search_set<int, std::greater<int>> set(numbers.begin(), numbers.end());
+        thrust::k_ary_search_set<int, std::greater<int>> set(numbers.begin(), numbers.end(), 4);
 
         BOOST_CHECK_EQUAL(*set.find(2), 2);
     }
