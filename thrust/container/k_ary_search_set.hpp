@@ -70,7 +70,7 @@ namespace thrust
                 iterator last = begin() + std::min(static_cast<difference_type>(node_index + m_arity - 1), std::distance(begin(), end()));
 
                 iterator search_result = std::lower_bound(first, last, value, m_compare);
-                if (search_result != last && not m_compare(*search_result, value))
+                if (search_result != last && not m_compare(value, *search_result))
                 {
                     return search_result;
                 }

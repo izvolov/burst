@@ -111,6 +111,6 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
 
         thrust::k_ary_search_set<int, std::greater<int>> set(numbers.begin(), numbers.end(), 4);
 
-        BOOST_CHECK_EQUAL(*set.find(2), 2);
+        BOOST_CHECK_EQUAL(*set.find(3), 3);
     }
 BOOST_AUTO_TEST_SUITE_END()
