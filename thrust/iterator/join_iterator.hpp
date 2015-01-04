@@ -45,35 +45,12 @@ namespace thrust
                диапазонов.
      */
     template <typename Range>
-    class join_iterator: public detail::join_iterator_base
-                                <
-                                    Range,
-                                    typename std::iterator_traits<typename Range::iterator>::iterator_category
-                                >
-    {
-    private:
-        typedef detail::join_iterator_base
+    using join_iterator =
+        detail::join_iterator_base
         <
             Range,
             typename std::iterator_traits<typename Range::iterator>::iterator_category
-        >
-        base_type;
-
-    public:
-        template <typename BidirectionalRange>
-        explicit join_iterator (const BidirectionalRange & ranges):
-            base_type(ranges)
-        {
-        }
-
-        template <typename BidirectionalRange>
-        join_iterator (const BidirectionalRange & ranges, iterator::end_tag_t):
-            base_type(ranges, iterator::end_tag)
-        {
-        }
-
-        join_iterator () = default;
-    };
+        >;
 
     //!     Функция для создания итератора склейки.
     /*!
