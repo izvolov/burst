@@ -28,6 +28,25 @@ namespace burst
             make_join_iterator(ranges, iterator::end_tag)
         );
     }
+
+    //!     Функция для создания склеенного диапазона из списка инициализации.
+    /*!
+            Принимает диапазоны для склейки в виде списка инициализации.
+            Возвращает склеенный диапазон.
+     */
+    template <typename Range>
+    boost::iterator_range
+    <
+        join_iterator<Range>
+    >
+    join (std::initializer_list<Range> ranges)
+    {
+        return boost::make_iterator_range
+        (
+            make_join_iterator(ranges),
+            make_join_iterator(ranges, iterator::end_tag)
+        );
+    }
 }
 
 #endif // BURST_RANGE_JOIN_HPP
