@@ -48,6 +48,47 @@ namespace burst
             make_merge_iterator(ranges, iterator::end_tag)
         );
     }
+
+    //!     Функция для создания диапазона слияний из списка инициализации с предикатом.
+    /*!
+            Принимает на вход в виде списка инициализации набор диапазонов, которые нужно слить, и
+        отношение строгого порядка на элементах этих диапазонов.
+            Возвращает диапазон, состоящий из всех элементов входных диапазонов, упорядоченный
+        относительно заданного отношения порядка.
+     */
+    template <typename Range, typename Compare>
+    boost::iterator_range
+    <
+        merge_iterator<Range, Compare>
+    >
+    merge (std::initializer_list<Range> ranges, Compare compare)
+    {
+        return boost::make_iterator_range
+        (
+            make_merge_iterator(ranges, compare),
+            make_merge_iterator(ranges, compare, iterator::end_tag)
+        );
+    }
+
+    //!     Функция для создания диапазона слияний из списка инициализации.
+    /*!
+            Принимает на вход в виде списка инициализации набор диапазонов, которые нужно слить.
+            Возвращает диапазон, состоящий из всех элементов входных диапазонов.
+            Отношение порядка выбирается по-умолчанию.
+     */
+    template <typename Range>
+    boost::iterator_range
+    <
+        merge_iterator<Range>
+    >
+    merge (std::initializer_list<Range> ranges)
+    {
+        return boost::make_iterator_range
+        (
+            make_merge_iterator(ranges),
+            make_merge_iterator(ranges, iterator::end_tag)
+        );
+    }
 }
 
 #endif // BURST_RANGE_MERGE_HPP

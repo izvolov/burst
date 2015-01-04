@@ -7,6 +7,7 @@ set(TEST_SOURCES test_main.cpp
                  iterator/join_iterator.cpp
                  iterator/merge_iterator.cpp
                  range/join.cpp
+                 range/merge.cpp
                  range/skip_to.cpp)
 
 set(TEST_EXECUTABLE test)
