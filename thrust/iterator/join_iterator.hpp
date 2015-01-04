@@ -46,7 +46,7 @@ namespace thrust
      */
     template <typename Range>
     using join_iterator =
-        detail::join_iterator_base
+        detail::join_iterator_impl
         <
             Range,
             typename std::iterator_traits<typename Range::iterator>::iterator_category

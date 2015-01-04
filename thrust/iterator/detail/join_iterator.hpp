@@ -21,9 +21,9 @@ namespace thrust
     namespace detail
     {
         template <typename ForwardRange, typename IteratorCategory>
-        class join_iterator_base: public boost::iterator_facade
+        class join_iterator_impl: public boost::iterator_facade
                                          <
-                                             join_iterator_base<ForwardRange, IteratorCategory>,
+                                             join_iterator_impl<ForwardRange, IteratorCategory>,
                                              typename ForwardRange::value_type,
                                              boost::forward_traversal_tag,
                                              typename ForwardRange::reference
@@ -34,7 +34,7 @@ namespace thrust
 
             typedef boost::iterator_facade
             <
-                join_iterator_base,
+                join_iterator_impl,
                 typename range_type::value_type,
                 boost::forward_traversal_tag,
                 typename range_type::reference
@@ -43,7 +43,7 @@ namespace thrust
 
         public:
             template <typename BidirectionalRange>
-            explicit join_iterator_base (const BidirectionalRange & ranges):
+            explicit join_iterator_impl (const BidirectionalRange & ranges):
                 m_ranges()
             {
                 BOOST_STATIC_ASSERT(boost::is_same<typename BidirectionalRange::value_type, range_type>::value);
@@ -56,12 +56,12 @@ namespace thrust
             }
 
             template <typename BidirectionalRange>
-            join_iterator_base (const BidirectionalRange &, iterator::end_tag_t):
+            join_iterator_impl (const BidirectionalRange &, iterator::end_tag_t):
                 m_ranges()
             {
             }
 
-            join_iterator_base () = default;
+            join_iterator_impl () = default;
 
         private:
             friend class boost::iterator_core_access;
@@ -81,7 +81,7 @@ namespace thrust
                 return m_ranges.back().front();
             }
 
-            bool equal (const join_iterator_base & that) const
+            bool equal (const join_iterator_impl & that) const
             {
                 return this->m_ranges == that.m_ranges;
             }
@@ -91,14 +91,14 @@ namespace thrust
         };
 
         template <typename RandomAccessRange>
-        class join_iterator_base
+        class join_iterator_impl
         <
             RandomAccessRange,
             std::random_access_iterator_tag
         >
         : public boost::iterator_facade
                  <
-                     join_iterator_base<RandomAccessRange, std::random_access_iterator_tag>,
+                     join_iterator_impl<RandomAccessRange, std::random_access_iterator_tag>,
                      typename RandomAccessRange::value_type,
                      boost::random_access_traversal_tag,
                      typename RandomAccessRange::reference
@@ -110,7 +110,7 @@ namespace thrust
 
             typedef boost::iterator_facade
             <
-                join_iterator_base,
+                join_iterator_impl,
                 typename range_type::value_type,
                 boost::forward_traversal_tag,
                 typename range_type::reference
@@ -119,7 +119,7 @@ namespace thrust
 
         public:
             template <typename InputRange>
-            explicit join_iterator_base (const InputRange & ranges):
+            explicit join_iterator_impl (const InputRange & ranges):
                 m_ranges(std::make_shared<range_container_type>()),
                 m_outer_range_index(0),
                 m_inner_range_index(0),
@@ -130,7 +130,7 @@ namespace thrust
             }
 
             template <typename InputRange>
-            explicit join_iterator_base (const InputRange & ranges, iterator::end_tag_t):
+            explicit join_iterator_impl (const InputRange & ranges, iterator::end_tag_t):
                 m_ranges(std::make_shared<range_container_type>()),
                 m_outer_range_index(0),
                 m_inner_range_index(0),
@@ -147,7 +147,7 @@ namespace thrust
                 m_outer_range_index = m_ranges->size();
             }
 
-            join_iterator_base () = default;
+            join_iterator_impl () = default;
 
         private:
             friend class boost::iterator_core_access;
@@ -244,12 +244,12 @@ namespace thrust
                 return (*m_ranges)[m_outer_range_index][inner_range_index];
             }
 
-            bool equal (const join_iterator_base & that) const
+            bool equal (const join_iterator_impl & that) const
             {
                 return this->m_items_passed == that.m_items_passed;
             }
 
-            typename base_type::difference_type distance_to (const join_iterator_base & that) const
+            typename base_type::difference_type distance_to (const join_iterator_impl & that) const
             {
                 return static_cast<typename base_type::difference_type>(that.m_items_passed - this->m_items_passed);
             }
