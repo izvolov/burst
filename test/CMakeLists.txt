@@ -6,6 +6,7 @@ set(TEST_SOURCES test_main.cpp
                  iterator/intersect_iterator.cpp
                  iterator/join_iterator.cpp
                  iterator/merge_iterator.cpp
+                 range/intersect.cpp
                  range/join.cpp
                  range/merge.cpp
                  range/skip_to.cpp)
