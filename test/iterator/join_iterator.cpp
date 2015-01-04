@@ -1,6 +1,7 @@
 #include <vector>
 #include <list>
 
+#include <boost/range/adaptor/reversed.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <boost/range/algorithm/for_each.hpp>
 #include <boost/test/unit_test.hpp>
@@ -159,5 +160,32 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
 
         BOOST_CHECK_EQUAL(*join_iterator_copy, 70);
         BOOST_CHECK_EQUAL(*join_iterator, 100);
+    }
+
+    BOOST_AUTO_TEST_CASE(joined_random_access_range_can_be_reversed)
+    {
+        std::string join("join");
+        std::string iterator("iterator");
+        std::string can("can");
+        std::string be("be");
+        std::string reversed("reversed");
+        auto ranges =
+        {
+            boost::make_iterator_range(join),
+            boost::make_iterator_range(iterator),
+            boost::make_iterator_range(can),
+            boost::make_iterator_range(be),
+            boost::make_iterator_range(reversed)
+        };
+
+        auto joint_range = thrust::join(ranges);
+        auto reversed_range = boost::adaptors::reverse(joint_range);
+
+        std::string expected = join + iterator + can + be + reversed;
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            reversed_range.begin(), reversed_range.end(),
+            expected.rbegin(), expected.rend()
+        );
     }
 BOOST_AUTO_TEST_SUITE_END()

@@ -229,6 +229,10 @@ namespace thrust
                     --m_outer_range_index;
                     m_inner_range_index = (*m_ranges)[m_outer_range_index].size() - 1;
                 }
+                else
+                {
+                    --m_inner_range_index;
+                }
 
                 --m_items_passed;
             }
