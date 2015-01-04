@@ -1,11 +1,11 @@
-#ifndef THRUST_RANGE_MERGE_HPP
-#define THRUST_RANGE_MERGE_HPP
+#ifndef BURST_RANGE_MERGE_HPP
+#define BURST_RANGE_MERGE_HPP
 
 #include <boost/range/iterator_range.hpp>
 
-#include <thrust/iterator/merge_iterator.hpp>
+#include <burst/iterator/merge_iterator.hpp>
 
-namespace thrust
+namespace burst
 {
     //!     Функция для создания диапазона слияния с предикатом.
     /*!
@@ -50,4 +50,4 @@ namespace thrust
     }
 }
 
-#endif // THRUST_RANGE_MERGE_HPP
+#endif // BURST_RANGE_MERGE_HPP

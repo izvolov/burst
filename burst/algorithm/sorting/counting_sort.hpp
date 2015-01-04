@@ -1,5 +1,5 @@
-#ifndef THRUST_ALGORITHM_SORTING_COUNTING_SORT_HPP
-#define THRUST_ALGORITHM_SORTING_COUNTING_SORT_HPP
+#ifndef BURST_ALGORITHM_SORTING_COUNTING_SORT_HPP
+#define BURST_ALGORITHM_SORTING_COUNTING_SORT_HPP
 
 #include <algorithm>
 #include <iterator>
@@ -10,9 +10,9 @@
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 
-#include <thrust/algorithm/identity.hpp>
+#include <burst/algorithm/identity.hpp>
 
-namespace thrust
+namespace burst
 {
     //!     Сортировка подсчётом.
     /*!
@@ -84,4 +84,4 @@ namespace thrust
     }
 }
 
-#endif // THRUST_ALGORITHM_SORTING_COUNTING_SORT_HPP
+#endif // BURST_ALGORITHM_SORTING_COUNTING_SORT_HPP

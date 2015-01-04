@@ -1,12 +1,12 @@
-#ifndef THRUST_RANGE_JOIN_HPP
-#define THRUST_RANGE_JOIN_HPP
+#ifndef BURST_RANGE_JOIN_HPP
+#define BURST_RANGE_JOIN_HPP
 
 #include <boost/range/iterator_range.hpp>
 
-#include <thrust/iterator/end_tag.hpp>
-#include <thrust/iterator/join_iterator.hpp>
+#include <burst/iterator/end_tag.hpp>
+#include <burst/iterator/join_iterator.hpp>
 
-namespace thrust
+namespace burst
 {
     //!     Функция для создания склеенного диапазона.
     /*!
@@ -30,4 +30,4 @@ namespace thrust
     }
 }
 
-#endif // THRUST_RANGE_JOIN_HPP
+#endif // BURST_RANGE_JOIN_HPP

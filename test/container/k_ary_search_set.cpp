@@ -5,14 +5,14 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <thrust/container/k_ary_search_set.hpp>
+#include <burst/container/k_ary_search_set.hpp>
 
 BOOST_AUTO_TEST_SUITE(k_ary_search)
     BOOST_AUTO_TEST_CASE(k_ary_search_set_is_empty_when_initialized_from_empty_range)
     {
         std::vector<int> nothing;
 
-        thrust::k_ary_search_set<int> set(nothing.begin(), nothing.end());
+        burst::k_ary_search_set<int> set(nothing.begin(), nothing.end());
 
         BOOST_CHECK(set.empty());
     }
@@ -21,7 +21,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
     {
         std::vector<int> nothing;
 
-        thrust::k_ary_search_set<int> set(nothing.begin(), nothing.end());
+        burst::k_ary_search_set<int> set(nothing.begin(), nothing.end());
 
         BOOST_CHECK_EQUAL(set.size(), 0);
     }
@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
     {
         std::vector<int> something{1, 2, 3, 4};
 
-        thrust::k_ary_search_set<int> set(something.begin(), something.end());
+        burst::k_ary_search_set<int> set(something.begin(), something.end());
 
         BOOST_CHECK_EQUAL(set.size(), something.size());
     }
@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
     {
         std::vector<int> numbers{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 
-        thrust::k_ary_search_set<int> set(numbers.begin(), numbers.end(), 3);
+        burst::k_ary_search_set<int> set(numbers.begin(), numbers.end(), 3);
 
         std::vector<int> expected{7, 10, 2, 5, 8, 9, 11, 12, 0, 1, 3, 4, 6};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
     {
         std::vector<int> numbers{0, 1, 2, 3, 4, 5, 6, 7};
 
-        thrust::k_ary_search_set<int> set(numbers.begin(), numbers.end(), 3);
+        burst::k_ary_search_set<int> set(numbers.begin(), numbers.end(), 3);
 
         std::vector<int> expected{2, 5, 0, 1, 3, 4, 6, 7};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -67,7 +67,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
     {
         std::vector<int> numbers{0, 1, 2, 3, 4, 5, 6, 7};
 
-        thrust::k_ary_search_set<int> set(numbers.begin(), numbers.end(), 129);
+        burst::k_ary_search_set<int> set(numbers.begin(), numbers.end(), 129);
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
     {
         std::vector<int> nothing;
 
-        thrust::k_ary_search_set<int> set(nothing.begin(), nothing.end());
+        burst::k_ary_search_set<int> set(nothing.begin(), nothing.end());
 
         BOOST_CHECK(set.find(26) == set.end());
     }
@@ -90,7 +90,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
         std::vector<int> numbers{3, 4, 6, 1, 7, 8, 2};
         std::sort(numbers.begin(), numbers.end());
 
-        thrust::k_ary_search_set<int> set(numbers.begin(), numbers.end(), 2);
+        burst::k_ary_search_set<int> set(numbers.begin(), numbers.end(), 2);
 
         BOOST_CHECK(set.find(26) == set.end());
     }
@@ -100,7 +100,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
         std::vector<int> numbers{3, 4, 6, 1, 7, 8, 2};
         std::sort(numbers.begin(), numbers.end());
 
-        thrust::k_ary_search_set<int> set(numbers.begin(), numbers.end(), 3);
+        burst::k_ary_search_set<int> set(numbers.begin(), numbers.end(), 3);
 
         BOOST_CHECK(set.find(8) != set.end());
     }
@@ -110,7 +110,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
         std::vector<int> numbers{3, 4, 6, 1, 7, 8, 2};
         std::sort(numbers.begin(), numbers.end(), std::greater<int>());
 
-        thrust::k_ary_search_set<int, std::greater<int>> set(numbers.begin(), numbers.end(), 4);
+        burst::k_ary_search_set<int, std::greater<int>> set(numbers.begin(), numbers.end(), 4);
 
         BOOST_CHECK_EQUAL(*set.find(3), 3);
     }
@@ -120,7 +120,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
         std::vector<int> numbers(1000);
         std::iota(numbers.rbegin(), numbers.rend(), 0);
 
-        thrust::k_ary_search_set<int, std::greater<int>> set(numbers.begin(), numbers.end(), 10);
+        burst::k_ary_search_set<int, std::greater<int>> set(numbers.begin(), numbers.end(), 10);
 
         BOOST_CHECK_EQUAL(*set.find(50), 50);
     }

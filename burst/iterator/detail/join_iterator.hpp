@@ -1,5 +1,5 @@
-#ifndef THRUST_ITERATOR_DETAIL_JOIN_ITERATOR_HPP
-#define THRUST_ITERATOR_DETAIL_JOIN_ITERATOR_HPP
+#ifndef BURST_ITERATOR_DETAIL_JOIN_ITERATOR_HPP
+#define BURST_ITERATOR_DETAIL_JOIN_ITERATOR_HPP
 
 #include <algorithm>
 #include <iterator>
@@ -14,9 +14,9 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-#include <thrust/iterator/end_tag.hpp>
+#include <burst/iterator/end_tag.hpp>
 
-namespace thrust
+namespace burst
 {
     namespace detail
     {
@@ -265,4 +265,4 @@ namespace thrust
     }
 }
 
-#endif // THRUST_ITERATOR_DETAIL_JOIN_ITERATOR_HPP
+#endif // BURST_ITERATOR_DETAIL_JOIN_ITERATOR_HPP

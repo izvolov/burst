@@ -4,8 +4,8 @@
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <thrust/iterator/intersect_iterator.hpp>
-#include <thrust/range/intersect.hpp>
+#include <burst/iterator/intersect_iterator.hpp>
+#include <burst/range/intersect.hpp>
 
 BOOST_AUTO_TEST_SUITE(intersect_iterator)
     BOOST_AUTO_TEST_CASE(intersecting_empty_ranges_results_empty_range)
@@ -14,7 +14,7 @@ BOOST_AUTO_TEST_SUITE(intersect_iterator)
         std::vector<int> second;
         auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
 
-        auto intersected_range = thrust::intersect(ranges);
+        auto intersected_range = burst::intersect(ranges);
 
         BOOST_CHECK(intersected_range.empty());
     }
@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_SUITE(intersect_iterator)
         int array[] = {1, 2, 3, 4};
         auto ranges = {boost::make_iterator_range(array)};
 
-        auto intersected_range = thrust::intersect(ranges);
+        auto intersected_range = burst::intersect(ranges);
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_SUITE(intersect_iterator)
         auto second = first;
         auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
 
-        auto intersected_range = thrust::intersect(ranges);
+        auto intersected_range = burst::intersect(ranges);
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_SUITE(intersect_iterator)
         std::string short_range("cde");
         auto ranges = {boost::make_iterator_range(long_range), boost::make_iterator_range(short_range)};
 
-        auto intersected_range = thrust::intersect(ranges);
+        auto intersected_range = burst::intersect(ranges);
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_SUITE(intersect_iterator)
         std::list<char> second{'g', 'e', 'c', 'a'};
         auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
 
-        auto intersected_range = thrust::intersect(ranges, std::greater<char>());
+        auto intersected_range = burst::intersect(ranges, std::greater<char>());
 
         BOOST_CHECK(intersected_range.empty());
     }
@@ -85,7 +85,7 @@ BOOST_AUTO_TEST_SUITE(intersect_iterator)
         auto second = {4, 3, 2};
         auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
 
-        auto intersected_range = thrust::intersect(ranges, std::greater<int>());
+        auto intersected_range = burst::intersect(ranges, std::greater<int>());
 
         std::vector<int> expected_collection{3, 2};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -107,7 +107,7 @@ BOOST_AUTO_TEST_SUITE(intersect_iterator)
             boost::make_iterator_range(third)
         };
 
-        auto intersected_range = thrust::intersect(ranges);
+        auto intersected_range = burst::intersect(ranges);
 
         BOOST_CHECK(intersected_range.empty());
     }
@@ -124,7 +124,7 @@ BOOST_AUTO_TEST_SUITE(intersect_iterator)
             boost::make_iterator_range(third)
         };
 
-        auto intersected_range = thrust::intersect(ranges, std::less<int>());
+        auto intersected_range = burst::intersect(ranges, std::less<int>());
 
         BOOST_CHECK(intersected_range.empty());
     }
@@ -141,7 +141,7 @@ BOOST_AUTO_TEST_SUITE(intersect_iterator)
             boost::make_iterator_range(third)
         };
 
-        auto intersected_range = thrust::intersect(ranges, std::less<int>());
+        auto intersected_range = burst::intersect(ranges, std::less<int>());
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
@@ -156,8 +156,8 @@ BOOST_AUTO_TEST_SUITE(intersect_iterator)
         auto second = {0, 2, 4};
         auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
 
-        auto intersected_begin = thrust::make_intersect_iterator(ranges);
-        auto   intersected_end = thrust::make_intersect_iterator(ranges, thrust::iterator::end_tag);
+        auto intersected_begin = burst::make_intersect_iterator(ranges);
+        auto   intersected_end = burst::make_intersect_iterator(ranges, burst::iterator::end_tag);
 
         auto expected_collection = {2};
         BOOST_CHECK_EQUAL_COLLECTIONS

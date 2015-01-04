@@ -1,7 +1,7 @@
-#ifndef THRUST_ITERATOR_DETAIL_FRONT_VALUE_COMPARE_HPP
-#define THRUST_ITERATOR_DETAIL_FRONT_VALUE_COMPARE_HPP
+#ifndef BURST_ITERATOR_DETAIL_FRONT_VALUE_COMPARE_HPP
+#define BURST_ITERATOR_DETAIL_FRONT_VALUE_COMPARE_HPP
 
-namespace thrust
+namespace burst
 {
     namespace detail
     {
@@ -30,6 +30,6 @@ namespace thrust
             return front_value_comparator<Compare>(compare);
         }
     } // namespace detail
-} // namespace thrust
+} // namespace burst
 
-#endif // THRUST_ITERATOR_DETAIL_FRONT_VALUE_COMPARE_HPP
+#endif // BURST_ITERATOR_DETAIL_FRONT_VALUE_COMPARE_HPP

@@ -1,12 +1,12 @@
-#ifndef THRUST_RANGE_SKIP_TO_HPP
-#define THRUST_RANGE_SKIP_TO_HPP
+#ifndef BURST_RANGE_SKIP_TO_HPP
+#define BURST_RANGE_SKIP_TO_HPP
 
 #include <boost/algorithm/cxx11/is_sorted.hpp>
 #include <boost/assert.hpp>
 
-#include <thrust/range/detail/skip_to.hpp>
+#include <burst/range/detail/skip_to.hpp>
 
-namespace thrust
+namespace burst
 {
     //!     "Прокрутить" диапазон до нужного значения относительно предиката.
     /*!
@@ -35,4 +35,4 @@ namespace thrust
 
 }
 
-#endif // THRUST_RANGE_SKIP_TO_HPP
+#endif // BURST_RANGE_SKIP_TO_HPP

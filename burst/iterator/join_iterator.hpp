@@ -1,12 +1,12 @@
-#ifndef THRUST_ITERATOR_JOIN_ITERATOR_HPP
-#define THRUST_ITERATOR_JOIN_ITERATOR_HPP
+#ifndef BURST_ITERATOR_JOIN_ITERATOR_HPP
+#define BURST_ITERATOR_JOIN_ITERATOR_HPP
 
 #include <iterator>
 
-#include <thrust/iterator/detail/join_iterator.hpp>
-#include <thrust/iterator/end_tag.hpp>
+#include <burst/iterator/detail/join_iterator.hpp>
+#include <burst/iterator/end_tag.hpp>
 
-namespace thrust
+namespace burst
 {
     //!     Итератор склейки.
     /*!
@@ -75,6 +75,6 @@ namespace thrust
     {
         return join_iterator<typename RangeRange::value_type>(ranges, iterator::end_tag);
     }
-} // namespace thrust
+} // namespace burst
 
-#endif // THRUST_ITERATOR_JOIN_ITERATOR_HPP
+#endif // BURST_ITERATOR_JOIN_ITERATOR_HPP

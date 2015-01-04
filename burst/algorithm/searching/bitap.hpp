@@ -1,5 +1,5 @@
-#ifndef THRUST_ALGORITHM_SEARCHING_BITAP_HPP
-#define THRUST_ALGORITHM_SEARCHING_BITAP_HPP
+#ifndef BURST_ALGORITHM_SEARCHING_BITAP_HPP
+#define BURST_ALGORITHM_SEARCHING_BITAP_HPP
 
 #include <iterator>
 #include <map>
@@ -8,10 +8,10 @@
 
 #include <boost/assert.hpp>
 
-#include <thrust/algorithm/searching/detail/element_position_bitmask_table.hpp>
-#include <thrust/algorithm/searching/detail/bitmask_traits.hpp>
+#include <burst/algorithm/searching/detail/element_position_bitmask_table.hpp>
+#include <burst/algorithm/searching/detail/bitmask_traits.hpp>
 
-namespace thrust
+namespace burst
 {
     namespace algorithm
     {
@@ -154,6 +154,6 @@ namespace thrust
             const std::shared_ptr<const bitmask_table_type> m_bitmask_table;
         };
     } // namespace algorithm
-} // namespace thrust
+} // namespace burst
 
-#endif // THRUST_ALGORITHM_SEARCHING_BITAP_HPP
+#endif // BURST_ALGORITHM_SEARCHING_BITAP_HPP

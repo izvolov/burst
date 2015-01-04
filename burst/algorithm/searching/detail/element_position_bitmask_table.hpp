@@ -1,12 +1,12 @@
-#ifndef THRUST_ALGORITHM_SEARCHING_DETAIL_ELEMENT_POSITION_BITMASK_TABLE_HPP
-#define THRUST_ALGORITHM_SEARCHING_DETAIL_ELEMENT_POSITION_BITMASK_TABLE_HPP
+#ifndef BURST_ALGORITHM_SEARCHING_DETAIL_ELEMENT_POSITION_BITMASK_TABLE_HPP
+#define BURST_ALGORITHM_SEARCHING_DETAIL_ELEMENT_POSITION_BITMASK_TABLE_HPP
 
 #include <cstddef>
 #include <initializer_list>
 #include <iterator>
 #include <type_traits>
 
-namespace thrust
+namespace burst
 {
     namespace algorithm
     {
@@ -113,6 +113,6 @@ namespace thrust
             };
         } // namespace detail
     } // namespace algorithm
-} // namespace thrust
+} // namespace burst
 
-#endif // THRUST_ALGORITHM_SEARCHING_DETAIL_ELEMENT_POSITION_BITMASK_TABLE_HPP
+#endif // BURST_ALGORITHM_SEARCHING_DETAIL_ELEMENT_POSITION_BITMASK_TABLE_HPP

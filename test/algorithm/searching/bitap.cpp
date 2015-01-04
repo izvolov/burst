@@ -5,14 +5,14 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <thrust/algorithm/searching/bitap.hpp>
+#include <burst/algorithm/searching/bitap.hpp>
 
 BOOST_AUTO_TEST_SUITE(bitap)
     BOOST_AUTO_TEST_CASE(pattern_is_found_when_equal_to_whole_text)
     {
         std::string pattern("Привет!");
         std::string text(pattern);
-        thrust::algorithm::bitap<char, std::uint16_t> search(pattern);
+        burst::algorithm::bitap<char, std::uint16_t> search(pattern);
 
         auto match_position = search(text.begin(), text.end());
 
@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_SUITE(bitap)
     {
         std::string pattern("абырвалг");
         std::string text(pattern + "абырвалгович");
-        thrust::algorithm::bitap<char, std::bitset<32>> search(pattern);
+        burst::algorithm::bitap<char, std::bitset<32>> search(pattern);
 
         auto match_position = search(text.begin(), text.end());
 
@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_SUITE(bitap)
     {
         std::string pattern("ойойой");
         std::string text("FFUUU" + pattern);
-        thrust::algorithm::bitap<char, std::bitset<32>> search(pattern);
+        burst::algorithm::bitap<char, std::bitset<32>> search(pattern);
 
         auto match_position = search(text.begin(), text.end());
 
@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_SUITE(bitap)
     {
         std::string pattern("123");
         std::string text("12131415");
-        thrust::algorithm::bitap<char, std::bitset<32>> search(pattern);
+        burst::algorithm::bitap<char, std::bitset<32>> search(pattern);
 
         auto match_position = search(text.begin(), text.end());
 
@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_SUITE(bitap)
     {
         std::string pattern("asdf");
         std::string text(pattern + pattern);
-        thrust::algorithm::bitap<char, std::bitset<32>> search(pattern);
+        burst::algorithm::bitap<char, std::bitset<32>> search(pattern);
 
         auto match_position = search(text.begin() + 1, text.end());
 
@@ -71,7 +71,7 @@ BOOST_AUTO_TEST_SUITE(bitap)
     {
         std::string pattern("шалаш");
         std::string text("   шалашалаш   ");
-        thrust::algorithm::bitap<char, std::bitset<32>, std::unordered_map<char, std::bitset<32>>> search(pattern);
+        burst::algorithm::bitap<char, std::bitset<32>, std::unordered_map<char, std::bitset<32>>> search(pattern);
 
         auto match_position = search(text.begin(), text.end());
 
@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_SUITE(bitap)
     {
         std::forward_list<int> pattern{1, 2, 3};
         std::forward_list<int> text{0, 1, 2, 3, 4};
-        thrust::algorithm::bitap<int, std::bitset<32>, std::unordered_map<int, std::bitset<32>>> search(pattern);
+        burst::algorithm::bitap<int, std::bitset<32>, std::unordered_map<int, std::bitset<32>>> search(pattern);
 
         auto match_position = search(text.begin(), text.end());
 
@@ -95,7 +95,7 @@ BOOST_AUTO_TEST_SUITE(bitap)
     {
         std::string pattern("два");
         std::string text("дваждыдвачетыре");
-        thrust::algorithm::bitap<char, std::uint32_t, std::unordered_map<char, std::uint32_t>> search(pattern);
+        burst::algorithm::bitap<char, std::uint32_t, std::unordered_map<char, std::uint32_t>> search(pattern);
         auto copied_search = search;
 
         auto initial_search_result = search(text.begin(), text.end());

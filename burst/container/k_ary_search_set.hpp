@@ -1,5 +1,5 @@
-#ifndef THRUST_CONTAINER_K_ARY_SEARCH_SET_HPP
-#define THRUST_CONTAINER_K_ARY_SEARCH_SET_HPP
+#ifndef BURST_CONTAINER_K_ARY_SEARCH_SET_HPP
+#define BURST_CONTAINER_K_ARY_SEARCH_SET_HPP
 
 #include <algorithm>
 #include <cmath>
@@ -12,7 +12,7 @@
 #include <boost/assert.hpp>
 #include <boost/range/iterator_range.hpp>
 
-namespace thrust
+namespace burst
 {
     struct k_ary_search_set_branch
     {
@@ -260,4 +260,4 @@ namespace thrust
     };
 }
 
-#endif // THRUST_CONTAINER_K_ARY_SEARCH_SET_HPP
+#endif // BURST_CONTAINER_K_ARY_SEARCH_SET_HPP

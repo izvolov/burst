@@ -1,5 +1,5 @@
-#ifndef THRUST_ITERATOR_INTERSECT_ITERATOR_HPP
-#define THRUST_ITERATOR_INTERSECT_ITERATOR_HPP
+#ifndef BURST_ITERATOR_INTERSECT_ITERATOR_HPP
+#define BURST_ITERATOR_INTERSECT_ITERATOR_HPP
 
 #include <algorithm>
 #include <functional>
@@ -15,11 +15,11 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-#include <thrust/iterator/detail/front_value_compare.hpp>
-#include <thrust/iterator/end_tag.hpp>
-#include <thrust/range/skip_to.hpp>
+#include <burst/iterator/detail/front_value_compare.hpp>
+#include <burst/iterator/end_tag.hpp>
+#include <burst/range/skip_to.hpp>
 
-namespace thrust
+namespace burst
 {
     //!     Итератор пересечения.
     /*!
@@ -225,6 +225,6 @@ namespace thrust
     {
         return intersect_iterator<typename RangeRange::value_type>();
     }
-} // namespace thrust
+} // namespace burst
 
-#endif // THRUST_ITERATOR_INTERSECT_ITERATOR_HPP
+#endif // BURST_ITERATOR_INTERSECT_ITERATOR_HPP

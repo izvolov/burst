@@ -1,5 +1,5 @@
-#ifndef THRUST_ALGORITHM_SEARCHING_DETAIL_BITMASK_TRAITS_HPP
-#define THRUST_ALGORITHM_SEARCHING_DETAIL_BITMASK_TRAITS_HPP
+#ifndef BURST_ALGORITHM_SEARCHING_DETAIL_BITMASK_TRAITS_HPP
+#define BURST_ALGORITHM_SEARCHING_DETAIL_BITMASK_TRAITS_HPP
 
 #include <bitset>
 #include <type_traits>
@@ -9,7 +9,7 @@
 "Тип битовой маски не является целочисленным. \
 Создайте специализацию класса bitmask_traits для своего класса."
 
-namespace thrust
+namespace burst
 {
     namespace algorithm
     {
@@ -39,6 +39,6 @@ namespace thrust
             };
         } // namespace detail
     } // namespace algorithm
-} // namespace thrust
+} // namespace burst
 
-#endif // THRUST_ALGORITHM_SEARCHING_DETAIL_BITMASK_TRAITS_HPP
+#endif // BURST_ALGORITHM_SEARCHING_DETAIL_BITMASK_TRAITS_HPP

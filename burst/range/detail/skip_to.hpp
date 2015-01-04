@@ -1,5 +1,5 @@
-#ifndef THRUST_RANGE_DETAIL_SKIP_TO_HPP
-#define THRUST_RANGE_DETAIL_SKIP_TO_HPP
+#ifndef BURST_RANGE_DETAIL_SKIP_TO_HPP
+#define BURST_RANGE_DETAIL_SKIP_TO_HPP
 
 #include <type_traits>
 #include <iterator>
@@ -7,7 +7,7 @@
 #include <boost/range/algorithm/lower_bound.hpp>
 #include <boost/range/iterator_range.hpp>
 
-namespace thrust
+namespace burst
 {
     namespace detail
     {
@@ -67,4 +67,4 @@ namespace thrust
     }
 }
 
-#endif // THRUST_RANGE_DETAIL_SKIP_TO_HPP
+#endif // BURST_RANGE_DETAIL_SKIP_TO_HPP

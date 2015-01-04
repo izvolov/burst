@@ -6,8 +6,8 @@
 #include <boost/range/algorithm/for_each.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <thrust/iterator/join_iterator.hpp>
-#include <thrust/range/join.hpp>
+#include <burst/iterator/join_iterator.hpp>
+#include <burst/range/join.hpp>
 
 BOOST_AUTO_TEST_SUITE(join_iterator)
     BOOST_AUTO_TEST_CASE(joining_empty_ranges_results_empty_range)
@@ -16,7 +16,7 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
         std::vector<int> second;
         auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
 
-        auto joint_range = thrust::join(ranges);
+        auto joint_range = burst::join(ranges);
 
         BOOST_CHECK(joint_range.empty());
     }
@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
         int array[] = {1, 2, 3, 4};
         auto ranges = {boost::make_iterator_range(array)};
 
-        auto joint_range = thrust::join(ranges);
+        auto joint_range = burst::join(ranges);
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
@@ -41,7 +41,7 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
         std::list<int> second = {2, 3, 4};
         auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
 
-        auto joint_range = thrust::join(ranges);
+        auto joint_range = burst::join(ranges);
 
         auto expected_collection = {1, 2, 3, 2, 3, 4};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -63,7 +63,7 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
             boost::make_iterator_range(third)
         };
 
-        auto joint_range = thrust::join(ranges);
+        auto joint_range = burst::join(ranges);
 
         std::string expected_collection("hello!");
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -80,7 +80,7 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
 
         auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
 
-        auto joint_range = thrust::join(ranges);
+        auto joint_range = burst::join(ranges);
         boost::for_each(joint_range, [] (int & x) { x /= 10; });
 
         BOOST_CHECK_EQUAL(first[0], 10);
@@ -95,8 +95,8 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
         auto second = {600, 200};
         auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
 
-        auto joined_begin = thrust::make_join_iterator(ranges);
-        auto   joined_end = thrust::make_join_iterator(ranges, thrust::iterator::end_tag);
+        auto joined_begin = burst::make_join_iterator(ranges);
+        auto   joined_end = burst::make_join_iterator(ranges, burst::iterator::end_tag);
 
         auto expected_collection = {500, 100, 600, 200};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -112,8 +112,8 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
         auto second = {1, 0};
         auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
 
-        auto joined_begin = thrust::make_join_iterator(ranges);
-        auto joined_end   = thrust::make_join_iterator(ranges, thrust::iterator::end_tag);
+        auto joined_begin = burst::make_join_iterator(ranges);
+        auto joined_end   = burst::make_join_iterator(ranges, burst::iterator::end_tag);
 
         joined_begin += 3;
         BOOST_CHECK_EQUAL(*joined_begin, 0);
@@ -130,7 +130,7 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
         std::vector<int> second{3, 2};
         auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
 
-        auto joint_range = thrust::join(ranges);
+        auto joint_range = burst::join(ranges);
 
         BOOST_CHECK_EQUAL(joint_range.size(), 4);
     }
@@ -141,7 +141,7 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
         auto second = {1, 0};
         auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
 
-        auto joined_end = thrust::make_join_iterator(ranges, thrust::iterator::end_tag);
+        auto joined_end = burst::make_join_iterator(ranges, burst::iterator::end_tag);
         --joined_end;
 
         BOOST_CHECK_EQUAL(*joined_end, 0);
@@ -153,7 +153,7 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
         std::vector<int> second{70, 30};
         auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
 
-        auto join_iterator = thrust::make_join_iterator(ranges);
+        auto join_iterator = burst::make_join_iterator(ranges);
 
         auto join_iterator_copy = join_iterator;
         join_iterator_copy += 2;
@@ -178,7 +178,7 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
             boost::make_iterator_range(reversed)
         };
 
-        auto joint_range = thrust::join(ranges);
+        auto joint_range = burst::join(ranges);
         auto reversed_range = boost::adaptors::reverse(joint_range);
 
         std::string expected = join + iterator + can + be + reversed;

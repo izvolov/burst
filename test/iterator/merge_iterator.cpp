@@ -6,8 +6,8 @@
 #include <boost/range/algorithm/for_each.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <thrust/iterator/merge_iterator.hpp>
-#include <thrust/range/merge.hpp>
+#include <burst/iterator/merge_iterator.hpp>
+#include <burst/range/merge.hpp>
 
 BOOST_AUTO_TEST_SUITE(merge_iterator)
     BOOST_AUTO_TEST_CASE(merging_empty_ranges_results_empty_range)
@@ -16,7 +16,7 @@ BOOST_AUTO_TEST_SUITE(merge_iterator)
         std::vector<int> second;
         auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
 
-        auto merged_range = thrust::merge(ranges);
+        auto merged_range = burst::merge(ranges);
         BOOST_CHECK(merged_range.empty());
     }
 
@@ -25,7 +25,7 @@ BOOST_AUTO_TEST_SUITE(merge_iterator)
         int array[] = {1, 2, 3, 4};
         auto ranges = {boost::make_iterator_range(array)};
 
-        auto merged_range = thrust::merge(ranges);
+        auto merged_range = burst::merge(ranges);
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
             boost::begin(array), boost::end(array),
@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_SUITE(merge_iterator)
         std::list<char> second{'g', 'e', 'c', 'a'};
         auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
 
-        auto merged_range = thrust::merge(ranges, std::greater<char>());
+        auto merged_range = burst::merge(ranges, std::greater<char>());
 
         std::vector<char> expected_collection{'h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -61,7 +61,7 @@ BOOST_AUTO_TEST_SUITE(merge_iterator)
             boost::make_iterator_range(third)
         };
 
-        auto merged_range = thrust::merge(ranges, std::less<int>());
+        auto merged_range = burst::merge(ranges, std::less<int>());
 
         auto expected_collection = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -78,7 +78,7 @@ BOOST_AUTO_TEST_SUITE(merge_iterator)
 
         auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
 
-        auto merged_range = thrust::merge(ranges, std::greater<int>());
+        auto merged_range = burst::merge(ranges, std::greater<int>());
         boost::for_each(merged_range, [] (int & x) { x /= 10; });
 
         BOOST_CHECK_EQUAL(first[0], 10);
@@ -93,8 +93,8 @@ BOOST_AUTO_TEST_SUITE(merge_iterator)
         auto second = {600, 200};
         auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
 
-        auto merged_begin = thrust::make_merge_iterator(ranges, std::greater<int>());
-        auto   merged_end = thrust::make_merge_iterator(ranges, std::greater<int>(), thrust::iterator::end_tag);
+        auto merged_begin = burst::make_merge_iterator(ranges, std::greater<int>());
+        auto   merged_end = burst::make_merge_iterator(ranges, std::greater<int>(), burst::iterator::end_tag);
 
         auto expected_collection = {600, 500, 200, 100};
         BOOST_CHECK_EQUAL_COLLECTIONS

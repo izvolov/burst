@@ -1,7 +1,7 @@
-#ifndef THRUST_ITERATOR_END_TAG_HPP
-#define THRUST_ITERATOR_END_TAG_HPP
+#ifndef BURST_ITERATOR_END_TAG_HPP
+#define BURST_ITERATOR_END_TAG_HPP
 
-namespace thrust
+namespace burst
 {
     namespace iterator
     {
@@ -23,4 +23,4 @@ namespace thrust
     }
 }
 
-#endif // THRUST_ITERATOR_END_TAG_HPP
+#endif // BURST_ITERATOR_END_TAG_HPP

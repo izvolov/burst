@@ -1,4 +1,4 @@
-Thrust
+Burst
 ========
 
 То, чего нет в Бусте.
@@ -25,4 +25,4 @@ Thrust
 
 Про более древние компиляторы и версии Буста мне ничего неизвестно.
 
-[![Статус сборки](https://travis-ci.org/izvolov/thrust.svg?branch=master)](https://travis-ci.org/izvolov/thrust)
+[![Статус сборки](https://travis-ci.org/izvolov/burst.svg?branch=master)](https://travis-ci.org/izvolov/burst)

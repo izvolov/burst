@@ -7,7 +7,7 @@
 #include <boost/container/flat_set.hpp>
 #include <boost/program_options.hpp>
 
-#include <thrust/container/k_ary_search_set.hpp>
+#include <burst/container/k_ary_search_set.hpp>
 
 template <typename Container>
 struct default_constructor
@@ -36,10 +36,10 @@ struct k_ary_constructor
     }
 
     template <typename Iterator>
-    thrust::k_ary_search_set<Value> operator () (Iterator first, Iterator last) const
+    burst::k_ary_search_set<Value> operator () (Iterator first, Iterator last) const
     {
         std::cout << "k_ary_set(" << arity << ")" << std::endl;
-        return thrust::k_ary_search_set<Value>(first, last, arity);
+        return burst::k_ary_search_set<Value>(first, last, arity);
     }
 
     std::size_t arity;

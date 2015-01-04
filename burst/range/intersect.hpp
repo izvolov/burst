@@ -1,12 +1,12 @@
-#ifndef THRUST_RANGE_INTERSECT_HPP
-#define THRUST_RANGE_INTERSECT_HPP
+#ifndef BURST_RANGE_INTERSECT_HPP
+#define BURST_RANGE_INTERSECT_HPP
 
 #include <boost/range/iterator_range.hpp>
 
-#include <thrust/iterator/end_tag.hpp>
-#include <thrust/iterator/intersect_iterator.hpp>
+#include <burst/iterator/end_tag.hpp>
+#include <burst/iterator/intersect_iterator.hpp>
 
-namespace thrust
+namespace burst
 {
     //!     Функция для создания диапазона пересечений с предикатом.
     /*!
@@ -51,4 +51,4 @@ namespace thrust
     }
 }
 
-#endif // THRUST_RANGE_INTERSECT_HPP
+#endif // BURST_RANGE_INTERSECT_HPP

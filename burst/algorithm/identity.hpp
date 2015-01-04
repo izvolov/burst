@@ -1,7 +1,7 @@
-#ifndef THRUST_ALGORITHM_IDENTITY_HPP
-#define THRUST_ALGORITHM_IDENTITY_HPP
+#ifndef BURST_ALGORITHM_IDENTITY_HPP
+#define BURST_ALGORITHM_IDENTITY_HPP
 
-namespace thrust
+namespace burst
 {
     //!     Тождественное отображение, параметризованное типом.
     /*!
@@ -34,4 +34,4 @@ namespace thrust
     };
 }
 
-#endif // THRUST_ALGORITHM_IDENTITY_HPP
+#endif // BURST_ALGORITHM_IDENTITY_HPP
