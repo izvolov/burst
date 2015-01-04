@@ -65,7 +65,6 @@ void test_one (const Container & numbers, std::size_t attempt_count, const SetCo
     creation_time = clock() - creation_time;
 
     clock_t search_time = 0;
-    std::size_t elements_found = 0;
     for (std::size_t attempt = 0; attempt < attempt_count; ++attempt)
     {
         const auto & element = numbers[static_cast<std::size_t>(random()) % numbers.size()];
@@ -74,21 +73,12 @@ void test_one (const Container & numbers, std::size_t attempt_count, const SetCo
         auto search_result = set.find(element);
         attempt_time = clock() - attempt_time;
 
-        if (search_result != set.end() && *search_result == element)
+        if (search_result == set.end() || *search_result != element)
         {
-            ++elements_found;
-        }
-        else
-        {
-        throw std::runtime_error("Нашлись не все искомые элементы.");
+            throw std::runtime_error("Нашлись не все искомые элементы.");
         }
 
         search_time += attempt_time;
-    }
-
-    if (elements_found != attempt_count)
-    {
-        throw 1;
     }
 
     std::cout << "\tВремя создания: " << static_cast<double>(creation_time) / CLOCKS_PER_SEC << std::endl;
