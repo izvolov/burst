@@ -148,4 +148,17 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
 
         BOOST_CHECK_EQUAL(*set.find(50), 50);
     }
+
+    BOOST_AUTO_TEST_CASE(const_find_method_exists)
+    {
+        const burst::k_ary_search_set<int> set;
+        BOOST_CHECK(set.find(8) == set.end());
+    }
+
+    BOOST_AUTO_TEST_CASE(mutable_find_method_exists)
+    {
+        burst::k_ary_search_set<int> set;
+        burst::k_ary_search_set<int> & set_ref = set;
+        BOOST_CHECK(set_ref.find(8) == set_ref.end());
+    }
 BOOST_AUTO_TEST_SUITE_END()

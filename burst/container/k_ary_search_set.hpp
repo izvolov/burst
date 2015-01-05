@@ -67,35 +67,12 @@ namespace burst
     public:
         iterator find (const value_type & value)
         {
-            std::size_t node_index = 0;
-
-            while (node_index < m_values.size())
-            {
-                iterator node_begin = begin() + static_cast<difference_type>(node_index);
-                iterator node_end = node_begin + std::min(static_cast<difference_type>(m_arity - 1), std::distance(node_begin, end()));
-
-                iterator search_result = std::lower_bound(node_begin, node_end, value, m_compare);
-                if (search_result != node_end && not m_compare(value, *search_result))
-                {
-                    return search_result;
-                }
-                else
-                {
-                    node_index = perfect_tree_child_index
-                    (
-                        m_arity,
-                        node_index,
-                        static_cast<std::size_t>(std::distance(node_begin, search_result))
-                    );
-                }
-            }
-
-            return end();
+            return begin() + std::distance(cbegin(), find_impl(value));
         }
 
         const_iterator find (const value_type & value) const
         {
-            return find(value);
+            return find_impl(value);
         }
 
         size_type size () const
@@ -139,6 +116,34 @@ namespace burst
         }
 
     private:
+        const_iterator find_impl (const value_type & value) const
+        {
+            std::size_t node_index = 0;
+
+            while (node_index < m_values.size())
+            {
+                const_iterator node_begin = begin() + static_cast<difference_type>(node_index);
+                const_iterator node_end = node_begin + std::min(static_cast<difference_type>(m_arity - 1), std::distance(node_begin, end()));
+
+                const_iterator search_result = std::lower_bound(node_begin, node_end, value, m_compare);
+                if (search_result != node_end && not m_compare(value, *search_result))
+                {
+                    return search_result;
+                }
+                else
+                {
+                    node_index = perfect_tree_child_index
+                    (
+                        m_arity,
+                        node_index,
+                        static_cast<std::size_t>(std::distance(node_begin, search_result))
+                    );
+                }
+            }
+
+            return end();
+        }
+
         template <typename RandomAccessRange>
         void initialize (const RandomAccessRange & range)
         {
