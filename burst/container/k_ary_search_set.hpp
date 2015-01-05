@@ -10,7 +10,10 @@
 #include <vector>
 
 #include <boost/assert.hpp>
+#include <boost/container/container_fwd.hpp>
 #include <boost/range/iterator_range.hpp>
+
+#include <burst/container/unique_ordered_tag.hpp>
 
 namespace burst
 {
@@ -42,6 +45,7 @@ namespace burst
         template <typename RandomAccessIterator>
         k_ary_search_set
                 (
+                    container::unique_ordered_tag_t,
                     RandomAccessIterator first,
                     RandomAccessIterator last,
                     std::size_t arity = 129,
@@ -51,11 +55,33 @@ namespace burst
             m_arity(arity),
             m_compare(compare)
         {
-            BOOST_ASSERT(std::is_sorted(first, last, compare));
+            BOOST_ASSERT(std::adjacent_find(first, last, std::not2(compare)) == last);
 
             if (first != last)
             {
                 initialize(boost::make_iterator_range(first, last));
+            }
+        }
+
+        template <typename RandomAccessIterator>
+        k_ary_search_set
+                (
+                    RandomAccessIterator first,
+                    RandomAccessIterator last,
+                    std::size_t arity = 129,
+                    const value_compare & compare = value_compare()
+                ):
+            m_arity(arity),
+            m_compare(compare)
+        {
+            if (first != last)
+            {
+                value_container_type buffer(first, last);
+                std::sort(buffer.begin(), buffer.end(), m_compare);
+                buffer.erase(std::unique(buffer.begin(), buffer.end(), std::not2(m_compare)), buffer.end());
+                m_values.resize(buffer.size());
+
+                initialize(boost::make_iterator_range(buffer));
             }
         }
 

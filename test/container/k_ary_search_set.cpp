@@ -54,7 +54,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
     {
         std::vector<int> something{1, 2, 3, 4};
 
-        burst::k_ary_search_set<int> set(something.begin(), something.end());
+        burst::k_ary_search_set<int> set(burst::container::unique_ordered_tag, something.begin(), something.end());
 
         BOOST_CHECK_EQUAL(set.size(), something.size());
     }
@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
     {
         std::vector<int> numbers{0, 1, 2, 3, 4, 5, 6, 7};
 
-        burst::k_ary_search_set<int> set(numbers.begin(), numbers.end(), 3);
+        burst::k_ary_search_set<int> set(burst::container::unique_ordered_tag, numbers.begin(), numbers.end(), 3);
 
         std::vector<int> expected{2, 5, 0, 1, 3, 4, 6, 7};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -112,7 +112,6 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
     BOOST_AUTO_TEST_CASE(searching_absent_value_results_end_iterator)
     {
         std::vector<int> numbers{3, 4, 6, 1, 7, 8, 2};
-        std::sort(numbers.begin(), numbers.end());
 
         burst::k_ary_search_set<int> set(numbers.begin(), numbers.end(), 2);
 
@@ -122,7 +121,6 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
     BOOST_AUTO_TEST_CASE(searching_existing_value_results_non_end_iterator)
     {
         std::vector<int> numbers{3, 4, 6, 1, 7, 8, 2};
-        std::sort(numbers.begin(), numbers.end());
 
         burst::k_ary_search_set<int> set(numbers.begin(), numbers.end(), 3);
 
@@ -132,7 +130,6 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
     BOOST_AUTO_TEST_CASE(searching_existing_value_results_iterator_pointing_to_that_value)
     {
         std::vector<int> numbers{3, 4, 6, 1, 7, 8, 2};
-        std::sort(numbers.begin(), numbers.end(), std::greater<int>());
 
         burst::k_ary_search_set<int, std::greater<int>> set(numbers.begin(), numbers.end(), 4);
 
