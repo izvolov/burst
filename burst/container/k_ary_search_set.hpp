@@ -59,6 +59,11 @@ namespace burst
             }
         }
 
+        k_ary_search_set ():
+            m_arity(0)
+        {
+        }
+
     public:
         iterator find (const value_type & value)
         {

@@ -8,6 +8,30 @@
 #include <burst/container/k_ary_search_set.hpp>
 
 BOOST_AUTO_TEST_SUITE(k_ary_search)
+    BOOST_AUTO_TEST_CASE(k_ary_search_set_initialized_with_default_constructor_is_empty)
+    {
+        burst::k_ary_search_set<std::string> set;
+        BOOST_CHECK(set.empty());
+    }
+
+    BOOST_AUTO_TEST_CASE(size_of_k_ary_search_set_initialized_with_default_constructor_is_zero)
+    {
+        burst::k_ary_search_set<std::string> set;
+        BOOST_CHECK_EQUAL(set.size(), 0);
+    }
+
+    BOOST_AUTO_TEST_CASE(begin_of_k_ary_search_set_initialized_with_default_constructor_is_equal_to_end)
+    {
+        burst::k_ary_search_set<std::string> set;
+        BOOST_CHECK(set.begin() == set.end());
+    }
+
+    BOOST_AUTO_TEST_CASE(nothing_to_find_in_k_ary_search_set_initialized_with_default_constructor)
+    {
+        burst::k_ary_search_set<std::string> set;
+        BOOST_CHECK(set.find("qwerty") == set.end());
+    }
+
     BOOST_AUTO_TEST_CASE(k_ary_search_set_is_empty_when_initialized_from_empty_range)
     {
         std::vector<int> nothing;
