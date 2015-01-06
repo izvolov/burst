@@ -56,11 +56,7 @@ namespace burst
             m_compare(compare)
         {
             BOOST_ASSERT(std::adjacent_find(first, last, std::not2(compare)) == last);
-
-            if (first != last)
-            {
-                initialize(boost::make_iterator_range(first, last));
-            }
+            initialize_trusted(boost::make_iterator_range(first, last));
         }
 
         template <typename RandomAccessIterator>
@@ -74,15 +70,34 @@ namespace burst
             m_arity(arity),
             m_compare(compare)
         {
-            if (first != last)
-            {
-                value_container_type buffer(first, last);
-                std::sort(buffer.begin(), buffer.end(), m_compare);
-                buffer.erase(std::unique(buffer.begin(), buffer.end(), std::not2(m_compare)), buffer.end());
-                m_values.resize(buffer.size());
+            initialize_preparing(boost::make_iterator_range(first, last));
+        }
 
-                initialize(boost::make_iterator_range(buffer));
-            }
+        k_ary_search_set
+                (
+                    container::unique_ordered_tag_t,
+                    std::initializer_list<value_type> values,
+                    std::size_t arity = 129,
+                    const value_compare & compare = value_compare()
+                ):
+            m_values(values.size()),
+            m_arity(arity),
+            m_compare(compare)
+        {
+            BOOST_ASSERT(std::adjacent_find(values.begin(), values.end(), std::not2(compare)) == values.end());
+            initialize_trusted(boost::make_iterator_range(values));
+        }
+
+        k_ary_search_set
+                (
+                    std::initializer_list<value_type> values,
+                    std::size_t arity = 129,
+                    const value_compare & compare = value_compare()
+                ):
+            m_arity(arity),
+            m_compare(compare)
+        {
+            initialize_preparing(values);
         }
 
         k_ary_search_set ():
@@ -171,42 +186,57 @@ namespace burst
         }
 
         template <typename RandomAccessRange>
-        void initialize (const RandomAccessRange & range)
+        void initialize_preparing (const RandomAccessRange & range)
         {
-            std::stack<k_ary_search_set_branch> branches;
+            value_container_type buffer(range.begin(), range.end());
+            std::sort(buffer.begin(), buffer.end(), m_compare);
+            buffer.erase(std::unique(buffer.begin(), buffer.end(), std::not2(m_compare)), buffer.end());
 
-            branches.push({0, size(), perfect_tree_height(m_arity, size()), 0});
-            while (not branches.empty())
+            initialize_trusted(boost::make_iterator_range(buffer));
+        }
+
+        template <typename RandomAccessRange>
+        void initialize_trusted (const RandomAccessRange & range)
+        {
+            if (not range.empty())
             {
-                const auto branch = branches.top();
-                branches.pop();
+                m_values.resize(range.size());
 
-                // Количество меньших элементов ветки для каждого элемента текущего узла.
-                std::vector<std::size_t> counters;
-                fill_counters(branch, counters);
+                std::stack<k_ary_search_set_branch> branches;
 
-                fill_node(branch, counters, range);
-
-                if (counters[0] > 0)
+                branches.push({0, size(), perfect_tree_height(m_arity, size()), 0});
+                while (not branches.empty())
                 {
-                    branches.push
-                    ({
-                        perfect_tree_child_index(m_arity, branch.index, 0),
-                        counters[0],
-                        branch.height - 1,
-                        branch.preceding_elements
-                    });
-                }
+                    const auto branch = branches.top();
+                    branches.pop();
 
-                for (std::size_t i = 1; i < counters.size() && (counters[i] - counters[i - 1] - 1) > 0; ++i)
-                {
-                    branches.push
-                    ({
-                        perfect_tree_child_index(m_arity, branch.index, i),
-                        counters[i] - counters[i - 1] - 1,
-                        branch.height - 1,
-                        branch.preceding_elements + counters[i - 1] + 1
-                    });
+                    // Количество меньших элементов ветки для каждого элемента текущего узла.
+                    std::vector<std::size_t> counters;
+                    fill_counters(branch, counters);
+
+                    fill_node(branch, counters, range);
+
+                    if (counters[0] > 0)
+                    {
+                        branches.push
+                        ({
+                            perfect_tree_child_index(m_arity, branch.index, 0),
+                            counters[0],
+                            branch.height - 1,
+                            branch.preceding_elements
+                        });
+                    }
+
+                    for (std::size_t i = 1; i < counters.size() && (counters[i] - counters[i - 1] - 1) > 0; ++i)
+                    {
+                        branches.push
+                        ({
+                            perfect_tree_child_index(m_arity, branch.index, i),
+                            counters[i] - counters[i - 1] - 1,
+                            branch.height - 1,
+                            branch.preceding_elements + counters[i - 1] + 1
+                        });
+                    }
                 }
             }
         }

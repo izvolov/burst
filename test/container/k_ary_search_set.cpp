@@ -75,9 +75,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
 
     BOOST_AUTO_TEST_CASE(k_ary_search_set_is_initialized_properly_when_it_is_complete_ternary_tree)
     {
-        std::vector<int> numbers{0, 1, 2, 3, 4, 5, 6, 7};
-
-        burst::k_ary_search_set<int> set(burst::container::unique_ordered_tag, numbers.begin(), numbers.end(), 3);
+        burst::k_ary_search_set<int> set(burst::container::unique_ordered_tag, {0, 1, 2, 3, 4, 5, 6, 7}, 3);
 
         std::vector<int> expected{2, 5, 0, 1, 3, 4, 6, 7};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -111,9 +109,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
 
     BOOST_AUTO_TEST_CASE(searching_absent_value_results_end_iterator)
     {
-        std::vector<int> numbers{3, 4, 6, 1, 7, 8, 2};
-
-        burst::k_ary_search_set<int> set(numbers.begin(), numbers.end(), 2);
+        burst::k_ary_search_set<int> set({3, 4, 6, 1, 7, 8, 2}, 2);
 
         BOOST_CHECK(set.find(26) == set.end());
     }
