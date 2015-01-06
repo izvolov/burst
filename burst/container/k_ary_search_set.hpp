@@ -70,7 +70,7 @@ namespace burst
             m_arity(arity),
             m_compare(compare)
         {
-            initialize_preparing(boost::make_iterator_range(first, last));
+            initialize(boost::make_iterator_range(first, last));
         }
 
         k_ary_search_set
@@ -97,7 +97,7 @@ namespace burst
             m_arity(arity),
             m_compare(compare)
         {
-            initialize_preparing(values);
+            initialize(boost::make_iterator_range(values));
         }
 
         k_ary_search_set ():
@@ -186,13 +186,20 @@ namespace burst
         }
 
         template <typename RandomAccessRange>
-        void initialize_preparing (const RandomAccessRange & range)
+        void initialize (const RandomAccessRange & range)
         {
-            value_container_type buffer(range.begin(), range.end());
-            std::sort(buffer.begin(), buffer.end(), m_compare);
-            buffer.erase(std::unique(buffer.begin(), buffer.end(), std::not2(m_compare)), buffer.end());
+            if (std::is_sorted(range.begin(), range.end(), m_compare))
+            {
+                initialize_trusted(range);
+            }
+            else
+            {
+                value_container_type buffer(range.begin(), range.end());
+                std::sort(buffer.begin(), buffer.end(), m_compare);
+                buffer.erase(std::unique(buffer.begin(), buffer.end(), std::not2(m_compare)), buffer.end());
 
-            initialize_trusted(boost::make_iterator_range(buffer));
+                initialize_trusted(boost::make_iterator_range(buffer));
+            }
         }
 
         template <typename RandomAccessRange>
