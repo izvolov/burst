@@ -55,7 +55,6 @@ namespace burst
             m_arity(arity),
             m_compare(compare)
         {
-            BOOST_ASSERT(std::adjacent_find(first, last, std::not2(compare)) == last);
             initialize_trusted(boost::make_iterator_range(first, last));
         }
 
@@ -84,7 +83,6 @@ namespace burst
             m_arity(arity),
             m_compare(compare)
         {
-            BOOST_ASSERT(std::adjacent_find(values.begin(), values.end(), std::not2(compare)) == values.end());
             initialize_trusted(boost::make_iterator_range(values));
         }
 
@@ -205,6 +203,7 @@ namespace burst
         template <typename RandomAccessRange>
         void initialize_trusted (const RandomAccessRange & range)
         {
+            BOOST_ASSERT(std::adjacent_find(range.begin(), range.end(), std::not2(m_compare)) == range.end());
             if (not range.empty())
             {
                 m_values.resize(range.size());
