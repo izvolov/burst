@@ -48,7 +48,7 @@ namespace burst
                     container::unique_ordered_tag_t,
                     RandomAccessIterator first,
                     RandomAccessIterator last,
-                    std::size_t arity = 129,
+                    std::size_t arity = default_arity,
                     const value_compare & compare = value_compare()
                 ):
             m_values(static_cast<size_type>(std::distance(first, last))),
@@ -64,7 +64,7 @@ namespace burst
                 (
                     RandomAccessIterator first,
                     RandomAccessIterator last,
-                    std::size_t arity = 129,
+                    std::size_t arity = default_arity,
                     const value_compare & compare = value_compare()
                 ):
             m_arity(arity),
@@ -77,7 +77,7 @@ namespace burst
                 (
                     container::unique_ordered_tag_t,
                     std::initializer_list<value_type> values,
-                    std::size_t arity = 129,
+                    std::size_t arity = default_arity,
                     const value_compare & compare = value_compare()
                 ):
             m_values(values.size()),
@@ -91,7 +91,7 @@ namespace burst
         k_ary_search_set
                 (
                     std::initializer_list<value_type> values,
-                    std::size_t arity = 129,
+                    std::size_t arity = default_arity,
                     const value_compare & compare = value_compare()
                 ):
             m_arity(arity),
@@ -318,6 +318,9 @@ namespace burst
                 return degree - 1;
             }
         }
+
+    private:
+        static const std::size_t default_arity = 33;
 
     private:
         value_container_type m_values;
