@@ -61,6 +61,7 @@ BOOST_AUTO_TEST_SUITE(subset_iterator)
         auto   subsets_end = burst::make_subset_iterator(sequence, burst::iterator::end_tag);
 
         BOOST_CHECK_EQUAL(std::distance(subsets_begin, subsets_end), 1);
+        BOOST_CHECK_EQUAL(subsets_begin->size(), 1);
     }
 
     BOOST_AUTO_TEST_CASE(repeating_elements_are_not_considered)
