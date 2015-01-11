@@ -65,11 +65,11 @@ BOOST_AUTO_TEST_SUITE(subset_iterator)
 
     BOOST_AUTO_TEST_CASE(repeating_elements_are_not_considered)
     {
-        auto sequence = {1, 1, 1, 2, 2, 2, 3, 3, 3};
-        std::set<int> set(sequence.begin(), sequence.end());
+        auto sequence = {3, 3, 3, 2, 2, 2, 1, 1, 1};
+        std::set<int, std::greater<int>> set(sequence.begin(), sequence.end());
 
-        auto sequence_subsets = burst::subsets(sequence);
-        auto set_subsets = burst::subsets(set);
+        auto sequence_subsets = burst::subsets(sequence, std::greater<int>());
+        auto set_subsets = burst::subsets(set, std::greater<int>());
 
         BOOST_CHECK_EQUAL(sequence_subsets, set_subsets);
     }

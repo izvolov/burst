@@ -33,7 +33,7 @@ namespace burst
         return boost::make_iterator_range
         (
             make_subset_iterator(std::forward<Range>(range), compare),
-            make_subset_iterator(std::forward<Range>(range), compare, iterator::end_tag)
+            make_subset_iterator(std::forward<Range>(range), iterator::end_tag, compare)
         );
     }
 

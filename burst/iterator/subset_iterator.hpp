@@ -178,13 +178,13 @@ namespace burst
         typename std::decay<Range>::type,
         Compare
     >
-    make_subset_iterator (Range && range, Compare compare, iterator::end_tag_t)
+    make_subset_iterator (Range && range, iterator::end_tag_t, Compare compare)
     {
         return subset_iterator<typename std::decay<Range>::type, Compare>
         (
             std::forward<Range>(range),
-            compare,
-            iterator::end_tag
+            iterator::end_tag,
+            compare
         );
     }
 
