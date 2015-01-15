@@ -1,6 +1,7 @@
 #include <vector>
 #include <list>
 
+#include <boost/range/irange.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
@@ -21,14 +22,11 @@ BOOST_AUTO_TEST_SUITE(intersect_iterator)
 
     BOOST_AUTO_TEST_CASE(intersecting_one_range_results_the_same_range)
     {
-        int array[] = {1, 2, 3, 4};
-        auto ranges = {boost::make_iterator_range(array)};
-
-        auto intersected_range = burst::intersect(ranges);
+        auto intersected_range = burst::intersect({boost::irange(1, 5)});
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
-            boost::begin(array), boost::end(array),
+            boost::begin(boost::irange(1, 5)), boost::end(boost::irange(1, 5)),
             boost::begin(intersected_range), boost::end(intersected_range)
         );
     }

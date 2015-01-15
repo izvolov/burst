@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <type_traits>
 #include <vector>
 
 #include <boost/algorithm/cxx11/all_of.hpp>
@@ -65,7 +66,13 @@ namespace burst
                                          intersect_iterator<InputRange, Compare>,
                                          typename InputRange::value_type,
                                          boost::forward_traversal_tag,
-                                         const typename InputRange::value_type &
+                                         typename std::conditional
+                                         <
+                                             std::is_lvalue_reference<typename InputRange::reference>::value,
+                                             typename std::remove_reference<typename InputRange::reference>::type const &,
+                                             typename InputRange::reference
+                                         >
+                                         ::type
                                      >
     {
     private:
@@ -77,7 +84,13 @@ namespace burst
             intersect_iterator,
             typename range_type::value_type,
             boost::forward_traversal_tag,
-            const typename range_type::value_type &
+            typename std::conditional
+            <
+                std::is_lvalue_reference<typename range_type::reference>::value,
+                typename std::remove_reference<typename range_type::reference>::type const &,
+                typename range_type::reference
+            >
+            ::type
         >
         base_type;
 
