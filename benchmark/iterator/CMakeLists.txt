@@ -1,0 +1,7 @@
+set(MERGE_SOURCES merge_iterator.cpp)
+set(MERGE_EXECUTABLE merge)
+add_executable(${MERGE_EXECUTABLE} ${MERGE_SOURCES})
+
+set(SUBSET_ITERATOR_SOURCES subset_iterator.cpp)
+set(SUBSET_ITERATOR_EXECUTABLE subset)
+add_executable(${SUBSET_ITERATOR_EXECUTABLE} ${SUBSET_ITERATOR_SOURCES})
