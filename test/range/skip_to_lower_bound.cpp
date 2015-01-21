@@ -4,15 +4,15 @@
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <burst/range/skip_to.hpp>
+#include <burst/range/skip_to_lower_bound.hpp>
 
-BOOST_AUTO_TEST_SUITE(skip_to)
+BOOST_AUTO_TEST_SUITE(skip_to_lower_bound)
     BOOST_AUTO_TEST_CASE(skipping_to_value_in_empty_range_results_empty_range)
     {
         std::vector<int> empty_container;
         auto empty_range = boost::make_iterator_range(empty_container);
 
-        burst::skip_to(empty_range, 5);
+        burst::skip_to_lower_bound(empty_range, 5);
 
         BOOST_CHECK(empty_range.empty());
     }
@@ -22,7 +22,7 @@ BOOST_AUTO_TEST_SUITE(skip_to)
         std::vector<int> values{1, 5, 5, 7};
         auto sorted_range = boost::make_iterator_range(values);
 
-        burst::skip_to(sorted_range, 5);
+        burst::skip_to_lower_bound(sorted_range, 5);
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
@@ -36,7 +36,7 @@ BOOST_AUTO_TEST_SUITE(skip_to)
         auto values = {1, 2, 3};
         auto sorted_range = boost::make_iterator_range(values);
 
-        burst::skip_to(sorted_range, 100500);
+        burst::skip_to_lower_bound(sorted_range, 100500);
 
         BOOST_CHECK(sorted_range.empty());
     }
@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_SUITE(skip_to)
         auto sorted_range = boost::make_iterator_range(values);
         auto sorted_range_copy = sorted_range;
 
-        burst::skip_to(sorted_range, 100500, std::greater<int>());
+        burst::skip_to_lower_bound(sorted_range, 100500, std::greater<int>());
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
@@ -61,7 +61,7 @@ BOOST_AUTO_TEST_SUITE(skip_to)
         std::vector<double> values{3.14, 2.71, 1.6};
         auto sorted_range = boost::make_iterator_range(values);
 
-        burst::skip_to(sorted_range, 2.5, std::greater<double>());
+        burst::skip_to_lower_bound(sorted_range, 2.5, std::greater<double>());
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (

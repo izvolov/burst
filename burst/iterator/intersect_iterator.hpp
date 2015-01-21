@@ -18,7 +18,7 @@
 
 #include <burst/iterator/detail/front_value_compare.hpp>
 #include <burst/iterator/end_tag.hpp>
-#include <burst/range/skip_to.hpp>
+#include <burst/range/skip_to_lower_bound.hpp>
 
 namespace burst
 {
@@ -133,7 +133,7 @@ namespace burst
         {
             while (m_compare(m_ranges.front().front(), m_ranges.back().front()))
             {
-                skip_to(m_ranges.front(), m_ranges.back().front(), m_compare);
+                skip_to_lower_bound(m_ranges.front(), m_ranges.back().front(), m_compare);
                 if (not m_ranges.front().empty())
                 {
                     auto second_range = ++m_ranges.begin();

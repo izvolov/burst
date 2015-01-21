@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_DETAIL_SKIP_TO_HPP
-#define BURST_RANGE_DETAIL_SKIP_TO_HPP
+#ifndef BURST_RANGE_DETAIL_SKIP_TO_LOWER_BOUND_HPP
+#define BURST_RANGE_DETAIL_SKIP_TO_LOWER_BOUND_HPP
 
 #include <type_traits>
 #include <iterator>
@@ -28,7 +28,7 @@ namespace burst
             void
         >
         ::type
-        skip_to (RandomAccessRange & range, const Value & goal, Compare compare)
+        skip_to_lower_bound (RandomAccessRange & range, const Value & goal, Compare compare)
         {
             range.advance_begin
             (
@@ -57,7 +57,7 @@ namespace burst
             void
         >
         ::type
-        skip_to (InputRange & range, const Value & goal, Compare compare)
+        skip_to_lower_bound (InputRange & range, const Value & goal, Compare compare)
         {
             while (not range.empty() && compare(range.front(), goal))
             {
@@ -67,4 +67,4 @@ namespace burst
     }
 }
 
-#endif // BURST_RANGE_DETAIL_SKIP_TO_HPP
+#endif // BURST_RANGE_DETAIL_SKIP_TO_LOWER_BOUND_HPP
