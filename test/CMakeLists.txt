@@ -1,4 +1,5 @@
 set(TEST_SOURCES test_main.cpp
+                 algorithm/galloping_lower_bound.cpp
                  algorithm/searching/bitap.cpp
                  algorithm/searching/element_position_bitmask_table.cpp
                  algorithm/sorting/counting_sort.cpp
