@@ -164,4 +164,20 @@ BOOST_AUTO_TEST_SUITE(intersect_iterator)
             boost::begin(expected_collection), boost::end(expected_collection)
         );
     }
+
+    BOOST_AUTO_TEST_CASE(no_element_considered_twice)
+    {
+        auto  first = {0, 0, 1};
+        auto second = {0, 1, 1};
+        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+
+        auto intersected_range = burst::intersect(ranges);
+
+        auto expected_collection = {0, 1};
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            boost::begin(intersected_range), boost::end(intersected_range),
+            boost::begin(expected_collection), boost::end(expected_collection)
+        );
+    }
 BOOST_AUTO_TEST_SUITE_END()
