@@ -188,4 +188,22 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
             expected.rbegin(), expected.rend()
         );
     }
+
+    BOOST_AUTO_TEST_CASE(random_accessing_near_range_bounds_is_correct)
+    {
+        auto  first = {3, 2};
+        auto second = {1, 0};
+        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+
+        auto joined_begin = burst::make_join_iterator(ranges);
+        auto joined_end   = burst::make_join_iterator(ranges, burst::iterator::end_tag);
+
+        joined_begin += 2;
+        BOOST_CHECK_EQUAL(*joined_begin, 1);
+        BOOST_CHECK_EQUAL(joined_end - joined_begin, 2);
+
+        joined_begin -= 2;
+        BOOST_CHECK_EQUAL(*joined_begin, 3);
+        BOOST_CHECK_EQUAL(joined_end - joined_begin, 4);
+    }
 BOOST_AUTO_TEST_SUITE_END()

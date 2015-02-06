@@ -294,15 +294,18 @@ namespace burst
             {
                 while (n > 0)
                 {
-                    auto items_remaining_in_current_range = m_inner_range_index;
-                    auto items_to_scroll_in_current_range = std::min(n, items_remaining_in_current_range);
-                    n -= items_to_scroll_in_current_range;
-
-                    m_inner_range_index -= items_to_scroll_in_current_range;
                     if (m_inner_range_index == 0)
                     {
                         --m_outer_range_index;
-                        m_inner_range_index = (*m_ranges)[m_outer_range_index].size();
+                        m_inner_range_index = (*m_ranges)[m_outer_range_index].size() - 1;
+                        --n;
+                    }
+                    else
+                    {
+                        auto items_remaining_in_current_range = m_inner_range_index;
+                        auto items_to_scroll_in_current_range = std::min(n, items_remaining_in_current_range);
+                        n -= items_to_scroll_in_current_range;
+                        m_inner_range_index -= items_to_scroll_in_current_range;
                     }
                 }
             }
