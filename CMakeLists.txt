@@ -13,8 +13,25 @@ cmake_minimum_required(VERSION 2.8)
 ##
 ###################################################################################################
 
-set(WARNING_FLAGS "-Wall -Wextra -Wpedantic -Wconversion -Werror")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 ${WARNING_FLAGS}")
+add_compile_options(
+    -std=c++11
+    -Werror
+
+    -Wall
+    -Wextra
+    -Wpedantic
+
+    -Wcast-align
+    -Wcast-qual
+    -Wconversion
+    -Wenum-compare
+    -Wfloat-equal
+    -Wnon-virtual-dtor
+    -Wold-style-cast
+    -Woverloaded-virtual
+    -Wredundant-decls
+    -Wsign-conversion
+)
 
 if(NOT CMAKE_BUILD_TYPE)
     message(WARNING "Тип сборки не выбран (см. опцию CMAKE_BUILD_TYPE).")
