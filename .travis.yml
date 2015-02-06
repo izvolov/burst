@@ -12,7 +12,7 @@ before_install:
   - cd ..
   - wget http://www.cmake.org/files/v3.1/cmake-3.1.2.tar.gz
   - tar xf cmake-3.1.2.tar.gz
-  - cd cd cmake-3.1.2
+  - cd cmake-3.1.2
   - ./bootstrap
   - sudo make -j4 install
   - cd ..
