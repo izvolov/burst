@@ -258,29 +258,26 @@ namespace burst
              */
             void advance (typename base_type::difference_type n)
             {
+                auto abs_n = static_cast<typename range_type::size_type>(std::abs(n));
                 m_items_passed += static_cast<typename range_type::size_type>(n);
 
                 if (n > 0)
                 {
-                    forward(n);
+                    forward(abs_n);
                 }
                 else
                 {
-                    backward(n);
+                    backward(abs_n);
                 }
             }
 
-            void forward (typename base_type::difference_type n)
+            //!     Вперёд на n элементов.
+            void forward (typename range_type::size_type n)
             {
                 while (n > 0)
                 {
                     auto items_remaining_in_current_range = (*m_ranges)[m_outer_range_index].size() - m_inner_range_index;
-                    auto items_to_scroll_in_current_range =
-                        std::min
-                        (
-                            static_cast<typename range_type::size_type>(n),
-                            items_remaining_in_current_range
-                        );
+                    auto items_to_scroll_in_current_range = std::min(n, items_remaining_in_current_range);
                     n -= items_to_scroll_in_current_range;
 
                     m_inner_range_index += items_to_scroll_in_current_range;
@@ -292,18 +289,14 @@ namespace burst
                 }
             }
 
-            void backward (typename base_type::difference_type n)
+            //!     Назад на n элементов.
+            void backward (typename range_type::size_type n)
             {
-                while (n < 0)
+                while (n > 0)
                 {
                     auto items_remaining_in_current_range = m_inner_range_index;
-                    auto items_to_scroll_in_current_range =
-                        std::min
-                        (
-                            static_cast<typename range_type::size_type>(std::abs(n)),
-                            items_remaining_in_current_range
-                        );
-                    n += items_to_scroll_in_current_range;
+                    auto items_to_scroll_in_current_range = std::min(n, items_remaining_in_current_range);
+                    n -= items_to_scroll_in_current_range;
 
                     m_inner_range_index -= items_to_scroll_in_current_range;
                     if (m_inner_range_index == 0)
