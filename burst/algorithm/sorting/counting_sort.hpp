@@ -1,16 +1,12 @@
 #ifndef BURST_ALGORITHM_SORTING_COUNTING_SORT_HPP
 #define BURST_ALGORITHM_SORTING_COUNTING_SORT_HPP
 
-#include <algorithm>
 #include <iterator>
 #include <limits>
-#include <numeric>
 #include <type_traits>
 
-#include <boost/range/begin.hpp>
-#include <boost/range/end.hpp>
-
 #include <burst/algorithm/identity.hpp>
+#include <burst/algorithm/sorting/detail/counting_sort.hpp>
 
 namespace burst
 {
@@ -61,20 +57,8 @@ namespace burst
         // Единица для дополнительного нуля в начале массива.
         difference_type counters[value_range + 1] = {0};
 
-        std::for_each(first, last,
-            [& counters, & map] (const preimage_type & preimage)
-            {
-                ++counters[map(preimage) - min_value + 1];
-            });
-
-        std::partial_sum(boost::begin(counters), boost::end(counters), boost::begin(counters));
-
-        std::for_each(first, last,
-            [& result, & counters, & map] (const preimage_type & preimage)
-            {
-                auto index = counters[map(preimage) - min_value]++;
-                result[index] = preimage;
-            });
+        detail::collect(first, last, map, counters);
+        detail::dispose(first, last, result, map, counters);
     }
 
     template <typename ForwardIterator, typename RandomAccessIterator>
