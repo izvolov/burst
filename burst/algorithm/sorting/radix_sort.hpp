@@ -7,7 +7,7 @@
 
 #include <burst/algorithm/identity.hpp>
 #include <burst/algorithm/low_byte.hpp>
-#include <burst/algorithm/sorting/counting_sort.hpp>
+#include <burst/algorithm/sorting/detail/counting_sort.hpp>
 #include <burst/algorithm/sorting/detail/radix_sort.hpp>
 
 namespace burst
