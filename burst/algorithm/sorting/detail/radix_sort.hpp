@@ -1,9 +1,13 @@
 #ifndef BURST_ALGORITHM_SORTING_DETAIL_RADIX_SORT_HPP
 #define BURST_ALGORITHM_SORTING_DETAIL_RADIX_SORT_HPP
 
+#include <algorithm>
 #include <iterator>
 #include <limits>
+#include <numeric>
 #include <type_traits>
+
+#include <burst/variadic.hpp>
 
 namespace burst
 {
@@ -51,6 +55,26 @@ namespace burst
             constexpr static const auto radix_size = detail::log2ip(radix_value_range);
             constexpr static const auto radix_count = sizeof(integer_type) * CHAR_BIT / radix_size;
         };
+
+        //!     Собрать счётчики сразу для всех разрядов.
+        /*!
+                Для каждого сортируемого числа подсчитывает количество элементов, строго меньших
+            этого числа.
+         */
+        template <typename ForwardIterator, typename Map, typename Radix, typename Array, std::size_t ... Radices>
+        void collect (ForwardIterator first, ForwardIterator last, Map map, Radix radix, Array & counters, std::index_sequence<Radices...>)
+        {
+            using traits = detail::radix_sort_traits<ForwardIterator, Map, Radix>;
+
+            using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
+            std::for_each(first, last,
+                [& counters, & map, & radix] (const value_type & value)
+                {
+                    BURST_VARIADIC(++counters[Radices][radix(static_cast<typename traits::integer_type>(map(value) >> (traits::radix_size * Radices))) - traits::min_radix_value + 1]);
+                });
+
+            BURST_VARIADIC(std::partial_sum(std::begin(counters[Radices]), std::end(counters[Radices]), std::begin(counters[Radices])));
+        }
     } // namespace detail
 } // namespace burst
 
