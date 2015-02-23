@@ -45,17 +45,13 @@ namespace burst
     template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
     void counting_sort (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
     {
-        typedef typename std::iterator_traits<ForwardIterator>::value_type preimage_type;
-        typedef typename std::decay<typename std::result_of<Map(preimage_type)>::type>::type image_type;
-        static_assert(std::is_integral<image_type>::value, "Сортируемые элементы должны быть отображены в целые числа.");
-        typedef typename std::iterator_traits<RandomAccessIterator>::difference_type difference_type;
+        using traits = detail::counting_sort_traits<ForwardIterator, Map>;
+        static_assert(std::is_integral<typename traits::image_type>::value,
+            "Сортируемые элементы должны быть отображены в целые числа.");
 
-        constexpr const auto min_value = std::numeric_limits<image_type>::min();
-        constexpr const auto max_value = std::numeric_limits<image_type>::max();
-        constexpr const auto value_range = max_value - min_value + 1;
-
+        using difference_type = typename std::iterator_traits<RandomAccessIterator>::difference_type;
         // Единица для дополнительного нуля в начале массива.
-        difference_type counters[value_range + 1] = {0};
+        difference_type counters[traits::value_range + 1] = {0};
 
         detail::collect(first, last, map, counters);
         detail::dispose(first, last, result, map, counters);
