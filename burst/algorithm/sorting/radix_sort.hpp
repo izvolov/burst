@@ -8,44 +8,33 @@
 #include <burst/algorithm/identity.hpp>
 #include <burst/algorithm/low_byte.hpp>
 #include <burst/algorithm/sorting/counting_sort.hpp>
+#include <burst/algorithm/sorting/detail/radix_sort.hpp>
 
 namespace burst
 {
     template <typename ForwardIterator, typename Map, typename Radix>
     void radix_sort (ForwardIterator first, ForwardIterator last, Map map, Radix radix)
     {
-        using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
-        using integer_type = typename std::decay<typename std::result_of<Map(value_type)>::type>::type;
-        static_assert(std::is_integral<integer_type>::value && std::is_unsigned<integer_type>::value,
-            "Сортируемые элементы должны быть отображены в целые беззнаковые числа.");
-
-        using radix_type = typename std::decay<typename std::result_of<Radix(integer_type)>::type>::type;
-        static_assert(std::is_integral<radix_type>::value,
-            "Тип разряда, выделяемого из целого числа, тоже должен быть целым.");
-
-        constexpr const auto min_radix_value = std::numeric_limits<radix_type>::min();
-        constexpr const auto max_radix_value = std::numeric_limits<radix_type>::max();
-        constexpr const auto radix_value_range = max_radix_value - min_radix_value + 1;
-        constexpr const auto radix_size = detail::log2ip(radix_value_range);
-        constexpr const auto radix_count = sizeof(integer_type) * CHAR_BIT / radix_size;
+        using traits = detail::radix_sort_traits<ForwardIterator, Map, Radix>;
 
         using difference_type = typename std::iterator_traits<ForwardIterator>::difference_type;
-        difference_type counters[radix_count][radix_value_range + 1] = {{0}};
-        detail::collect(first, last, map, radix, counters, std::make_index_sequence<radix_count>());
+        difference_type counters[traits::radix_count][traits::radix_value_range + 1] = {{0}};
+        detail::collect(first, last, map, radix, counters, std::make_index_sequence<traits::radix_count>());
 
         auto distance = std::distance(first, last);
+        using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
         std::vector<value_type> resulting_buffer(static_cast<std::size_t>(distance));
         std::vector<value_type> intermediate_buffer(static_cast<std::size_t>(distance));
 
         auto get_low_radix = [& radix, & map] (const value_type & value) { return radix(map(value)); };
         detail::dispose(first, last, resulting_buffer.begin(), get_low_radix, counters[0]);
 
-        for (std::size_t radix_number = 1; radix_number < radix_count; ++radix_number)
+        for (std::size_t radix_number = 1; radix_number < traits::radix_count; ++radix_number)
         {
             auto get_radix =
                 [& map, & radix, & radix_number] (const value_type & value)
                 {
-                    return radix(static_cast<integer_type>(map(value) >> (radix_size * radix_number)));
+                    return radix(static_cast<typename traits::integer_type>(map(value) >> (traits::radix_size * radix_number)));
                 };
             detail::dispose(resulting_buffer.begin(), resulting_buffer.end(),
                 intermediate_buffer.begin(),
