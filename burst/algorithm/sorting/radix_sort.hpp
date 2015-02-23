@@ -33,8 +33,9 @@ namespace burst
         difference_type counters[radix_count][radix_value_range + 1] = {{0}};
         detail::collect(first, last, map, radix, counters, std::make_index_sequence<radix_count>());
 
-        std::vector<value_type> resulting_buffer(static_cast<std::size_t>(std::distance(first, last)));
-        std::vector<value_type> intermediate_buffer(static_cast<std::size_t>(std::distance(first, last)));
+        auto distance = std::distance(first, last);
+        std::vector<value_type> resulting_buffer(static_cast<std::size_t>(distance));
+        std::vector<value_type> intermediate_buffer(static_cast<std::size_t>(distance));
 
         auto get_low_radix = [& radix, & map] (const value_type & value) { return radix(map(value)); };
         detail::dispose(first, last, resulting_buffer.begin(), get_low_radix, counters[0]);
