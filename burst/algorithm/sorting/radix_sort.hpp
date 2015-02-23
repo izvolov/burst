@@ -11,10 +11,10 @@
 
 namespace burst
 {
-    template <typename RandomAccessIterator, typename Map, typename Radix>
-    void radix_sort (RandomAccessIterator first, RandomAccessIterator last, Map map, Radix radix)
+    template <typename ForwardIterator, typename Map, typename Radix>
+    void radix_sort (ForwardIterator first, ForwardIterator last, Map map, Radix radix)
     {
-        using value_type = typename std::iterator_traits<RandomAccessIterator>::value_type;
+        using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
         using integer_type = typename std::decay<typename std::result_of<Map(value_type)>::type>::type;
         static_assert(std::is_integral<integer_type>::value && std::is_unsigned<integer_type>::value,
             "Сортируемые элементы должны быть отображены в целые беззнаковые числа.");
@@ -29,7 +29,7 @@ namespace burst
         constexpr const auto radix_size = detail::log2ip(radix_value_range);
         constexpr const auto radix_count = sizeof(integer_type) * CHAR_BIT / radix_size;
 
-        using difference_type = typename std::iterator_traits<RandomAccessIterator>::difference_type;
+        using difference_type = typename std::iterator_traits<ForwardIterator>::difference_type;
         difference_type counters[radix_count][radix_value_range + 1] = {{0}};
         detail::collect(first, last, map, radix, counters, std::make_index_sequence<radix_count>());
 
