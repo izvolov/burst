@@ -32,7 +32,7 @@ void test_radix_sort (const Container & numbers, std::size_t attempts)
 
     std::cout << "Поразрядная:" << std::endl;
     std::cout << "\tОбщее время: " << static_cast<double>(total_time) / CLOCKS_PER_SEC << std::endl;
-    std::cout << "\tСреднее время: " << static_cast<double>(total_time) / attempts / CLOCKS_PER_SEC << std::endl;
+    std::cout << "\tСреднее время: " << static_cast<double>(total_time) / static_cast<double>(attempts) / CLOCKS_PER_SEC << std::endl;
     std::cout << std::endl;
 }
 
@@ -53,7 +53,7 @@ void test_std_sort (const Container & numbers, std::size_t attempts)
 
     std::cout << "std::sort:" << std::endl;
     std::cout << "\tОбщее время: " << static_cast<double>(total_time) / CLOCKS_PER_SEC << std::endl;
-    std::cout << "\tСреднее время: " << static_cast<double>(total_time) / attempts / CLOCKS_PER_SEC << std::endl;
+    std::cout << "\tСреднее время: " << static_cast<double>(total_time) / static_cast<double>(attempts) / CLOCKS_PER_SEC << std::endl;
     std::cout << std::endl;
 }
 
