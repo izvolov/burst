@@ -1,5 +1,5 @@
-#ifndef BURST_ALGORITHM_SORTING_COUNTING_SORT_HPP
-#define BURST_ALGORITHM_SORTING_COUNTING_SORT_HPP
+#ifndef BURST_ALGORITHM_SORTING_COUNTING_SORT_COPY_HPP
+#define BURST_ALGORITHM_SORTING_COUNTING_SORT_COPY_HPP
 
 #include <iterator>
 #include <limits>
@@ -43,7 +43,7 @@ namespace burst
            элементы входного диапазона на их места в отсортированном диапазоне.
      */
     template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
-    void counting_sort (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
+    void counting_sort_copy (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
     {
         using traits = detail::counting_sort_traits<ForwardIterator, Map>;
         static_assert(std::is_integral<typename traits::image_type>::value,
@@ -58,10 +58,10 @@ namespace burst
     }
 
     template <typename ForwardIterator, typename RandomAccessIterator>
-    void counting_sort (ForwardIterator first, ForwardIterator last, RandomAccessIterator result)
+    void counting_sort_copy (ForwardIterator first, ForwardIterator last, RandomAccessIterator result)
     {
-        return counting_sort(first, last, result, identity<>());
+        return counting_sort_copy(first, last, result, identity<>());
     }
 }
 
-#endif // BURST_ALGORITHM_SORTING_COUNTING_SORT_HPP
+#endif // BURST_ALGORITHM_SORTING_COUNTING_SORT_COPY_HPP

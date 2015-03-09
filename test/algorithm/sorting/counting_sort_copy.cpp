@@ -7,15 +7,15 @@
 #include <boost/range/rend.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <burst/algorithm/sorting/counting_sort.hpp>
+#include <burst/algorithm/sorting/counting_sort_copy.hpp>
 
-BOOST_AUTO_TEST_SUITE(counting_sort)
+BOOST_AUTO_TEST_SUITE(counting_sort_copy)
     BOOST_AUTO_TEST_CASE(sorting_empty_range_does_nothing)
     {
         std::vector<std::uint8_t> values;
 
         std::vector<std::uint8_t> sorted_values(values.size());
-        burst::counting_sort(values.begin(), values.end(), sorted_values.begin());
+        burst::counting_sort_copy(values.begin(), values.end(), sorted_values.begin());
 
         BOOST_CHECK(values == sorted_values);
     }
@@ -25,7 +25,7 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
         std::vector<std::uint8_t> initial{0, 1, 2, 3, 4};
 
         std::vector<std::uint8_t> sorted(initial.size());
-        burst::counting_sort(initial.begin(), initial.end(), sorted.begin());
+        burst::counting_sort_copy(initial.begin(), initial.end(), sorted.begin());
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
         std::vector<std::size_t> descending_by_low_byte{0x0104, 0x0203, 0x0302, 0x0401};
 
         std::vector<std::size_t> ascending_by_low_byte(descending_by_low_byte.size());
-        burst::counting_sort
+        burst::counting_sort_copy
         (
             descending_by_low_byte.begin(),
             descending_by_low_byte.end(),
@@ -59,7 +59,7 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
         std::vector<std::uint8_t> chaos{0x12, 0xfd, 0x00, 0x15, 0x66};
 
         std::vector<std::uint8_t> sorted(chaos.size());
-        burst::counting_sort(chaos.begin(), chaos.end(), sorted.begin());
+        burst::counting_sort_copy(chaos.begin(), chaos.end(), sorted.begin());
 
         std::vector<std::uint8_t> expected{0x00, 0x12, 0x15, 0x66, 0xfd};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
         std::vector<std::int8_t> unsorted{0, -1, 1, -2, 2};
 
         std::vector<std::int8_t> sorted(unsorted.size());
-        burst::counting_sort(unsorted.begin(), unsorted.end(), sorted.begin());
+        burst::counting_sort_copy(unsorted.begin(), unsorted.end(), sorted.begin());
 
         std::vector<std::int8_t> expected{-2, -1, 0, 1, 2};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -94,7 +94,7 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
         };
 
         std::vector<std::int8_t> sorted(unsorted.size());
-        burst::counting_sort(unsorted.begin(), unsorted.end(), sorted.begin());
+        burst::counting_sort_copy(unsorted.begin(), unsorted.end(), sorted.begin());
 
         std::vector<std::int8_t> expected
         {
@@ -122,7 +122,7 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
         };
 
         std::vector<std::uint32_t> sorted(unsorted.size());
-        burst::counting_sort
+        burst::counting_sort_copy
         (
             unsorted.begin(),
             unsorted.end(),

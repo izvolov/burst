@@ -4,7 +4,7 @@ set(TEST_SOURCES test_main.cpp
                  algorithm/galloping_lower_bound.cpp
                  algorithm/searching/bitap.cpp
                  algorithm/searching/element_position_bitmask_table.cpp
-                 algorithm/sorting/counting_sort.cpp
+                 algorithm/sorting/counting_sort_copy.cpp
                  algorithm/sorting/radix_sort.cpp
                  container/k_ary_search_set.cpp
                  iterator/intersect_iterator.cpp

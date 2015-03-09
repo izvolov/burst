@@ -8,7 +8,7 @@
 #include <numeric>
 #include <type_traits>
 
-#include <burst/algorithm/sorting/counting_sort.hpp>
+#include <burst/algorithm/sorting/counting_sort_copy.hpp>
 #include <burst/variadic.hpp>
 
 namespace burst
@@ -102,7 +102,7 @@ namespace burst
             using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
             std::vector<value_type> buffer(static_cast<std::size_t>(distance));
 
-            counting_sort(first, last, buffer.begin(),
+            counting_sort_copy(first, last, buffer.begin(),
                 [& map, & radix] (const value_type & value)
                 {
                     return radix(map(value));
