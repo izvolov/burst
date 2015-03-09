@@ -1,32 +1,28 @@
-#ifndef BURST_ALGORITHM_SORTING_COUNTING_SORT_COPY_HPP
-#define BURST_ALGORITHM_SORTING_COUNTING_SORT_COPY_HPP
+#ifndef BURST_ALGORITHM_SORTING_COUNTING_SORT_HPP
+#define BURST_ALGORITHM_SORTING_COUNTING_SORT_HPP
 
+#include <algorithm>
 #include <iterator>
-#include <limits>
-#include <type_traits>
+#include <vector>
 
 #include <burst/algorithm/identity.hpp>
-#include <burst/algorithm/sorting/detail/counting_sort.hpp>
+#include <burst/algorithm/sorting/counting_sort_copy.hpp>
 
 namespace burst
 {
-    //!     Сортировка подсчётом без буферизации.
+    //!     Сортировка подсчётом с буферизацией.
     /*!
             Алгоритм целочисленной сортировки, работающий за линейное время и использующий
         O(max(N, M)) дополнительной памяти, где N — размер входного диапазона, M — максимальное
         значение сортируемых целых чисел.
-            Дополнительная память, в которую и будет записан отсортированный диапазон, задаётся
-        пользователем в виде выходного итератора. Внутри функции дополнительная память для
-        диапазона не создаётся.
+            В процессе сортировки используется внутренний буфер, в который записывается
+        отсортированный диапазон, а затем его элементы перемещаются обратно во входной диапазон.
             Максимальное значение вычисляется на этапе компиляции, исходя из типа, возвращаемого
         отображением "Map".
 
         \tparam ForwardIterator
             Тип принимаемого на вход диапазона, который нужно отсортировать. Для него достаточно
             быть однонаправленным итератором.
-        \tparam RandomAccessIterator
-            Тип итератора, в который будет записан отсортированный диапазон. Должен быть итератором
-            произвольного доступа.
         \tparam Map
             Отображение входных значений в целые числа.
             Сортировка происходит по значениям этого отображения. Поэтому от него требуется, чтобы
@@ -45,26 +41,21 @@ namespace burst
         4. Проходим по входному диапазону и, используя полученный массив индексов, записываем
            элементы входного диапазона на их места в отсортированном диапазоне.
      */
-    template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
-    void counting_sort_copy (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
+    template <typename ForwardIterator, typename Map>
+    void counting_sort (ForwardIterator first, ForwardIterator last, Map map)
     {
-        using traits = detail::counting_sort_traits<ForwardIterator, Map>;
-        static_assert(std::is_integral<typename traits::image_type>::value,
-            "Сортируемые элементы должны быть отображены в целые числа.");
+        using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
+        std::vector<value_type> buffer(static_cast<std::size_t>(std::distance(first, last)));
 
-        using difference_type = typename std::iterator_traits<RandomAccessIterator>::difference_type;
-        // Единица для дополнительного нуля в начале массива.
-        difference_type counters[traits::value_range + 1] = {0};
-
-        detail::collect(first, last, map, counters);
-        detail::dispose(first, last, result, map, counters);
+        counting_sort_copy(first, last, buffer.begin(), map);
+        std::move(buffer.begin(), buffer.end(), first);
     }
 
-    template <typename ForwardIterator, typename RandomAccessIterator>
-    void counting_sort_copy (ForwardIterator first, ForwardIterator last, RandomAccessIterator result)
+    template <typename ForwardIterator>
+    void counting_sort (ForwardIterator first, ForwardIterator last)
     {
-        return counting_sort_copy(first, last, result, identity<>());
+        return counting_sort(first, last, identity<>());
     }
 }
 
-#endif // BURST_ALGORITHM_SORTING_COUNTING_SORT_COPY_HPP
+#endif // BURST_ALGORITHM_SORTING_COUNTING_SORT_HPP
