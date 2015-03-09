@@ -58,13 +58,8 @@ namespace burst
             constexpr static const auto radix_count = sizeof(integer_type) * CHAR_BIT / radix_size;
         };
 
-        //!     Собрать счётчики сразу для всех разрядов.
-        /*!
-                Для каждого сортируемого числа подсчитывает количество элементов, строго меньших
-            этого числа.
-         */
         template <typename ForwardIterator, typename Map, typename Radix, typename Array, std::size_t ... Radices>
-        void collect (ForwardIterator first, ForwardIterator last, Map map, Radix radix, Array & counters, std::index_sequence<Radices...>)
+        void collect_impl (ForwardIterator first, ForwardIterator last, Map map, Radix radix, Array & counters, std::index_sequence<Radices...>)
         {
             using traits = detail::radix_sort_traits<ForwardIterator, Map, Radix>;
 
@@ -76,6 +71,18 @@ namespace burst
                 });
 
             BURST_VARIADIC(std::partial_sum(std::begin(counters[Radices]), std::end(counters[Radices]), std::begin(counters[Radices])));
+        }
+
+        //!     Собрать счётчики сразу для всех разрядов.
+        /*!
+                Для каждого сортируемого числа подсчитывает количество элементов, строго меньших
+            этого числа.
+         */
+        template <typename ForwardIterator, typename Map, typename Radix, typename Array>
+        void collect (ForwardIterator first, ForwardIterator last, Map map, Radix radix, Array & counters)
+        {
+            constexpr auto radix_count = detail::radix_sort_traits<ForwardIterator, Map, Radix>::radix_count;
+            collect_impl(first, last, map, radix, counters, std::make_index_sequence<radix_count>());
         }
 
         //!     Специализация для случая, когда в сортируемом числе всего один разряд.
@@ -119,7 +126,7 @@ namespace burst
 
             using difference_type = typename std::iterator_traits<ForwardIterator>::difference_type;
             difference_type counters[traits::radix_count][traits::radix_value_range + 1] = {{0}};
-            detail::collect(first, last, map, radix, counters, std::make_index_sequence<traits::radix_count>());
+            detail::collect(first, last, map, radix, counters);
 
             auto distance = std::distance(first, last);
             using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
