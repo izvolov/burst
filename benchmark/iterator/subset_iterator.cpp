@@ -30,7 +30,7 @@ void test (const Container & numbers)
     }
 
     std::cout << "Общее время: " << static_cast<double>(total_time) / CLOCKS_PER_SEC << std::endl;
-    std::cout << "Среднее время: " << static_cast<double>(total_time) / iteration_count / CLOCKS_PER_SEC << std::endl;
+    std::cout << "Среднее время: " << static_cast<double>(total_time) / static_cast<double>(iteration_count) / CLOCKS_PER_SEC << std::endl;
 }
 
 int main ()

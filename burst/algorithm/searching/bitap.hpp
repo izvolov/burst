@@ -117,7 +117,7 @@ namespace burst
             ForwardIterator active_search (ForwardIterator match_candidate, ForwardIterator corpus_current, ForwardIterator corpus_end, bitmask_type & hint) const
             {
                 // Индикатор совпадения — единица на N-м месте в битовой маске, где N — количество элементов в искомом образце.
-                const bitmask_type match_indicator = static_cast<bitmask_type>(0x01 << (m_bitmask_table->length() - 1));
+                const bitmask_type match_indicator = static_cast<bitmask_type>(0x01u << (m_bitmask_table->length() - 1));
                 bitmask_type & match_column = hint;
 
                 while (corpus_current != corpus_end && (match_column & match_indicator) == 0)

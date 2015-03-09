@@ -82,7 +82,7 @@ void test_one (const Container & numbers, std::size_t attempt_count, const SetCo
     }
 
     std::cout << "\tВремя создания: " << static_cast<double>(creation_time) / CLOCKS_PER_SEC << std::endl;
-    std::cout << "\tСреднее время поиска: " << static_cast<double>(search_time) / attempt_count / CLOCKS_PER_SEC << std::endl;
+    std::cout << "\tСреднее время поиска: " << static_cast<double>(search_time) / static_cast<double>(attempt_count) / CLOCKS_PER_SEC << std::endl;
     std::cout << std::endl;
 }
 

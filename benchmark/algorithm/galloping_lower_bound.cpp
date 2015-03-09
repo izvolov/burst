@@ -36,7 +36,7 @@ void test (const Container & numbers, std::size_t attempts, Function lower_bound
 
     std::cout << name << ":" << std::endl;
     std::cout << "\tОбщее время: " << static_cast<double>(total_time) / CLOCKS_PER_SEC << std::endl;
-    std::cout << "\tСреднее время: " << static_cast<double>(total_time) / attempts / CLOCKS_PER_SEC << std::endl;
+    std::cout << "\tСреднее время: " << static_cast<double>(total_time) / static_cast<double>(attempts) / CLOCKS_PER_SEC << std::endl;
     std::cout << std::endl;
 }
 
