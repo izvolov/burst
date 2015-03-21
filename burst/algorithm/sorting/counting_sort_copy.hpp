@@ -24,9 +24,17 @@ namespace burst
         \tparam ForwardIterator
             Тип принимаемого на вход диапазона, который нужно отсортировать. Для него достаточно
             быть однонаправленным итератором.
-        \tparam RandomAccessIterator
-            Тип итератора, в который будет записан отсортированный диапазон. Должен быть итератором
-            произвольного доступа.
+        \tparam Iterator
+            Тип итератора выходного диапазона, в который будут записаны сортированные данные.
+
+            1. Однонаправленный итератор.
+               Если итератор однонаправленный, то сортировка пройдёт с дополнительной буферизацией,
+               то есть сначала сортированные данные окажутся в буфере, а затем будет перемещены в
+               выходной диапазон.
+
+            2. Итератор произвольного доступа.
+               Если итератор произвольного доступа, то сортировка пройдёт сразу в выходной
+               диапазон, без дополнительной буферизации.
         \tparam Map
             Отображение входных значений в целые числа.
             Сортировка происходит по значениям этого отображения. Поэтому от него требуется, чтобы
@@ -45,21 +53,14 @@ namespace burst
         4. Проходим по входному диапазону и, используя полученный массив индексов, записываем
            элементы входного диапазона на их места в отсортированном диапазоне.
      */
-    template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
-    void counting_sort_copy (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
+    template <typename ForwardIterator, typename Iterator, typename Map>
+    void counting_sort_copy (ForwardIterator first, ForwardIterator last, Iterator result, Map map)
     {
-        using traits = detail::counting_sort_traits<ForwardIterator, Map>;
-
-        using difference_type = typename std::iterator_traits<RandomAccessIterator>::difference_type;
-        // Единица для дополнительного нуля в начале массива.
-        difference_type counters[traits::value_range + 1] = {0};
-
-        detail::collect(first, last, map, counters);
-        detail::dispose(first, last, result, map, counters);
+        detail::counting_sort_copy_impl(first, last, result, map);
     }
 
-    template <typename ForwardIterator, typename RandomAccessIterator>
-    void counting_sort_copy (ForwardIterator first, ForwardIterator last, RandomAccessIterator result)
+    template <typename ForwardIterator, typename Iterator>
+    void counting_sort_copy (ForwardIterator first, ForwardIterator last, Iterator result)
     {
         return counting_sort_copy(first, last, result, identity<>());
     }

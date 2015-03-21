@@ -6,6 +6,7 @@
 #include <limits>
 #include <numeric>
 #include <type_traits>
+#include <vector>
 
 namespace burst
 {
@@ -64,6 +65,71 @@ namespace burst
                     auto index = counters[map(preimage) - traits::min_value]++;
                     result[index] = preimage;
                 });
+        }
+
+        //!     Случай, когда выходной итератор — произвольного доступа.
+        /*!
+                Дополнительный буфер не создаётся, сортированные значения записываются сразу в
+            выходной диапазон.
+         */
+        template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
+        void counting_sort_copy_at_a_go (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
+        {
+            using traits = detail::counting_sort_traits<ForwardIterator, Map>;
+
+            using difference_type = typename std::iterator_traits<RandomAccessIterator>::difference_type;
+            // Единица для дополнительного нуля в начале массива.
+            difference_type counters[traits::value_range + 1] = {0};
+
+            detail::collect(first, last, map, counters);
+            detail::dispose(first, last, result, map, counters);
+        }
+
+        //!     Случай, когда выходной итератор не является итератором произвольного доступа.
+        /*!
+                Создаётся дополнительный буфер, сортированные значения записываются в буфер, а
+            затем переносятся в выходной диапазон.
+         */
+        template <typename ForwardIterator1, typename ForwardIterator2, typename Map>
+        void counting_sort_copy_buffered (ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 result, Map map)
+        {
+            using value_type = typename std::iterator_traits<ForwardIterator1>::value_type;
+            std::vector<value_type> buffer(static_cast<std::size_t>(std::distance(first, last)));
+
+            counting_sort_copy_at_a_go(first, last, buffer.begin(), map);
+            std::move(buffer.begin(), buffer.end(), result);
+        }
+
+        template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
+        typename std::enable_if
+        <
+            std::is_same
+            <
+                typename std::iterator_traits<RandomAccessIterator>::iterator_category,
+                std::random_access_iterator_tag
+            >
+            ::value,
+            void
+        >
+        ::type counting_sort_copy_impl (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
+        {
+            counting_sort_copy_at_a_go(first, last, result, map);
+        }
+
+        template <typename ForwardIterator1, typename ForwardIterator2, typename Map>
+        typename std::enable_if
+        <
+            not std::is_same
+            <
+                typename std::iterator_traits<ForwardIterator2>::iterator_category,
+                std::random_access_iterator_tag
+            >
+            ::value,
+            void
+        >
+        ::type counting_sort_copy_impl (ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 result, Map map)
+        {
+            counting_sort_copy_buffered(first, last, result, map);
         }
     } // namespace detail
 } // namespace burst

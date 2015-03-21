@@ -1,3 +1,4 @@
+#include <forward_list>
 #include <limits>
 #include <vector>
 
@@ -143,6 +144,20 @@ BOOST_AUTO_TEST_SUITE(counting_sort_copy)
         (
             boost::begin(sorted), boost::end(sorted),
             boost::begin(expected), boost::end(expected)
+        );
+    }
+
+    BOOST_AUTO_TEST_CASE(resulting_iterator_can_be_forward_iterator)
+    {
+        std::vector<std::uint8_t> initial{0, 1, 2, 3, 4};
+
+        std::forward_list<std::uint8_t> sorted(initial.size());
+        burst::counting_sort_copy(initial.begin(), initial.end(), sorted.begin());
+
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            boost::begin(sorted), boost::end(sorted),
+            boost::begin(initial), boost::end(initial)
         );
     }
 BOOST_AUTO_TEST_SUITE_END()
