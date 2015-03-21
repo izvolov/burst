@@ -131,6 +131,12 @@ namespace burst
         {
             counting_sort_copy_buffered(first, last, result, map);
         }
+
+        template <typename ForwardIterator, typename Map>
+        void counting_sort_impl (ForwardIterator first, ForwardIterator last, Map map)
+        {
+            counting_sort_copy_buffered(first, last, first, map);
+        }
     } // namespace detail
 } // namespace burst
 

@@ -6,7 +6,7 @@
 #include <vector>
 
 #include <burst/algorithm/identity.hpp>
-#include <burst/algorithm/sorting/counting_sort_copy.hpp>
+#include <burst/algorithm/sorting/detail/counting_sort.hpp>
 
 namespace burst
 {
@@ -44,11 +44,7 @@ namespace burst
     template <typename ForwardIterator, typename Map>
     void counting_sort (ForwardIterator first, ForwardIterator last, Map map)
     {
-        using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
-        std::vector<value_type> buffer(static_cast<std::size_t>(std::distance(first, last)));
-
-        counting_sort_copy(first, last, buffer.begin(), map);
-        std::move(buffer.begin(), buffer.end(), first);
+        detail::counting_sort_impl(first, last, map);
     }
 
     template <typename ForwardIterator>
