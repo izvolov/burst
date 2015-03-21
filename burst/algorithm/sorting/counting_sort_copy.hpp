@@ -49,8 +49,6 @@ namespace burst
     void counting_sort_copy (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
     {
         using traits = detail::counting_sort_traits<ForwardIterator, Map>;
-        static_assert(std::is_integral<typename traits::image_type>::value,
-            "Сортируемые элементы должны быть отображены в целые числа.");
 
         using difference_type = typename std::iterator_traits<RandomAccessIterator>::difference_type;
         // Единица для дополнительного нуля в начале массива.

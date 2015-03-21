@@ -16,6 +16,11 @@ namespace burst
         {
             using preimage_type = typename std::iterator_traits<Iterator>::value_type;
             using image_type = typename std::decay<typename std::result_of<Map(preimage_type)>::type>::type;
+            static_assert
+            (
+                std::is_integral<image_type>::value,
+                "Сортируемые элементы должны быть отображены в целые числа."
+            );
 
             constexpr static const auto min_value = std::numeric_limits<image_type>::min();
             constexpr static const auto max_value = std::numeric_limits<image_type>::max();
