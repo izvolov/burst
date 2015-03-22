@@ -210,14 +210,37 @@ namespace burst
                 });
         }
 
-        //!     Общий случай.
-        /*!
-                Вызывается тогда, когда разрядов в сортируемых числах больше одного.
-         */
+        template <typename RandomAccessIterator, typename Map, typename Radix>
+        typename std::enable_if
+        <
+            std::is_same
+            <
+                typename std::iterator_traits<RandomAccessIterator>::iterator_category,
+                std::random_access_iterator_tag
+            >
+            ::value && detail::radix_sort_traits
+            <
+                typename std::iterator_traits<RandomAccessIterator>::value_type,
+                Map,
+                Radix
+            >
+            ::radix_count % 2 == 0,
+            void
+        >
+        ::type radix_sort_impl (RandomAccessIterator first, RandomAccessIterator last, Map map, Radix radix)
+        {
+            radix_sort_with_custom_buffer(first, last, first, map, radix);
+        }
+
         template <typename ForwardIterator, typename Map, typename Radix>
         typename std::enable_if
         <
-            detail::radix_sort_traits
+            not std::is_same
+            <
+                typename std::iterator_traits<ForwardIterator>::iterator_category,
+                std::random_access_iterator_tag
+            >
+            ::value && detail::radix_sort_traits
             <
                 typename std::iterator_traits<ForwardIterator>::value_type,
                 Map,

@@ -17,9 +17,18 @@ namespace burst
             Максимальное значение вычисляется на этапе компиляции, исходя из типа, возвращаемого
         отображением "Radix".
 
-        \tparam ForwardIterator
-            Тип принимаемого на вход диапазона, который нужно отсортировать. Для него достаточно
-            быть однонаправленным итератором.
+        \tparam Iterator
+            Тип принимаемого на вход диапазона, который нужно отсортировать.
+
+            1. Однонаправленный итератор.
+               Если итератор однонаправленный и разрядов в сортируемых числах больше одного, то для
+               сортировки будет использовано два дополнительных буфера, а по окончании
+               сортированные данные будут перемещены обратно во входной диапазон.
+               Если в сортируемых числах один разряд, то будет использован только один буфер.
+
+            2. Итератор произвольного доступа.
+               Если итератор произвольного доступа, то для сортировки будет заведён только один
+               дополнительный буфер, а в роли второго буфера будет выступать входной диапазон.
         \tparam Map
             Отображение входных объектов в целые числа.
             Сортировка происходит по разрядам числа, полученного из этого отображения. Поэтому от
@@ -38,20 +47,20 @@ namespace burst
         частности, счётчики для сортировки подсчётом вычисляются за один проход для всех разрядов,
         а не отдельным проходом на каждый разряд.
      */
-    template <typename ForwardIterator, typename Map, typename Radix>
-    void radix_sort (ForwardIterator first, ForwardIterator last, Map map, Radix radix)
+    template <typename Iterator, typename Map, typename Radix>
+    void radix_sort (Iterator first, Iterator last, Map map, Radix radix)
     {
         detail::radix_sort_impl(first, last, map, radix);
     }
 
-    template <typename ForwardIterator, typename Map>
-    void radix_sort (ForwardIterator first, ForwardIterator last, Map map)
+    template <typename Iterator, typename Map>
+    void radix_sort (Iterator first, Iterator last, Map map)
     {
         radix_sort(first, last, map, low_byte<>());
     }
 
-    template <typename ForwardIterator>
-    void radix_sort (ForwardIterator first, ForwardIterator last)
+    template <typename Iterator>
+    void radix_sort (Iterator first, Iterator last)
     {
         radix_sort(first, last, identity<>(), low_byte<>());
     }

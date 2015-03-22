@@ -1,3 +1,4 @@
+#include <forward_list>
 #include <limits>
 #include <string>
 #include <utility>
@@ -41,7 +42,7 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
     {
         std::vector<std::string> descending{"1000", "100", "10", "1"};
 
-        auto ascending = descending;
+        std::forward_list<std::string> ascending(descending.begin(), descending.end());
         burst::radix_sort(ascending.begin(), ascending.end(),
             [] (const std::string & string)
             {
