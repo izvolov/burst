@@ -217,13 +217,13 @@ namespace burst
         template <typename ForwardIterator, typename Map, typename Radix>
         typename std::enable_if
         <
-            (detail::radix_sort_traits
+            detail::radix_sort_traits
             <
                 typename std::iterator_traits<ForwardIterator>::value_type,
                 Map,
                 Radix
             >
-            ::radix_count > 1),
+            ::radix_count % 2 == 0,
             void
         >
         ::type radix_sort_impl (ForwardIterator first, ForwardIterator last, Map map, Radix radix)
