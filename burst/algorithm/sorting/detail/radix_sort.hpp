@@ -203,16 +203,11 @@ namespace burst
         >
         ::type radix_sort_impl (ForwardIterator first, ForwardIterator last, Map map, Radix radix)
         {
-            auto distance = std::distance(first, last);
-            using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
-            std::vector<value_type> buffer(static_cast<std::size_t>(distance));
-
-            counting_sort_copy(first, last, buffer.begin(),
-                [& map, & radix] (const value_type & value)
+            counting_sort_copy_buffered(first, last, first,
+                [& map, & radix] (const auto & value)
                 {
                     return radix(map(value));
                 });
-            std::move(buffer.begin(), buffer.end(), first);
         }
 
         //!     Общий случай.
@@ -233,36 +228,7 @@ namespace burst
         >
         ::type radix_sort_impl (ForwardIterator first, ForwardIterator last, Map map, Radix radix)
         {
-            using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
-            using traits = detail::radix_sort_traits<value_type, Map, Radix>;
-
-            using difference_type = typename std::iterator_traits<ForwardIterator>::difference_type;
-            difference_type counters[traits::radix_count][traits::radix_value_range + 1] = {{0}};
-            detail::collect(first, last, map, radix, counters);
-
-            auto distance = std::distance(first, last);
-            std::vector<value_type> resulting_buffer(static_cast<std::size_t>(distance));
-            std::vector<value_type> intermediate_buffer(static_cast<std::size_t>(distance));
-
-            auto get_low_radix = [& radix, & map] (const value_type & value) { return radix(map(value)); };
-            detail::dispose(first, last, resulting_buffer.begin(), get_low_radix, counters[0]);
-
-            for (std::size_t radix_number = 1; radix_number < traits::radix_count; ++radix_number)
-            {
-                auto get_radix =
-                    [& map, & radix, & radix_number] (const value_type & value)
-                    {
-                        return radix(static_cast<typename traits::integer_type>(map(value) >> (traits::radix_size * radix_number)));
-                    };
-                detail::dispose(resulting_buffer.begin(), resulting_buffer.end(),
-                    intermediate_buffer.begin(),
-                    get_radix,
-                    counters[radix_number]);
-
-                std::swap(resulting_buffer, intermediate_buffer);
-            }
-
-            std::move(resulting_buffer.begin(), resulting_buffer.end(), first);
+            radix_sort_with_two_buffers(first, last, first, map, radix);
         }
 
         //!     Специализация для случая, когда сортируется один разряд.
