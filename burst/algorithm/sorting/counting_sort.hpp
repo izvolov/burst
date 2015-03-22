@@ -1,10 +1,6 @@
 #ifndef BURST_ALGORITHM_SORTING_COUNTING_SORT_HPP
 #define BURST_ALGORITHM_SORTING_COUNTING_SORT_HPP
 
-#include <algorithm>
-#include <iterator>
-#include <vector>
-
 #include <burst/algorithm/identity.hpp>
 #include <burst/algorithm/sorting/detail/counting_sort.hpp>
 
