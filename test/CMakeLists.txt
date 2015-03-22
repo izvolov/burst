@@ -7,6 +7,7 @@ set(TEST_SOURCES test_main.cpp
                  algorithm/sorting/counting_sort.cpp
                  algorithm/sorting/counting_sort_copy.cpp
                  algorithm/sorting/radix_sort.cpp
+                 algorithm/sorting/radix_sort_copy.cpp
                  container/k_ary_search_set.cpp
                  iterator/intersect_iterator.cpp
                  iterator/join_iterator.cpp
