@@ -33,11 +33,10 @@ namespace burst
             // return degree;
         }
 
-        template <typename Iterator, typename Map, typename Radix>
+        template <typename Value, typename Map, typename Radix>
         struct radix_sort_traits
         {
-            using value_type = typename std::iterator_traits<Iterator>::value_type;
-            using integer_type = typename std::decay<typename std::result_of<Map(value_type)>::type>::type;
+            using integer_type = typename std::decay<typename std::result_of<Map(Value)>::type>::type;
             static_assert
             (
                 std::is_integral<integer_type>::value && std::is_unsigned<integer_type>::value,
@@ -61,9 +60,9 @@ namespace burst
         template <typename ForwardIterator, typename Map, typename Radix, typename Array, std::size_t ... Radices>
         void collect_impl (ForwardIterator first, ForwardIterator last, Map map, Radix radix, Array & counters, std::index_sequence<Radices...>)
         {
-            using traits = detail::radix_sort_traits<ForwardIterator, Map, Radix>;
-
             using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
+            using traits = detail::radix_sort_traits<value_type, Map, Radix>;
+
             std::for_each(first, last,
                 [& counters, & map, & radix] (const value_type & value)
                 {
@@ -81,7 +80,8 @@ namespace burst
         template <typename ForwardIterator, typename Map, typename Radix, typename Array>
         void collect (ForwardIterator first, ForwardIterator last, Map map, Radix radix, Array & counters)
         {
-            constexpr auto radix_count = detail::radix_sort_traits<ForwardIterator, Map, Radix>::radix_count;
+            using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
+            constexpr auto radix_count = detail::radix_sort_traits<value_type, Map, Radix>::radix_count;
             collect_impl(first, last, map, radix, counters, std::make_index_sequence<radix_count>());
         }
 
@@ -93,7 +93,13 @@ namespace burst
         template <typename ForwardIterator, typename Map, typename Radix>
         typename std::enable_if
         <
-            detail::radix_sort_traits<ForwardIterator, Map, Radix>::radix_count == 1,
+            detail::radix_sort_traits
+            <
+                typename std::iterator_traits<ForwardIterator>::value_type,
+                Map,
+                Radix
+            >
+            ::radix_count == 1,
             void
         >
         ::type radix_sort_impl (ForwardIterator first, ForwardIterator last, Map map, Radix radix)
@@ -117,19 +123,25 @@ namespace burst
         template <typename ForwardIterator, typename Map, typename Radix>
         typename std::enable_if
         <
-            (detail::radix_sort_traits<ForwardIterator, Map, Radix>::radix_count > 1),
+            (detail::radix_sort_traits
+            <
+                typename std::iterator_traits<ForwardIterator>::value_type,
+                Map,
+                Radix
+            >
+            ::radix_count > 1),
             void
         >
         ::type radix_sort_impl (ForwardIterator first, ForwardIterator last, Map map, Radix radix)
         {
-            using traits = detail::radix_sort_traits<ForwardIterator, Map, Radix>;
+            using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
+            using traits = detail::radix_sort_traits<value_type, Map, Radix>;
 
             using difference_type = typename std::iterator_traits<ForwardIterator>::difference_type;
             difference_type counters[traits::radix_count][traits::radix_value_range + 1] = {{0}};
             detail::collect(first, last, map, radix, counters);
 
             auto distance = std::distance(first, last);
-            using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
             std::vector<value_type> resulting_buffer(static_cast<std::size_t>(distance));
             std::vector<value_type> intermediate_buffer(static_cast<std::size_t>(distance));
 
