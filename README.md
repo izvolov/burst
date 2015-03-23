@@ -108,6 +108,39 @@ assert(*set.find(3) == 3);
   #include <burst/algorithm/sorting/counting_sort_copy.hpp>
   ```
 
+* Поразрядная сортировка
+  ```c++
+  std::vector<std::string> strings{"1000", "100", "10", "1"};
+
+  burst::radix_sort(strings.begin(), strings.end(),
+      [] (const std::string & string)
+      {
+          return string.size();
+      }
+  );
+  assert((strings == std::vector<std::string>{"1", "10", "100", "1000"}));
+  ```
+
+  Находится в заголовке
+  ```c++
+  #include <burst/algorithm/sorting/radix_sort.hpp>
+  ```
+
+* Копирование диапазона, отсортированного порязрядной сортировкой
+  ```c++
+  std::vector<std::uint32_t> chaos{100500, 42, 99999, 1000, 0};
+
+  std::forward_list<std::uint32_t> order(chaos.size());
+  burst::radix_sort_copy(chaos.begin(), chaos.end(), order.begin());
+
+  assert((order == std::forward_list<std::uint32_t>{0, 42, 1000, 99999, 100500}));
+  ```
+
+  Находится в заголовке
+  ```c++
+  #include <burst/algorithm/sorting/radix_sort_copy.hpp>
+  ```
+
 Требования
 ----------
 
