@@ -110,7 +110,7 @@ assert(*set.find(3) == 3);
 
 * Поразрядная сортировка
   ```c++
-  std::vector<std::string> strings{"1000", "100", "10", "1"};
+  std::vector<std::string> strings{"aaaa", "bbb", "cc", "d"};
 
   burst::radix_sort(strings.begin(), strings.end(),
       [] (const std::string & string)
@@ -118,7 +118,7 @@ assert(*set.find(3) == 3);
           return string.size();
       }
   );
-  assert((strings == std::vector<std::string>{"1", "10", "100", "1000"}));
+  assert((strings == std::vector<std::string>{"d", "cc", "bbb", "aaaa"}));
   ```
 
   Находится в заголовке
