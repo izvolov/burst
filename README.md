@@ -22,6 +22,11 @@ burst::k_ary_search_set<int> set{3, 4, 6, 1, 7, 8, 2};
 assert(*set.find(3) == 3);
 ```
 
+В заголовке
+```c++
+#include <burst/container/k_ary_search_set.hpp>
+```
+
 Работа с диапазонами "на лету", без создания дополнительного буфера для хранения их содержимого.
 
 * Склейка
@@ -38,6 +43,11 @@ assert(*set.find(3) == 3);
 
   assert(helloworld == std::string("helloworld"));
   ```
+
+  В заголовке
+  ```c++
+  #include <burst/range/join.hpp>
+  ```
   
 * Слияние
   
@@ -52,6 +62,11 @@ assert(*set.find(3) == 3);
   });
 
   assert((merged_range == std::vector<int>{1, 2, 3, 4, 5, 6}));
+  ```
+
+  В заголовке
+  ```c++
+  #include <burst/range/merge.hpp>
   ```
   
 * Пересечение
@@ -69,6 +84,11 @@ assert(*set.find(3) == 3);
   });
 
   assert((intersected_range == std::vector<int>{3, 5, 7}));
+  ```
+
+  В заголовке
+  ```c++
+  #include <burst/range/intersect.hpp>
   ```
   
 Целочисленная сортировка.
