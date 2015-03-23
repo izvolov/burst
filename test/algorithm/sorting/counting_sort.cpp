@@ -43,6 +43,25 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
         );
     }
 
+    BOOST_AUTO_TEST_CASE(can_sort_bitwise)
+    {
+        std::vector<std::uint8_t> numbers{0, 5, 3, 7, 1, 2, 4, 6};
+
+        burst::counting_sort(numbers.begin(), numbers.end(),
+            [] (const std::uint8_t & number) -> bool
+            {
+                return number & 0x01;
+            });
+
+        // Порядок внутри чётных и нечётных групп сохраняется, потому что сортировка устойчива.
+        std::vector<std::uint8_t> even_goes_first{0, 2, 4, 6, 5, 3, 7, 1};
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            std::begin(numbers), std::end(numbers),
+            std::begin(even_goes_first), std::end(even_goes_first)
+        );
+    }
+
     BOOST_AUTO_TEST_CASE(sorting_chaotic_range_results_sorted_range)
     {
         std::vector<std::uint8_t> values{0x12, 0xfd, 0x00, 0x15, 0x66};
