@@ -12,11 +12,10 @@ namespace burst
 {
     namespace detail
     {
-        template <typename Iterator, typename Map>
+        template <typename Value, typename Map>
         struct counting_sort_traits
         {
-            using preimage_type = typename std::iterator_traits<Iterator>::value_type;
-            using image_type = typename std::decay<typename std::result_of<Map(preimage_type)>::type>::type;
+            using image_type = typename std::decay<typename std::result_of<Map(Value)>::type>::type;
             static_assert
             (
                 std::is_integral<image_type>::value,
@@ -36,11 +35,11 @@ namespace burst
         template <typename ForwardIterator, typename Map, typename Array>
         void collect (ForwardIterator first, ForwardIterator last, Map map, Array & counters)
         {
-            using traits = counting_sort_traits<ForwardIterator, Map>;
+            using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
+            using traits = counting_sort_traits<value_type, Map>;
 
-            using preimage_type = typename std::iterator_traits<ForwardIterator>::value_type;
             std::for_each(first, last,
-                [& counters, & map] (const preimage_type & preimage)
+                [& counters, & map] (const value_type & preimage)
                 {
                     ++counters[map(preimage) - traits::min_value + 1];
                 });
@@ -56,11 +55,11 @@ namespace burst
         template <typename ForwardIterator, typename RandomAccessIterator, typename Map, typename Array>
         void dispose (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map, Array & counters)
         {
-            using traits = counting_sort_traits<ForwardIterator, Map>;
+            using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
+            using traits = counting_sort_traits<value_type, Map>;
 
-            using preimage_type = typename std::iterator_traits<ForwardIterator>::value_type;
             std::for_each(first, last,
-                [& result, & counters, & map] (const preimage_type & preimage)
+                [& result, & counters, & map] (const value_type & preimage)
                 {
                     auto index = counters[map(preimage) - traits::min_value]++;
                     result[index] = preimage;
@@ -75,7 +74,8 @@ namespace burst
         template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
         void counting_sort_copy_at_a_go (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
         {
-            using traits = detail::counting_sort_traits<ForwardIterator, Map>;
+            using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
+            using traits = detail::counting_sort_traits<value_type, Map>;
 
             using difference_type = typename std::iterator_traits<RandomAccessIterator>::difference_type;
             // Единица для дополнительного нуля в начале массива.
