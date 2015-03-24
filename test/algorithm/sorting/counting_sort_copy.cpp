@@ -1,4 +1,5 @@
 #include <forward_list>
+#include <iterator>
 #include <limits>
 #include <vector>
 
@@ -25,8 +26,8 @@ BOOST_AUTO_TEST_SUITE(counting_sort_copy)
     {
         std::vector<std::uint8_t> initial{0, 1, 2, 3, 4};
 
-        std::vector<std::uint8_t> sorted(initial.size());
-        burst::counting_sort_copy(initial.begin(), initial.end(), sorted.begin());
+        std::vector<std::uint8_t> sorted;
+        burst::counting_sort_copy(initial.begin(), initial.end(), std::back_inserter(sorted));
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
