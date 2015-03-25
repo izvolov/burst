@@ -6,6 +6,7 @@
 
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
+#include <boost/range/iterator_range.hpp>
 #include <boost/range/rbegin.hpp>
 #include <boost/range/rend.hpp>
 #include <boost/test/unit_test.hpp>
@@ -147,5 +148,55 @@ BOOST_AUTO_TEST_SUITE(radix_sort_copy)
             boost::begin(sorted), boost::end(sorted),
             boost::begin(expected), boost::end(expected)
         );
+    }
+
+    BOOST_AUTO_TEST_CASE(initial_range_does_not_change)
+    {
+        std::vector<std::size_t> initial{5, 4, 3, 2, 1};
+        auto initial_copy = initial;
+
+        std::vector<std::size_t> sorted;
+        burst::radix_sort_copy(initial.begin(), initial.end(), std::back_inserter(sorted));
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            boost::begin(initial), boost::end(initial),
+            boost::begin(initial_copy), boost::end(initial_copy)
+        );
+    }
+
+    BOOST_AUTO_TEST_CASE(sorted_range_is_exactly_the_same_size_as_initial_range)
+    {
+        std::vector<std::size_t> initial{5, 4, 3, 2, 1};
+        std::vector<std::size_t> expected{1, 2, 3, 4, 5};
+
+        // rar = random access range.
+        {
+            std::vector<std::size_t> rar(initial.size() * 2, 0);
+            auto sorted_rar_end = burst::radix_sort_copy(initial.begin(), initial.end(), rar.begin());
+            BOOST_CHECK_EQUAL_COLLECTIONS
+            (
+                boost::begin(rar), sorted_rar_end,
+                boost::begin(expected), boost::end(expected)
+            );
+            BOOST_CHECK
+            (
+                boost::make_iterator_range(sorted_rar_end, rar.end()) == std::vector<std::size_t>(initial.size(), 0)
+            );
+        }
+
+        // fr = forward range.
+        {
+            std::forward_list<std::size_t> fr(initial.size() * 2, 0);
+            auto sorted_fr_end = burst::radix_sort_copy(initial.begin(), initial.end(), fr.begin());
+            BOOST_CHECK_EQUAL_COLLECTIONS
+            (
+                boost::begin(fr), sorted_fr_end,
+                boost::begin(expected), boost::end(expected)
+            );
+            BOOST_CHECK
+            (
+                boost::make_iterator_range(sorted_fr_end, fr.end()) == std::vector<std::size_t>(initial.size(), 0)
+            );
+        }
     }
 BOOST_AUTO_TEST_SUITE_END()

@@ -107,7 +107,7 @@ namespace burst
                 Входной диапазон не изменяется.
          */
         template <typename ForwardIterator, typename RandomAccessIterator, typename Map, typename Radix>
-        void radix_sort_with_custom_buffer (ForwardIterator first, ForwardIterator last, RandomAccessIterator buffer, Map map, Radix radix)
+        RandomAccessIterator radix_sort_with_custom_buffer (ForwardIterator first, ForwardIterator last, RandomAccessIterator buffer, Map map, Radix radix)
         {
             using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
             using traits = detail::radix_sort_traits<value_type, Map, Radix>;
@@ -144,6 +144,8 @@ namespace burst
 
             auto get_high_radix = nth_radix(traits::radix_count - 1, map, radix);
             detail::dispose(extra_buffer.begin(), extra_buffer.end(), buffer, get_high_radix, counters[traits::radix_count - 1]);
+
+            return buffer + static_cast<typename std::iterator_traits<RandomAccessIterator>::difference_type>(distance);
         }
 
         //!     Сортировка с двумя дополнительными буферами.
@@ -155,7 +157,7 @@ namespace burst
                 Входной диапазон не изменяется.
          */
         template <typename ForwardIterator1, typename ForwardIterator2, typename Map, typename Radix>
-        void radix_sort_with_two_buffers (ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 result, Map map, Radix radix)
+        ForwardIterator2 radix_sort_with_two_buffers (ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 result, Map map, Radix radix)
         {
             using value_type = typename std::iterator_traits<ForwardIterator1>::value_type;
             using traits = detail::radix_sort_traits<value_type, Map, Radix>;
@@ -181,7 +183,7 @@ namespace burst
                 std::swap(resulting_buffer, intermediate_buffer);
             }
 
-            std::move(resulting_buffer.begin(), resulting_buffer.end(), result);
+            return std::move(resulting_buffer.begin(), resulting_buffer.end(), result);
         }
 
         // ----------------------------------------------------------------------------------------
@@ -276,7 +278,7 @@ namespace burst
                 Radix
             >
             ::radix_count == 1,
-            void
+            Iterator
         >
         ::type radix_sort_copy_impl (ForwardIterator first, ForwardIterator last, Iterator result, Map map, Radix radix)
         {
@@ -302,7 +304,7 @@ namespace burst
                 Radix
             >
             ::radix_count % 2 == 0,
-            void
+            RandomAccessIterator
         >
         ::type radix_sort_copy_impl (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map, Radix radix)
         {
@@ -324,7 +326,7 @@ namespace burst
                 Radix
             >
             ::radix_count % 2 == 0,
-            void
+            ForwardIterator2
         >
         ::type radix_sort_copy_impl (ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 result, Map map, Radix radix)
         {

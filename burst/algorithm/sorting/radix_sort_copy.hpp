@@ -44,6 +44,8 @@ namespace burst
             Должна возвращать целое число, представляющее младший разряд сортируемого числа.
             Для получения более старших разрядов сортируемое число, полученное отображением Map,
             побитово сдвигается на число битов в разряде, и к нему снова применяется функция Radix.
+        \return Iterator
+            Возвращает итератор за последним отсортированным элементом в выходном диапазоне.
 
             Алгоритм работы.
 
@@ -53,21 +55,21 @@ namespace burst
         а не отдельным проходом на каждый разряд.
      */
     template <typename ForwardIterator, typename Iterator, typename Map, typename Radix>
-    void radix_sort_copy (ForwardIterator first, ForwardIterator last, Iterator result, Map map, Radix radix)
+    Iterator radix_sort_copy (ForwardIterator first, ForwardIterator last, Iterator result, Map map, Radix radix)
     {
-        detail::radix_sort_copy_impl(first, last, result, map, radix);
+        return detail::radix_sort_copy_impl(first, last, result, map, radix);
     }
 
     template <typename ForwardIterator, typename Iterator, typename Map>
-    void radix_sort_copy (ForwardIterator first, ForwardIterator last, Iterator result, Map map)
+    Iterator radix_sort_copy (ForwardIterator first, ForwardIterator last, Iterator result, Map map)
     {
-        radix_sort_copy(first, last, result, map, low_byte<>());
+        return radix_sort_copy(first, last, result, map, low_byte<>());
     }
 
     template <typename ForwardIterator, typename Iterator>
-    void radix_sort_copy (ForwardIterator first, ForwardIterator last, Iterator result)
+    Iterator radix_sort_copy (ForwardIterator first, ForwardIterator last, Iterator result)
     {
-        radix_sort_copy(first, last, result, identity<>(), low_byte<>());
+        return radix_sort_copy(first, last, result, identity<>(), low_byte<>());
     }
 } // namespace burst
 

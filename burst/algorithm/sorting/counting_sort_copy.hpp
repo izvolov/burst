@@ -35,6 +35,8 @@ namespace burst
             Отображение входных значений в целые числа.
             Сортировка происходит по значениям этого отображения. Поэтому от него требуется, чтобы
             результатом отображения были целые числа.
+        \return Iterator
+            Возвращает итератор за последним отсортированным элементом в выходном диапазоне.
 
             Алгоритм работы.
 
@@ -50,13 +52,13 @@ namespace burst
            элементы входного диапазона на их места в отсортированном диапазоне.
      */
     template <typename ForwardIterator, typename Iterator, typename Map>
-    void counting_sort_copy (ForwardIterator first, ForwardIterator last, Iterator result, Map map)
+    Iterator counting_sort_copy (ForwardIterator first, ForwardIterator last, Iterator result, Map map)
     {
-        detail::counting_sort_copy_impl(first, last, result, map);
+        return detail::counting_sort_copy_impl(first, last, result, map);
     }
 
     template <typename ForwardIterator, typename Iterator>
-    void counting_sort_copy (ForwardIterator first, ForwardIterator last, Iterator result)
+    Iterator counting_sort_copy (ForwardIterator first, ForwardIterator last, Iterator result)
     {
         return counting_sort_copy(first, last, result, identity<>());
     }
