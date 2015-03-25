@@ -9,7 +9,7 @@
 #include <type_traits>
 #include <vector>
 
-#include <burst/algorithm/sorting/counting_sort_copy.hpp>
+#include <burst/algorithm/sorting/detail/counting_sort.hpp>
 #include <burst/variadic.hpp>
 
 namespace burst
