@@ -1,8 +1,8 @@
 #ifndef BURST_ALGORITHM_SORTING_COUNTING_SORT_COPY_HPP
 #define BURST_ALGORITHM_SORTING_COUNTING_SORT_COPY_HPP
 
-#include <burst/algorithm/identity.hpp>
 #include <burst/algorithm/sorting/detail/counting_sort.hpp>
+#include <burst/functional/identity.hpp>
 
 namespace burst
 {

@@ -1,9 +1,9 @@
 #ifndef BURST_ALGORITHM_SORTING_RADIX_SORT_COPY_HPP
 #define BURST_ALGORITHM_SORTING_RADIX_SORT_COPY_HPP
 
-#include <burst/algorithm/identity.hpp>
-#include <burst/algorithm/low_byte.hpp>
 #include <burst/algorithm/sorting/detail/radix_sort.hpp>
+#include <burst/functional/identity.hpp>
+#include <burst/functional/low_byte.hpp>
 
 namespace burst
 {

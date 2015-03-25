@@ -1,5 +1,5 @@
-#ifndef BURST_ALGORITHM_LOW_BYTE_HPP
-#define BURST_ALGORITHM_LOW_BYTE_HPP
+#ifndef BURST_FUNCTIONAL_LOW_BYTE_HPP
+#define BURST_FUNCTIONAL_LOW_BYTE_HPP
 
 #include <type_traits>
 
@@ -39,4 +39,4 @@ namespace burst
     };
 }
 
-#endif // BURST_ALGORITHM_LOW_BYTE_HPP
+#endif // BURST_FUNCTIONAL_LOW_BYTE_HPP
