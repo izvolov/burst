@@ -165,6 +165,41 @@ assert(set.find(0) == set.end());
   #include <burst/algorithm/sorting/radix_sort_copy.hpp>
   ```
 
+#### Скачущий поиск
+
+Эффективен и обгоняет двоичный поиск в том случае, если искомый элемент находится близко к началу
+диапазона.
+
+* Поиск нижней грани
+  ```c++
+  std::vector<int> range{1, 2, 2, 3, 3, 3};
+
+  auto search_result = burst::galloping_lower_bound(range.begin(), range.end(), 3);
+
+  assert(search_result == range.begin() + 3);
+  assert(*search_result == 3);
+  ```
+
+  В заголовке
+  ```c++
+  #include <burst/algorithm/galloping_lower_bound.hpp>
+  ```
+
+* Поиск верхней грани
+  ```c++
+  std::vector<int> range{30, 30, 30, 20, 20, 10};
+
+  auto search_result = burst::galloping_upper_bound(range.begin(), range.end(), 20, std::greater<int>());
+
+  assert(search_result == range.begin() + 5);
+  assert(*search_result == 10);
+  ```
+
+  В заголовке
+  ```c++
+  #include <burst/algorithm/galloping_upper_bound.hpp>
+  ```
+
 Требования
 ----------
 
