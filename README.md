@@ -14,7 +14,21 @@ Burst
 Что интересного?
 ----------------
 
-#### Структура для быстрого поиска в больших массивах данных
+1. [Структура для быстрого поиска в больших массивах данных](#kary)
+2. [Работа с диапазонами "на лету"](#ranges)
+   1. [Склейка](#join)
+   2. [Слияние](#merge)
+   3. [Пересечение](#intersect)
+3. [Целочисленная сортировка](#intsort)
+   1. [Сортировка подсчётом](#counting)
+   2. [Копирование диапазона, отсортированного подсчётом](#counting-copy)
+   3. [Поразрядная сортировка](#radix)
+   4. [Копирование диапазона, отсортированного поразрядной сортировкой](#radix-copy)
+4. [Скачущий поиск](#gallop)
+   1. [Поиск нижней грани](#galloping-lb)
+   2. [Поиск верхней грани](#galloping-ub)
+
+#### <a name="kary"/> Структура для быстрого поиска в больших массивах данных
 
 На достаточно большом количестве данных опережает по скорости поиска и ```std::set```, и ```std::unordered_set```, и ```boost::container::flat_set```.
 
@@ -29,11 +43,11 @@ assert(set.find(0) == set.end());
 #include <burst/container/k_ary_search_set.hpp>
 ```
 
-#### Работа с диапазонами "на лету"
+#### <a name="ranges"/> Работа с диапазонами "на лету"
 
 Операции с диапазонами без создания дополнительного буфера для хранения их содержимого.
 
-* Склейка
+* <a name="join"/> Склейка
   
   ```c++
   std::string hello("hello");
@@ -53,7 +67,7 @@ assert(set.find(0) == set.end());
   #include <burst/range/join.hpp>
   ```
   
-* Слияние
+* <a name="merge"/> Слияние
   
   ```c++
   std::vector<int> even{2, 4, 6};
@@ -73,7 +87,7 @@ assert(set.find(0) == set.end());
   #include <burst/range/merge.hpp>
   ```
   
-* Пересечение
+* <a name="intersect"/> Пересечение
   
   ```c++
   std::vector<int> natural{1, 2, 3, 4, 5, 6, 7};
@@ -95,9 +109,9 @@ assert(set.find(0) == set.end());
   #include <burst/range/intersect.hpp>
   ```
   
-#### Целочисленная сортировка
+#### <a name="intsort"/> Целочисленная сортировка
 
-* Сортировка подсчётом
+* <a name="counting"/> Сортировка подсчётом
 
   ```c++
   std::vector<std::int8_t> numbers{0, -1, 1, -2, 2};
@@ -112,7 +126,7 @@ assert(set.find(0) == set.end());
   #include <burst/algorithm/sorting/counting_sort.hpp>
   ```
   
-* Копирование диапазона, отсортированного подсчётом
+* <a name="counting-copy"/> Копирование диапазона, отсортированного подсчётом
 
   ```c++
   std::vector<std::size_t> chaos{0x0104, 0x0203, 0x0302, 0x0401};
@@ -132,7 +146,7 @@ assert(set.find(0) == set.end());
   #include <burst/algorithm/sorting/counting_sort_copy.hpp>
   ```
 
-* Поразрядная сортировка
+* <a name="radix"/> Поразрядная сортировка
   ```c++
   std::vector<std::string> strings{"aaaa", "bbb", "cc", "d"};
 
@@ -150,7 +164,7 @@ assert(set.find(0) == set.end());
   #include <burst/algorithm/sorting/radix_sort.hpp>
   ```
 
-* Копирование диапазона, отсортированного поразрядной сортировкой
+* <a name="radix-copy"/> Копирование диапазона, отсортированного поразрядной сортировкой
   ```c++
   std::vector<std::uint32_t> chaos{100500, 42, 99999, 1000, 0};
 
@@ -165,12 +179,12 @@ assert(set.find(0) == set.end());
   #include <burst/algorithm/sorting/radix_sort_copy.hpp>
   ```
 
-#### Скачущий поиск
+#### <a name="gallop"/> Скачущий поиск
 
 Эффективен и обгоняет двоичный поиск в том случае, если искомый элемент находится близко к началу
 диапазона.
 
-* Поиск нижней грани
+* <a name="galloping-lb"/> Поиск нижней грани
   ```c++
   std::vector<int> range{1, 2, 2, 3, 3, 3};
 
@@ -185,7 +199,7 @@ assert(set.find(0) == set.end());
   #include <burst/algorithm/galloping_lower_bound.hpp>
   ```
 
-* Поиск верхней грани
+* <a name="galloping-ub"/> Поиск верхней грани
   ```c++
   std::vector<int> range{30, 30, 30, 20, 20, 10};
 
