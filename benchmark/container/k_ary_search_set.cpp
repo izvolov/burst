@@ -48,9 +48,9 @@ struct k_ary_constructor
 template <typename Container>
 void read (std::istream & stream, Container & values)
 {
-    for (typename Container::value_type n; stream >> n; /* пусто */)
+    for (std::int64_t n; stream >> n; /* пусто */)
     {
-        values.push_back(n);
+        values.push_back(static_cast<typename Container::value_type>(n));
     }
 
     std::sort(values.begin(), values.end());
@@ -89,17 +89,18 @@ void test_one (const Container & numbers, std::size_t attempt_count, const SetCo
 template <typename Container>
 void test (const Container & arities, std::size_t attempts)
 {
-    std::vector<std::int64_t> numbers;
+    using integer_type = std::int64_t;
+    std::vector<integer_type> numbers;
     read(std::cin, numbers);
 
     for (auto arity: arities)
     {
-        test_one(numbers, attempts, k_ary_constructor<std::int64_t>(arity));
+        test_one(numbers, attempts, k_ary_constructor<integer_type>(arity));
     }
 
-    test_one(numbers, attempts, default_constructor<std::set<std::int64_t>>("set"));
-    test_one(numbers, attempts, default_constructor<boost::container::flat_set<std::int64_t>>("flat_set"));
-    test_one(numbers, attempts, default_constructor<std::unordered_set<std::int64_t>>("hash_set"));
+    test_one(numbers, attempts, default_constructor<std::set<integer_type>>("set"));
+    test_one(numbers, attempts, default_constructor<boost::container::flat_set<integer_type>>("flat_set"));
+    test_one(numbers, attempts, default_constructor<std::unordered_set<integer_type>>("hash_set"));
 }
 
 int main (int argc, const char * argv[])
