@@ -350,6 +350,11 @@ namespace burst
             }
         }
 
+        //!     Подсчёт счётчиков для элементов узла.
+        /*!
+                Для каждого элемента узла подсчитывает количество элементов в ветке (ветка включает
+            рассматриваемый узел), которые строго меньше этого элемента.
+         */
         void fill_counters (const k_ary_search_set_branch & branch, std::vector<std::size_t> & counters)
         {
             const std::size_t max_subtree_height = branch.height - 1;
@@ -369,6 +374,11 @@ namespace burst
             BOOST_ASSERT(counters.back() == branch.size);
         }
 
+        //!     Заполнение узла нужными элементами исходного диапазона.
+        /*!
+                Для каждого элемента узла известен индекс в исходном диапазоне, по которому лежит
+            нужное значение. Осталось только скопировать его.
+         */
         template <typename RandomAccessRange>
         void fill_node (const k_ary_search_set_branch & branch, const std::vector<std::size_t> & counters, const RandomAccessRange & range)
         {
