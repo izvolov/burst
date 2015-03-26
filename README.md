@@ -21,6 +21,7 @@ Burst
 ```c++
 burst::k_ary_search_set<int> set{3, 4, 6, 1, 7, 8, 2};
 assert(*set.find(3) == 3);
+assert(set.find(0) == set.end());
 ```
 
 В заголовке
