@@ -2,6 +2,7 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 set(TEST_SOURCES test_main.cpp
                  algorithm/galloping_lower_bound.cpp
+                 algorithm/galloping_upper_bound.cpp
                  algorithm/searching/bitap.cpp
                  algorithm/searching/element_position_bitmask_table.cpp
                  algorithm/sorting/counting_sort.cpp
