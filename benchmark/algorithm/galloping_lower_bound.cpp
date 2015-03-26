@@ -66,7 +66,8 @@ int main (int argc, const char * argv[])
 
             std::size_t attempts = vm["attempts"].as<std::size_t>();
             test(numbers, attempts, &burst::galloping_lower_bound<std::vector<std::int64_t>::const_iterator, std::int64_t>, "gallop");
-            test(numbers, attempts, &std::lower_bound<std::vector<std::int64_t>::const_iterator, std::int64_t>, "std");
+            test(numbers, attempts, &std::lower_bound<std::vector<std::int64_t>::const_iterator, std::int64_t>, "std::lower_bound");
+            test(numbers, attempts, &std::find<std::vector<std::int64_t>::const_iterator, std::int64_t>, "std::find");
         }
     }
     catch (bpo::error & e)
