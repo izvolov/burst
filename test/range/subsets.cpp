@@ -3,7 +3,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <burst/range/subset.hpp>
+#include <burst/range/subsets.hpp>
 
 BOOST_AUTO_TEST_SUITE(subsets)
     BOOST_AUTO_TEST_CASE(repeating_elements_are_not_considered)

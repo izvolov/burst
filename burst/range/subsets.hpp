@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_SUBSET_HPP
-#define BURST_RANGE_SUBSET_HPP
+#ifndef BURST_RANGE_SUBSETS_HPP
+#define BURST_RANGE_SUBSETS_HPP
 
 #include <type_traits>
 #include <utility>
@@ -61,4 +61,4 @@ namespace burst
     }
 }
 
-#endif // BURST_RANGE_SUBSET_HPP
+#endif // BURST_RANGE_SUBSETS_HPP
