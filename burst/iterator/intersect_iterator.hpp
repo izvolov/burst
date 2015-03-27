@@ -65,19 +65,20 @@ namespace burst
         typename InputRange,
         typename Compare = std::less<typename InputRange::value_type>
     >
-    class intersect_iterator: public boost::iterator_facade
-                                     <
-                                         intersect_iterator<InputRange, Compare>,
-                                         typename InputRange::value_type,
-                                         boost::forward_traversal_tag,
-                                         typename std::conditional
-                                         <
-                                             std::is_lvalue_reference<typename InputRange::reference>::value,
-                                             typename std::remove_reference<typename InputRange::reference>::type const &,
-                                             typename InputRange::reference
-                                         >
-                                         ::type
-                                     >
+    class intersect_iterator:
+        public boost::iterator_facade
+        <
+            intersect_iterator<InputRange, Compare>,
+            typename InputRange::value_type,
+            boost::forward_traversal_tag,
+            typename std::conditional
+            <
+                std::is_lvalue_reference<typename InputRange::reference>::value,
+                typename std::remove_reference<typename InputRange::reference>::type const &,
+                typename InputRange::reference
+            >
+            ::type
+        >
     {
     private:
         typedef InputRange range_type;

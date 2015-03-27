@@ -26,13 +26,14 @@ namespace burst
             являются диапазонами произвольного доступа.
          */
         template <typename ForwardRange, typename IteratorCategory>
-        class join_iterator_impl: public boost::iterator_facade
-                                         <
-                                             join_iterator_impl<ForwardRange, IteratorCategory>,
-                                             typename ForwardRange::value_type,
-                                             boost::forward_traversal_tag,
-                                             typename ForwardRange::reference
-                                         >
+        class join_iterator_impl:
+            public boost::iterator_facade
+            <
+                join_iterator_impl<ForwardRange, IteratorCategory>,
+                typename ForwardRange::value_type,
+                boost::forward_traversal_tag,
+                typename ForwardRange::reference
+            >
         {
         private:
             typedef ForwardRange range_type;
@@ -155,18 +156,14 @@ namespace burst
             итератор склейки произвольного доступа за O(1).
          */
         template <typename RandomAccessRange>
-        class join_iterator_impl
-        <
-            RandomAccessRange,
-            std::random_access_iterator_tag
-        >
-        : public boost::iterator_facade
-                 <
-                     join_iterator_impl<RandomAccessRange, std::random_access_iterator_tag>,
-                     typename RandomAccessRange::value_type,
-                     boost::random_access_traversal_tag,
-                     typename RandomAccessRange::reference
-                 >
+        class join_iterator_impl<RandomAccessRange, std::random_access_iterator_tag>:
+            public boost::iterator_facade
+            <
+                join_iterator_impl<RandomAccessRange, std::random_access_iterator_tag>,
+                typename RandomAccessRange::value_type,
+                boost::random_access_traversal_tag,
+                typename RandomAccessRange::reference
+            >
         {
         private:
             typedef RandomAccessRange range_type;

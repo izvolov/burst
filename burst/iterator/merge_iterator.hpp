@@ -52,13 +52,14 @@ namespace burst
         typename InputRange,
         typename Compare = std::less<typename InputRange::value_type>
     >
-    class merge_iterator: public boost::iterator_facade
-                                 <
-                                     merge_iterator<InputRange, Compare>,
-                                     typename InputRange::value_type,
-                                     boost::forward_traversal_tag,
-                                     typename InputRange::reference
-                                 >
+    class merge_iterator:
+        public boost::iterator_facade
+        <
+            merge_iterator<InputRange, Compare>,
+            typename InputRange::value_type,
+            boost::forward_traversal_tag,
+            typename InputRange::reference
+        >
     {
     private:
         typedef InputRange range_type;
@@ -79,7 +80,7 @@ namespace burst
             m_heap_order(compare)
         {
             BOOST_STATIC_ASSERT(boost::is_same<typename InputRange1::value_type, range_type>::value);
-            BOOST_ASSERT(boost::algorithm::all_of(m_range_heap.begin(), m_range_heap.end(), boost::bind(&boost::algorithm::is_sorted<range_type, Compare>, _1, compare)));
+            BOOST_ASSERT(boost::algorithm::all_of(m_range_heap, boost::bind(&boost::algorithm::is_sorted<range_type, Compare>, _1, compare)));
 
             m_range_heap.reserve(ranges.size());
             boost::algorithm::copy_if(ranges, std::back_inserter(m_range_heap), not boost::bind(&range_type::empty, _1));
@@ -121,7 +122,8 @@ namespace burst
     private:
         std::vector<range_type> m_range_heap;
 
-        // invert_comparison устраняет путаницу с обратным порядком в пирамиде при работе с std::make(push, pop)_heap.
+        // invert_comparison устраняет путаницу с обратным порядком в пирамиде при работе с
+        // std::make(push, pop)_heap.
         typedef detail::front_value_comparator<detail::invert_comparison<Compare>> heap_order_type;
         heap_order_type m_heap_order;
     };
