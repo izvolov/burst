@@ -18,6 +18,7 @@ set(TEST_SOURCES test_main.cpp
                  range/join.cpp
                  range/merge.cpp
                  range/skip_to_lower_bound.cpp
+                 range/skip_to_upper_bound.cpp
                  range/subsets.cpp)
 
 set(TEST_EXECUTABLE test)
