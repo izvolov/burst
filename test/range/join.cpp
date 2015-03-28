@@ -5,6 +5,8 @@
 
 #include <boost/range/algorithm/for_each.hpp>
 #include <boost/range/iterator_range.hpp>
+#include <boost/range/rbegin.hpp>
+#include <boost/range/rend.hpp>
 #include <boost/test/unit_test.hpp>
 
 #include <burst/range/join.hpp>
@@ -142,7 +144,7 @@ BOOST_AUTO_TEST_SUITE(join)
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
             std::begin(reversed_range), std::end(reversed_range),
-            std::rbegin(expected), std::rend(expected)
+            boost::rbegin(expected), boost::rend(expected)
         );
     }
 BOOST_AUTO_TEST_SUITE_END()
