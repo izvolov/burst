@@ -97,23 +97,21 @@ namespace burst
 
     public:
         template <typename RangeOfRanges>
-        union_iterator (RangeOfRanges ranges, compare_type compare = compare_type()):
+        union_iterator (const RangeOfRanges & ranges, compare_type compare = compare_type()):
             m_ranges(),
             m_compare(compare)
         {
             BOOST_STATIC_ASSERT(std::is_same<typename RangeOfRanges::value_type, range_type>::value);
             BOOST_ASSERT(boost::algorithm::all_of(ranges, boost::bind(&boost::algorithm::is_sorted<range_type, compare_type>, _1, m_compare)));
 
-            auto is_not_empty = [] (const auto & range) { return not range.empty(); };
-            auto non_empty_ranges =
-                boost::make_iterator_range
-                (
-                    boost::make_filter_iterator(is_not_empty, ranges.begin(), ranges.end()),
-                    boost::make_filter_iterator(is_not_empty, ranges.end(), ranges.end())
-                );
-
             m_ranges.reserve(ranges.size());
-            std::move(non_empty_ranges.begin(), non_empty_ranges.end(), std::back_inserter(m_ranges));
+
+            std::copy_if(ranges.begin(), ranges.end(), std::back_inserter(m_ranges),
+                [] (const auto & range)
+                {
+                    return not range.empty();
+                });
+
             std::sort(m_ranges.begin(), m_ranges.end(), detail::compare_by_front_value(m_compare));
         }
 
@@ -170,16 +168,12 @@ namespace burst
     template <typename RangeOfRanges, typename Compare>
     union_iterator
     <
-        typename std::remove_reference<RangeOfRanges>::type::value_type,
+        typename RangeOfRanges::value_type,
         Compare
     >
-    make_union_iterator (RangeOfRanges && ranges, Compare compare)
+    make_union_iterator (const RangeOfRanges & ranges, Compare compare)
     {
-        return union_iterator<typename std::remove_reference<RangeOfRanges>::type::value_type, Compare>
-        (
-            std::forward<RangeOfRanges>(ranges),
-            compare
-        );
+        return union_iterator<typename RangeOfRanges::value_type, Compare>(ranges, compare);
     }
 
     //!     Функция для создания итератора на конец объединения с предикатом.
@@ -193,12 +187,12 @@ namespace burst
     template <typename RangeOfRanges, typename Compare>
     union_iterator
     <
-        typename std::remove_reference<RangeOfRanges>::type::value_type,
+        typename RangeOfRanges::value_type,
         Compare
     >
-    make_union_iterator (RangeOfRanges &&, Compare, iterator::end_tag_t)
+    make_union_iterator (const RangeOfRanges &, Compare, iterator::end_tag_t)
     {
-        return union_iterator<typename std::remove_reference<RangeOfRanges>::type::value_type, Compare>();
+        return union_iterator<typename RangeOfRanges::value_type, Compare>();
     }
 
     //!     Функция для создания итератора объединения.
@@ -210,14 +204,11 @@ namespace burst
     template <typename RangeOfRanges>
     union_iterator
     <
-        typename std::remove_reference<RangeOfRanges>::type::value_type
+        typename RangeOfRanges::value_type
     >
-    make_union_iterator (RangeOfRanges && ranges)
+    make_union_iterator (const RangeOfRanges & ranges)
     {
-        return union_iterator<typename std::remove_reference<RangeOfRanges>::type::value_type>
-        (
-            std::forward<RangeOfRanges>(ranges)
-        );
+        return union_iterator<typename RangeOfRanges::value_type>(ranges);
     }
 
     //!     Функция для создания итератора на конец объединения.
@@ -230,11 +221,11 @@ namespace burst
     template <typename RangeOfRanges>
     union_iterator
     <
-        typename std::remove_reference<RangeOfRanges>::type::value_type
+        typename RangeOfRanges::value_type
     >
-    make_union_iterator (RangeOfRanges &&, iterator::end_tag_t)
+    make_union_iterator (const RangeOfRanges &, iterator::end_tag_t)
     {
-        return union_iterator<typename std::remove_reference<RangeOfRanges>::type::value_type>();
+        return union_iterator<typename RangeOfRanges::value_type>();
     }
 } // namespace burst
 
