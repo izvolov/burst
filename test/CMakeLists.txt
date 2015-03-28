@@ -14,12 +14,14 @@ set(TEST_SOURCES test_main.cpp
                  iterator/join_iterator.cpp
                  iterator/merge_iterator.cpp
                  iterator/subset_iterator.cpp
+                 iterator/union_iterator.cpp
                  range/intersect.cpp
                  range/join.cpp
                  range/merge.cpp
                  range/skip_to_lower_bound.cpp
                  range/skip_to_upper_bound.cpp
-                 range/subsets.cpp)
+                 range/subsets.cpp
+                 range/unite.cpp)
 
 set(TEST_EXECUTABLE test)
 
