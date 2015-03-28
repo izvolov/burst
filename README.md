@@ -19,6 +19,7 @@ Burst
    1. [Склейка](#join)
    2. [Слияние](#merge)
    3. [Пересечение](#intersect)
+   4. [Объединение](#union)
 3. [Целочисленная сортировка](#intsort)
    1. [Сортировка подсчётом](#counting)
    2. [Копирование диапазона, отсортированного подсчётом](#counting-copy)
@@ -108,7 +109,29 @@ assert(set.find(0) == set.end());
   ```c++
   #include <burst/range/intersect.hpp>
   ```
+
+* <a name="union"/> Объединение
   
+  ```c++
+  std::vector<int>   one{1, 2      };
+  std::vector<int>   two{   2, 3   };
+  std::vector<int> three{      3, 4};
+
+  auto range_union = burst::unite
+  ({
+      boost::make_iterator_range(one),
+      boost::make_iterator_range(two),
+      boost::make_iterator_range(three)
+  });
+
+  assert((range_union == std::vector<int>{1, 2, 3, 4}));
+  ```
+
+  В заголовке
+  ```c++
+  #include <burst/range/unite.hpp>
+  ```
+
 #### <a name="intsort"/> Целочисленная сортировка
 
 * <a name="counting"/> Сортировка подсчётом
