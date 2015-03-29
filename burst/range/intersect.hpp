@@ -16,12 +16,12 @@ namespace burst
             Возвращает диапазон, упорядоченный относительно всё той же операции, каждое значение
         которого соответствует одному элементу, который есть в каждом из входных диапазонов.
      */
-    template <typename RangeRange, typename Compare>
+    template <typename ForwardRange, typename Compare>
     boost::iterator_range
     <
-        intersect_iterator<typename RangeRange::value_type, Compare>
+        intersect_iterator<typename ForwardRange::value_type, Compare>
     >
-    intersect (const RangeRange & ranges, Compare compare)
+    intersect (const ForwardRange & ranges, Compare compare)
     {
         return boost::make_iterator_range
         (
@@ -36,12 +36,12 @@ namespace burst
             Возвращает диапазон элементов, которые есть в каждом из входных диапазонов.
             Отношение порядка выбирается по-умолчанию.
      */
-    template <typename RangeRange>
+    template <typename ForwardRange>
     boost::iterator_range
     <
-        intersect_iterator<typename RangeRange::value_type>
+        intersect_iterator<typename ForwardRange::value_type>
     >
-    intersect (const RangeRange & ranges)
+    intersect (const ForwardRange & ranges)
     {
         return boost::make_iterator_range
         (
@@ -57,12 +57,12 @@ namespace burst
             Возвращает упорядоченный относительно заданного отношения порядка диапазон, элементы
         которого есть в каждом из входных диапазонов.
      */
-    template <typename Range, typename Compare>
+    template <typename ForwardRange, typename Compare>
     boost::iterator_range
     <
-        intersect_iterator<Range, Compare>
+        intersect_iterator<ForwardRange, Compare>
     >
-    intersect (std::initializer_list<Range> ranges, Compare compare)
+    intersect (std::initializer_list<ForwardRange> ranges, Compare compare)
     {
         return boost::make_iterator_range
         (
@@ -77,12 +77,12 @@ namespace burst
             Возвращает диапазон элементов, которые есть в каждом из входных диапазонов.
             Отношение порядка выбирается по-умолчанию.
      */
-    template <typename Range>
+    template <typename ForwardRange>
     boost::iterator_range
     <
-        intersect_iterator<Range>
+        intersect_iterator<ForwardRange>
     >
-    intersect (std::initializer_list<Range> ranges)
+    intersect (std::initializer_list<ForwardRange> ranges)
     {
         return boost::make_iterator_range
         (

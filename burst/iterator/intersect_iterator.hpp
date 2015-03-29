@@ -13,6 +13,7 @@
 #include <boost/bind.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/range/algorithm/sort.hpp>
+#include <boost/range/concepts.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 
@@ -33,12 +34,11 @@ namespace burst
         выдаваемые итератором элементы есть в каждом из входных диапазонов, а значит, нельзя
         однозначно выбрать из них какой-то один для записи нового значения.
 
-        \tparam InputRange
-            Тип принимаемого на вход диапазона. Он должен быть однопроходным, то есть удовлетворять
-            требованиям понятия "Single Pass Range".
+        \tparam ForwardRange
+            Тип принимаемого на вход диапазона. Он должен быть однонаправленным, то есть
+            удовлетворять требованиям понятия "Forward Range".
         \tparam Compare
-            Бинарная операция, задающая отношение строгого порядка на элементах диапазона
-            InputRange.
+            Бинарная операция, задающая отношение строгого порядка на элементах входных диапазонов.
             Если пользователем явно не указана операция, то, по-умолчанию, берётся отношение
             "меньше", задаваемое функциональным объектом "std::less<T>".
 
@@ -62,26 +62,27 @@ namespace burst
      */
     template
     <
-        typename InputRange,
-        typename Compare = std::less<typename InputRange::value_type>
+        typename ForwardRange,
+        typename Compare = std::less<typename ForwardRange::value_type>
     >
     class intersect_iterator:
         public boost::iterator_facade
         <
-            intersect_iterator<InputRange, Compare>,
-            typename InputRange::value_type,
+            intersect_iterator<ForwardRange, Compare>,
+            typename ForwardRange::value_type,
             boost::forward_traversal_tag,
             typename std::conditional
             <
-                std::is_lvalue_reference<typename InputRange::reference>::value,
-                typename std::remove_reference<typename InputRange::reference>::type const &,
-                typename InputRange::reference
+                std::is_lvalue_reference<typename ForwardRange::reference>::value,
+                typename std::remove_reference<typename ForwardRange::reference>::type const &,
+                typename ForwardRange::reference
             >
             ::type
         >
     {
     private:
-        typedef InputRange range_type;
+        BOOST_CONCEPT_ASSERT((boost::ForwardRangeConcept<ForwardRange>));
+        typedef ForwardRange range_type;
         typedef Compare compare_type;
 
         typedef boost::iterator_facade
@@ -100,12 +101,12 @@ namespace burst
         base_type;
 
     public:
-        template <typename InputRange1>
-        explicit intersect_iterator (const InputRange1 & ranges, Compare compare = Compare()):
+        template <typename ForwardRange1>
+        explicit intersect_iterator (const ForwardRange1 & ranges, Compare compare = Compare()):
             m_ranges(),
             m_compare(compare)
         {
-            BOOST_STATIC_ASSERT(boost::is_same<typename InputRange1::value_type, range_type>::value);
+            BOOST_STATIC_ASSERT(boost::is_same<typename ForwardRange1::value_type, range_type>::value);
 
             if (boost::algorithm::none_of(ranges, boost::bind(&range_type::empty, _1)))
             {
@@ -228,15 +229,15 @@ namespace burst
             Сами диапазоны должны быть упорядочены относительно этой операции.
             Возвращает итератор на первое пересечение входных диапазонов.
      */
-    template <typename RangeRange, typename Compare>
+    template <typename ForwardRange, typename Compare>
     intersect_iterator
     <
-        typename RangeRange::value_type,
+        typename ForwardRange::value_type,
         Compare
     >
-    make_intersect_iterator (const RangeRange & ranges, Compare compare)
+    make_intersect_iterator (const ForwardRange & ranges, Compare compare)
     {
-        return intersect_iterator<typename RangeRange::value_type, Compare>(ranges, compare);
+        return intersect_iterator<typename ForwardRange::value_type, Compare>(ranges, compare);
     }
 
     //!     Функция для создания итератора пересечения.
@@ -245,14 +246,14 @@ namespace burst
             Возвращает итератор на первое пересечение входных диапазонов.
             Отношение порядка для элементов диапазона выбирается по-умолчанию.
      */
-    template <typename RangeRange>
+    template <typename ForwardRange>
     intersect_iterator
     <
-        typename RangeRange::value_type
+        typename ForwardRange::value_type
     >
-    make_intersect_iterator (const RangeRange & ranges)
+    make_intersect_iterator (const ForwardRange & ranges)
     {
-        return intersect_iterator<typename RangeRange::value_type>(ranges);
+        return intersect_iterator<typename ForwardRange::value_type>(ranges);
     }
 
     //!     Функция для создания итератора на конец пересечения с предикатом.
@@ -263,15 +264,15 @@ namespace burst
             Возвращает итератор-конец, который, если до него дойти, покажет, что пересечения
         закончились.
      */
-    template <typename RangeRange, typename Compare>
+    template <typename ForwardRange, typename Compare>
     intersect_iterator
     <
-        typename RangeRange::value_type,
+        typename ForwardRange::value_type,
         Compare
     >
-    make_intersect_iterator (const RangeRange &, Compare, iterator::end_tag_t)
+    make_intersect_iterator (const ForwardRange &, Compare, iterator::end_tag_t)
     {
-        return intersect_iterator<typename RangeRange::value_type, Compare>();
+        return intersect_iterator<typename ForwardRange::value_type, Compare>();
     }
 
     //!     Функция для создания итератора на конец пересечения.
@@ -281,14 +282,14 @@ namespace burst
             Возвращает итератор на конец последовательности пересечений.
             Отношение порядка берётся по-умолчанию.
      */
-    template <typename RangeRange>
+    template <typename ForwardRange>
     intersect_iterator
     <
-        typename RangeRange::value_type
+        typename ForwardRange::value_type
     >
-    make_intersect_iterator (const RangeRange &, iterator::end_tag_t)
+    make_intersect_iterator (const ForwardRange &, iterator::end_tag_t)
     {
-        return intersect_iterator<typename RangeRange::value_type>();
+        return intersect_iterator<typename ForwardRange::value_type>();
     }
 } // namespace burst
 
