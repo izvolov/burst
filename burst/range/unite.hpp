@@ -15,17 +15,17 @@ namespace burst
             Возвращает диапазон, упорядоченный относительно всё той же операции, каждое значение
         которого соответствует одному элементу, который есть хотя бы в одном из входных диапазонов.
      */
-    template <typename RangeOfRanges, typename Compare>
+    template <typename RandomAccessRange, typename Compare>
     boost::iterator_range
     <
-        union_iterator<typename RangeOfRanges::value_type, Compare>
+        union_iterator<typename RandomAccessRange::value_type, Compare>
     >
-    unite (RangeOfRanges && ranges, Compare compare)
+    unite (RandomAccessRange && ranges, Compare compare)
     {
         return boost::make_iterator_range
         (
-            make_union_iterator(std::forward<RangeOfRanges>(ranges), compare),
-            make_union_iterator(std::forward<RangeOfRanges>(ranges), compare, iterator::end_tag)
+            make_union_iterator(std::forward<RandomAccessRange>(ranges), compare),
+            make_union_iterator(std::forward<RandomAccessRange>(ranges), compare, iterator::end_tag)
         );
     }
 
@@ -35,17 +35,17 @@ namespace burst
             Возвращает диапазон элементов, которые есть хотя бы в одном из входных диапазонов.
             Отношение порядка выбирается по-умолчанию.
      */
-    template <typename RangeOfRanges>
+    template <typename RandomAccessRange>
     boost::iterator_range
     <
-        union_iterator<typename RangeOfRanges::value_type>
+        union_iterator<typename RandomAccessRange::value_type>
     >
-    unite (RangeOfRanges && ranges)
+    unite (RandomAccessRange && ranges)
     {
         return boost::make_iterator_range
         (
-            make_union_iterator(std::forward<RangeOfRanges>(ranges)),
-            make_union_iterator(std::forward<RangeOfRanges>(ranges), iterator::end_tag)
+            make_union_iterator(std::forward<RandomAccessRange>(ranges)),
+            make_union_iterator(std::forward<RandomAccessRange>(ranges), iterator::end_tag)
         );
     }
 
