@@ -1,3 +1,4 @@
+#include <forward_list>
 #include <iterator>
 
 #include <boost/range/iterator_range.hpp>
@@ -16,6 +17,22 @@ BOOST_AUTO_TEST_SUITE(union_iterator)
         auto   union_end = burst::make_union_iterator(ranges, burst::iterator::end_tag);
 
         auto expected_collection = {0, 1, 2, 2, 3, 4};
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            union_begin, union_end,
+            std::begin(expected_collection), std::end(expected_collection)
+        );
+    }
+
+    BOOST_AUTO_TEST_CASE(union_iterator_accepts_forward_iterator)
+    {
+        std::forward_list<double> forward_range{1.6, 2.71, 3.14};
+        auto ranges = {boost::make_iterator_range(forward_range)};
+
+        auto union_begin = burst::make_union_iterator(ranges);
+        auto   union_end = burst::make_union_iterator(ranges, burst::iterator::end_tag);
+
+        auto expected_collection = {1.6, 2.71, 3.14};
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
             union_begin, union_end,

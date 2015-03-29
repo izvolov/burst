@@ -36,12 +36,12 @@ namespace burst
         диапазонов, а значит, нельзя однозначно выбрать из них какой-то один для записи нового
         значения.
 
-        \tparam InputRange
+        \tparam ForwardRange
             Тип принимаемого на вход диапазона. Он должен быть хотя бы однопроходным, то есть
             удовлетворять требованиям понятия "Single Pass Range".
         \tparam Compare
             Бинарная операция, задающая отношение строгого порядка на элементах диапазона
-            InputRange.
+            ForwardRange.
             Если пользователем явно не указана операция, то, по-умолчанию, берётся отношение
             "меньше", задаваемое функциональным объектом "std::less<T>".
 
@@ -58,26 +58,26 @@ namespace burst
      */
     template
     <
-        typename InputRange,
-        typename Compare = std::less<typename InputRange::value_type>
+        typename ForwardRange,
+        typename Compare = std::less<typename ForwardRange::value_type>
     >
     class union_iterator:
         public boost::iterator_facade
         <
-            union_iterator<InputRange, Compare>,
-            typename InputRange::value_type,
+            union_iterator<ForwardRange, Compare>,
+            typename ForwardRange::value_type,
             boost::forward_traversal_tag,
             typename std::conditional
             <
-                std::is_lvalue_reference<typename InputRange::reference>::value,
-                typename std::remove_reference<typename InputRange::reference>::type const &,
-                typename InputRange::reference
+                std::is_lvalue_reference<typename ForwardRange::reference>::value,
+                typename std::remove_reference<typename ForwardRange::reference>::type const &,
+                typename ForwardRange::reference
             >
             ::type
         >
     {
     public:
-        using range_type = InputRange;
+        using range_type = ForwardRange;
         using compare_type = Compare;
 
         using base_type =
