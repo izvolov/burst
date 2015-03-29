@@ -11,6 +11,7 @@
 #include <boost/assert.hpp>
 #include <boost/bind.hpp>
 #include <boost/iterator/iterator_facade.hpp>
+#include <boost/range/concepts.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 
@@ -30,12 +31,11 @@ namespace burst
         прочитать значения, но можно и записать в него. В результате записи в итератор будет
         изменено значение в исходном хранилище.
 
-        \tparam InputRange
-            Тип принимаемого на вход диапазона. Он должен быть однопроходным, то есть удовлетворять
-            требованиям понятия "Single Pass Range".
+        \tparam ForwardRange
+            Тип принимаемого на вход диапазона. Он должен быть однонаправленным, то есть
+            удовлетворять требованиям понятия "Forward Range".
         \tparam Compare
-            Бинарная операция, задающая отношение строгого порядка на элементах диапазона
-            InputRange.
+            Бинарная операция, задающая отношение строгого порядка на элементах входных диапазонов.
             Если пользователем явно не указана операция, то, по-умолчанию, берётся отношение
             "меньше", задаваемое функциональным объектом "std::less<T>".
 
@@ -49,20 +49,21 @@ namespace burst
      */
     template
     <
-        typename InputRange,
-        typename Compare = std::less<typename InputRange::value_type>
+        typename ForwardRange,
+        typename Compare = std::less<typename ForwardRange::value_type>
     >
     class merge_iterator:
         public boost::iterator_facade
         <
-            merge_iterator<InputRange, Compare>,
-            typename InputRange::value_type,
+            merge_iterator<ForwardRange, Compare>,
+            typename ForwardRange::value_type,
             boost::forward_traversal_tag,
-            typename InputRange::reference
+            typename ForwardRange::reference
         >
     {
     private:
-        typedef InputRange range_type;
+        BOOST_CONCEPT_ASSERT((boost::ForwardRangeConcept<ForwardRange>));
+        typedef ForwardRange range_type;
 
         typedef boost::iterator_facade
         <
@@ -74,12 +75,12 @@ namespace burst
         base_type;
 
     public:
-        template <typename InputRange1>
-        explicit merge_iterator (const InputRange1 & ranges, Compare compare = Compare()):
+        template <typename RandomAccessRange>
+        explicit merge_iterator (const RandomAccessRange & ranges, Compare compare = Compare()):
             m_range_heap(),
             m_heap_order(compare)
         {
-            BOOST_STATIC_ASSERT(boost::is_same<typename InputRange1::value_type, range_type>::value);
+            BOOST_STATIC_ASSERT(boost::is_same<typename RandomAccessRange::value_type, range_type>::value);
             BOOST_ASSERT(boost::algorithm::all_of(ranges, boost::bind(&boost::algorithm::is_sorted<range_type, Compare>, _1, compare)));
 
             m_range_heap.reserve(ranges.size());
@@ -136,15 +137,15 @@ namespace burst
             Возвращает итератор на наименьший относительно заданного отношения порядка элемент
         среди входных диапазонов.
      */
-    template <typename RangeRange, typename Compare>
+    template <typename RandomAccessRange, typename Compare>
     merge_iterator
     <
-        typename RangeRange::value_type,
+        typename RandomAccessRange::value_type,
         Compare
     >
-    make_merge_iterator (const RangeRange & ranges, Compare compare)
+    make_merge_iterator (const RandomAccessRange & ranges, Compare compare)
     {
-        return merge_iterator<typename RangeRange::value_type, Compare>(ranges, compare);
+        return merge_iterator<typename RandomAccessRange::value_type, Compare>(ranges, compare);
     }
 
     //!     Функция для создания итератора слияния.
@@ -153,14 +154,14 @@ namespace burst
             Возвращает итератор на наименьший элемент среди входных диапазонов.
             Отношение порядка для элементов диапазона выбирается по-умолчанию.
      */
-    template <typename RangeRange>
+    template <typename RandomAccessRange>
     merge_iterator
     <
-        typename RangeRange::value_type
+        typename RandomAccessRange::value_type
     >
-    make_merge_iterator (const RangeRange & ranges)
+    make_merge_iterator (const RandomAccessRange & ranges)
     {
-        return merge_iterator<typename RangeRange::value_type>(ranges);
+        return merge_iterator<typename RandomAccessRange::value_type>(ranges);
     }
 
     //!     Функция для создания итератора на конец слияния с предикатом.
@@ -171,15 +172,15 @@ namespace burst
             Возвращает итератор-конец, который, если до него дойти, покажет, что элементы слияния
         закончились.
      */
-    template <typename RangeRange, typename Compare>
+    template <typename RandomAccessRange, typename Compare>
     merge_iterator
     <
-        typename RangeRange::value_type,
+        typename RandomAccessRange::value_type,
         Compare
     >
-    make_merge_iterator (const RangeRange &, Compare, iterator::end_tag_t)
+    make_merge_iterator (const RandomAccessRange &, Compare, iterator::end_tag_t)
     {
-        return merge_iterator<typename RangeRange::value_type, Compare>();
+        return merge_iterator<typename RandomAccessRange::value_type, Compare>();
     }
 
     //!     Функция для создания итератора на конец слияния.
@@ -189,14 +190,14 @@ namespace burst
             Возвращает итератор на конец слияния.
             Отношение порядка берётся по-умолчанию.
      */
-    template <typename RangeRange>
+    template <typename RandomAccessRange>
     merge_iterator
     <
-        typename RangeRange::value_type
+        typename RandomAccessRange::value_type
     >
-    make_merge_iterator (const RangeRange &, iterator::end_tag_t)
+    make_merge_iterator (const RandomAccessRange &, iterator::end_tag_t)
     {
-        return merge_iterator<typename RangeRange::value_type>();
+        return merge_iterator<typename RandomAccessRange::value_type>();
     }
 } // namespace burst
 

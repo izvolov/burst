@@ -15,12 +15,12 @@ namespace burst
             Возвращает диапазон, упорядоченный относительно всё той же операции, состоящий из всех
         элементов входных списков.
      */
-    template <typename RangeRange, typename Compare>
+    template <typename RandomAccessRange, typename Compare>
     boost::iterator_range
     <
-        merge_iterator<typename RangeRange::value_type, Compare>
+        merge_iterator<typename RandomAccessRange::value_type, Compare>
     >
-    merge (const RangeRange & ranges, Compare compare)
+    merge (const RandomAccessRange & ranges, Compare compare)
     {
         return boost::make_iterator_range
         (
@@ -35,12 +35,12 @@ namespace burst
             Возвращает диапазон, состоящий из всех элементов входных диапазонов.
             Отношение порядка выбирается по-умолчанию.
      */
-    template <typename RangeRange>
+    template <typename RandomAccessRange>
     boost::iterator_range
     <
-        merge_iterator<typename RangeRange::value_type>
+        merge_iterator<typename RandomAccessRange::value_type>
     >
-    merge (const RangeRange & ranges)
+    merge (const RandomAccessRange & ranges)
     {
         return boost::make_iterator_range
         (
@@ -56,12 +56,12 @@ namespace burst
             Возвращает диапазон, состоящий из всех элементов входных диапазонов, упорядоченный
         относительно заданного отношения порядка.
      */
-    template <typename Range, typename Compare>
+    template <typename ForwardRange, typename Compare>
     boost::iterator_range
     <
-        merge_iterator<Range, Compare>
+        merge_iterator<ForwardRange, Compare>
     >
-    merge (std::initializer_list<Range> ranges, Compare compare)
+    merge (std::initializer_list<ForwardRange> ranges, Compare compare)
     {
         return boost::make_iterator_range
         (
@@ -76,12 +76,12 @@ namespace burst
             Возвращает диапазон, состоящий из всех элементов входных диапазонов.
             Отношение порядка выбирается по-умолчанию.
      */
-    template <typename Range>
+    template <typename ForwardRange>
     boost::iterator_range
     <
-        merge_iterator<Range>
+        merge_iterator<ForwardRange>
     >
-    merge (std::initializer_list<Range> ranges)
+    merge (std::initializer_list<ForwardRange> ranges)
     {
         return boost::make_iterator_range
         (
