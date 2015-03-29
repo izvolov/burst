@@ -80,7 +80,7 @@ namespace burst
             m_heap_order(compare)
         {
             BOOST_STATIC_ASSERT(boost::is_same<typename InputRange1::value_type, range_type>::value);
-            BOOST_ASSERT(boost::algorithm::all_of(m_range_heap, boost::bind(&boost::algorithm::is_sorted<range_type, Compare>, _1, compare)));
+            BOOST_ASSERT(boost::algorithm::all_of(ranges, boost::bind(&boost::algorithm::is_sorted<range_type, Compare>, _1, compare)));
 
             m_range_heap.reserve(ranges.size());
             boost::algorithm::copy_if(ranges, std::back_inserter(m_range_heap), not boost::bind(&range_type::empty, _1));
