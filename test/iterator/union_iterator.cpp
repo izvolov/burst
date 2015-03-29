@@ -5,8 +5,8 @@
 
 #include <burst/iterator/union_iterator.hpp>
 
-BOOST_AUTO_TEST_SUITE(unite_iterator)
-    BOOST_AUTO_TEST_CASE(unite_iterator_end_is_created_using_special_tag)
+BOOST_AUTO_TEST_SUITE(union_iterator)
+    BOOST_AUTO_TEST_CASE(union_iterator_end_is_created_using_special_tag)
     {
         auto  first = {1, 2, 2, 3};
         auto second = {0, 2, 2, 4};
