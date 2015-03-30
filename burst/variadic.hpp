@@ -33,10 +33,10 @@ namespace burst
             template <std::size_t ... I>
             void f (std::index_sequence<I...>)
             {
-                BURST_VARIADIC(g<I>(1));
+                BURST_EXPAND_VARIADIC(g<I>(1));
             }
  */
-#define BURST_VARIADIC(expression) \
+#define BURST_EXPAND_VARIADIC(expression) \
     burst::detail::dummy((expression, 0)...)
 
 #endif // BURST_VARIADIC_HPP
