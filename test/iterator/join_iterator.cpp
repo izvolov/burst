@@ -33,13 +33,8 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
         auto joined_begin = burst::make_join_iterator(ranges);
         auto joined_end   = burst::make_join_iterator(ranges, burst::iterator::end_tag);
 
-        joined_begin += 3;
-        BOOST_CHECK_EQUAL(*joined_begin, 0);
-        BOOST_CHECK_EQUAL(joined_end - joined_begin, 1);
-
-        joined_begin -= 2;
-        BOOST_CHECK_EQUAL(*joined_begin, 2);
-        BOOST_CHECK_EQUAL(joined_end - joined_begin, 3);
+        BOOST_CONCEPT_ASSERT((boost::RandomAccessIterator<decltype(joined_begin)>));
+        BOOST_CONCEPT_ASSERT((boost::RandomAccessIterator<decltype(joined_end)>));
     }
 
     BOOST_AUTO_TEST_CASE(decrementing_random_access_join_iterator_end_is_legal)
