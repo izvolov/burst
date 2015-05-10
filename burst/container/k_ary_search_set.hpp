@@ -14,6 +14,7 @@
 #include <boost/range/iterator_range.hpp>
 
 #include <burst/container/unique_ordered_tag.hpp>
+#include <burst/math/intlog.hpp>
 
 namespace burst
 {
@@ -404,38 +405,12 @@ namespace burst
 
         static std::size_t perfect_tree_height (std::size_t arity, std::size_t size)
         {
-            return logip(size, arity) + 1;
+            return intlog(size, arity) + 1;
         }
 
         static std::size_t perfect_tree_child_index (std::size_t arity, std::size_t parent_index, std::size_t child_number)
         {
             return parent_index * arity + (child_number + 1) * (arity - 1);
-        }
-
-        //!     Целая часть логарифма.
-        /*!
-                Вычисляет целую часть логарифма числа по заданному основанию.
-                logip = LOGarithm Integral Part.
-         */
-        static std::size_t logip (std::size_t number, std::size_t base)
-        {
-            std::size_t degree = 0;
-            std::size_t exponent = 1;
-
-            while (exponent < number)
-            {
-                exponent *= base;
-                ++degree;
-            }
-
-            if (exponent == number)
-            {
-                return degree;
-            }
-            else
-            {
-                return degree - 1;
-            }
         }
 
     private:
