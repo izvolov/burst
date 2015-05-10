@@ -10,30 +10,13 @@
 #include <vector>
 
 #include <burst/algorithm/sorting/detail/counting_sort.hpp>
+#include <burst/math/intlog2.hpp>
 #include <burst/variadic.hpp>
 
 namespace burst
 {
     namespace detail
     {
-        //!     Целая часть двоичного логарифма.
-        inline constexpr std::size_t log2ip (std::size_t integer)
-        {
-            // Из-за C++11 приходится использовать рекурсию.
-            return integer > 0 ? log2ip(integer >> 1) + 1 : std::numeric_limits<std::size_t>::max();
-
-            // А в C++14 можно обойтись без рекурсии.
-            // std::size_t degree = std::numeric_limits<std::size_t>::max();
-
-            // while (integer > 0)
-            // {
-            //     integer >>= 1;
-            //     ++degree;
-            // }
-
-            // return degree;
-        }
-
         template <typename Value, typename Map, typename Radix>
         struct radix_sort_traits
         {
@@ -54,7 +37,7 @@ namespace burst
             constexpr static const auto min_radix_value = std::numeric_limits<radix_type>::min();
             constexpr static const auto max_radix_value = std::numeric_limits<radix_type>::max();
             constexpr static const auto radix_value_range = max_radix_value - min_radix_value + 1;
-            constexpr static const auto radix_size = detail::log2ip(radix_value_range);
+            constexpr static const auto radix_size = intlog2<std::uint64_t>(radix_value_range);
             constexpr static const auto radix_count = sizeof(integer_type) * CHAR_BIT / radix_size;
         };
 
