@@ -19,7 +19,8 @@ Burst
    1. [Склейка](#join)
    2. [Слияние](#merge)
    3. [Пересечение](#intersect)
-   4. [Объединение](#union)
+   4. [Полупересечение](#semiintersect)
+   5. [Объединение](#union)
 3. [Целочисленная сортировка](#intsort)
    1. [Сортировка подсчётом](#counting)
    2. [Копирование диапазона, отсортированного подсчётом](#counting-copy)
@@ -108,6 +109,29 @@ assert(set.find(0) == set.end());
   В заголовке
   ```c++
   #include <burst/range/intersect.hpp>
+  ```
+
+* <a name="semiintersect"/> Полупересечение
+
+  ```c++
+  auto  first = {0, 0, 1,       2};
+  auto second = {0,    1, 1      };
+  auto  third = {      1, 1, 1, 2};
+  //             ^     ^  ^     ^
+
+  auto semiintersection = burst::semiintersect
+  ({
+      boost::make_iterator_range(first),
+      boost::make_iterator_range(second),
+      boost::make_iterator_range(third)
+  }, 2);
+
+  auto expected_collection = {0, 1, 1, 2};
+  ```
+
+  В заголовке
+  ```c++
+  #include <burst/range/semiintersect.hpp>
   ```
 
 * <a name="union"/> Объединение
