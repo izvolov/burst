@@ -20,9 +20,14 @@ void generate (std::size_t range_count, std::size_t range_length, std::int64_t m
         std::generate(range.begin(), range.end(), [&] () { return uniform(engine); });
         if (sort)
         {
-            typedef std::function<bool (std::int64_t, std::int64_t)> compare_type;
-            auto compare = descending ? static_cast<compare_type>(std::greater<std::int64_t>()) : std::less<std::int64_t>();
-            std::sort(range.begin(), range.end(), compare);
+            if (descending)
+            {
+                std::sort(range.begin(), range.end(), std::greater<>());
+            }
+            else
+            {
+                std::sort(range.begin(), range.end());
+            }
         }
 
         boost::for_each(range, [] (std::int64_t value) { std::cout << value << ' '; });

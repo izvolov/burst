@@ -14,7 +14,7 @@ cmake_minimum_required(VERSION 2.8.12)
 ###################################################################################################
 
 add_compile_options(
-    -std=c++1y
+    -std=c++14
     -Werror
 
     -Wall
