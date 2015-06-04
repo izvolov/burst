@@ -227,20 +227,15 @@ namespace burst
                 auto skipped_until = skip_while_less(m_ranges.begin(), semiintersection_candidate());
                 if (skipped_until == semiintersection_candidate())
                 {
-                    // Полупересечение найдено.
-                    break;
+                    break; // Полупересечение найдено.
                 }
-                else
+                else if (skipped_until->empty())
                 {
-                    if (skipped_until->empty())
-                    {
-                        remove_empty_range(skipped_until);
-                    }
-                    else
-                    {
-                        maintain_invariant();
-                    }
-
+                    remove_empty_range(skipped_until);
+                }
+                else // Текущий диапазон больше кандидата.
+                {
+                    maintain_invariant();
                 }
             }
         }
