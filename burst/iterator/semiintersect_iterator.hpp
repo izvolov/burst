@@ -235,14 +235,12 @@ namespace burst
                     if (skipped_until->empty())
                     {
                         remove_empty_range(skipped_until);
-                        if (m_ranges.size() < m_min_items)
-                        {
-                            scroll_to_end();
-                            break;
-                        }
+                    }
+                    else
+                    {
+                        maintain_invariant();
                     }
 
-                    maintain_invariant();
                 }
             }
         }
@@ -274,10 +272,26 @@ namespace burst
             return range;
         }
 
-        void remove_empty_range (range_iterator range)
+        //!     Устранить из рассмотрения опустевший диапазон.
+        /*!
+                Если после удаления этого диапазона их по-прежнему будет достаточно для
+            полупересечения, то нужно удалить диапазон и поддержать инвариант.
+                Если же диапазонов станет меньше необходимого минимума, то итератор полупересечений
+            надо сразу установить на конец полупересечений.
+         */
+        void remove_empty_range (range_iterator empty_range)
         {
-            std::rotate(range, std::next(range), m_ranges.end());
-            m_ranges.pop_back();
+            if (m_ranges.size() - 1 >= m_min_items)
+            {
+                std::rotate(empty_range, std::next(empty_range), m_ranges.end());
+                m_ranges.pop_back();
+
+                maintain_invariant();
+            }
+            else
+            {
+                scroll_to_end();
+            }
         }
 
         void scroll_to_end ()
