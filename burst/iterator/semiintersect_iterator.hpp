@@ -172,9 +172,11 @@ namespace burst
                 });
 
             auto is_empty = [] (const auto & range) { return range.empty(); };
-            m_ranges.erase(boost::remove_if(m_ranges, is_empty), m_ranges.end());
-            if (m_ranges.size() >= m_min_items)
+
+            auto non_empty_end = boost::remove_if(m_ranges, is_empty);
+            if (static_cast<std::size_t>(std::distance(m_ranges.begin(), non_empty_end)) >= m_min_items)
             {
+                m_ranges.erase(non_empty_end, m_ranges.end());
                 maintain_invariant();
             }
             else
