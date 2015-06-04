@@ -227,6 +227,8 @@ namespace burst
                 auto skipped_until = skip_while_less(m_ranges.begin(), semiintersection_candidate());
                 if (skipped_until == semiintersection_candidate())
                 {
+                    BOOST_ASSERT(not m_compare(skipped_until->front(), semiintersection_candidate()->front()));
+                    BOOST_ASSERT(not m_compare(semiintersection_candidate()->front(), skipped_until->front()));
                     break; // Полупересечение найдено.
                 }
                 else if (skipped_until->empty())
@@ -235,6 +237,7 @@ namespace burst
                 }
                 else // Текущий диапазон больше кандидата.
                 {
+                    BOOST_ASSERT(m_compare(semiintersection_candidate()->front(), skipped_until->front()));
                     maintain_invariant();
                 }
             }
