@@ -233,7 +233,7 @@ namespace burst
                 }
                 else if (skipped_until->empty())
                 {
-                    remove_empty_range(skipped_until);
+                    drop_empty_range(skipped_until);
                 }
                 else // Текущий диапазон больше кандидата.
                 {
@@ -270,14 +270,14 @@ namespace burst
             return range;
         }
 
-        //!     Устранить из рассмотрения опустевший диапазон.
+        //!     Выбросить из рассмотрения опустевший диапазон.
         /*!
                 Если после удаления этого диапазона их по-прежнему будет достаточно для
             полупересечения, то нужно удалить диапазон и поддержать инвариант.
                 Если же диапазонов станет меньше необходимого минимума, то итератор полупересечений
             надо сразу установить на конец полупересечений.
          */
-        void remove_empty_range (range_iterator empty_range)
+        void drop_empty_range (range_iterator empty_range)
         {
             if (m_ranges.size() - 1 >= m_min_items)
             {
