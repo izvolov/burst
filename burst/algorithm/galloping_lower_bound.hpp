@@ -54,13 +54,14 @@ namespace burst
     {
         BOOST_ASSERT(std::is_sorted(first, last, compare));
 
-        auto distance = std::distance(first, last);
+        const auto distance = std::distance(first, last);
+
         auto position = static_cast<decltype(distance)>(0);
         auto step = static_cast<decltype(distance)>(1);
 
         while (position + step < distance)
         {
-            auto current = std::next(first, step);
+            const auto current = std::next(first, step);
             if (compare(*current, value))
             {
                 first = std::next(current);
