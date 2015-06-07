@@ -55,9 +55,8 @@ namespace burst
         BOOST_ASSERT(std::is_sorted(first, last, compare));
 
         auto distance = std::distance(first, last);
-        using difference_type = typename std::iterator_traits<RandomAccessIterator>::difference_type;
-        auto position = static_cast<difference_type>(0);
-        auto step = static_cast<difference_type>(1);
+        auto position = static_cast<decltype(distance)>(0);
+        auto step = static_cast<decltype(distance)>(1);
 
         while (position + step < distance)
         {
