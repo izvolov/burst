@@ -1,6 +1,8 @@
 #ifndef BURST_ALGORITHM_SEARCHING_BITAP_HPP
 #define BURST_ALGORITHM_SEARCHING_BITAP_HPP
 
+#include <array>
+#include <climits>
 #include <iterator>
 #include <map>
 #include <memory>
@@ -27,7 +29,18 @@ namespace burst
             \tparam Map
                 Ассоциативный контейнер, хранящий отображение элементов образца в битовые маски.
          */
-        template <typename Value, typename Bitmask, typename Map = std::map<Value, Bitmask>>
+        template
+        <
+            typename Value,
+            typename Bitmask,
+            typename Map = typename std::conditional
+            <
+                std::is_integral<Value>::value && sizeof(Value) == 1,
+                std::array<Bitmask, (1 << (sizeof(Value) * CHAR_BIT))>,
+                std::map<Value, Bitmask>
+            >
+            ::type
+        >
         class bitap
         {
         public:

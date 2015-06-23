@@ -1,3 +1,5 @@
+#include <array>
+#include <climits>
 #include <map>
 #include <set>
 #include <string>
@@ -8,7 +10,7 @@
 
 #include <burst/algorithm/searching/detail/element_position_bitmask_table.hpp>
 
-typedef burst::algorithm::detail::element_position_bitmask_table<std::map<char, std::bitset<32>>> char_masks;
+typedef burst::algorithm::detail::element_position_bitmask_table<std::array<std::bitset<32>, (1 << sizeof(char) * CHAR_BIT)>> char_masks;
 typedef burst::algorithm::detail::element_position_bitmask_table<std::map<int, std::bitset<64>>> integral_masks;
 
 BOOST_AUTO_TEST_SUITE(element_position_bitmask_table)

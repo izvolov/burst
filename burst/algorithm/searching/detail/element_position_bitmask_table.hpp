@@ -1,6 +1,7 @@
 #ifndef BURST_ALGORITHM_SEARCHING_DETAIL_ELEMENT_POSITION_BITMASK_TABLE_HPP
 #define BURST_ALGORITHM_SEARCHING_DETAIL_ELEMENT_POSITION_BITMASK_TABLE_HPP
 
+#include <iostream>
 #include <cstddef>
 #include <initializer_list>
 #include <iterator>
@@ -109,6 +110,87 @@ namespace burst
 
             private:
                 map_type m_bitmasks;
+                std::size_t m_sequence_length;
+            };
+
+            //!     Позиционные маски элементов байтовой последовательности.
+            /*!
+                    Специализация для случая, когда входная последовательность состоит из
+                однобайтовых чисел.
+                    В этом случае можно в качестве отображения взять обычный массив и обращаться к
+                нему просто по индексам.
+             */
+            template <typename Bitmask, std::size_t Size>
+            class element_position_bitmask_table <std::array<Bitmask, Size>>
+            {
+            public:
+                typedef std::array<Bitmask, Size> array_type;
+                typedef typename array_type::size_type key_type;
+                typedef typename array_type::value_type bitmask_type;
+
+            public:
+                template <typename InputIterator>
+                element_position_bitmask_table (InputIterator sequence_begin, InputIterator sequence_end)
+                {
+                    initialize(sequence_begin, sequence_end);
+                }
+
+                template <typename InputRange>
+                explicit element_position_bitmask_table (const InputRange & sequence)
+                {
+                    initialize(sequence.begin(), sequence.end());
+                }
+
+                element_position_bitmask_table (std::initializer_list<key_type> sequence)
+                {
+                    initialize(sequence.begin(), sequence.end());
+                }
+
+            private:
+                template <typename InputIterator>
+                void initialize (InputIterator first, InputIterator last)
+                {
+                    typedef typename std::iterator_traits<InputIterator>::value_type iterated_type;
+                    static_assert(std::is_integral<iterated_type>::value && sizeof(iterated_type) == 1, "Входной элемент должен быть однобайтовым целым числом.");
+
+                    std::size_t elements_count = 0;
+
+                    bitmask_type position_indicator = 0x01;
+                    while (first != last)
+                    {
+                        m_bitmasks[static_cast<unsigned char>(*first)] |= position_indicator;
+
+                        ++first;
+                        position_indicator = static_cast<bitmask_type>(position_indicator << 1);
+                        ++elements_count;
+                    }
+
+                    m_sequence_length = elements_count;
+                }
+
+            public:
+                template <typename Integer>
+                bitmask_type operator [] (Integer element) const
+                {
+                    static_assert(std::is_integral<Integer>::value && sizeof(Integer) == 1, "Входной элемент должен быть однобайтовым целым числом.");
+
+                    return m_bitmasks[static_cast<unsigned char>(element)];
+                }
+
+                //!     Длина исходной последовательности.
+                std::size_t length () const
+                {
+                    return m_sequence_length;
+                }
+
+                //!     Количество уникальных элементов исходной последовательности.
+                std::size_t size () const
+                {
+                    return m_bitmasks.size();
+                }
+
+            private:
+                array_type m_bitmasks;
                 std::size_t m_sequence_length;
             };
         } // namespace detail
