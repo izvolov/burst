@@ -9,6 +9,7 @@
 #include <type_traits>
 
 #include <boost/assert.hpp>
+#include <boost/range/iterator_range.hpp>
 
 #include <burst/algorithm/searching/detail/element_position_bitmask_table.hpp>
 #include <burst/algorithm/searching/detail/bitmask_traits.hpp>
@@ -79,6 +80,54 @@ namespace burst
                 return do_search(corpus_begin, corpus_end);
             }
 
+            //!     Найти первое вхождение образца в текст.
+            /*!
+                    Принимает диапазон, в котором нужно произвести поиск, а также ссылку на битовую
+                маску — "подсказку" — которую в дальнейшем можно использовать для продолжения
+                поиска с конца предыдущего вхождения.
+             */
+            template <typename ForwardIterator>
+            boost::iterator_range<ForwardIterator> find_first
+                (
+                    ForwardIterator corpus_begin,
+                    ForwardIterator corpus_end,
+                    bitmask_type & hint
+                ) const
+            {
+                return active_search(corpus_begin, dummy_search(corpus_begin, corpus_end, hint), corpus_end, hint);
+            }
+
+            //!     Найти следующее вхождение образца в текст.
+            /*!
+                    Принимает предыдущее вхождение образца в текст, конец текста, а также
+                "подсказку", в которой сохранена информация о предыдущем поиске. Используя эту
+                информацию можно продолжить поиск с того места, на котором он был закончен в
+                прошлый раз, вместо того, чтобы начинать поиск с элемента, следующего за началом
+                предыдущего совпадения.
+             */
+            template <typename ForwardIterator>
+            boost::iterator_range<ForwardIterator> find_next
+                (
+                    ForwardIterator previous_match_begin,
+                    ForwardIterator previous_match_end,
+                    ForwardIterator corpus_end,
+                    bitmask_type & hint
+                ) const
+            {
+                if (previous_match_end != corpus_end)
+                {
+                    hint = bit_shift(hint) & (*m_bitmask_table)[*previous_match_end];
+                    ++previous_match_begin;
+                    ++previous_match_end;
+
+                    return active_search(previous_match_begin, previous_match_end, corpus_end, hint);
+                }
+                else
+                {
+                    return boost::make_iterator_range(corpus_end, corpus_end);
+                }
+            }
+
         private:
             template <typename ForwardIterator>
             ForwardIterator do_search (ForwardIterator first, ForwardIterator last) const
@@ -86,7 +135,7 @@ namespace burst
                 bitmask_type match_column = 0x00;
                 ForwardIterator match_candidate = first;
                 first = dummy_search(first, last, match_column);
-                return active_search(match_candidate, first, last, match_column);
+                return active_search(match_candidate, first, last, match_column).begin();
             }
 
             //!     "Холостой поиск".
@@ -127,7 +176,7 @@ namespace burst
                 уже посчитана маска-индикатор совпадений — "подсказка" ("hint").
              */
             template <typename ForwardIterator>
-            ForwardIterator active_search (ForwardIterator match_candidate, ForwardIterator corpus_current, ForwardIterator corpus_end, bitmask_type & hint) const
+            boost::iterator_range<ForwardIterator> active_search (ForwardIterator match_candidate, ForwardIterator corpus_current, ForwardIterator corpus_end, bitmask_type & hint) const
             {
                 // Индикатор совпадения — единица на N-м месте в битовой маске, где N — количество элементов в искомом образце.
                 const bitmask_type match_indicator = static_cast<bitmask_type>(0x01u << (m_bitmask_table->length() - 1));
@@ -140,7 +189,9 @@ namespace burst
                     ++match_candidate;
                 }
 
-                return (match_column & match_indicator) == 0 ? corpus_end : match_candidate;
+                return (match_column & match_indicator) == 0
+                    ? boost::make_iterator_range(corpus_end, corpus_end)
+                    : boost::make_iterator_range(match_candidate, corpus_current);
             }
 
             //!     Главная битовая операция алгоритма.
@@ -166,6 +217,23 @@ namespace burst
             // из одного объекта в другой.
             const std::shared_ptr<const bitmask_table_type> m_bitmask_table;
         };
+
+        //!     Функция создания поискового объекта.
+        /*!
+                Принимает явно заданный аргумент шаблона "Bitmask", обозначающий тип битовой маски,
+            которым будет кодироваться образец, а также сам образец в виде диапазона произвольных
+            элементов.
+         */
+        template <typename Bitmask, typename ForwardRange>
+        bitap
+        <
+            typename ForwardRange::value_type,
+            Bitmask
+        >
+        make_bitap (const ForwardRange & pattern)
+        {
+            return bitap<typename ForwardRange::value_type, Bitmask>(pattern);
+        }
     } // namespace algorithm
 } // namespace burst
 
