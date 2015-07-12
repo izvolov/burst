@@ -24,6 +24,7 @@ add_compile_options(
     -Wcast-align
     -Wcast-qual
     -Wconversion
+    -Wctor-dtor-privacy
     -Wenum-compare
     -Wfloat-equal
     -Wnon-virtual-dtor
@@ -31,6 +32,7 @@ add_compile_options(
     -Woverloaded-virtual
     -Wredundant-decls
     -Wsign-conversion
+    -Wsign-promo
 )
 
 if(NOT CMAKE_BUILD_TYPE)
