@@ -37,7 +37,7 @@ namespace burst
             typename Map = typename std::conditional
             <
                 std::is_integral<Value>::value && sizeof(Value) == 1,
-                std::array<Bitmask, (1ul << (sizeof(Value) * CHAR_BIT))>,
+                std::array<Bitmask, (1ul << CHAR_BIT)>,
                 std::map<Value, Bitmask>
             >
             ::type
