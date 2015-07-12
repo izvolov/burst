@@ -130,18 +130,21 @@ namespace burst
 
             public:
                 template <typename InputIterator>
-                element_position_bitmask_table (InputIterator sequence_begin, InputIterator sequence_end)
+                element_position_bitmask_table (InputIterator sequence_begin, InputIterator sequence_end):
+                    m_bitmasks{{0}}
                 {
                     initialize(sequence_begin, sequence_end);
                 }
 
                 template <typename InputRange>
-                explicit element_position_bitmask_table (const InputRange & sequence)
+                explicit element_position_bitmask_table (const InputRange & sequence):
+                    m_bitmasks{{0}}
                 {
                     initialize(sequence.begin(), sequence.end());
                 }
 
-                element_position_bitmask_table (std::initializer_list<key_type> sequence)
+                element_position_bitmask_table (std::initializer_list<key_type> sequence):
+                    m_bitmasks{{0}}
                 {
                     initialize(sequence.begin(), sequence.end());
                 }
