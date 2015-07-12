@@ -4,6 +4,7 @@
 #include <forward_list>
 #include <iterator>
 #include <string>
+#include <unordered_map>
 
 #include <boost/test/unit_test.hpp>
 
@@ -122,6 +123,25 @@ BOOST_AUTO_TEST_SUITE(bitap)
         const std::forward_list<int> text{0, 1, 2, 3, 4};
 
         const auto matches = burst::bitap<std::bitset<32>>(pattern, text);
+        BOOST_REQUIRE(not matches.empty());
+
+        const auto match = matches.front();
+
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            match.begin(), match.end(),
+            pattern.begin(), pattern.end()
+        );
+    }
+
+    BOOST_AUTO_TEST_CASE(bitmask_map_can_be_set_explicitly)
+    {
+        const std::forward_list<int> pattern{1, 2, 3};
+        const std::forward_list<int> text{0, 1, 2, 3, 4};
+
+        using bitmask_type = std::bitset<32>;
+        using bitmask_map_type = std::unordered_map<int, bitmask_type>;
+        const auto matches = burst::bitap<bitmask_type, bitmask_map_type>(pattern, text);
         BOOST_REQUIRE(not matches.empty());
 
         const auto match = matches.front();

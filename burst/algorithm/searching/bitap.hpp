@@ -234,6 +234,23 @@ namespace burst
         {
             return bitap<typename ForwardRange::value_type, Bitmask>(pattern);
         }
+
+        //!     Функция создания поискового объекта с произвольным отображением.
+        /*!
+                Отличается тем, что принимает явно заданный аргумент шаблона "Map", обозначающий
+            тип, в котором будет храниться отображение из элементов образца в битовые маски.
+         */
+        template <typename Bitmask, typename Map, typename ForwardRange>
+        bitap
+        <
+            typename ForwardRange::value_type,
+            Bitmask,
+            Map
+        >
+        make_bitap (const ForwardRange & pattern)
+        {
+            return bitap<typename ForwardRange::value_type, Bitmask, Map>(pattern);
+        }
     } // namespace algorithm
 } // namespace burst
 
