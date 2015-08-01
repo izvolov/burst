@@ -16,6 +16,17 @@ namespace burst
     {
         return std::vector<Value>(values);
     }
+
+    //!     Создание вектора с пользовательским аллокатором.
+    /*!
+            Отличается наличием аллокатора, передаваемого в качестве аргумента
+        функции.
+     */
+    template <typename Value, typename Allocator>
+    auto make_vector (std::initializer_list<Value> values, const Allocator & allocator)
+    {
+        return std::vector<Value, Allocator>(values, allocator);
+    }
 } // namespace burst
 
 #endif // BURST_CONTAINER_MAKE_VECTOR_HPP
