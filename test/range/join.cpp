@@ -10,13 +10,14 @@
 #include <boost/test/unit_test.hpp>
 
 #include <burst/range/join.hpp>
+#include <burst/range/make_range_vector.hpp>
 
 BOOST_AUTO_TEST_SUITE(join)
     BOOST_AUTO_TEST_CASE(joining_empty_ranges_results_empty_range)
     {
         std::vector<int> first;
         std::vector<int> second;
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto joint_range = burst::join(ranges);
 
@@ -26,7 +27,7 @@ BOOST_AUTO_TEST_SUITE(join)
     BOOST_AUTO_TEST_CASE(joining_one_range_results_the_same_range)
     {
         int array[] = {1, 2, 3, 4};
-        auto ranges = {boost::make_iterator_range(array)};
+        auto ranges = burst::make_range_vector(array);
 
         auto joint_range = burst::join(ranges);
 
@@ -41,7 +42,7 @@ BOOST_AUTO_TEST_SUITE(join)
     {
         std::list<int>  first = {1, 2, 3};
         std::list<int> second = {2, 3, 4};
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto joint_range = burst::join(ranges);
 
@@ -58,12 +59,7 @@ BOOST_AUTO_TEST_SUITE(join)
         auto  first = {'h', 'e'};
         auto second = {'l', 'l'};
         auto  third = {'o', '!'};
-        auto ranges =
-        {
-            boost::make_iterator_range(first),
-            boost::make_iterator_range(second),
-            boost::make_iterator_range(third)
-        };
+        auto ranges = burst::make_range_vector(first, second, third);
 
         auto joint_range = burst::join(ranges);
 
@@ -79,8 +75,7 @@ BOOST_AUTO_TEST_SUITE(join)
     {
         std::vector<int> first{100, 50};
         std::vector<int> second{70, 30};
-
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto joint_range = burst::join(ranges);
         boost::for_each(joint_range, [] (int & x) { x /= 10; });
@@ -114,7 +109,7 @@ BOOST_AUTO_TEST_SUITE(join)
     {
         std::vector<int>  first{1, 0};
         std::vector<int> second{3, 2};
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto joint_range = burst::join(ranges);
 
@@ -128,14 +123,7 @@ BOOST_AUTO_TEST_SUITE(join)
         std::string can("can");
         std::string be("be");
         std::string reversed("reversed");
-        auto ranges =
-        {
-            boost::make_iterator_range(join),
-            boost::make_iterator_range(iterator),
-            boost::make_iterator_range(can),
-            boost::make_iterator_range(be),
-            boost::make_iterator_range(reversed)
-        };
+        auto ranges = burst::make_range_vector(join, iterator, can, be, reversed);
 
         auto joint_range = burst::join(ranges);
         auto reversed_range = boost::adaptors::reverse(joint_range);
