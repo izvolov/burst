@@ -11,13 +11,10 @@
 #include <boost/assert.hpp>
 #include <boost/bind.hpp>
 #include <boost/range/algorithm/upper_bound.hpp>
-#include <boost/range/iterator_range.hpp>
-#include <boost/iterator/filter_iterator.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 
 #include <burst/iterator/detail/front_value_compare.hpp>
 #include <burst/iterator/end_tag.hpp>
-#include <burst/range/skip_to_upper_bound.hpp>
 
 namespace burst
 {
@@ -123,10 +120,8 @@ namespace burst
         void increment ()
         {
             auto next_element = boost::upper_bound(m_ranges, m_ranges.front(), detail::compare_by_front_value(m_compare));
-
-            auto value_to_skip_by = m_ranges.front().front();
             std::for_each(m_ranges.begin(), next_element,
-                [this, & value_to_skip_by] (range_type & range)
+                [] (range_type & range)
                 {
                     range.advance_begin(1);
                 });
