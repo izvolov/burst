@@ -119,8 +119,8 @@ namespace burst
 
         void increment ()
         {
-            auto next_element = boost::upper_bound(m_ranges, m_ranges.front(), detail::compare_by_front_value(m_compare));
-            std::for_each(m_ranges.begin(), next_element,
+            auto current_union_end = boost::upper_bound(m_ranges, m_ranges.front(), detail::compare_by_front_value(m_compare));
+            std::for_each(m_ranges.begin(), current_union_end,
                 [] (range_type & range)
                 {
                     range.advance_begin(1);
