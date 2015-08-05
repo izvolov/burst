@@ -374,7 +374,7 @@ namespace burst
         private:
             std::shared_ptr<range_container_type> m_ranges;
 
-            typename std::vector<range_type>::size_type m_outer_range_index;
+            typename range_container_type::size_type m_outer_range_index;
             typename range_type::size_type m_inner_range_index;
 
             typename range_type::size_type m_items_passed;
