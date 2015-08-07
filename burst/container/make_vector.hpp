@@ -19,8 +19,7 @@ namespace burst
 
     //!     Создание вектора с пользовательским аллокатором.
     /*!
-            Отличается наличием аллокатора, передаваемого в качестве аргумента
-        функции.
+            Отличается наличием аллокатора, передаваемого в качестве аргумента функции.
      */
     template <typename Value, typename Allocator>
     auto make_vector (std::initializer_list<Value> values, const Allocator & allocator)
