@@ -21,6 +21,7 @@ Burst
    3. [Пересечение](#intersect)
    4. [Полупересечение](#semiintersect)
    5. [Объединение](#union)
+   6. [Разность](#difference)
 3. [Целочисленная сортировка](#intsort)
    1. [Сортировка подсчётом](#counting)
    2. [Копирование диапазона, отсортированного подсчётом](#counting-copy)
@@ -154,6 +155,28 @@ assert(set.find(0) == set.end());
   В заголовке
   ```c++
   #include <burst/range/unite.hpp>
+  ```
+
+* <a name="difference"/> Разность
+
+  ```c++
+  const auto natural = burst::make_vector({1, 2, 3, 4, 5, 6});
+  const auto odd = burst::make_vector({1, 3, 5});
+
+  const auto difference =
+      burst::difference
+      (
+          boost::make_iterator_range(natural),
+          boost::make_iterator_range(odd)
+      );
+
+  const auto even = burst::make_vector({2, 4, 6});
+  assert(difference == even);
+  ```
+
+  В заголовке
+  ```c++
+  #include <burst/range/difference.hpp>
   ```
 
 #### <a name="intsort"/> Целочисленная сортировка

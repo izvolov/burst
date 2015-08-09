@@ -11,6 +11,7 @@ set(TEST_SOURCES test_main.cpp
                  algorithm/sorting/radix_sort_copy.cpp
                  container/k_ary_search_set.cpp
                  iterator/bitap_iterator.cpp
+                 iterator/difference_iterator.cpp
                  iterator/intersect_iterator.cpp
                  iterator/join_iterator.cpp
                  iterator/merge_iterator.cpp
@@ -20,6 +21,7 @@ set(TEST_SOURCES test_main.cpp
                  math/intlog.cpp
                  math/intlog2.cpp
                  range/bitap.cpp
+                 range/difference.cpp
                  range/intersect.cpp
                  range/join.cpp
                  range/merge.cpp
