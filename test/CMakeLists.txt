@@ -20,6 +20,7 @@ set(TEST_SOURCES test_main.cpp
                  iterator/union_iterator.cpp
                  math/intlog.cpp
                  math/intlog2.cpp
+                 math/intpow.cpp
                  range/bitap.cpp
                  range/difference.cpp
                  range/intersect.cpp
