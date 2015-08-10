@@ -2,7 +2,6 @@
 #define BURST_CONTAINER_K_ARY_SEARCH_SET_HPP
 
 #include <algorithm>
-#include <cmath>
 #include <functional>
 #include <iterator>
 #include <stack>
@@ -15,6 +14,7 @@
 
 #include <burst/container/unique_ordered_tag.hpp>
 #include <burst/math/intlog.hpp>
+#include <burst/math/intpow.hpp>
 
 namespace burst
 {
@@ -400,7 +400,7 @@ namespace burst
     private:
         static std::size_t perfect_tree_size (std::size_t arity, std::size_t height)
         {
-            return static_cast<std::size_t>(std::pow(arity, height)) - 1;
+            return intpow(arity, height) - 1;
         }
 
         static std::size_t perfect_tree_height (std::size_t arity, std::size_t size)
