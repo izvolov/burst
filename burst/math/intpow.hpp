@@ -44,14 +44,9 @@ namespace burst
         static_assert(std::is_integral<Base>::value, "Основание должно быть целым.");
         static_assert(std::is_integral<Exponent>::value, "Показатель степени должен быть целым.");
 
-        if (n >= 0)
-        {
-            return detail::intpow_impl(x, n);
-        }
-        else
-        {
-            throw std::logic_error("Отрицательная степень целого числа не может быть представлена целым числом.");
-        }
+        return n >= 0
+            ? detail::intpow_impl(x, n)
+            : throw std::logic_error("Отрицательная степень целого числа не может быть представлена целым числом");
     }
 } // namespace burst
 
