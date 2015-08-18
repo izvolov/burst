@@ -27,7 +27,7 @@ namespace burst
     struct identity <void>
     {
         template <typename Type>
-        constexpr auto operator () (Type && value) const -> decltype(std::forward<Type>(value))
+        constexpr decltype(auto) operator () (Type && value) const
         {
             return std::forward<Type>(value);
         }
