@@ -81,16 +81,15 @@ namespace burst
             collect_impl(first, last, map, radix, counters, std::make_index_sequence<radix_count>());
         }
 
-        //!     Сортировка с пользовательским буфером.
+        //!     Сортировка с одним дополнительным буфером.
         /*!
-                Один буфер задаётся пользователем, а второй — создаётся внутри функции.
-                Сортировка по первому разряду проходит из входного диапазона во внутренний буфер.
-            Затем сортировка проходит из одного буфера в другой до тех пор, пока не заканчиваются
-            разряды. Итоговый результат сортировки оказывается в пользовательском буфере.
+                Внутри функции заводится дополнительный буфер. Сортировка по первому разряду
+            проходит из входного диапазона в буфер. Дальнейшая сортировка происходит между буфером
+            и выходным диапазоном. В итоге результат сортировки оказывается в выходном диапазоне.
                 Входной диапазон не изменяется.
          */
         template <typename ForwardIterator, typename RandomAccessIterator, typename Map, typename Radix>
-        RandomAccessIterator radix_sort_with_custom_buffer (ForwardIterator first, ForwardIterator last, RandomAccessIterator buffer, Map map, Radix radix)
+        RandomAccessIterator radix_sort_with_one_extra_buffer (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map, Radix radix)
         {
             using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
             using traits = detail::radix_sort_traits<value_type, Map, Radix>;
@@ -100,7 +99,7 @@ namespace burst
             detail::collect(first, last, map, radix, counters);
 
             auto distance = std::distance(first, last);
-            auto buffer_end = buffer + static_cast<typename std::iterator_traits<RandomAccessIterator>::difference_type>(distance);
+            auto result_end = result + static_cast<typename std::iterator_traits<RandomAccessIterator>::difference_type>(distance);
             std::vector<value_type> extra_buffer(static_cast<std::size_t>(distance));
 
             auto get_low_radix = [& radix, & map] (const value_type & value) { return radix(map(value)); };
@@ -112,14 +111,14 @@ namespace burst
                 (
                     extra_buffer.begin(),
                     extra_buffer.end(),
-                    buffer,
+                    result,
                     nth_radix(radix_number, map, radix),
                     counters[radix_number]
                 );
                 detail::dispose
                 (
-                    buffer,
-                    buffer_end,
+                    result,
+                    result_end,
                     extra_buffer.begin(),
                     nth_radix(radix_number + 1, map, radix),
                     counters[radix_number + 1]
@@ -127,9 +126,9 @@ namespace burst
             }
 
             auto get_high_radix = nth_radix(traits::radix_count - 1, map, radix);
-            detail::dispose(extra_buffer.begin(), extra_buffer.end(), buffer, get_high_radix, counters[traits::radix_count - 1]);
+            detail::dispose(extra_buffer.begin(), extra_buffer.end(), result, get_high_radix, counters[traits::radix_count - 1]);
 
-            return buffer_end;
+            return result_end;
         }
 
         //!     Сортировка с двумя дополнительными буферами.
@@ -141,7 +140,7 @@ namespace burst
                 Входной диапазон не изменяется.
          */
         template <typename ForwardIterator1, typename ForwardIterator2, typename Map, typename Radix>
-        ForwardIterator2 radix_sort_with_two_buffers (ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 result, Map map, Radix radix)
+        ForwardIterator2 radix_sort_with_two_extra_buffers (ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 result, Map map, Radix radix)
         {
             using value_type = typename std::iterator_traits<ForwardIterator1>::value_type;
             using traits = detail::radix_sort_traits<value_type, Map, Radix>;
@@ -195,7 +194,7 @@ namespace burst
         >
         ::type radix_sort_impl (ForwardIterator first, ForwardIterator last, Map map, Radix radix)
         {
-            counting_sort_copy_buffered(first, last, first,
+            counting_sort_copy_with_extra_buffer(first, last, first,
                 [& map, & radix] (const auto & value)
                 {
                     return radix(map(value));
@@ -221,7 +220,7 @@ namespace burst
         >
         ::type radix_sort_impl (RandomAccessIterator first, RandomAccessIterator last, Map map, Radix radix)
         {
-            radix_sort_with_custom_buffer(first, last, first, map, radix);
+            radix_sort_with_one_extra_buffer(first, last, first, map, radix);
         }
 
         template <typename ForwardIterator, typename Map, typename Radix>
@@ -243,7 +242,7 @@ namespace burst
         >
         ::type radix_sort_impl (ForwardIterator first, ForwardIterator last, Map map, Radix radix)
         {
-            radix_sort_with_two_buffers(first, last, first, map, radix);
+            radix_sort_with_two_extra_buffers(first, last, first, map, radix);
         }
 
         // ----------------------------------------------------------------------------------------
@@ -292,7 +291,7 @@ namespace burst
         >
         ::type radix_sort_copy_impl (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map, Radix radix)
         {
-            return radix_sort_with_custom_buffer(first, last, result, map, radix);
+            return radix_sort_with_one_extra_buffer(first, last, result, map, radix);
         }
 
         template <typename ForwardIterator1, typename ForwardIterator2, typename Map, typename Radix>
@@ -314,7 +313,7 @@ namespace burst
         >
         ::type radix_sort_copy_impl (ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 result, Map map, Radix radix)
         {
-            return radix_sort_with_two_buffers(first, last, result, map, radix);
+            return radix_sort_with_two_extra_buffers(first, last, result, map, radix);
         }
     } // namespace detail
 } // namespace burst

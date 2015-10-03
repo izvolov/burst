@@ -93,7 +93,7 @@ namespace burst
             затем переносятся в выходной диапазон.
          */
         template <typename ForwardIterator1, typename ForwardIterator2, typename Map>
-        ForwardIterator2 counting_sort_copy_buffered (ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 result, Map map)
+        ForwardIterator2 counting_sort_copy_with_extra_buffer (ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 result, Map map)
         {
             using value_type = typename std::iterator_traits<ForwardIterator1>::value_type;
             std::vector<value_type> buffer(static_cast<std::size_t>(std::distance(first, last)));
@@ -131,13 +131,13 @@ namespace burst
         >
         ::type counting_sort_copy_impl (ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 result, Map map)
         {
-            return counting_sort_copy_buffered(first, last, result, map);
+            return counting_sort_copy_with_extra_buffer(first, last, result, map);
         }
 
         template <typename ForwardIterator, typename Map>
         void counting_sort_impl (ForwardIterator first, ForwardIterator last, Map map)
         {
-            counting_sort_copy_buffered(first, last, first, map);
+            counting_sort_copy_with_extra_buffer(first, last, first, map);
         }
     } // namespace detail
 } // namespace burst
