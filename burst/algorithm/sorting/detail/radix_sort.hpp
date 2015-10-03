@@ -100,6 +100,7 @@ namespace burst
             detail::collect(first, last, map, radix, counters);
 
             auto distance = std::distance(first, last);
+            auto buffer_end = buffer + static_cast<typename std::iterator_traits<RandomAccessIterator>::difference_type>(distance);
             std::vector<value_type> extra_buffer(static_cast<std::size_t>(distance));
 
             auto get_low_radix = [& radix, & map] (const value_type & value) { return radix(map(value)); };
@@ -118,7 +119,7 @@ namespace burst
                 detail::dispose
                 (
                     buffer,
-                    buffer + static_cast<typename std::iterator_traits<RandomAccessIterator>::difference_type>(distance),
+                    buffer_end,
                     extra_buffer.begin(),
                     nth_radix(radix_number + 1, map, radix),
                     counters[radix_number + 1]
@@ -128,7 +129,7 @@ namespace burst
             auto get_high_radix = nth_radix(traits::radix_count - 1, map, radix);
             detail::dispose(extra_buffer.begin(), extra_buffer.end(), buffer, get_high_radix, counters[traits::radix_count - 1]);
 
-            return buffer + static_cast<typename std::iterator_traits<RandomAccessIterator>::difference_type>(distance);
+            return buffer_end;
         }
 
         //!     Сортировка с двумя дополнительными буферами.
