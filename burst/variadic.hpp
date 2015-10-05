@@ -6,8 +6,7 @@ namespace burst
     namespace detail
     {
         //!     Функция, которая ничего не делает.
-        template <typename ... Arguments>
-        void dummy (Arguments ...)
+        inline void dummy (std::initializer_list<int>)
         {
         }
     }
@@ -35,8 +34,10 @@ namespace burst
             {
                 BURST_EXPAND_VARIADIC(g<I>(1));
             }
+
+        Вычисление производится слева направо в порядке перечисления аргументов.
  */
 #define BURST_EXPAND_VARIADIC(expression) \
-    burst::detail::dummy((expression, 0)...)
+    burst::detail::dummy({(expression, 0)...})
 
 #endif // BURST_VARIADIC_HPP
