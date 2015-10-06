@@ -1,6 +1,6 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-set(TEST_SOURCES test_main.cpp
+set(UNIT_TEST_SOURCES test_main.cpp
     algorithm/galloping_lower_bound.cpp
     algorithm/galloping_upper_bound.cpp
     algorithm/searching/bitap.cpp
@@ -33,9 +33,9 @@ set(TEST_SOURCES test_main.cpp
     range/unite.cpp
 )
 
-set(TEST_EXECUTABLE test)
+set(UNIT_TEST_EXECUTABLE unit-tests)
 
-add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
-target_link_libraries(${TEST_EXECUTABLE} ${Boost_LIBRARIES})
+add_executable(${UNIT_TEST_EXECUTABLE} ${UNIT_TEST_SOURCES})
+target_link_libraries(${UNIT_TEST_EXECUTABLE} ${Boost_LIBRARIES})
 
-add_custom_target(check ALL COMMAND ${TEST_EXECUTABLE} --report_level=short)
+add_custom_target(check ALL COMMAND ${UNIT_TEST_EXECUTABLE} --report_level=short)
