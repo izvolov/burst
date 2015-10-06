@@ -45,11 +45,23 @@ namespace burst
             destroy(0, size());
         }
 
+        void reserve (std::size_t new_capacity)
+        {
+            if (new_capacity > m_capacity)
+            {
+                new_capacity = std::max(new_capacity, m_capacity * CAPACITY_INCREASING_FACTOR);
+                auto new_data = std::make_unique<std::int8_t[]>(new_capacity);
+
+                move(0, size(), new_data.get());
+                std::swap(m_data, new_data);
+            }
+        }
+
         template <typename T>
         void push_back (T object)
         {
             const auto new_data_size = data_size() + sizeof(T);
-            extend_storage(new_data_size);
+            reserve(new_data_size);
 
             void * creation_place = data() + data_size();
             new (creation_place) T(std::move(object));
@@ -116,18 +128,6 @@ namespace burst
 
                 manager.move(data() + offset, new_data + offset);
                 manager.destroy(data() + offset);
-            }
-        }
-
-        void extend_storage (std::size_t new_capacity)
-        {
-            if (new_capacity > m_capacity)
-            {
-                new_capacity = std::max(new_capacity, m_capacity * CAPACITY_INCREASING_FACTOR);
-                auto new_data = std::make_unique<std::int8_t[]>(new_capacity);
-
-                move(0, size(), new_data.get());
-                std::swap(m_data, new_data);
             }
         }
 
