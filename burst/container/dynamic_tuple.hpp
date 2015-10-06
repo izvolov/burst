@@ -74,6 +74,8 @@ namespace burst
         /*!
                 Все ссылки на лежавшие внутри объекты становятся недействительными.
                 Вместительность контейнера не изменяется.
+
+                Сложность: O(n).
          */
         void clear ()
         {
@@ -89,16 +91,34 @@ namespace burst
             return *static_cast<const T *>(static_cast<const void *>(data() + m_offsets[index]));
         }
 
+        //!     Размер контейнера.
+        /*!
+                Возвращает количество элементов, лежащих в контейнере.
+
+                Сложность: O(1).
+         */
         size_type size () const
         {
             return m_lifetime_managers.size();
         }
 
+        //!     Объём контейнера.
+        /*!
+                Возвращает суммарный объём памяти, занимаемый элементами, лежащими в контейнере.
+
+                Сложность: O(1).
+         */
         std::size_t data_size () const
         {
             return m_offsets.back();
         }
 
+        //!     Вместимость контейнера.
+        /*!
+                Возвращает размер памяти, выделенной под хранение элементов контейнера.
+
+                Сложность: O(1).
+         */
         std::size_t capacity () const
         {
             return m_capacity;
@@ -143,8 +163,11 @@ namespace burst
             }
         }
 
+        //!     Минимальная вместительность контейнера.
         static const auto DEFAULT_CAPACITY = std::size_t{64};
+        //!     Коэффициент роста вместимости контейнера.
         static const auto CAPACITY_INCREASING_FACTOR = std::size_t{2};
+        //!     Порог, по достижении которого необходимо уменьшить вместимость.
         static const auto CAPACITY_DECREASING_FACTOR = std::size_t{4};
 
         std::size_t m_capacity = DEFAULT_CAPACITY;
