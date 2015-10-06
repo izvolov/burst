@@ -168,7 +168,7 @@ namespace burst
         //!     Коэффициент роста вместимости контейнера.
         static const auto CAPACITY_INCREASING_FACTOR = std::size_t{2};
         //!     Порог, по достижении которого необходимо уменьшить вместимость.
-        static const auto CAPACITY_DECREASING_FACTOR = std::size_t{4};
+        static const auto CAPACITY_DECREASING_THRESHOLD = std::size_t{4};
 
         std::size_t m_capacity = DEFAULT_CAPACITY;
         std::unique_ptr<std::int8_t[]> m_data;
