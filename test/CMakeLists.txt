@@ -38,4 +38,4 @@ set(TEST_EXECUTABLE test)
 add_executable(${TEST_EXECUTABLE} ${TEST_SOURCES})
 target_link_libraries(${TEST_EXECUTABLE} ${Boost_LIBRARIES})
 
-add_custom_target(check COMMAND ${TEST_EXECUTABLE} --report_level=short)
+add_custom_target(check ALL COMMAND ${TEST_EXECUTABLE} --report_level=short)
