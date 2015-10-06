@@ -60,13 +60,13 @@ namespace burst
         template <typename T>
         void push_back (T object)
         {
-            const auto new_data_size = data_size() + sizeof(T);
-            reserve(new_data_size);
+            const auto new_volume = volume() + sizeof(T);
+            reserve(new_volume);
 
-            void * creation_place = data() + data_size();
+            void * creation_place = data() + volume();
             new (creation_place) T(std::move(object));
 
-            m_offsets.push_back(new_data_size);
+            m_offsets.push_back(new_volume);
             m_lifetime_managers.push_back(std::make_shared<lifetime_manager<T>>());
         }
 
@@ -108,7 +108,7 @@ namespace burst
 
                 Сложность: O(1).
          */
-        std::size_t data_size () const
+        std::size_t volume () const
         {
             return m_offsets.back();
         }

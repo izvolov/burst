@@ -52,7 +52,7 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
         BOOST_CHECK_EQUAL(t.get<X>(3).b, (std::vector<int>{1, 2, 3}));
     }
 
-    BOOST_AUTO_TEST_CASE(data_size_of_dynamic_tuple_is_equal_to_sum_of_inlying_types)
+    BOOST_AUTO_TEST_CASE(volume_of_dynamic_tuple_is_equal_to_sum_of_inlying_types)
     {
         const auto some_vector = std::vector<std::size_t>{};
         const auto some_integer = 42;
@@ -62,7 +62,7 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
         burst::dynamic_tuple t(some_vector, some_integer, some_struct, some_floating);
         BOOST_CHECK_EQUAL
         (
-            t.data_size(),
+            t.volume(),
             sizeof(some_vector) +
             sizeof(some_integer) +
             sizeof(some_struct) +
