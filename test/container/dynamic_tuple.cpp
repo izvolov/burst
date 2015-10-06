@@ -14,6 +14,33 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
         std::vector<int> b = std::vector<int>{0};
     };
 
+    struct dummy
+    {
+        dummy ()
+        {
+            ++instances_count;
+        }
+
+        dummy (const dummy &)
+        {
+            ++instances_count;
+        }
+
+        dummy (dummy &&)
+        {
+            ++instances_count;
+        }
+
+        ~dummy ()
+        {
+            --instances_count;
+        }
+
+        static int instances_count;
+    };
+
+    int dummy::instances_count = 0;
+
     BOOST_AUTO_TEST_CASE(dynamic_tuple_can_be_created_from_an_arbitrary_set_of_types)
     {
         burst::dynamic_tuple t(std::string("123"), 42, true, X{17, std::vector<int>{1, 2, 3}});
@@ -67,5 +94,39 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
         BOOST_CHECK_EQUAL(t.get<X>(0).b, (std::vector<int>{1, 2, 3}));
         BOOST_CHECK_EQUAL(t.get<bool>(1), true);
         BOOST_CHECK_EQUAL(t.get<std::string>(2), std::string("123"));
+    }
+
+    BOOST_AUTO_TEST_CASE(clear_method_destructs_inlying_objects)
+    {
+        burst::dynamic_tuple t;
+        t.push_back(dummy{});
+
+        BOOST_REQUIRE_EQUAL(dummy::instances_count, 1);
+        t.clear();
+
+        BOOST_CHECK_EQUAL(dummy::instances_count, 0);
+    }
+
+    BOOST_AUTO_TEST_CASE(dynamic_tuple_is_empty_after_clear)
+    {
+        burst::dynamic_tuple t(1, 3.14, true, std::string("qwe"));
+
+        BOOST_REQUIRE_EQUAL(t.size(), 4);
+        BOOST_REQUIRE(not t.empty());
+        t.clear();
+
+        BOOST_CHECK_EQUAL(t.size(), 0);
+        BOOST_CHECK(t.empty());
+    }
+
+    BOOST_AUTO_TEST_CASE(capacity_does_not_change_after_clear)
+    {
+        burst::dynamic_tuple t(1, 3.14, true, std::string("qwe"));
+
+        const auto capacity = t.capacity();
+        BOOST_REQUIRE_GT(capacity, 0);
+        t.clear();
+
+        BOOST_CHECK_EQUAL(t.capacity(), capacity);
     }
 BOOST_AUTO_TEST_SUITE_END()

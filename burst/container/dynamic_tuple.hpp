@@ -70,6 +70,18 @@ namespace burst
             m_lifetime_managers.push_back(std::make_shared<lifetime_manager<T>>());
         }
 
+        //!     Удалить все элементы из контейнера.
+        /*!
+                Все ссылки на лежавшие внутри объекты становятся недействительными.
+                Вместительность контейнера не изменяется.
+         */
+        void clear ()
+        {
+            destroy(0, size());
+            m_offsets.resize(1);
+            m_lifetime_managers.clear();
+        }
+
         template <typename T>
         const T & get (size_type index) const
         {
