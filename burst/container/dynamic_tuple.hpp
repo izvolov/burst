@@ -88,7 +88,8 @@ namespace burst
             void * creation_place = data() + volume();
             new (creation_place) T(std::move(object));
 
-            m_offsets.push_back(new_volume);
+            m_offsets.push_back(volume());
+            m_volume = new_volume;
             m_lifetime_managers.push_back(std::make_shared<lifetime_manager<T>>());
         }
 
@@ -102,8 +103,9 @@ namespace burst
         void clear ()
         {
             destroy(0, size());
-            m_offsets.resize(1);
+            m_offsets.clear();
             m_lifetime_managers.clear();
+            m_volume = 0;
         }
 
         //!     Доступ к элементу по индексу.
@@ -115,7 +117,6 @@ namespace burst
         template <typename T>
         const T & get (size_type index) const
         {
-            assert(sizeof(T) == (m_offsets[index + 1] - m_offsets[index]));
             return *static_cast<const T *>(static_cast<const void *>(data() + m_offsets[index]));
         }
 
@@ -138,7 +139,7 @@ namespace burst
          */
         std::size_t volume () const
         {
-            return m_offsets.back();
+            return m_volume;
         }
 
         //!     Вместимость контейнера.
@@ -208,12 +209,9 @@ namespace burst
         std::size_t m_capacity = DEFAULT_CAPACITY;
         std::unique_ptr<std::int8_t[]> m_data;
 
-        // В массиве отступов всегда на один элемент больше.
-        // m_offsets.back() всегда равен суммарному размеру хранимых объектов, что равно отступу,
-        // начиная с которого можно положить следующий объект.
-        std::vector<std::size_t> m_offsets = std::vector<std::size_t>({0});
+        std::vector<std::size_t> m_offsets;
         lifetime_manager_container_type m_lifetime_managers;
-
+        std::size_t m_volume = 0;
     };
 } // namespace burst
 
