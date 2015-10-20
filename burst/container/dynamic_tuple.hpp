@@ -27,7 +27,15 @@ namespace burst
             m_capacity(std::max(std::size_t{DEFAULT_CAPACITY}, sum({sizeof(Types) + alignof(Types)...}))),
             m_data(std::make_unique<std::int8_t[]>(m_capacity))
         {
-            BURST_EXPAND_VARIADIC(push_back(std::forward<Types>(objects)));
+            try
+            {
+                BURST_EXPAND_VARIADIC(push_back_no_realloc(std::forward<Types>(objects)));
+            }
+            catch (...)
+            {
+                destroy(0, size());
+                throw;
+            }
         }
 
         dynamic_tuple ():
@@ -191,6 +199,27 @@ namespace burst
             }
 
             return static_cast<std::int8_t *>(proposed_creation_place);
+        }
+
+        //!     Вставка, не производящая перевыделение памяти.
+        /*!
+                Не производит никаких лишних действий, только размещает объект в буфере.
+                Нужна для того случая, когда гарантировано, что в буфере достаточно места для
+            размещения нового объекта.
+         */
+        template <typename T>
+        void push_back_no_realloc (T object)
+        {
+            auto space_left = capacity() - volume();
+            void * creation_place = data() + volume();
+            BOOST_VERIFY(std::align(alignof(T), sizeof(T), creation_place, space_left) != nullptr);
+
+            new (creation_place) T(std::move(object));
+
+            const auto new_offset = static_cast<std::size_t>(static_cast<std::int8_t *>(creation_place) - data());
+            m_offsets.push_back(new_offset);
+            m_volume = new_offset + sizeof(T);
+            m_lifetime_managers.push_back(std::make_shared<lifetime_manager<T>>());
         }
 
         void destroy (std::size_t first, std::size_t last)

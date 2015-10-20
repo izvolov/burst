@@ -138,4 +138,44 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
 
         BOOST_CHECK_EQUAL(t.capacity(), capacity);
     }
+
+    struct kamikaze
+    {
+        kamikaze ()
+        {
+            ++instances_count;
+        }
+
+        kamikaze (const kamikaze &) = delete;
+
+        kamikaze (kamikaze &&)
+        {
+            if (instances_count > 3)
+            {
+                throw std::runtime_error(u8"Привет!");
+            }
+            ++instances_count;
+        }
+
+        ~kamikaze ()
+        {
+            --instances_count;
+        }
+
+        static int instances_count;
+    };
+
+    int kamikaze::instances_count = 0;
+
+    BOOST_AUTO_TEST_CASE(does_not_leak_when_inserted_element_throws)
+    {
+        try
+        {
+            burst::dynamic_tuple t(kamikaze{}, kamikaze{});
+        }
+        catch (std::runtime_error &)
+        {
+            BOOST_CHECK_EQUAL(kamikaze::instances_count, 0);
+        }
+    }
 BOOST_AUTO_TEST_SUITE_END()
