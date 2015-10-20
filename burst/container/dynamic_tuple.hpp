@@ -7,6 +7,8 @@
 #include <utility>
 #include <vector>
 
+#include <boost/assert.hpp>
+
 #include <burst/algorithm/sum.hpp>
 #include <burst/container/detail/lifetime_manager.hpp>
 #include <burst/variadic.hpp>
@@ -64,6 +66,7 @@ namespace burst
             {
                 new_capacity = std::max(new_capacity, m_capacity * CAPACITY_INCREASING_FACTOR);
                 auto new_data = std::make_unique<std::int8_t[]>(new_capacity);
+                m_capacity = new_capacity;
 
                 move(0, size(), new_data.get());
                 std::swap(m_data, new_data);
@@ -82,14 +85,12 @@ namespace burst
         template <typename T>
         void push_back (T object)
         {
-            const auto new_volume = volume() + sizeof(T);
-            reserve(new_volume);
-
-            void * creation_place = data() + volume();
+            auto creation_place = set_up_creation_place(object);
             new (creation_place) T(std::move(object));
 
-            m_offsets.push_back(volume());
-            m_volume = new_volume;
+            const auto new_offset = static_cast<std::size_t>(creation_place - data());
+            m_offsets.push_back(new_offset);
+            m_volume = new_offset + sizeof(T);
             m_lifetime_managers.push_back(std::make_shared<lifetime_manager<T>>());
         }
 
@@ -174,6 +175,22 @@ namespace burst
         const std::int8_t * data () const
         {
             return m_data.get();
+        }
+
+        template <typename T>
+        std::int8_t * set_up_creation_place (const T &)
+        {
+            auto space_left = capacity() - volume();
+            void * proposed_creation_place = data() + volume();
+            if (std::align(alignof(T), sizeof(T), proposed_creation_place, space_left) == nullptr)
+            {
+                reserve(volume() + sizeof(T) + alignof(T));
+                space_left = capacity() - volume();
+                proposed_creation_place = data() + volume();
+                BOOST_VERIFY(std::align(alignof(T), sizeof(T), proposed_creation_place, space_left));
+            }
+
+            return static_cast<std::int8_t *>(proposed_creation_place);
         }
 
         void destroy (std::size_t first, std::size_t last)

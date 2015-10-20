@@ -52,7 +52,7 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
         BOOST_CHECK_EQUAL(t.get<X>(3).b, (std::vector<int>{1, 2, 3}));
     }
 
-    BOOST_AUTO_TEST_CASE(volume_of_dynamic_tuple_is_equal_to_sum_of_inlying_types)
+    BOOST_AUTO_TEST_CASE(volume_of_dynamic_tuple_is_between_sum_of_sizes_and_sizes_plus_alignments_of_inlying_types)
     {
         const auto some_vector = std::vector<std::size_t>{};
         const auto some_integer = 42;
@@ -60,13 +60,22 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
         const auto some_floating = 3.14;
 
         burst::dynamic_tuple t(some_vector, some_integer, some_struct, some_floating);
-        BOOST_CHECK_EQUAL
+        BOOST_CHECK_GE
         (
             t.volume(),
             sizeof(some_vector) +
             sizeof(some_integer) +
             sizeof(some_struct) +
             sizeof(some_floating)
+        );
+
+        BOOST_CHECK_LE
+        (
+            t.volume(),
+            sizeof(some_vector) + alignof(decltype(some_vector)) +
+            sizeof(some_integer) + alignof(decltype(some_integer)) +
+            sizeof(some_struct) + alignof(decltype(some_struct)) +
+            sizeof(some_floating) + alignof(decltype(some_floating))
         );
     }
 
