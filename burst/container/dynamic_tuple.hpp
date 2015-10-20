@@ -183,14 +183,15 @@ namespace burst
         template <typename T>
         std::int8_t * set_up_creation_place (const T & object)
         {
-            auto proposed_creation_place = try_to_align(object);
-            if (proposed_creation_place == nullptr)
+            if (auto proposed_creation_place = try_to_align(object))
+            {
+                return proposed_creation_place;
+            }
+            else
             {
                 reserve(volume() + sizeof(T) + alignof(T));
                 return manage_to_align(object);
             }
-
-            return proposed_creation_place;
         }
 
         //!     Вставка, не производящая перевыделение памяти.
