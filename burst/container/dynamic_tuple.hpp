@@ -94,12 +94,7 @@ namespace burst
         void push_back (T object)
         {
             auto creation_place = set_up_creation_place(object);
-            new (creation_place) T(std::move(object));
-
-            const auto new_offset = static_cast<std::size_t>(creation_place - data());
-            m_offsets.push_back(new_offset);
-            m_volume = new_offset + sizeof(T);
-            m_lifetime_managers.push_back(std::make_shared<lifetime_manager<T>>());
+            accomodate(std::move(object), creation_place);
         }
 
         //!     Удалить все элементы из контейнера.
@@ -186,19 +181,16 @@ namespace burst
         }
 
         template <typename T>
-        std::int8_t * set_up_creation_place (const T &)
+        std::int8_t * set_up_creation_place (const T & object)
         {
-            auto space_left = capacity() - volume();
-            void * proposed_creation_place = data() + volume();
-            if (std::align(alignof(T), sizeof(T), proposed_creation_place, space_left) == nullptr)
+            auto proposed_creation_place = try_to_align(object);
+            if (proposed_creation_place == nullptr)
             {
                 reserve(volume() + sizeof(T) + alignof(T));
-                space_left = capacity() - volume();
-                proposed_creation_place = data() + volume();
-                BOOST_VERIFY(std::align(alignof(T), sizeof(T), proposed_creation_place, space_left));
+                return manage_to_align(object);
             }
 
-            return static_cast<std::int8_t *>(proposed_creation_place);
+            return proposed_creation_place;
         }
 
         //!     Вставка, не производящая перевыделение памяти.
@@ -210,13 +202,38 @@ namespace burst
         template <typename T>
         void push_back_no_realloc (T object)
         {
+            auto creation_place = manage_to_align(object);
+            accomodate(std::move(object), creation_place);
+        }
+
+        template <typename T>
+        std::int8_t * try_to_align (const T &)
+        {
             auto space_left = capacity() - volume();
             void * creation_place = data() + volume();
-            BOOST_VERIFY(std::align(alignof(T), sizeof(T), creation_place, space_left) != nullptr);
+            return static_cast<std::int8_t *>(std::align(alignof(T), sizeof(T), creation_place, space_left));
+        }
 
+        template <typename T>
+        std::int8_t * manage_to_align (const T & object)
+        {
+            auto creation_place = try_to_align(object);
+            BOOST_ASSERT(creation_place != nullptr);
+
+            return creation_place;
+        }
+
+        //!     Разместить объект.
+        /*!
+                Кладёт объект в хранилище и создаёт всю необходимую обвязку — отступы, менеджера
+            времени жизни, — а также задаёт новый объём с учётом размещённого объекта.
+         */
+        template <typename T>
+        void accomodate (T object, std::int8_t * creation_place)
+        {
             new (creation_place) T(std::move(object));
 
-            const auto new_offset = static_cast<std::size_t>(static_cast<std::int8_t *>(creation_place) - data());
+            const auto new_offset = static_cast<std::size_t>(creation_place - data());
             m_offsets.push_back(new_offset);
             m_volume = new_offset + sizeof(T);
             m_lifetime_managers.push_back(std::make_shared<lifetime_manager<T>>());

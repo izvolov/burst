@@ -150,7 +150,7 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
 
         kamikaze (kamikaze &&)
         {
-            if (instances_count > 3)
+            if (instances_count > 4)
             {
                 throw std::runtime_error(u8"Привет!");
             }
