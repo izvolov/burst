@@ -33,7 +33,7 @@ namespace burst
             }
             catch (...)
             {
-                destroy(0, size());
+                destroy_all();
                 throw;
             }
         }
@@ -52,7 +52,7 @@ namespace burst
 
         ~dynamic_tuple ()
         {
-            destroy(0, size());
+            destroy_all();
         }
 
         //!     Обеспечить необходимую вместительность контейнера.
@@ -106,7 +106,7 @@ namespace burst
          */
         void clear ()
         {
-            destroy(0, size());
+            destroy_all();
             m_offsets.clear();
             m_lifetime_managers.clear();
             m_volume = 0;
@@ -248,6 +248,11 @@ namespace burst
 
                 manager.destroy(data() + offset);
             }
+        }
+
+        void destroy_all ()
+        {
+            destroy(0, size());
         }
 
         void move (std::size_t first, std::size_t last, std::int8_t * new_data)
