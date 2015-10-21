@@ -32,7 +32,7 @@ namespace burst
     class dynamic_tuple
     {
     public:
-        using lifetime_manager_container_type = std::vector<std::shared_ptr<lifetime_manager_base>>;
+        using lifetime_manager_container_type = std::vector<lifetime_manager>;
         using size_type = typename lifetime_manager_container_type::size_type;
 
     public:
@@ -270,14 +270,14 @@ namespace burst
             const auto new_offset = static_cast<std::size_t>(creation_place - data());
             m_offsets.push_back(new_offset);
             m_volume = new_offset + sizeof(T);
-            m_lifetime_managers.push_back(std::make_shared<lifetime_manager<T>>());
+            m_lifetime_managers.emplace_back(make_lifetime_manager<T>());
         }
 
         void destroy (std::size_t first, std::size_t last)
         {
             for (auto index = first; index < last; ++index)
             {
-                const auto & manager = *m_lifetime_managers[index];
+                const auto & manager = m_lifetime_managers[index];
                 const auto offset = m_offsets[index];
 
                 manager.destroy(data() + offset);
@@ -293,7 +293,7 @@ namespace burst
         {
             for (auto index = first; index < last; ++index)
             {
-                const auto & manager = *m_lifetime_managers[index];
+                const auto & manager = m_lifetime_managers[index];
                 const auto offset = m_offsets[index];
 
                 manager.move(data() + offset, new_data + offset);
