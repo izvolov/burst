@@ -198,7 +198,7 @@ namespace burst
             else
             {
                 reserve(volume() + sizeof(T) + alignof(T));
-                return manage_to_align(object);
+                return force_align(object);
             }
         }
 
@@ -211,7 +211,7 @@ namespace burst
         template <typename T>
         void push_back_no_realloc (T object)
         {
-            auto creation_place = manage_to_align(object);
+            auto creation_place = force_align(object);
             accomodate(std::move(object), creation_place);
         }
 
@@ -224,7 +224,7 @@ namespace burst
         }
 
         template <typename T>
-        std::int8_t * manage_to_align (const T & object)
+        std::int8_t * force_align (const T & object)
         {
             auto creation_place = try_to_align(object);
             BOOST_ASSERT(creation_place != nullptr);
