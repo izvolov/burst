@@ -115,7 +115,7 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
 
     BOOST_AUTO_TEST_CASE(sorting_algorithm_is_stable)
     {
-        std::vector<std::pair<std::uint32_t, std::string>> numbers
+        std::vector<std::pair<std::uint16_t, std::string>> numbers
         {
             {1, "раз"},
             {1, "два"},
@@ -130,7 +130,7 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
                 return pair.first;
             });
 
-        std::vector<std::pair<std::uint32_t, std::string>> expected
+        std::vector<std::pair<std::uint16_t, std::string>> expected
         {
             {0, "три"},
             {0, "четыре"},

@@ -17,7 +17,7 @@ namespace burst
 
         std::uint8_t operator () (Integer integer) const
         {
-            return integer & 0xff;
+            return static_cast<std::uint8_t>(integer & 0xff);
         }
     };
 
@@ -34,7 +34,7 @@ namespace burst
         {
             static_assert(std::is_integral<Integer>::value, "Младший байт можно взять только от целого числа.");
 
-            return integer & 0xff;
+            return static_cast<std::uint8_t>(integer & 0xff);
         }
     };
 }
