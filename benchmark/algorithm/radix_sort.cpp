@@ -3,6 +3,7 @@
 #include <vector>
 
 #include <boost/program_options.hpp>
+#include <boost/sort/spreadsort/integer_sort.hpp>
 
 #include <burst/algorithm/sorting/radix_sort.hpp>
 
@@ -67,6 +68,9 @@ int main (int argc, const char * argv[])
 
             auto std_sort = [] (auto && ... args) { return std::sort(std::forward<decltype(args)>(args)...); };
             test_sort("std::sort", std_sort, numbers, attempts);
+
+            auto boost_int_sort = [] (auto && ... args) { return boost::sort::spreadsort::integer_sort(std::forward<decltype(args)>(args)...); };
+            test_sort("boost::integer_sort", boost_int_sort, numbers, attempts);
         }
     }
     catch (bpo::error & e)
