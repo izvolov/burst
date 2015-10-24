@@ -15,8 +15,8 @@ void read (std::istream & stream, Container & values)
     }
 }
 
-template <typename Container>
-void test_radix_sort (const Container & numbers, std::size_t attempts)
+template <typename Sort, typename Container>
+void test_sort (const std::string & name, Sort sort, const Container & numbers, std::size_t attempts)
 {
     clock_t total_time = 0;
 
@@ -25,33 +25,12 @@ void test_radix_sort (const Container & numbers, std::size_t attempts)
         auto unsorted = numbers;
 
         clock_t attempt_time = clock();
-        burst::radix_sort(unsorted.begin(), unsorted.end());
+        sort(unsorted.begin(), unsorted.end());
         attempt_time = clock() - attempt_time;
         total_time += attempt_time;
     }
 
-    std::cout << "Поразрядная:" << std::endl;
-    std::cout << "\tОбщее время: " << static_cast<double>(total_time) / CLOCKS_PER_SEC << std::endl;
-    std::cout << "\tСреднее время: " << static_cast<double>(total_time) / static_cast<double>(attempts) / CLOCKS_PER_SEC << std::endl;
-    std::cout << std::endl;
-}
-
-template <typename Container>
-void test_std_sort (const Container & numbers, std::size_t attempts)
-{
-    clock_t total_time = 0;
-
-    for (std::size_t attempt = 0; attempt < attempts; ++attempt)
-    {
-        auto unsorted = numbers;
-
-        clock_t attempt_time = clock();
-        std::sort(unsorted.begin(), unsorted.end());
-        attempt_time = clock() - attempt_time;
-        total_time += attempt_time;
-    }
-
-    std::cout << "std::sort:" << std::endl;
+    std::cout << name << ":" << std::endl;
     std::cout << "\tОбщее время: " << static_cast<double>(total_time) / CLOCKS_PER_SEC << std::endl;
     std::cout << "\tСреднее время: " << static_cast<double>(total_time) / static_cast<double>(attempts) / CLOCKS_PER_SEC << std::endl;
     std::cout << std::endl;
@@ -82,8 +61,12 @@ int main (int argc, const char * argv[])
             read(std::cin, numbers);
 
             std::size_t attempts = vm["attempts"].as<std::size_t>();
-            test_radix_sort(numbers, attempts);
-            test_std_sort(numbers, attempts);
+
+            auto radix_sort = [] (auto && ... args) { return burst::radix_sort(std::forward<decltype(args)>(args)...); };
+            test_sort(u8"Поразрядная", radix_sort, numbers, attempts);
+
+            auto std_sort = [] (auto && ... args) { return std::sort(std::forward<decltype(args)>(args)...); };
+            test_sort("std::sort", std_sort, numbers, attempts);
         }
     }
     catch (bpo::error & e)
