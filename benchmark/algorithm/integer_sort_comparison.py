@@ -43,4 +43,4 @@ lengths = \
     [1000000]
 
 measurements = measure(lengths, max_attempts)
-plot(lengths, measurements, 'plot1.png')
+plot(lengths, measurements, 'intsort.png')
