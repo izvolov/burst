@@ -69,7 +69,7 @@ test_call_type get_call_for_bits (std::size_t bits)
     }
     else
     {
-        throw boost::program_options::error(u8"Неверная битность сортируемых чисел.");
+        throw boost::program_options::error(u8"Неверная разрядность сортируемых чисел: " + std::to_string(bits));
     }
 }
 
