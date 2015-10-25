@@ -34,6 +34,19 @@ void test_sort (const std::string & name, Sort sort, const Container & numbers, 
     std::cout << name << ": " << static_cast<double>(total_time) / CLOCKS_PER_SEC << std::endl;
 }
 
+template <typename Container>
+void test_all (const Container & numbers, std::size_t attempts)
+{
+    auto radix_sort = [] (auto && ... args) { return burst::radix_sort(std::forward<decltype(args)>(args)...); };
+    test_sort("burst::radix_sort", radix_sort, numbers, attempts);
+
+    auto std_sort = [] (auto && ... args) { return std::sort(std::forward<decltype(args)>(args)...); };
+    test_sort("std::sort", std_sort, numbers, attempts);
+
+    auto boost_int_sort = [] (auto && ... args) { return boost::sort::spreadsort::integer_sort(std::forward<decltype(args)>(args)...); };
+    test_sort("boost::integer_sort", boost_int_sort, numbers, attempts);
+}
+
 int main (int argc, const char * argv[])
 {
     namespace bpo = boost::program_options;
@@ -59,15 +72,7 @@ int main (int argc, const char * argv[])
             read(std::cin, numbers);
 
             std::size_t attempts = vm["attempts"].as<std::size_t>();
-
-            auto radix_sort = [] (auto && ... args) { return burst::radix_sort(std::forward<decltype(args)>(args)...); };
-            test_sort("burst::radix_sort", radix_sort, numbers, attempts);
-
-            auto std_sort = [] (auto && ... args) { return std::sort(std::forward<decltype(args)>(args)...); };
-            test_sort("std::sort", std_sort, numbers, attempts);
-
-            auto boost_int_sort = [] (auto && ... args) { return boost::sort::spreadsort::integer_sort(std::forward<decltype(args)>(args)...); };
-            test_sort("boost::integer_sort", boost_int_sort, numbers, attempts);
+            test_all(numbers, attempts);
         }
     }
     catch (bpo::error & e)
