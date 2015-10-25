@@ -51,6 +51,28 @@ void test_all (std::size_t attempts)
     test_sort("boost::integer_sort", boost_int_sort, numbers, attempts);
 }
 
+using test_call_type = void (*) (std::size_t);
+test_call_type get_call_for_bits (std::size_t bits)
+{
+    static const std::unordered_map<std::size_t, test_call_type> test_calls
+    {
+        {8, &test_all<std::uint8_t>},
+        {16, &test_all<std::uint16_t>},
+        {32, &test_all<std::uint32_t>},
+        {64, &test_all<std::uint64_t>}
+    };
+
+    auto call = test_calls.find(bits);
+    if (call != test_calls.end())
+    {
+        return call->second;
+    }
+    else
+    {
+        throw boost::program_options::error(u8"Неверная битность сортируемых чисел.");
+    }
+}
+
 int main (int argc, const char * argv[])
 {
     namespace bpo = boost::program_options;
@@ -73,25 +95,11 @@ int main (int argc, const char * argv[])
         }
         else
         {
-            std::unordered_map<std::size_t, void (*) (std::size_t)> test_calls
-            {
-                {8, &test_all<std::uint8_t>},
-                {16, &test_all<std::uint16_t>},
-                {32, &test_all<std::uint32_t>},
-                {64, &test_all<std::uint64_t>}
-            };
-
+            std::size_t attempts = vm["attempts"].as<std::size_t>();
             std::size_t bits = vm["bits"].as<std::size_t>();
-            if (test_calls.find(bits) != test_calls.end())
-            {
-                std::size_t attempts = vm["attempts"].as<std::size_t>();
-                auto test = test_calls.at(bits);
-                test(attempts);
-            }
-            else
-            {
-                std::cout << description << std::endl;
-            }
+
+            auto test = get_call_for_bits(bits);
+            test(attempts);
         }
     }
     catch (bpo::error & e)
