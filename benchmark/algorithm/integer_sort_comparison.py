@@ -19,7 +19,7 @@ def measure (lengths, max_attempts):
     return measurements
 
 def plot (lengths, measurements, file_name):
-    plt.figure(num=1, figsize=(8, 6))
+    plt.figure(num=1)
     plt.title(u'Производительность целочисленных сортировок', size=14)
     plt.xlabel(u'Размер массива', size=14)
     plt.ylabel(u'Время, с', size=14)
