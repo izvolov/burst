@@ -24,11 +24,11 @@ def plot (lengths, measurements, file_name):
     plt.xlabel(u'Размер массива', size=14)
     plt.ylabel(u'Время, с', size=14)
 
-    xData = np.array(lengths)
+    x = np.array(lengths)
 
     for algorithm, times in measurements.items():
-        yData = np.array(times)
-        plt.plot(xData, yData, label=algorithm)
+        y = np.array(times)
+        plt.plot(x, y, label=algorithm)
 
     plt.legend(loc='upper left')
     plt.savefig(file_name, format='png')
