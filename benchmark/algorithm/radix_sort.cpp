@@ -31,10 +31,7 @@ void test_sort (const std::string & name, Sort sort, const Container & numbers, 
         total_time += attempt_time;
     }
 
-    std::cout << name << ":" << std::endl;
-    std::cout << "\tОбщее время: " << static_cast<double>(total_time) / CLOCKS_PER_SEC << std::endl;
-    std::cout << "\tСреднее время: " << static_cast<double>(total_time) / static_cast<double>(attempts) / CLOCKS_PER_SEC << std::endl;
-    std::cout << std::endl;
+    std::cout << name << ": " << static_cast<double>(total_time) / CLOCKS_PER_SEC << std::endl;
 }
 
 int main (int argc, const char * argv[])
@@ -64,7 +61,7 @@ int main (int argc, const char * argv[])
             std::size_t attempts = vm["attempts"].as<std::size_t>();
 
             auto radix_sort = [] (auto && ... args) { return burst::radix_sort(std::forward<decltype(args)>(args)...); };
-            test_sort(u8"Поразрядная", radix_sort, numbers, attempts);
+            test_sort("burst::radix_sort", radix_sort, numbers, attempts);
 
             auto std_sort = [] (auto && ... args) { return std::sort(std::forward<decltype(args)>(args)...); };
             test_sort("std::sort", std_sort, numbers, attempts);
