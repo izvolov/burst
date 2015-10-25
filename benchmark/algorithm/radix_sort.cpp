@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <unordered_map>
 #include <vector>
 
 #include <boost/program_options.hpp>
@@ -34,9 +35,12 @@ void test_sort (const std::string & name, Sort sort, const Container & numbers, 
     std::cout << name << ": " << static_cast<double>(total_time) / CLOCKS_PER_SEC << std::endl;
 }
 
-template <typename Container>
-void test_all (const Container & numbers, std::size_t attempts)
+template <typename Integer>
+void test_all (std::size_t attempts)
 {
+    std::vector<Integer> numbers;
+    read(std::cin, numbers);
+
     auto radix_sort = [] (auto && ... args) { return burst::radix_sort(std::forward<decltype(args)>(args)...); };
     test_sort("burst::radix_sort", radix_sort, numbers, attempts);
 
@@ -54,7 +58,8 @@ int main (int argc, const char * argv[])
     bpo::options_description description("Опции");
     description.add_options()
         ("help,h", "Подсказка")
-        ("attempts", bpo::value<std::size_t>()->default_value(1000), "Количество испытаний");
+        ("attempts", bpo::value<std::size_t>()->default_value(1000), "Количество испытаний")
+        ("bits", bpo::value<std::size_t>()->default_value(32), "Разрядность сортируемых чисел. Допустимые значения: 8, 16, 32, 64");
 
     try
     {
@@ -68,11 +73,25 @@ int main (int argc, const char * argv[])
         }
         else
         {
-            std::vector<std::uint32_t> numbers;
-            read(std::cin, numbers);
+            std::unordered_map<std::size_t, void (*) (std::size_t)> test_calls
+            {
+                {8, &test_all<std::uint8_t>},
+                {16, &test_all<std::uint16_t>},
+                {32, &test_all<std::uint32_t>},
+                {64, &test_all<std::uint64_t>}
+            };
 
-            std::size_t attempts = vm["attempts"].as<std::size_t>();
-            test_all(numbers, attempts);
+            std::size_t bits = vm["bits"].as<std::size_t>();
+            if (test_calls.find(bits) != test_calls.end())
+            {
+                std::size_t attempts = vm["attempts"].as<std::size_t>();
+                auto test = test_calls.at(bits);
+                test(attempts);
+            }
+            else
+            {
+                std::cout << description << std::endl;
+            }
         }
     }
     catch (bpo::error & e)
