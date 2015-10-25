@@ -32,7 +32,7 @@ void test_sort (const std::string & name, Sort sort, const Container & numbers, 
         total_time += attempt_time;
     }
 
-    std::cout << name << ": " << static_cast<double>(total_time) / CLOCKS_PER_SEC << std::endl;
+    std::cout << name << ' ' << static_cast<double>(total_time) / CLOCKS_PER_SEC << std::endl;
 }
 
 template <typename Integer>
