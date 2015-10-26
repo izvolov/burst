@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from subprocess import Popen, PIPE
+import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -33,14 +34,18 @@ def plot (lengths, measurements, file_name):
     plt.legend(loc='upper left')
     plt.savefig(file_name, format='png')
 
+def parse_command_line ():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-b', '--begin', default=10)
+    parser.add_argument('-e', '--end', default=100)
+    parser.add_argument('-s', '--step', default=10)
+    args = parser.parse_args()
+    return int(args.begin), int(args.end), int(args.step)
+
 max_attempts = 10000000
-lengths = \
-    range(10, 100, 10) + \
-    range(100, 1000, 100) + \
-    range(1000, 10000, 1000) + \
-    range(10000, 100000, 10000) + \
-    range(100000, 1000000, 100000) + \
-    [1000000]
+
+begin, end, step = parse_command_line()
+lengths = range(begin, end, step)
 
 measurements = measure(lengths, max_attempts)
 plot(lengths, measurements, 'intsort.png')
