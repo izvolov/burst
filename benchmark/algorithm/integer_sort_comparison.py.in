@@ -5,6 +5,7 @@ from subprocess import Popen, PIPE
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
+import sys
 
 def measure (lengths, max_attempts):
     measurements = {}
@@ -34,18 +35,18 @@ def plot (lengths, measurements, file_name):
     plt.legend(loc='upper left')
     plt.savefig(file_name, format='png')
 
-def parse_command_line ():
-    parser = argparse.ArgumentParser()
+def parse_command_line (options):
+    parser = argparse.ArgumentParser(options[0])
     parser.add_argument('--begin', type=int, default=10)
     parser.add_argument('--end', type=int, default=100)
     parser.add_argument('--step', type=int, default=10)
     parser.add_argument('--file', type=str, default='intsort')
-    args = parser.parse_args()
+    args = parser.parse_args(options[1:])
     return args.begin, args.end, args.step, args.file
 
 max_attempts = 10000000
 
-begin, end, step, file_name = parse_command_line()
+begin, end, step, file_name = parse_command_line(sys.argv)
 lengths = range(begin, end, step)
 
 measurements = measure(lengths, max_attempts)
