@@ -126,7 +126,7 @@ namespace burst
             m_volume = 0;
         }
 
-        //!     Доступ к элементу по индексу.
+        //!     Доступ к неизменяемому элементу по индексу.
         /*!
                 Зная тип элемента и его номер в контейнере, можно получить этот элемент.
 
@@ -136,6 +136,16 @@ namespace burst
         const T & get (size_type index) const
         {
             return *static_cast<const T *>(static_cast<const void *>(data() + m_offsets[index]));
+        }
+
+        //!     Доступ к изменяемому элементу по индексу.
+        /*!
+                Сложность: O(1).
+         */
+        template <typename T>
+        T & get (size_type index)
+        {
+            return *static_cast<T *>(static_cast<void *>(data() + m_offsets[index]));
         }
 
         //!     Размер контейнера.

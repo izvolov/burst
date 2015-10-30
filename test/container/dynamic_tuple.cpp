@@ -178,4 +178,17 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
             BOOST_CHECK_EQUAL(kamikaze::instances_count, 0);
         }
     }
+
+    BOOST_AUTO_TEST_CASE(underlying_items_can_be_mutated)
+    {
+        burst::dynamic_tuple t(true, std::vector<char>{'a', 'b' ,'c'}, 10);
+
+        auto & vector = t.get<std::vector<char>>(1);
+
+        vector.push_back('q');
+        BOOST_CHECK_EQUAL(t.get<std::vector<char>>(1), (std::vector<char>{'a', 'b' ,'c', 'q'}));
+
+        vector.clear();
+        BOOST_CHECK(t.get<std::vector<char>>(1).empty());
+    }
 BOOST_AUTO_TEST_SUITE_END()
