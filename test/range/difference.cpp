@@ -1,6 +1,4 @@
 #include <functional>
-#include <list>
-#include <set>
 #include <vector>
 
 #include <boost/range/algorithm/for_each.hpp>
@@ -8,6 +6,8 @@
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
+#include <burst/container/make_list.hpp>
+#include <burst/container/make_set.hpp>
 #include <burst/container/make_vector.hpp>
 #include <burst/range/difference.hpp>
 
@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_SUITE(difference)
 
     BOOST_AUTO_TEST_CASE(a_set_minus_empty_set_is_initial_set)
     {
-        const auto set = std::vector<int>{3, 2, 1};
+        const auto set = burst::make_vector({3, 2, 1});
         const auto empty_set = std::vector<int>{};
 
         const auto difference =
@@ -89,7 +89,7 @@ BOOST_AUTO_TEST_SUITE(difference)
     BOOST_AUTO_TEST_CASE(empty_set_minus_any_set_is_empty_set)
     {
         const auto empty_set = std::vector<int>{};
-        const auto set = std::set<int>{1, 2, 3};
+        const auto set = burst::make_set({1, 2, 3});
 
         const auto difference =
             burst::difference
@@ -103,9 +103,9 @@ BOOST_AUTO_TEST_SUITE(difference)
 
     BOOST_AUTO_TEST_CASE(difference_of_saw_toothed_ranges_results_minuend)
     {
-        const std::list<char>    minuend{'h',      'f',      'd',      'b'     };
-        const std::list<char> subtrahend{     'g',      'e',      'c',      'a'};
-        //                                ^         ^         ^         ^
+        const auto    minuend = burst::make_list({'h',      'f',      'd',      'b'     });
+        const auto subtrahend = burst::make_list({     'g',      'e',      'c',      'a'});
+        //                                         ^         ^         ^         ^
 
         const auto difference =
             burst::difference
@@ -124,9 +124,9 @@ BOOST_AUTO_TEST_SUITE(difference)
 
     BOOST_AUTO_TEST_CASE(difference_equals_minuend_if_subtrahend_surrounds_minuend)
     {
-        const std::list<int>      minuend{       4, 6, 8       };
-        const std::vector<int> subtrahend{-1, 2,         10, 11};
-        //                                       ^  ^  ^
+        const auto    minuend =   burst::make_list({       4, 6, 8       });
+        const auto subtrahend = burst::make_vector({-1, 2,         10, 11});
+        //                                                 ^  ^  ^
 
         const auto difference =
             burst::difference
@@ -144,9 +144,9 @@ BOOST_AUTO_TEST_SUITE(difference)
 
     BOOST_AUTO_TEST_CASE(accepts_ranges_of_different_types)
     {
-        const std::list<int>      minuend{0,    4,    6,    7, 9, 10    };
-        const std::vector<int> subtrahend{0, 2,    5, 6, 6,       10, 11};
-        //                                      ^           ^  ^
+        const auto    minuend =   burst::make_list({0,    4,    6,    7, 9, 10    });
+        const auto subtrahend = burst::make_vector({0, 2,    5, 6, 6,       10, 11});
+        //                                                ^           ^  ^
 
         const auto difference =
             burst::difference
@@ -155,7 +155,7 @@ BOOST_AUTO_TEST_SUITE(difference)
                 boost::make_iterator_range(subtrahend)
             );
 
-        const std::vector<int> expected{4, 7, 9};
+        const auto expected = burst::make_vector({4, 7, 9});
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
             difference.begin(), difference.end(),
@@ -165,8 +165,8 @@ BOOST_AUTO_TEST_SUITE(difference)
 
     BOOST_AUTO_TEST_CASE(resulting_range_is_writable)
     {
-        std::vector<int> minuend{1, 3, 5, 7, 9};
-        std::vector<int> subtrahend{2, 3, 4, 5};
+        auto minuend = burst::make_vector({1, 3, 5, 7, 9});
+        auto subtrahend = burst::make_vector({2, 3, 4, 5});
 
         auto difference =
             burst::difference
@@ -177,7 +177,7 @@ BOOST_AUTO_TEST_SUITE(difference)
 
         boost::for_each(difference, [] (auto & x) { x *= 2; });
 
-        const std::vector<int> expected{2, 14, 18};
+        const auto expected = burst::make_vector({2, 14, 18});
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
             difference.begin(), difference.end(),
