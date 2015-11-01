@@ -12,6 +12,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     algorithm/sum.cpp
     container/dynamic_tuple.cpp
     container/k_ary_search_set.cpp
+    functional/low_byte.cpp
     iterator/bitap_iterator.cpp
     iterator/difference_iterator.cpp
     iterator/intersect_iterator.cpp

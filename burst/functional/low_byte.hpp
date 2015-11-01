@@ -30,7 +30,7 @@ namespace burst
     struct low_byte <void>
     {
         template <typename Integer>
-        std::uint8_t operator () (Integer integer) const
+        constexpr std::uint8_t operator () (Integer integer) const
         {
             static_assert(std::is_integral<Integer>::value, "Младший байт можно взять только от целого числа.");
 
