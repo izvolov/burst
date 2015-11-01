@@ -15,7 +15,8 @@ BOOST_AUTO_TEST_SUITE(difference)
     BOOST_AUTO_TEST_CASE(difference_of_two_ranges_is_set_of_elements_in_first_range_but_not_in_second_range)
     {
         const auto natural = burst::make_vector({1, 2, 3, 4, 5, 6});
-        const auto odd = burst::make_vector({1, 3, 5});
+        const auto     odd = burst::make_vector({1,    3,    5   });
+        //                                          ^     ^     ^
 
         const auto difference =
             burst::difference
@@ -34,8 +35,9 @@ BOOST_AUTO_TEST_SUITE(difference)
 
     BOOST_AUTO_TEST_CASE(accepts_multisets)
     {
-        const auto minuend = burst::make_vector({1, 1, 1, 2, 2, 3});
-        const auto subtrahend = burst::make_vector({1, 1, 2});
+        const auto    minuend = burst::make_vector({1, 1, 1, 2, 2, 3});
+        const auto subtrahend = burst::make_vector({1, 1,    2      });
+        //                                                ^     ^  ^
 
         const auto difference =
             burst::difference
@@ -165,8 +167,9 @@ BOOST_AUTO_TEST_SUITE(difference)
 
     BOOST_AUTO_TEST_CASE(resulting_range_is_writable)
     {
-        auto minuend = burst::make_vector({1, 3, 5, 7, 9});
-        auto subtrahend = burst::make_vector({2, 3, 4, 5});
+        auto    minuend = burst::make_vector({1,    3,    5, 7, 9});
+        auto subtrahend = burst::make_vector({   2, 3, 4, 5      });
+        //                                    ^              ^  ^
 
         auto difference =
             burst::difference
