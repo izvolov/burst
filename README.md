@@ -28,7 +28,6 @@ Burst
    1. [Сортировка подсчётом](#counting)
    2. [Копирование диапазона, отсортированного подсчётом](#counting-copy)
    3. [Поразрядная сортировка](#radix)
-   4. [Копирование диапазона, отсортированного поразрядной сортировкой](#radix-copy)
 4. [Скачущий поиск](#gallop)
    1. [Поиск нижней грани](#galloping-lb)
    2. [Поиск верхней грани](#galloping-ub)
@@ -263,21 +262,6 @@ Burst
   Находится в заголовке
   ```c++
   #include <burst/algorithm/sorting/radix_sort.hpp>
-  ```
-
-* <a name="radix-copy"/> Копирование диапазона, отсортированного поразрядной сортировкой
-  ```c++
-  std::vector<std::uint32_t> chaos{100500, 42, 99999, 1000, 0};
-
-  std::forward_list<std::uint32_t> order(chaos.size());
-  burst::radix_sort_copy(chaos.begin(), chaos.end(), order.begin());
-
-  assert((order == std::forward_list<std::uint32_t>{0, 42, 1000, 99999, 100500}));
-  ```
-
-  Находится в заголовке
-  ```c++
-  #include <burst/algorithm/sorting/radix_sort_copy.hpp>
   ```
 
 #### <a name="gallop"/> Скачущий поиск

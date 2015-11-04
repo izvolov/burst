@@ -8,7 +8,6 @@ set(UNIT_TEST_SOURCES test_main.cpp
     algorithm/sorting/counting_sort.cpp
     algorithm/sorting/counting_sort_copy.cpp
     algorithm/sorting/radix_sort.cpp
-    algorithm/sorting/radix_sort_copy.cpp
     algorithm/sum.cpp
     container/dynamic_tuple.cpp
     container/k_ary_search_set.cpp
