@@ -1,4 +1,3 @@
-#include <forward_list>
 #include <limits>
 #include <string>
 #include <utility>
@@ -18,8 +17,9 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
     {
         std::vector<std::size_t> values;
 
+        std::vector<std::size_t> buffer;
         auto sorted_values = values;
-        burst::radix_sort(sorted_values.begin(), sorted_values.end());
+        burst::radix_sort(sorted_values.begin(), sorted_values.end(), buffer.begin());
 
         BOOST_CHECK(sorted_values == values);
     }
@@ -28,8 +28,9 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
     {
         std::vector<std::uint8_t> initial{0, 1, 2, 3, 4};
 
+        std::vector<std::uint8_t> buffer(initial.size());
         auto sorted = initial;
-        burst::radix_sort(sorted.begin(), sorted.end());
+        burst::radix_sort(sorted.begin(), sorted.end(), buffer.begin());
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
@@ -42,8 +43,9 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
     {
         std::vector<std::string> descending{"1000", "100", "10", "1"};
 
-        std::forward_list<std::string> ascending(descending.begin(), descending.end());
-        burst::radix_sort(ascending.begin(), ascending.end(),
+        std::vector<std::string> buffer(descending.size());
+        std::vector<std::string> ascending(descending.begin(), descending.end());
+        burst::radix_sort(ascending.begin(), ascending.end(), buffer.begin(),
             [] (const std::string & string)
             {
                 return string.size();
@@ -61,7 +63,8 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
     {
         std::vector<std::uint32_t> numbers{100500, 42, 99999, 1000, 0};
 
-        burst::radix_sort(numbers.begin(), numbers.end());
+        std::vector<std::uint32_t> buffer(numbers.size());
+        burst::radix_sort(numbers.begin(), numbers.end(), buffer.begin());
 
         std::vector<std::uint32_t> expected{0, 42, 1000, 99999, 100500};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -75,7 +78,8 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
     {
         std::vector<std::uint8_t> numbers{0, 5, 3, 7, 1, 2, 4, 6};
 
-        burst::radix_sort(numbers.begin(), numbers.end(), burst::identity<>(),
+        std::vector<std::uint8_t> buffer(numbers.size());
+        burst::radix_sort(numbers.begin(), numbers.end(), buffer.begin(), burst::identity<>(),
             [] (const std::uint8_t & number) -> bool
             {
                 return number & 0x01;
@@ -98,7 +102,8 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
             std::numeric_limits<std::size_t>::max()
         };
 
-        burst::radix_sort(numbers.begin(), numbers.end());
+        std::vector<std::size_t> buffer(numbers.size());
+        burst::radix_sort(numbers.begin(), numbers.end(), buffer.begin());
 
         std::vector<std::size_t> expected
         {
@@ -124,7 +129,8 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
             {1, "пять"}
         };
 
-        burst::radix_sort(numbers.begin(), numbers.end(),
+        std::vector<std::pair<std::uint16_t, std::string>> buffer(numbers.size());
+        burst::radix_sort(numbers.begin(), numbers.end(), buffer.begin(),
             [] (const auto & pair)
             {
                 return pair.first;

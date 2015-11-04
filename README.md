@@ -250,7 +250,8 @@ Burst
   ```c++
   std::vector<std::string> strings{"aaaa", "bbb", "cc", "d"};
 
-  burst::radix_sort(strings.begin(), strings.end(),
+  std::vector<std::string> buffer(strings.size());
+  burst::radix_sort(strings.begin(), strings.end(), buffer.begin(),
       [] (const std::string & string)
       {
           return string.size();

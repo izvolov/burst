@@ -81,6 +81,53 @@ namespace burst
             collect_impl(first, last, map, radix, counters, std::make_index_sequence<radix_count>());
         }
 
+        //!     Сортировка с пользовательским буфером.
+        /*!
+                Сортировка происходит между и входным диапазоном и буфером по следующей схеме:
+                Перед обработкой каждого чётного разряда (отсчёт от нуля) во входном диапазоне
+            лежит неотсортированная по этому разряду последовательность. Она сортируется, и
+            результат складывается в буфер.
+                Перед обработкой каждого нечётного разряда в буфере лежит неотсортированная
+            по этому разряду последовательность. Она сортируется, а результат складывается во
+            входной диапазон.
+                Таким образом, в итоге во входном диапазоне оказывается отсортированная
+            последовательность.
+
+                Важное предусловие: в сортируемых числах чётное количество разрядов.
+         */
+        template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map, typename Radix>
+        void radix_sort_with_custom_buffer
+            (
+                RandomAccessIterator1 first,
+                RandomAccessIterator1 last,
+                RandomAccessIterator2 buffer_begin,
+                Map map,
+                Radix radix
+            )
+        {
+            using value_type = typename std::iterator_traits<RandomAccessIterator1>::value_type;
+            using traits = detail::radix_sort_traits<value_type, Map, Radix>;
+
+            using difference_type = typename std::iterator_traits<RandomAccessIterator1>::difference_type;
+            difference_type counters[traits::radix_count][traits::radix_value_range + 1] = {{0}};
+            detail::collect(first, last, map, radix, counters);
+
+            auto distance = std::distance(first, last);
+            auto buffer_end = buffer_begin + distance;
+
+            auto get_low_radix = [& radix, & map] (const value_type & value) { return radix(map(value)); };
+            detail::dispose(first, last, buffer_begin, get_low_radix, counters[0]);
+
+            for (std::size_t radix_number = 1; radix_number < traits::radix_count - 1; radix_number += 2)
+            {
+                detail::dispose(buffer_begin, buffer_end, first, nth_radix(radix_number, map, radix), counters[radix_number]);
+                detail::dispose(first, last, buffer_begin, nth_radix(radix_number + 1, map, radix), counters[radix_number + 1]);
+            }
+
+            auto get_high_radix = nth_radix(traits::radix_count - 1, map, radix);
+            detail::dispose(buffer_begin, buffer_end, first, get_high_radix, counters[traits::radix_count - 1]);
+        }
+
         //!     Сортировка с одним дополнительным буфером.
         /*!
                 Внутри функции заводится дополнительный буфер. Сортировка по первому разряду
@@ -180,69 +227,44 @@ namespace burst
                 Отличается от основной функции тем, что здесь заводится один дополнительный буфер,
             а не два.
          */
-        template <typename ForwardIterator, typename Map, typename Radix>
+        template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map, typename Radix>
         typename std::enable_if
         <
             detail::radix_sort_traits
             <
-                typename std::iterator_traits<ForwardIterator>::value_type,
+                typename std::iterator_traits<RandomAccessIterator1>::value_type,
                 Map,
                 Radix
             >
             ::radix_count == 1,
             void
         >
-        ::type radix_sort_impl (ForwardIterator first, ForwardIterator last, Map map, Radix radix)
+        ::type radix_sort_impl (RandomAccessIterator1 first, RandomAccessIterator1 last, RandomAccessIterator2 buffer, Map map, Radix radix)
         {
-            counting_sort_copy_with_extra_buffer(first, last, first,
+            counting_sort_copy_at_a_go(first, last, buffer,
                 [& map, & radix] (const auto & value)
                 {
                     return radix(map(value));
                 });
+
+            std::move(buffer, buffer + std::distance(first, last), first);
         }
 
-        template <typename RandomAccessIterator, typename Map, typename Radix>
+        template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map, typename Radix>
         typename std::enable_if
         <
-            std::is_same
+            detail::radix_sort_traits
             <
-                typename std::iterator_traits<RandomAccessIterator>::iterator_category,
-                std::random_access_iterator_tag
-            >
-            ::value && detail::radix_sort_traits
-            <
-                typename std::iterator_traits<RandomAccessIterator>::value_type,
+                typename std::iterator_traits<RandomAccessIterator1>::value_type,
                 Map,
                 Radix
             >
             ::radix_count % 2 == 0,
             void
         >
-        ::type radix_sort_impl (RandomAccessIterator first, RandomAccessIterator last, Map map, Radix radix)
+        ::type radix_sort_impl (RandomAccessIterator1 first, RandomAccessIterator1 last, RandomAccessIterator2 buffer, Map map, Radix radix)
         {
-            radix_sort_with_one_extra_buffer(first, last, first, map, radix);
-        }
-
-        template <typename ForwardIterator, typename Map, typename Radix>
-        typename std::enable_if
-        <
-            not std::is_same
-            <
-                typename std::iterator_traits<ForwardIterator>::iterator_category,
-                std::random_access_iterator_tag
-            >
-            ::value && detail::radix_sort_traits
-            <
-                typename std::iterator_traits<ForwardIterator>::value_type,
-                Map,
-                Radix
-            >
-            ::radix_count % 2 == 0,
-            void
-        >
-        ::type radix_sort_impl (ForwardIterator first, ForwardIterator last, Map map, Radix radix)
-        {
-            radix_sort_with_two_extra_buffers(first, last, first, map, radix);
+            radix_sort_with_custom_buffer(first, last, buffer, map, radix);
         }
 
         // ----------------------------------------------------------------------------------------

@@ -41,7 +41,9 @@ void test_all (std::size_t attempts)
     std::vector<Integer> numbers;
     read(std::cin, numbers);
 
-    auto radix_sort = [] (auto && ... args) { return burst::radix_sort(std::forward<decltype(args)>(args)...); };
+    std::vector<Integer> buffer(numbers.size());
+
+    auto radix_sort = [& buffer] (auto && ... args) { return burst::radix_sort(std::forward<decltype(args)>(args)..., buffer.begin()); };
     test_sort("burst::radix_sort", radix_sort, numbers, attempts);
 
     auto std_sort = [] (auto && ... args) { return std::sort(std::forward<decltype(args)>(args)...); };
