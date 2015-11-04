@@ -62,7 +62,7 @@ namespace burst
             std::for_each(first, last,
                 [& counters, & map, & radix] (const value_type & value)
                 {
-                    BURST_EXPAND_VARIADIC(++counters[Radices][radix(static_cast<typename traits::integer_type>(map(value) >> (traits::radix_size * Radices))) - traits::min_radix_value + 1]);
+                    BURST_EXPAND_VARIADIC(++counters[Radices][nth_radix(Radices, map, radix)(value) - traits::min_radix_value + 1]);
                 });
 
             BURST_EXPAND_VARIADIC(std::partial_sum(std::begin(counters[Radices]), std::end(counters[Radices]), std::begin(counters[Radices])));
