@@ -6,19 +6,22 @@
 
 namespace burst
 {
-    //!     Сортировка подсчётом с буферизацией.
+    //!     Сортировка подсчётом.
     /*!
             Алгоритм целочисленной сортировки, работающий за линейное время и использующий
         O(max(N, M)) дополнительной памяти, где N — размер входного диапазона, M — максимальное
-        значение сортируемых целых чисел.
-            В процессе сортировки используется внутренний буфер, в который записывается
-        отсортированный диапазон, а затем его элементы перемещаются обратно во входной диапазон.
-            Максимальное значение вычисляется на этапе компиляции, исходя из типа, возвращаемого
-        отображением "Map".
+        значение сортируемых целых чисел. Максимальное значение вычисляется на этапе компиляции,
+        исходя из типа, возвращаемого отображением "Map".
+            Результат сортировки записывается в выходной диапазон, а входной диапазон остаётся без
+        изменений. Выходной диапазон должен быть не меньше входного, чтобы в него влезли
+        отсортированные данные.
 
         \tparam ForwardIterator
             Тип принимаемого на вход диапазона, который нужно отсортировать. Для него достаточно
             быть однонаправленным итератором.
+        \tparam RandomAccessIterator
+            Тип итератора выходного диапазона, в который будут записаны отсортированные данные.
+            Должен быть итератором произвольного доступа.
         \tparam Map
             Отображение входных значений в целые числа.
             Сортировка происходит по значениям этого отображения. Поэтому от него требуется, чтобы
@@ -37,16 +40,16 @@ namespace burst
         4. Проходим по входному диапазону и, используя полученный массив индексов, записываем
            элементы входного диапазона на их места в отсортированном диапазоне.
      */
-    template <typename ForwardIterator, typename Map>
-    void counting_sort (ForwardIterator first, ForwardIterator last, Map map)
+    template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
+    RandomAccessIterator counting_sort (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
     {
-        detail::counting_sort_impl(first, last, map);
+        return detail::counting_sort_impl(first, last, result, map);
     }
 
-    template <typename ForwardIterator>
-    void counting_sort (ForwardIterator first, ForwardIterator last)
+    template <typename ForwardIterator, typename RandomAccessIterator>
+    RandomAccessIterator counting_sort (ForwardIterator first, ForwardIterator last, RandomAccessIterator result)
     {
-        return counting_sort(first, last, identity<>());
+        return counting_sort(first, last, result, identity<>());
     }
 }
 

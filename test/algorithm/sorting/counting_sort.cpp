@@ -7,29 +7,22 @@
 #include <burst/algorithm/sorting/counting_sort.hpp>
 
 BOOST_AUTO_TEST_SUITE(counting_sort)
-    BOOST_AUTO_TEST_CASE(sorting_empty_range_does_nothing)
-    {
-        std::vector<std::uint8_t> values;
-
-        burst::counting_sort(values.begin(), values.end());
-
-        BOOST_CHECK(values.empty());
-    }
-
     BOOST_AUTO_TEST_CASE(sorting_already_sorted_range_results_the_same_range)
     {
         std::vector<std::uint8_t> values{0, 1, 2, 3, 4};
 
-        burst::counting_sort(values.begin(), values.end());
+        std::vector<std::uint8_t> sorted_values(values.size());
+        burst::counting_sort(values.begin(), values.end(), sorted_values.begin());
 
-        BOOST_CHECK(std::is_sorted(values.begin(), values.end()));
+        BOOST_CHECK(std::is_sorted(sorted_values.begin(), sorted_values.end()));
     }
 
     BOOST_AUTO_TEST_CASE(sorting_descending_range_results_ascending_range)
     {
         std::vector<std::size_t> values{0x0104, 0x0203, 0x0302, 0x0401};
 
-        burst::counting_sort(values.begin(), values.end(),
+        std::vector<std::size_t> sorted_values(values.size());
+        burst::counting_sort(values.begin(), values.end(), sorted_values.begin(),
             [] (const std::size_t & integer) -> std::uint8_t
             {
                 return integer & 0xff;
@@ -38,7 +31,7 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
         std::vector<std::size_t> expected{0x0401, 0x0302, 0x0203, 0x0104};
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
-            std::begin(values), std::end(values),
+            std::begin(sorted_values), std::end(sorted_values),
             std::begin(expected), std::end(expected)
         );
     }
@@ -47,7 +40,8 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
     {
         std::vector<std::uint8_t> numbers{0, 5, 3, 7, 1, 2, 4, 6};
 
-        burst::counting_sort(numbers.begin(), numbers.end(),
+        std::vector<std::uint8_t> sorted_numbers(numbers.size());
+        burst::counting_sort(numbers.begin(), numbers.end(), sorted_numbers.begin(),
             [] (const std::uint8_t & number) -> bool
             {
                 return number & 0x01;
@@ -57,7 +51,7 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
         std::vector<std::uint8_t> even_goes_first{0, 2, 4, 6, 5, 3, 7, 1};
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
-            std::begin(numbers), std::end(numbers),
+            std::begin(sorted_numbers), std::end(sorted_numbers),
             std::begin(even_goes_first), std::end(even_goes_first)
         );
     }
@@ -66,12 +60,13 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
     {
         std::vector<std::uint8_t> values{0x12, 0xfd, 0x00, 0x15, 0x66};
 
-        burst::counting_sort(values.begin(), values.end());
+        std::vector<std::uint8_t> sorted_values(values.size());
+        burst::counting_sort(values.begin(), values.end(), sorted_values.begin());
 
         std::vector<std::uint8_t> expected{0x00, 0x12, 0x15, 0x66, 0xfd};
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
-            std::begin(values), std::end(values),
+            std::begin(sorted_values), std::end(sorted_values),
             std::begin(expected), std::end(expected)
         );
     }
@@ -80,12 +75,13 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
     {
         std::vector<std::int8_t> values{0, -1, 1, -2, 2};
 
-        burst::counting_sort(values.begin(), values.end());
+        std::vector<std::int8_t> sorted_values(values.size());
+        burst::counting_sort(values.begin(), values.end(), sorted_values.begin());
 
         std::vector<std::int8_t> expected{-2, -1, 0, 1, 2};
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
-            std::begin(values), std::end(values),
+            std::begin(sorted_values), std::end(sorted_values),
             std::begin(expected), std::end(expected)
         );
     }
@@ -99,7 +95,8 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
             std::numeric_limits<std::int8_t>::max()
         };
 
-        burst::counting_sort(values.begin(), values.end());
+        std::vector<std::int8_t> sorted_values(values.size());
+        burst::counting_sort(values.begin(), values.end(), sorted_values.begin());
 
         std::vector<std::int8_t> expected
         {
@@ -109,7 +106,7 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
         };
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
-            std::begin(values), std::end(values),
+            std::begin(sorted_values), std::end(sorted_values),
             std::begin(expected), std::end(expected)
         );
     }
@@ -126,7 +123,8 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
             0x1100
         };
 
-        burst::counting_sort(values.begin(), values.end(),
+        std::vector<std::uint32_t> sorted_values(values.size());
+        burst::counting_sort(values.begin(), values.end(), sorted_values.begin(),
             [] (const std::uint32_t & integer) -> std::uint8_t
             {
                 return integer & 0xff;
@@ -143,8 +141,33 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
         };
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
-            std::begin(values), std::end(values),
+            std::begin(sorted_values), std::end(sorted_values),
             std::begin(expected), std::end(expected)
+        );
+    }
+
+    BOOST_AUTO_TEST_CASE(returns_iterator_past_the_end_of_the_sorted_range)
+    {
+        std::vector<std::uint8_t> initial{5, 4, 3, 2, 1};
+
+        std::vector<std::uint8_t> sorted(initial.size() * 2);
+        auto sorted_end = burst::counting_sort(initial.begin(), initial.end(), sorted.begin());
+
+        BOOST_CHECK((sorted_end == sorted.begin() + std::distance(initial.begin(), initial.end())));
+    }
+
+    BOOST_AUTO_TEST_CASE(initial_range_does_not_change)
+    {
+        std::vector<std::uint8_t> numbers{5, 4, 3, 2, 1};
+        const auto numbers_copy = numbers;
+
+        std::vector<std::uint8_t> sorted_numbers(numbers.size());
+        burst::counting_sort(numbers.begin(), numbers.end(), sorted_numbers.begin());
+
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            std::begin(numbers), std::end(numbers),
+            std::begin(numbers_copy), std::end(numbers_copy)
         );
     }
 BOOST_AUTO_TEST_SUITE_END()

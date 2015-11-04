@@ -147,13 +147,13 @@ namespace burst
         >
         ::type radix_sort_impl (RandomAccessIterator1 first, RandomAccessIterator1 last, RandomAccessIterator2 buffer, Map map, Radix radix)
         {
-            counting_sort_copy_at_a_go(first, last, buffer,
+            auto buffer_end = counting_sort_impl(first, last, buffer,
                 [& map, & radix] (const auto & value)
                 {
                     return radix(map(value));
                 });
 
-            std::move(buffer, buffer + std::distance(first, last), first);
+            std::move(buffer, buffer_end, first);
         }
 
         template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map, typename Radix>

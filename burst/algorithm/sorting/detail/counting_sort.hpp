@@ -66,13 +66,8 @@ namespace burst
                 });
         }
 
-        //!     Случай, когда выходной итератор — произвольного доступа.
-        /*!
-                Дополнительный буфер не создаётся, сортированные значения записываются сразу в
-            выходной диапазон.
-         */
         template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
-        RandomAccessIterator counting_sort_copy_at_a_go (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
+        RandomAccessIterator counting_sort_impl (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
         {
             using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
             using traits = detail::counting_sort_traits<value_type, Map>;
@@ -85,59 +80,6 @@ namespace burst
             detail::dispose(first, last, result, map, counters);
 
             return result + counters[traits::value_range];
-        }
-
-        //!     Случай, когда выходной итератор не является итератором произвольного доступа.
-        /*!
-                Создаётся дополнительный буфер, сортированные значения записываются в буфер, а
-            затем переносятся в выходной диапазон.
-         */
-        template <typename ForwardIterator1, typename ForwardIterator2, typename Map>
-        ForwardIterator2 counting_sort_copy_with_extra_buffer (ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 result, Map map)
-        {
-            using value_type = typename std::iterator_traits<ForwardIterator1>::value_type;
-            std::vector<value_type> buffer(static_cast<std::size_t>(std::distance(first, last)));
-
-            counting_sort_copy_at_a_go(first, last, buffer.begin(), map);
-            return std::move(buffer.begin(), buffer.end(), result);
-        }
-
-        template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
-        typename std::enable_if
-        <
-            std::is_same
-            <
-                typename std::iterator_traits<RandomAccessIterator>::iterator_category,
-                std::random_access_iterator_tag
-            >
-            ::value,
-            RandomAccessIterator
-        >
-        ::type counting_sort_copy_impl (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
-        {
-            return counting_sort_copy_at_a_go(first, last, result, map);
-        }
-
-        template <typename ForwardIterator1, typename ForwardIterator2, typename Map>
-        typename std::enable_if
-        <
-            not std::is_same
-            <
-                typename std::iterator_traits<ForwardIterator2>::iterator_category,
-                std::random_access_iterator_tag
-            >
-            ::value,
-            ForwardIterator2
-        >
-        ::type counting_sort_copy_impl (ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 result, Map map)
-        {
-            return counting_sort_copy_with_extra_buffer(first, last, result, map);
-        }
-
-        template <typename ForwardIterator, typename Map>
-        void counting_sort_impl (ForwardIterator first, ForwardIterator last, Map map)
-        {
-            counting_sort_copy_with_extra_buffer(first, last, first, map);
         }
     } // namespace detail
 } // namespace burst

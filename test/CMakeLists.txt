@@ -6,7 +6,6 @@ set(UNIT_TEST_SOURCES test_main.cpp
     algorithm/searching/bitap.cpp
     algorithm/searching/element_position_bitmask_table.cpp
     algorithm/sorting/counting_sort.cpp
-    algorithm/sorting/counting_sort_copy.cpp
     algorithm/sorting/radix_sort.cpp
     algorithm/sum.cpp
     container/dynamic_tuple.cpp

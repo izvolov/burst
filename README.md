@@ -209,29 +209,14 @@ Burst
   ```
 
 #### <a name="intsort"/> Целочисленная сортировка
-
-* <a name="counting"/> Сортировка подсчётом
-
-  ```c++
-  std::vector<std::int8_t> numbers{0, -1, 1, -2, 2};
-
-  burst::counting_sort(numbers.begin(), numbers.end());
-
-  assert((numbers == std::vector<std::int8_t>{-2, -1, 0, 1, 2}));
-  ```
-
-  Находится в заголовке
-  ```c++
-  #include <burst/algorithm/sorting/counting_sort.hpp>
-  ```
   
-* <a name="counting-copy"/> Копирование диапазона, отсортированного подсчётом
+* <a name="counting"/> Сортировка подсчётом
 
   ```c++
   std::vector<std::size_t> chaos{0x0104, 0x0203, 0x0302, 0x0401};
 
   std::vector<std::size_t> sorted_by_low_byte(chaos.size());
-  burst::counting_sort_copy(chaos.begin(), chaos.end(), sorted_by_low_byte.begin(),
+  burst::counting_sort(chaos.begin(), chaos.end(), sorted_by_low_byte.begin(),
       [] (const std::size_t & integer) -> std::uint8_t
       {
           return integer & 0xff;
