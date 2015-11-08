@@ -150,4 +150,41 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
             boost::begin(expected), boost::end(expected)
         );
     }
+
+    BOOST_AUTO_TEST_CASE(can_sort_signed_values)
+    {
+        std::vector<std::int64_t> values
+        {
+            0,
+            -1,
+            1,
+            -2,
+            2,
+            -100500,
+            100500,
+            std::numeric_limits<std::int64_t>::min(),
+            std::numeric_limits<std::int64_t>::max()
+        };
+
+        std::vector<std::int64_t> buffer(values.size());
+        burst::radix_sort(values.begin(), values.end(), buffer.begin());
+
+        std::vector<std::int64_t> expected
+        {
+            std::numeric_limits<std::int64_t>::min(),
+            -100500,
+            -2,
+            -1,
+            0,
+            1,
+            2,
+            100500,
+            std::numeric_limits<std::int64_t>::max()
+        };
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            std::begin(values), std::end(values),
+            std::begin(expected), std::end(expected)
+        );
+    }
 BOOST_AUTO_TEST_SUITE_END()

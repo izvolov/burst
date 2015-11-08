@@ -2,6 +2,7 @@
 #define BURST_ALGORITHM_SORTING_RADIX_SORT_HPP
 
 #include <burst/algorithm/sorting/detail/radix_sort.hpp>
+#include <burst/algorithm/sorting/detail/to_unsigned.hpp>
 #include <burst/functional/identity.hpp>
 #include <burst/functional/low_byte.hpp>
 
@@ -42,7 +43,7 @@ namespace burst
     template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map, typename Radix>
     void radix_sort (RandomAccessIterator1 first, RandomAccessIterator1 last, RandomAccessIterator2 buffer, Map map, Radix radix)
     {
-        detail::radix_sort_impl(first, last, buffer, map, radix);
+        detail::radix_sort_impl(first, last, buffer, detail::to_unsigned(std::move(map)), radix);
     }
 
     template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map>
