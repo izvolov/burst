@@ -26,8 +26,7 @@ Burst
    6. [Разность](#difference)
 3. [Целочисленная сортировка](#intsort)
    1. [Сортировка подсчётом](#counting)
-   2. [Копирование диапазона, отсортированного подсчётом](#counting-copy)
-   3. [Поразрядная сортировка](#radix)
+   2. [Поразрядная сортировка](#radix)
 4. [Скачущий поиск](#gallop)
    1. [Поиск нижней грани](#galloping-lb)
    2. [Поиск верхней грани](#galloping-ub)
@@ -227,7 +226,7 @@ Burst
 
   Находится в заголовке
   ```c++
-  #include <burst/algorithm/sorting/counting_sort_copy.hpp>
+  #include <burst/algorithm/sorting/counting_sort.hpp>
   ```
 
 * <a name="radix"/> Поразрядная сортировка
