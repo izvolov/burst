@@ -34,9 +34,7 @@ namespace burst
                 "Тип разряда, выделяемого из целого числа, тоже должен быть целым."
             );
 
-            constexpr static const auto min_radix_value = std::numeric_limits<radix_type>::min();
-            constexpr static const auto max_radix_value = std::numeric_limits<radix_type>::max();
-            constexpr static const auto radix_value_range = max_radix_value - min_radix_value + 1;
+            constexpr static const auto radix_value_range = std::numeric_limits<radix_type>::max() + 1;
             constexpr static const auto radix_size = intlog2<std::uint64_t>(radix_value_range);
             constexpr static const auto radix_count = sizeof(integer_type) * CHAR_BIT / radix_size;
         };
@@ -56,13 +54,10 @@ namespace burst
         template <typename ForwardIterator, typename Map, typename Radix, typename Array, std::size_t ... Radices>
         void collect_impl (ForwardIterator first, ForwardIterator last, Map map, Radix radix, Array & counters, std::index_sequence<Radices...>)
         {
-            using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
-            using traits = detail::radix_sort_traits<value_type, Map, Radix>;
-
             std::for_each(first, last,
-                [& counters, & map, & radix] (const value_type & value)
+                [& counters, & map, & radix] (const auto & value)
                 {
-                    BURST_EXPAND_VARIADIC(++counters[Radices][nth_radix(Radices, map, radix)(value) - traits::min_radix_value + 1]);
+                    BURST_EXPAND_VARIADIC(++counters[Radices][nth_radix(Radices, map, radix)(value) + 1]);
                 });
 
             BURST_EXPAND_VARIADIC(std::partial_sum(std::begin(counters[Radices]), std::end(counters[Radices]), std::begin(counters[Radices])));
