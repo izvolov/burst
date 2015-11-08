@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <chrono>
 #include <iostream>
 #include <unordered_map>
 #include <vector>
@@ -20,19 +21,20 @@ void read (std::istream & stream, Container & values)
 template <typename Sort, typename Container>
 void test_sort (const std::string & name, Sort sort, const Container & numbers, std::size_t attempts)
 {
-    clock_t total_time = 0;
+    using namespace std::chrono;
+    auto total_time = steady_clock::duration{0};
 
     for (std::size_t attempt = 0; attempt < attempts; ++attempt)
     {
         auto unsorted = numbers;
 
-        clock_t attempt_time = clock();
+        auto attempt_start_time = steady_clock::now();
         sort(unsorted.begin(), unsorted.end());
-        attempt_time = clock() - attempt_time;
+        auto attempt_time = steady_clock::now() - attempt_start_time;
         total_time += attempt_time;
     }
 
-    std::cout << name << ' ' << static_cast<double>(total_time) / CLOCKS_PER_SEC << std::endl;
+    std::cout << name << ' ' << duration_cast<duration<double>>(total_time).count() << std::endl;
 }
 
 template <typename Integer>
