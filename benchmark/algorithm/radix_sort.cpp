@@ -56,24 +56,28 @@ void test_all (std::size_t attempts)
 }
 
 using test_call_type = void (*) (std::size_t);
-test_call_type get_call_for_bits (std::size_t bits)
+test_call_type get_call_for_integer (const std::string & integer_type)
 {
-    static const std::unordered_map<std::size_t, test_call_type> test_calls
+    static const std::unordered_map<std::string, test_call_type> test_calls
     {
-        {8, &test_all<std::uint8_t>},
-        {16, &test_all<std::uint16_t>},
-        {32, &test_all<std::uint32_t>},
-        {64, &test_all<std::uint64_t>}
+        {"u8", &test_all<std::uint8_t>},
+        {"u16", &test_all<std::uint16_t>},
+        {"u32", &test_all<std::uint32_t>},
+        {"u64", &test_all<std::uint64_t>},
+        {"i8", &test_all<std::int8_t>},
+        {"i16", &test_all<std::int16_t>},
+        {"i32", &test_all<std::int32_t>},
+        {"i64", &test_all<std::int64_t>}
     };
 
-    auto call = test_calls.find(bits);
+    auto call = test_calls.find(integer_type);
     if (call != test_calls.end())
     {
         return call->second;
     }
     else
     {
-        throw boost::program_options::error(u8"Неверная разрядность сортируемых чисел: " + std::to_string(bits));
+        throw boost::program_options::error(u8"Неверная разрядность сортируемых чисел: " + integer_type);
     }
 }
 
@@ -85,7 +89,7 @@ int main (int argc, const char * argv[])
     description.add_options()
         ("help,h", "Подсказка")
         ("attempts", bpo::value<std::size_t>()->default_value(1000), "Количество испытаний")
-        ("bits", bpo::value<std::size_t>()->default_value(32), "Разрядность сортируемых чисел. Допустимые значения: 8, 16, 32, 64");
+        ("integer", bpo::value<std::string>()->default_value("u32"), "Тип сортируемых чисел. Допустимые значения: u8, u16, u32, u64, i8, i16, i32, i64");
 
     try
     {
@@ -100,9 +104,9 @@ int main (int argc, const char * argv[])
         else
         {
             std::size_t attempts = vm["attempts"].as<std::size_t>();
-            std::size_t bits = vm["bits"].as<std::size_t>();
+            auto integer_type = vm["integer"].as<std::string>();
 
-            auto test = get_call_for_bits(bits);
+            auto test = get_call_for_integer(integer_type);
             test(attempts);
         }
     }
