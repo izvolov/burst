@@ -151,6 +151,11 @@ namespace burst
             std::move(buffer, buffer_end, first);
         }
 
+        //!     Специализация для случая, когда количество разрядов сортируемых чисел чётно.
+        /*!
+                Других случаев не существует по построению. Либо разряд один, либо их количество
+            чётно.
+         */
         template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map, typename Radix>
         typename std::enable_if
         <
