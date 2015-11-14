@@ -1,17 +1,17 @@
 #include <iterator>
 #include <vector>
 
-#include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
 #include <burst/iterator/join_iterator.hpp>
+#include <burst/range/make_range_vector.hpp>
 
 BOOST_AUTO_TEST_SUITE(join_iterator)
     BOOST_AUTO_TEST_CASE(join_iterator_end_is_created_using_special_tag)
     {
         auto  first = {500, 100};
         auto second = {600, 200};
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto joined_begin = burst::make_join_iterator(ranges);
         auto   joined_end = burst::make_join_iterator(ranges, burst::iterator::end_tag);
@@ -28,7 +28,7 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
     {
         auto  first = {3, 2};
         auto second = {1, 0};
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto joined_begin = burst::make_join_iterator(ranges);
         auto joined_end   = burst::make_join_iterator(ranges, burst::iterator::end_tag);
@@ -41,7 +41,7 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
     {
         auto  first = {3, 2};
         auto second = {1, 0};
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto joined_end = burst::make_join_iterator(ranges, burst::iterator::end_tag);
         --joined_end;
@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
     {
         std::vector<int> first{100, 50};
         std::vector<int> second{70, 30};
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto join_iterator = burst::make_join_iterator(ranges);
 
@@ -68,7 +68,7 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
     {
         auto  first = {3, 2};
         auto second = {1, 0};
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto joined_begin = burst::make_join_iterator(ranges);
         auto joined_end   = burst::make_join_iterator(ranges, burst::iterator::end_tag);

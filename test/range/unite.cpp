@@ -8,6 +8,7 @@
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
+#include <burst/range/make_range_vector.hpp>
 #include <burst/range/unite.hpp>
 
 BOOST_AUTO_TEST_SUITE(unite)
@@ -30,7 +31,7 @@ BOOST_AUTO_TEST_SUITE(unite)
     {
         auto first = {4, 5, 6, 7};
         auto second = first;
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto range_union = burst::unite(ranges);
 
@@ -80,7 +81,7 @@ BOOST_AUTO_TEST_SUITE(unite)
     {
         std::list<char> first{'h', 'f', 'd', 'b'};
         std::list<char> second{'g', 'e', 'c', 'a'};
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto range_union = burst::unite(ranges, std::greater<char>());
 
@@ -92,12 +93,7 @@ BOOST_AUTO_TEST_SUITE(unite)
         auto  first = {3, 2, 1};
         auto second = {4, 3, 2};
         auto  third = {5, 3, 1};
-        auto ranges =
-        {
-            boost::make_iterator_range(first),
-            boost::make_iterator_range(second),
-            boost::make_iterator_range(third)
-        };
+        auto ranges = burst::make_range_vector(first, second, third);
 
         auto range_union = burst::unite(ranges, std::greater<int>());
 

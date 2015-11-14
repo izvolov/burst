@@ -8,6 +8,7 @@
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
+#include <burst/range/make_range_vector.hpp>
 #include <burst/range/semiintersect.hpp>
 
 BOOST_AUTO_TEST_SUITE(semiintersect)
@@ -15,7 +16,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
     {
         std::vector<int> first;
         std::vector<int> second;
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto semiintersection = burst::semiintersect(ranges, 1);
 
@@ -26,7 +27,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
     {
         std::vector<int>  first{1, 2, 3, 4};
         std::vector<int> second{1, 2, 3, 4};
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto semiintersection = burst::semiintersect(ranges, 10);
 
@@ -49,12 +50,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
         auto first = {4, 4, 5, 6, 6, 7};
         auto second = first;
         auto third = first;
-        auto ranges =
-        {
-            boost::make_iterator_range(first),
-            boost::make_iterator_range(second),
-            boost::make_iterator_range(third)
-        };
+        auto ranges = burst::make_range_vector(first, second, third);
 
         {
             auto semiintersection1 = burst::semiintersect(ranges, 1);
@@ -107,7 +103,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
         std::string  long_range("abcdef");
         std::string short_range(  "cde" );
         //                         ^^^
-        auto ranges = {boost::make_iterator_range(long_range), boost::make_iterator_range(short_range)};
+        auto ranges = burst::make_range_vector(long_range, short_range);
 
         auto semiintersection = burst::semiintersect(ranges, 2);
 
@@ -123,7 +119,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
         std::string short_range(   "cde" );
         std::string  long_range("aabcdef");
         //                       ^^^^^^^
-        auto ranges = {boost::make_iterator_range(long_range), boost::make_iterator_range(short_range)};
+        auto ranges = burst::make_range_vector(long_range, short_range);
 
         auto semiintersection = burst::semiintersect(ranges, 1);
 
@@ -138,7 +134,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
     {
         std::list<char>  first{'h',      'f',      'd',      'b'     };
         std::list<char> second{     'g',      'e',      'c',      'a'};
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto semiintersection = burst::semiintersect(ranges, 2, std::greater<char>());
 
@@ -150,7 +146,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
         std::list<char>  first{'h',      'f',      'd',      'b'     };
         std::list<char> second{     'g',      'e',      'c',      'a'};
         //                      ^    ^    ^    ^    ^    ^    ^    ^
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto semiintersection = burst::semiintersect(ranges, 1, std::greater<char>());
 
@@ -162,7 +158,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
         auto  first = {   3, 3, 2, 1};
         auto second = {4, 3,    2   };
         //                ^     ^
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto semiintersection = burst::semiintersect(ranges, 2, std::greater<int>());
 
@@ -180,12 +176,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
         auto second = {   2, 3, 3   };
         auto  third = {      3, 3, 4};
         //             ^  ^  ^  ^  ^
-        auto ranges =
-        {
-            boost::make_iterator_range(first),
-            boost::make_iterator_range(second),
-            boost::make_iterator_range(third)
-        };
+        auto ranges = burst::make_range_vector(first, second, third);
 
         auto semiintersection = burst::semiintersect(ranges, 1);
 
@@ -203,12 +194,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
         auto second = {   2, 3   };
         auto  third = {      3, 4};
         //                ^  ^
-        auto ranges =
-        {
-            boost::make_iterator_range(first),
-            boost::make_iterator_range(second),
-            boost::make_iterator_range(third)
-        };
+        auto ranges = burst::make_range_vector(first, second, third);
 
         auto semiintersection = burst::semiintersect(ranges, 2);
 
@@ -225,12 +211,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
         auto  first = {1, 2, 3                  };
         auto second = {         4, 5, 6         };
         auto  third = {                  7, 8, 9};
-        auto ranges =
-        {
-            boost::make_iterator_range(first),
-            boost::make_iterator_range(second),
-            boost::make_iterator_range(third)
-        };
+        auto ranges = burst::make_range_vector(first, second, third);
 
         auto semiintersection = burst::semiintersect(ranges, 2, std::less<int>());
 
@@ -243,12 +224,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
         auto second = {         4, 5, 6         };
         auto  third = {                  7, 8, 9};
         //             ^  ^  ^  ^  ^  ^  ^  ^  ^
-        auto ranges =
-        {
-            boost::make_iterator_range(first),
-            boost::make_iterator_range(second),
-            boost::make_iterator_range(third)
-        };
+        auto ranges = burst::make_range_vector(first, second, third);
 
         auto semiintersection = burst::semiintersect(ranges, 1, std::less<int>());
 
@@ -266,12 +242,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
         auto second = {1, 1, 1};
         auto  third = {1, 1, 1};
         //             ^  ^  ^
-        auto ranges =
-        {
-            boost::make_iterator_range(first),
-            boost::make_iterator_range(second),
-            boost::make_iterator_range(third)
-        };
+        auto ranges = burst::make_range_vector(first, second, third);
 
         auto semiintersection = burst::semiintersect(ranges, 2, std::less<int>());
 

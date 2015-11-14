@@ -7,6 +7,7 @@
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
+#include <burst/range/make_range_vector.hpp>
 #include <burst/range/merge.hpp>
 
 BOOST_AUTO_TEST_SUITE(merge)
@@ -14,7 +15,7 @@ BOOST_AUTO_TEST_SUITE(merge)
     {
         std::vector<int> first;
         std::vector<int> second;
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto merged_range = burst::merge(ranges);
         BOOST_CHECK(merged_range.empty());
@@ -37,7 +38,7 @@ BOOST_AUTO_TEST_SUITE(merge)
     {
         std::list<char> first{'h', 'f', 'd', 'b'};
         std::list<char> second{'g', 'e', 'c', 'a'};
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto merged_range = burst::merge(ranges, std::greater<char>());
 
@@ -54,12 +55,7 @@ BOOST_AUTO_TEST_SUITE(merge)
         auto  first = {1, 2, 3};
         auto second = {4, 5, 6};
         auto  third = {7, 8, 9};
-        auto ranges =
-        {
-            boost::make_iterator_range(first),
-            boost::make_iterator_range(second),
-            boost::make_iterator_range(third)
-        };
+        auto ranges = burst::make_range_vector(first, second, third);
 
         auto merged_range = burst::merge(ranges, std::less<int>());
 
@@ -76,7 +72,7 @@ BOOST_AUTO_TEST_SUITE(merge)
         std::vector<int> first{100, 50};
         std::vector<int> second{70, 30};
 
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto merged_range = burst::merge(ranges, std::greater<int>());
         boost::for_each(merged_range, [] (int & x) { x /= 10; });

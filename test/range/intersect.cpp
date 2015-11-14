@@ -9,13 +9,14 @@
 #include <boost/test/unit_test.hpp>
 
 #include <burst/range/intersect.hpp>
+#include <burst/range/make_range_vector.hpp>
 
 BOOST_AUTO_TEST_SUITE(intersect)
     BOOST_AUTO_TEST_CASE(intersecting_empty_ranges_results_empty_range)
     {
         std::vector<int> first;
         std::vector<int> second;
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto intersected_range = burst::intersect(ranges);
 
@@ -37,7 +38,7 @@ BOOST_AUTO_TEST_SUITE(intersect)
     {
         auto first = {4, 5, 6, 7};
         auto second = first;
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto intersected_range = burst::intersect(ranges);
 
@@ -57,7 +58,7 @@ BOOST_AUTO_TEST_SUITE(intersect)
     {
         std::string  long_range("abcdef");
         std::string short_range("cde");
-        auto ranges = {boost::make_iterator_range(long_range), boost::make_iterator_range(short_range)};
+        auto ranges = burst::make_range_vector(long_range, short_range);
 
         auto intersected_range = burst::intersect(ranges);
 
@@ -72,7 +73,7 @@ BOOST_AUTO_TEST_SUITE(intersect)
     {
         std::list<char> first{'h', 'f', 'd', 'b'};
         std::list<char> second{'g', 'e', 'c', 'a'};
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto intersected_range = burst::intersect(ranges, std::greater<char>());
 
@@ -83,7 +84,7 @@ BOOST_AUTO_TEST_SUITE(intersect)
     {
         auto  first = {3, 2, 1};
         auto second = {4, 3, 2};
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto intersected_range = burst::intersect(ranges, std::greater<int>());
 
@@ -100,12 +101,7 @@ BOOST_AUTO_TEST_SUITE(intersect)
         auto  first = {1, 2};
         auto second = {2, 3};
         auto  third = {3, 4};
-        auto ranges =
-        {
-            boost::make_iterator_range(first),
-            boost::make_iterator_range(second),
-            boost::make_iterator_range(third)
-        };
+        auto ranges = burst::make_range_vector(first, second, third);
 
         auto intersected_range = burst::intersect(ranges);
 
@@ -117,12 +113,7 @@ BOOST_AUTO_TEST_SUITE(intersect)
         auto  first = {1, 2, 3};
         auto second = {4, 5, 6};
         auto  third = {7, 8, 9};
-        auto ranges =
-        {
-            boost::make_iterator_range(first),
-            boost::make_iterator_range(second),
-            boost::make_iterator_range(third)
-        };
+        auto ranges = burst::make_range_vector(first, second, third);
 
         auto intersected_range = burst::intersect(ranges, std::less<int>());
 
@@ -134,12 +125,7 @@ BOOST_AUTO_TEST_SUITE(intersect)
         auto  first = {1, 1, 1};
         auto second = {1, 1, 1};
         auto  third = {1, 1, 1};
-        auto ranges =
-        {
-            boost::make_iterator_range(first),
-            boost::make_iterator_range(second),
-            boost::make_iterator_range(third)
-        };
+        auto ranges = burst::make_range_vector(first, second, third);
 
         auto intersected_range = burst::intersect(ranges, std::less<int>());
 
@@ -175,7 +161,7 @@ BOOST_AUTO_TEST_SUITE(intersect)
     {
         auto  first = {0, 0, 1};
         auto second = {0, 1, 1};
-        auto ranges = {boost::make_iterator_range(first), boost::make_iterator_range(second)};
+        auto ranges = burst::make_range_vector(first, second);
 
         auto intersected_range = burst::intersect(ranges);
 
