@@ -20,12 +20,12 @@ namespace burst
     <
         union_iterator<typename RandomAccessRange::value_type, Compare>
     >
-    unite (RandomAccessRange && ranges, Compare compare)
+    unite (const RandomAccessRange & ranges, Compare compare)
     {
         return boost::make_iterator_range
         (
-            make_union_iterator(std::forward<RandomAccessRange>(ranges), compare),
-            make_union_iterator(std::forward<RandomAccessRange>(ranges), compare, iterator::end_tag)
+            make_union_iterator(ranges, compare),
+            make_union_iterator(ranges, compare, iterator::end_tag)
         );
     }
 
@@ -40,12 +40,12 @@ namespace burst
     <
         union_iterator<typename RandomAccessRange::value_type>
     >
-    unite (RandomAccessRange && ranges)
+    unite (const RandomAccessRange & ranges)
     {
         return boost::make_iterator_range
         (
-            make_union_iterator(std::forward<RandomAccessRange>(ranges)),
-            make_union_iterator(std::forward<RandomAccessRange>(ranges), iterator::end_tag)
+            make_union_iterator(ranges),
+            make_union_iterator(ranges, iterator::end_tag)
         );
     }
 
