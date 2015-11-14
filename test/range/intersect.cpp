@@ -72,8 +72,8 @@ BOOST_AUTO_TEST_SUITE(intersect)
 
     BOOST_AUTO_TEST_CASE(intersecting_saw_toothed_ranges_results_empty_range)
     {
-        auto first = burst::make_list({'h', 'f', 'd', 'b'});
-        auto second = burst::make_list({'g', 'e', 'c', 'a'});
+        auto  first = burst::make_list({'h',      'f',      'd',      'b'     });
+        auto second = burst::make_list({     'g',      'e',      'c',      'a'});
         auto ranges = burst::make_range_vector(first, second);
 
         auto intersected_range = burst::intersect(ranges, std::greater<char>());
@@ -83,8 +83,9 @@ BOOST_AUTO_TEST_SUITE(intersect)
 
     BOOST_AUTO_TEST_CASE(intersecting_two_overlaying_ranges_results_overlayed_part)
     {
-        auto  first = {3, 2, 1};
-        auto second = {4, 3, 2};
+        auto  first = {   3, 2, 1};
+        auto second = {4, 3, 2   };
+        //                ^  ^
         auto ranges = burst::make_range_vector(first, second);
 
         auto intersected_range = burst::intersect(ranges, std::greater<int>());
@@ -99,9 +100,9 @@ BOOST_AUTO_TEST_SUITE(intersect)
 
     BOOST_AUTO_TEST_CASE(intersecting_pairwise_overlaying_but_mutual_disjoint_ranges_results_empty_range)
     {
-        auto  first = {1, 2};
-        auto second = {2, 3};
-        auto  third = {3, 4};
+        auto  first = {1, 2      };
+        auto second = {   2, 3   };
+        auto  third = {      3, 4};
         auto ranges = burst::make_range_vector(first, second, third);
 
         auto intersected_range = burst::intersect(ranges);
@@ -111,9 +112,9 @@ BOOST_AUTO_TEST_SUITE(intersect)
 
     BOOST_AUTO_TEST_CASE(intersecting_several_consecutive_sorted_ranges_results_empty_range)
     {
-        auto  first = {1, 2, 3};
-        auto second = {4, 5, 6};
-        auto  third = {7, 8, 9};
+        auto  first = {1, 2, 3                  };
+        auto second = {         4, 5, 6         };
+        auto  third = {                  7, 8, 9};
         auto ranges = burst::make_range_vector(first, second, third);
 
         auto intersected_range = burst::intersect(ranges, std::less<int>());
@@ -139,9 +140,10 @@ BOOST_AUTO_TEST_SUITE(intersect)
 
     BOOST_AUTO_TEST_CASE(intersect_function_accepts_inplace_initializer_list)
     {
-        auto natural = burst::make_vector({1, 2, 3, 4, 5, 6, 7});
-        auto prime = burst::make_vector({2, 3, 5, 7});
-        auto odd = burst::make_vector({1, 3, 5, 7, 9});
+        auto natural = burst::make_vector({1, 2, 3, 4, 5, 6, 7   });
+        auto   prime = burst::make_vector({   2, 3,    5,    7   });
+        auto     odd = burst::make_vector({1,    3,    5,    7, 9});
+        //                                       ^     ^     ^
 
         auto intersected_range = burst::intersect
         ({
