@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_SUITE(merge)
 
         auto merged_range = burst::merge(ranges, std::greater<char>());
 
-        std::vector<char> expected_collection{'h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'};
+        auto expected_collection = {'h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'};
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
             std::begin(merged_range), std::end(merged_range),
@@ -94,7 +94,7 @@ BOOST_AUTO_TEST_SUITE(merge)
             boost::make_iterator_range(odd)
         });
 
-        std::vector<int> all{1, 2, 3, 4, 5, 6};
+        auto all = {1, 2, 3, 4, 5, 6};
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
             std::begin(all), std::end(all),

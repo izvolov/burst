@@ -65,7 +65,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
 
         burst::k_ary_search_set<int> set(numbers.begin(), numbers.end(), 3);
 
-        std::vector<int> expected{7, 10, 2, 5, 8, 9, 11, 12, 0, 1, 3, 4, 6};
+        auto expected = {7, 10, 2, 5, 8, 9, 11, 12, 0, 1, 3, 4, 6};
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
             set.begin(), set.end(),
@@ -77,7 +77,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
     {
         burst::k_ary_search_set<int> set(burst::container::unique_ordered_tag, {0, 1, 2, 3, 4, 5, 6, 7}, 3);
 
-        std::vector<int> expected{2, 5, 0, 1, 3, 4, 6, 7};
+        auto expected = {2, 5, 0, 1, 3, 4, 6, 7};
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
             set.begin(), set.end(),

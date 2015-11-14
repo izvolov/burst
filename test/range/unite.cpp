@@ -97,7 +97,7 @@ BOOST_AUTO_TEST_SUITE(unite)
 
         auto range_union = burst::unite(ranges, std::greater<int>());
 
-        std::vector<int> expected_collection{5, 4, 3, 2, 1};
+        auto expected_collection = {5, 4, 3, 2, 1};
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
             std::begin(range_union), std::end(range_union),
@@ -118,7 +118,7 @@ BOOST_AUTO_TEST_SUITE(unite)
             boost::make_iterator_range(third)
         });
 
-        std::vector<int> expected_collection{1, 1, 1, 2, 2, 3};
+        auto expected_collection = {1, 1, 1, 2, 2, 3};
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
             std::begin(range_union), std::end(range_union),

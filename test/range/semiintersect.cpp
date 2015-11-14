@@ -162,7 +162,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
 
         auto semiintersection = burst::semiintersect(ranges, 2, std::greater<int>());
 
-        std::vector<int> expected_collection{3, 2};
+        auto expected_collection = {3, 2};
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
             std::begin(semiintersection), std::end(semiintersection),
@@ -180,7 +180,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
 
         auto semiintersection = burst::semiintersect(ranges, 1);
 
-        std::vector<int> expected{1, 2, 3, 3, 4};
+        auto expected = {1, 2, 3, 3, 4};
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
             std::begin(semiintersection), std::end(semiintersection),
@@ -198,7 +198,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
 
         auto semiintersection = burst::semiintersect(ranges, 2);
 
-        std::vector<int> expected{2, 3};
+        auto expected = {2, 3};
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
             std::begin(semiintersection), std::end(semiintersection),
@@ -228,7 +228,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
 
         auto semiintersection = burst::semiintersect(ranges, 1, std::less<int>());
 
-        std::vector<int> expected{1, 2, 3, 4, 5, 6, 7, 8, 9};
+        auto expected = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
             std::begin(semiintersection), std::end(semiintersection),
@@ -267,7 +267,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
             boost::make_iterator_range(odd)
         }, 2);
 
-        std::vector<int> expected{1, 2, 3, 5, 7};
+        auto expected = {1, 2, 3, 5, 7};
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
             std::begin(semiintersection), std::end(semiintersection),

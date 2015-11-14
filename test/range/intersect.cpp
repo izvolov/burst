@@ -88,7 +88,7 @@ BOOST_AUTO_TEST_SUITE(intersect)
 
         auto intersected_range = burst::intersect(ranges, std::greater<int>());
 
-        std::vector<int> expected_collection{3, 2};
+        auto expected_collection = {3, 2};
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
             std::begin(intersected_range), std::end(intersected_range),
@@ -149,7 +149,7 @@ BOOST_AUTO_TEST_SUITE(intersect)
             boost::make_iterator_range(odd)
         });
 
-        std::vector<int> expected{3, 5, 7};
+        auto expected = {3, 5, 7};
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
             std::begin(intersected_range), std::end(intersected_range),
