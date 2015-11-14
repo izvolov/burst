@@ -8,6 +8,7 @@
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
+#include <burst/container/make_list.hpp>
 #include <burst/range/make_range_vector.hpp>
 #include <burst/range/unite.hpp>
 
@@ -79,8 +80,8 @@ BOOST_AUTO_TEST_SUITE(unite)
 
     BOOST_AUTO_TEST_CASE(uniting_saw_toothed_ranges_results_range_containing_all_their_elements)
     {
-        std::list<char> first{'h', 'f', 'd', 'b'};
-        std::list<char> second{'g', 'e', 'c', 'a'};
+        auto first = burst::make_list({'h', 'f', 'd', 'b'});
+        auto second = burst::make_list({'g', 'e', 'c', 'a'});
         auto ranges = burst::make_range_vector(first, second);
 
         auto range_union = burst::unite(ranges, std::greater<char>());

@@ -6,6 +6,7 @@
 #include <boost/test/unit_test.hpp>
 
 #include <burst/container/k_ary_search_set.hpp>
+#include <burst/container/make_vector.hpp>
 
 BOOST_AUTO_TEST_SUITE(k_ary_search)
     BOOST_AUTO_TEST_CASE(k_ary_search_set_initialized_with_default_constructor_is_empty)
@@ -52,7 +53,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
 
     BOOST_AUTO_TEST_CASE(k_ary_search_set_size_is_equal_to_size_of_range_it_is_initialized_from)
     {
-        std::vector<int> something{1, 2, 3, 4};
+        auto something = burst::make_vector({1, 2, 3, 4});
 
         burst::k_ary_search_set<int> set(burst::container::unique_ordered_tag, something.begin(), something.end());
 
@@ -61,7 +62,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
 
     BOOST_AUTO_TEST_CASE(k_ary_search_set_is_initialized_properly_when_it_is_perfect_ternary_tree)
     {
-        std::vector<int> numbers{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+        auto numbers = burst::make_vector({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
 
         burst::k_ary_search_set<int> set(numbers.begin(), numbers.end(), 3);
 
@@ -87,7 +88,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
 
     BOOST_AUTO_TEST_CASE(k_ary_search_set_is_initialized_properly_when_arity_is_greater_than_its_size)
     {
-        std::vector<int> numbers{0, 1, 2, 3, 4, 5, 6, 7};
+        auto numbers = burst::make_vector({0, 1, 2, 3, 4, 5, 6, 7});
 
         burst::k_ary_search_set<int> set(numbers.begin(), numbers.end(), 129);
 
@@ -116,7 +117,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
 
     BOOST_AUTO_TEST_CASE(searching_existing_value_results_non_end_iterator)
     {
-        std::vector<int> numbers{3, 4, 6, 1, 7, 8, 2};
+        auto numbers = burst::make_vector({3, 4, 6, 1, 7, 8, 2});
 
         burst::k_ary_search_set<int> set(numbers.begin(), numbers.end(), 3);
 
@@ -125,7 +126,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
 
     BOOST_AUTO_TEST_CASE(searching_existing_value_results_iterator_pointing_to_that_value)
     {
-        std::vector<int> numbers{3, 4, 6, 1, 7, 8, 2};
+        auto numbers = burst::make_vector({3, 4, 6, 1, 7, 8, 2});
 
         burst::k_ary_search_set<int, std::greater<int>> set(numbers.begin(), numbers.end(), 4);
 

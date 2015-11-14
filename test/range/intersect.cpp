@@ -1,6 +1,5 @@
 #include <functional>
 #include <iterator>
-#include <list>
 #include <string>
 #include <vector>
 
@@ -8,6 +7,8 @@
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
+#include <burst/container/make_list.hpp>
+#include <burst/container/make_vector.hpp>
 #include <burst/range/intersect.hpp>
 #include <burst/range/make_range_vector.hpp>
 
@@ -71,8 +72,8 @@ BOOST_AUTO_TEST_SUITE(intersect)
 
     BOOST_AUTO_TEST_CASE(intersecting_saw_toothed_ranges_results_empty_range)
     {
-        std::list<char> first{'h', 'f', 'd', 'b'};
-        std::list<char> second{'g', 'e', 'c', 'a'};
+        auto first = burst::make_list({'h', 'f', 'd', 'b'});
+        auto second = burst::make_list({'g', 'e', 'c', 'a'});
         auto ranges = burst::make_range_vector(first, second);
 
         auto intersected_range = burst::intersect(ranges, std::greater<char>());
@@ -138,9 +139,9 @@ BOOST_AUTO_TEST_SUITE(intersect)
 
     BOOST_AUTO_TEST_CASE(intersect_function_accepts_inplace_initializer_list)
     {
-        std::vector<int> natural{1, 2, 3, 4, 5, 6, 7};
-        std::vector<int> prime{2, 3, 5, 7};
-        std::vector<int> odd{1, 3, 5, 7, 9};
+        auto natural = burst::make_vector({1, 2, 3, 4, 5, 6, 7});
+        auto prime = burst::make_vector({2, 3, 5, 7});
+        auto odd = burst::make_vector({1, 3, 5, 7, 9});
 
         auto intersected_range = burst::intersect
         ({

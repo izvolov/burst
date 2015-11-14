@@ -1,5 +1,4 @@
 #include <iterator>
-#include <list>
 #include <string>
 #include <vector>
 
@@ -9,6 +8,8 @@
 #include <boost/range/rend.hpp>
 #include <boost/test/unit_test.hpp>
 
+#include <burst/container/make_list.hpp>
+#include <burst/container/make_vector.hpp>
 #include <burst/range/join.hpp>
 #include <burst/range/make_range_vector.hpp>
 
@@ -40,8 +41,8 @@ BOOST_AUTO_TEST_SUITE(join)
 
     BOOST_AUTO_TEST_CASE(overlaying_ranges_do_not_blend)
     {
-        std::list<int>  first = {1, 2, 3};
-        std::list<int> second = {2, 3, 4};
+        auto  first = burst::make_list({1, 2, 3});
+        auto second = burst::make_list({2, 3, 4});
         auto ranges = burst::make_range_vector(first, second);
 
         auto joint_range = burst::join(ranges);
@@ -73,8 +74,8 @@ BOOST_AUTO_TEST_SUITE(join)
 
     BOOST_AUTO_TEST_CASE(modifying_joint_mutable_ranges_is_allowed)
     {
-        std::vector<int> first{100, 50};
-        std::vector<int> second{70, 30};
+        auto first = burst::make_vector({100, 50});
+        auto second = burst::make_vector({70, 30});
         auto ranges = burst::make_range_vector(first, second);
 
         auto joint_range = burst::join(ranges);
@@ -107,8 +108,8 @@ BOOST_AUTO_TEST_SUITE(join)
 
     BOOST_AUTO_TEST_CASE(random_access_joined_range_has_size_method)
     {
-        std::vector<int>  first{1, 0};
-        std::vector<int> second{3, 2};
+        auto  first = burst::make_vector({1, 0});
+        auto second = burst::make_vector({3, 2});
         auto ranges = burst::make_range_vector(first, second);
 
         auto joint_range = burst::join(ranges);

@@ -4,6 +4,7 @@
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
+#include <burst/container/make_vector.hpp>
 #include <burst/range/skip_to_upper_bound.hpp>
 
 BOOST_AUTO_TEST_SUITE(skip_to_upper_bound)
@@ -19,7 +20,7 @@ BOOST_AUTO_TEST_SUITE(skip_to_upper_bound)
 
     BOOST_AUTO_TEST_CASE(skipping_by_existing_value_makes_range_begin_after_last_occurence_of_the_value)
     {
-        std::vector<int> values{1, 5, 5, 7};
+        auto values = burst::make_vector({1, 5, 5, 7});
         auto sorted_range = boost::make_iterator_range(values);
 
         burst::skip_to_upper_bound(sorted_range, 5);

@@ -1,12 +1,13 @@
 #include <functional>
 #include <iterator>
-#include <list>
 #include <vector>
 
 #include <boost/range/algorithm/for_each.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
+#include <burst/container/make_list.hpp>
+#include <burst/container/make_vector.hpp>
 #include <burst/range/make_range_vector.hpp>
 #include <burst/range/merge.hpp>
 
@@ -36,8 +37,8 @@ BOOST_AUTO_TEST_SUITE(merge)
 
     BOOST_AUTO_TEST_CASE(merging_saw_toothed_sorted_ranges_results_sorted_range_containing_all_elements_from_initial_ranges)
     {
-        std::list<char> first{'h', 'f', 'd', 'b'};
-        std::list<char> second{'g', 'e', 'c', 'a'};
+        auto first = burst::make_list({'h', 'f', 'd', 'b'});
+        auto second = burst::make_list({'g', 'e', 'c', 'a'});
         auto ranges = burst::make_range_vector(first, second);
 
         auto merged_range = burst::merge(ranges, std::greater<char>());
@@ -69,8 +70,8 @@ BOOST_AUTO_TEST_SUITE(merge)
 
     BOOST_AUTO_TEST_CASE(modifying_merged_mutable_ranges_is_allowed)
     {
-        std::vector<int> first{100, 50};
-        std::vector<int> second{70, 30};
+        auto first = burst::make_vector({100, 50});
+        auto second = burst::make_vector({70, 30});
 
         auto ranges = burst::make_range_vector(first, second);
 
@@ -85,8 +86,8 @@ BOOST_AUTO_TEST_SUITE(merge)
 
     BOOST_AUTO_TEST_CASE(merge_function_accepts_inplace_initializer_list)
     {
-        std::vector<int> even{2, 4, 6};
-        std::vector<int>  odd{1, 3, 5};
+        auto even = burst::make_vector({2, 4, 6});
+        auto  odd = burst::make_vector({1, 3, 5});
 
         auto merged_range = burst::merge
         ({

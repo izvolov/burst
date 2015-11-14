@@ -25,8 +25,8 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
 
     BOOST_AUTO_TEST_CASE(semiintersection_of_min_items_larger_than_range_count_is_empty)
     {
-        std::vector<int>  first{1, 2, 3, 4};
-        std::vector<int> second{1, 2, 3, 4};
+        auto  first = burst::make_vector({1, 2, 3, 4});
+        auto second = burst::make_vector({1, 2, 3, 4});
         auto ranges = burst::make_range_vector(first, second);
 
         auto semiintersection = burst::semiintersect(ranges, 10);
@@ -255,10 +255,10 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
 
     BOOST_AUTO_TEST_CASE(semiintersect_function_accepts_inplace_initializer_list)
     {
-        std::vector<int> natural{1, 2, 3, 4, 5, 6, 7   };
-        std::vector<int>   prime{   2, 3,    5,    7   };
-        std::vector<int>     odd{1,    3,    5,    7, 9};
-        //                       ^  ^  ^     ^     ^
+        auto natural = burst::make_vector({1, 2, 3, 4, 5, 6, 7   });
+        auto   prime = burst::make_vector({   2, 3,    5,    7   });
+        auto     odd = burst::make_vector({1,    3,    5,    7, 9});
+        //                                 ^  ^  ^     ^     ^
 
         auto semiintersection = burst::semiintersect
         ({

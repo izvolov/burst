@@ -3,6 +3,7 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <burst/container/make_vector.hpp>
 #include <burst/iterator/join_iterator.hpp>
 #include <burst/range/make_range_vector.hpp>
 
@@ -51,8 +52,8 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
 
     BOOST_AUTO_TEST_CASE(modifying_a_copy_of_join_iterator_does_not_affect_the_original_iterator)
     {
-        std::vector<int> first{100, 50};
-        std::vector<int> second{70, 30};
+        auto first = burst::make_vector({100, 50});
+        auto second = burst::make_vector({70, 30});
         auto ranges = burst::make_range_vector(first, second);
 
         auto join_iterator = burst::make_join_iterator(ranges);
