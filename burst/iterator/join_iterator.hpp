@@ -3,6 +3,8 @@
 
 #include <iterator>
 
+#include <boost/iterator/iterator_categories.hpp>
+
 #include <burst/iterator/detail/join_iterator.hpp>
 #include <burst/iterator/end_tag.hpp>
 
@@ -53,7 +55,11 @@ namespace burst
         detail::join_iterator_impl
         <
             Range,
-            typename std::iterator_traits<typename Range::iterator>::iterator_category
+            typename boost::iterators::pure_traversal_tag
+            <
+                typename boost::iterator_traversal<typename Range::iterator>::type
+            >
+            ::type
         >;
 
     //!     Функция для создания итератора склейки.

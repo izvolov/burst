@@ -156,10 +156,10 @@ namespace burst
             итератор склейки произвольного доступа за O(1).
          */
         template <typename RandomAccessRange>
-        class join_iterator_impl<RandomAccessRange, std::random_access_iterator_tag>:
+        class join_iterator_impl<RandomAccessRange, boost::random_access_traversal_tag>:
             public boost::iterator_facade
             <
-                join_iterator_impl<RandomAccessRange, std::random_access_iterator_tag>,
+                join_iterator_impl<RandomAccessRange, boost::random_access_traversal_tag>,
                 typename RandomAccessRange::value_type,
                 boost::random_access_traversal_tag,
                 typename RandomAccessRange::reference
