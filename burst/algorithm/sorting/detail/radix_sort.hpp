@@ -107,8 +107,7 @@ namespace burst
             difference_type counters[traits::radix_count][traits::radix_value_range + 1] = {{0}};
             detail::collect(first, last, map, radix, counters);
 
-            auto distance = std::distance(first, last);
-            auto buffer_end = buffer_begin + distance;
+            auto buffer_end = buffer_begin + std::distance(first, last);
 
             auto get_low_radix = [& radix, & map] (const value_type & value) { return radix(map(value)); };
             detail::dispose(first, last, buffer_begin, get_low_radix, counters[0]);
