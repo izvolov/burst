@@ -2,6 +2,7 @@
 #define BURST_ALGORITHM_SORTING_COUNTING_SORT_HPP
 
 #include <burst/algorithm/sorting/detail/counting_sort.hpp>
+#include <burst/algorithm/sorting/detail/to_unsigned.hpp>
 #include <burst/functional/identity.hpp>
 
 namespace burst
@@ -43,7 +44,7 @@ namespace burst
     template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
     RandomAccessIterator counting_sort (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
     {
-        return detail::counting_sort_impl(first, last, result, map);
+        return detail::counting_sort_impl(first, last, result, detail::to_unsigned(std::move(map)));
     }
 
     template <typename ForwardIterator, typename RandomAccessIterator>

@@ -22,9 +22,7 @@ namespace burst
                 "Сортируемые элементы должны быть отображены в целые числа."
             );
 
-            constexpr static const auto min_value = std::numeric_limits<image_type>::min();
-            constexpr static const auto max_value = std::numeric_limits<image_type>::max();
-            constexpr static const auto value_range = max_value - min_value + 1;
+            constexpr static const auto value_range = std::numeric_limits<image_type>::max() + 1;
         };
 
         //!     Собрать счётчики.
@@ -35,13 +33,10 @@ namespace burst
         template <typename ForwardIterator, typename Map, typename Array>
         void collect (ForwardIterator first, ForwardIterator last, Map map, Array & counters)
         {
-            using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
-            using traits = counting_sort_traits<value_type, Map>;
-
             std::for_each(first, last,
-                [& counters, & map] (const value_type & preimage)
+                [& counters, & map] (const auto & preimage)
                 {
-                    ++counters[map(preimage) - traits::min_value + 1];
+                    ++counters[map(preimage) + 1];
                 });
 
             std::partial_sum(std::begin(counters), std::end(counters), std::begin(counters));
@@ -55,13 +50,10 @@ namespace burst
         template <typename ForwardIterator, typename RandomAccessIterator, typename Map, typename Array>
         void dispose (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map, Array & counters)
         {
-            using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
-            using traits = counting_sort_traits<value_type, Map>;
-
             std::for_each(first, last,
-                [& result, & counters, & map] (const value_type & preimage)
+                [& result, & counters, & map] (const auto & preimage)
                 {
-                    auto index = counters[map(preimage) - traits::min_value]++;
+                    auto index = counters[map(preimage)]++;
                     result[index] = preimage;
                 });
         }

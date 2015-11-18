@@ -5,6 +5,22 @@ namespace burst
 {
     namespace detail
     {
+        //!     Преобразовать целочисленный тип к беззнаковому.
+        /*!
+                std::make_unsigned не работает с типом bool.
+         */
+        template <typename T>
+        struct make_unsigned_even_bool
+        {
+            using type = typename std::make_unsigned<T>::type;
+        };
+
+        template <>
+        struct make_unsigned_even_bool <bool>
+        {
+            using type = bool;
+        };
+
         //!     Преобразование результата вызова к беззнаковому типу.
         /*!
                 Функциональный объект, принимающий некоторое значение, применяющий к нему заданную
@@ -25,14 +41,14 @@ namespace burst
                 typename std::enable_if
                 <
                     std::is_signed<typename std::decay<typename std::result_of<Map(Value)>::type>::type>::value,
-                    typename std::make_unsigned<typename std::decay<typename std::result_of<Map(Value)>::type>::type>::type
+                    typename make_unsigned_even_bool<typename std::decay<typename std::result_of<Map(Value)>::type>::type>::type
                 >
                 ::type
             {
                 using integer_type = typename std::decay<typename std::result_of<Map(Value)>::type>::type;
                 constexpr static const auto min_value = std::numeric_limits<integer_type>::min();
 
-                return static_cast<typename std::make_unsigned<integer_type>::type>(map(std::forward<Value>(value)) - min_value);
+                return static_cast<typename make_unsigned_even_bool<integer_type>::type>(map(std::forward<Value>(value)) - min_value);
             }
 
             template <typename Value>
