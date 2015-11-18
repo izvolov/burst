@@ -37,30 +37,12 @@ namespace burst
         struct to_unsigned_t
         {
             template <typename Value>
-            auto operator () (Value && value) const ->
-                typename std::enable_if
-                <
-                    std::is_signed<typename std::decay<typename std::result_of<Map(Value)>::type>::type>::value,
-                    typename make_unsigned_even_bool<typename std::decay<typename std::result_of<Map(Value)>::type>::type>::type
-                >
-                ::type
+            auto operator () (Value && value) const
             {
                 using integer_type = typename std::decay<typename std::result_of<Map(Value)>::type>::type;
                 constexpr static const auto min_value = std::numeric_limits<integer_type>::min();
 
                 return static_cast<typename make_unsigned_even_bool<integer_type>::type>(map(std::forward<Value>(value)) - min_value);
-            }
-
-            template <typename Value>
-            auto operator () (Value && value) const ->
-                typename std::enable_if
-                <
-                    std::is_unsigned<typename std::decay<typename std::result_of<Map(Value)>::type>::type>::value,
-                    typename std::result_of<Map(Value)>::type
-                >
-                ::type
-            {
-                return map(std::forward<Value>(value));
             }
 
             Map map;
