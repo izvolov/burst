@@ -10,7 +10,7 @@ before_install:
   - ./bootstrap.sh
   - sudo ./b2 --with-test --with-program_options install -d0
   - cd ..
-  - wget http://www.cmake.org/files/v3.1/cmake-3.1.2.tar.gz
+  - wget --no-check-certificate http://www.cmake.org/files/v3.1/cmake-3.1.2.tar.gz
   - tar xf cmake-3.1.2.tar.gz
   - cd cmake-3.1.2
   - ./bootstrap
