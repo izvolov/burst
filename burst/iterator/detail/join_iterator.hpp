@@ -173,7 +173,7 @@ namespace burst
             <
                 join_iterator_impl,
                 typename range_type::value_type,
-                boost::forward_traversal_tag,
+                boost::random_access_traversal_tag,
                 typename range_type::reference
             >
             base_type;
