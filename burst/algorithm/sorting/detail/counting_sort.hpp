@@ -62,14 +62,14 @@ namespace burst
         RandomAccessIterator counting_sort_impl (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
         {
             using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
-            using traits = detail::counting_sort_traits<value_type, Map>;
+            using traits = counting_sort_traits<value_type, Map>;
 
             using difference_type = typename std::iterator_traits<RandomAccessIterator>::difference_type;
             // Единица для дополнительного нуля в начале массива.
             difference_type counters[traits::value_range + 1] = {0};
 
-            detail::collect(first, last, map, counters);
-            detail::dispose(first, last, result, map, counters);
+            collect(first, last, map, counters);
+            dispose(first, last, result, map, counters);
 
             return result + counters[traits::value_range];
         }

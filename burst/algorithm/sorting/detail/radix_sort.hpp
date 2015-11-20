@@ -72,7 +72,7 @@ namespace burst
         void collect (ForwardIterator first, ForwardIterator last, Map map, Radix radix, Array & counters)
         {
             using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
-            constexpr auto radix_count = detail::radix_sort_traits<value_type, Map, Radix>::radix_count;
+            constexpr auto radix_count = radix_sort_traits<value_type, Map, Radix>::radix_count;
             collect_impl(first, last, map, radix, counters, std::make_index_sequence<radix_count>());
         }
 
@@ -101,25 +101,25 @@ namespace burst
             )
         {
             using value_type = typename std::iterator_traits<RandomAccessIterator1>::value_type;
-            using traits = detail::radix_sort_traits<value_type, Map, Radix>;
+            using traits = radix_sort_traits<value_type, Map, Radix>;
 
             using difference_type = typename std::iterator_traits<RandomAccessIterator1>::difference_type;
             difference_type counters[traits::radix_count][traits::radix_value_range + 1] = {{0}};
-            detail::collect(first, last, map, radix, counters);
+            collect(first, last, map, radix, counters);
 
             auto buffer_end = buffer_begin + std::distance(first, last);
 
             auto get_low_radix = [& radix, & map] (const value_type & value) { return radix(map(value)); };
-            detail::dispose(first, last, buffer_begin, get_low_radix, counters[0]);
+            dispose(first, last, buffer_begin, get_low_radix, counters[0]);
 
             for (std::size_t radix_number = 1; radix_number < traits::radix_count - 1; radix_number += 2)
             {
-                detail::dispose(buffer_begin, buffer_end, first, nth_radix(radix_number, map, radix), counters[radix_number]);
-                detail::dispose(first, last, buffer_begin, nth_radix(radix_number + 1, map, radix), counters[radix_number + 1]);
+                dispose(buffer_begin, buffer_end, first, nth_radix(radix_number, map, radix), counters[radix_number]);
+                dispose(first, last, buffer_begin, nth_radix(radix_number + 1, map, radix), counters[radix_number + 1]);
             }
 
             auto get_high_radix = nth_radix(traits::radix_count - 1, map, radix);
-            detail::dispose(buffer_begin, buffer_end, first, get_high_radix, counters[traits::radix_count - 1]);
+            dispose(buffer_begin, buffer_end, first, get_high_radix, counters[traits::radix_count - 1]);
         }
 
         //!     Специализация для случая, когда в сортируемом числе всего один разряд.
@@ -130,7 +130,7 @@ namespace burst
         template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map, typename Radix>
         typename std::enable_if
         <
-            detail::radix_sort_traits
+            radix_sort_traits
             <
                 typename std::iterator_traits<RandomAccessIterator1>::value_type,
                 Map,
@@ -158,7 +158,7 @@ namespace burst
         template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map, typename Radix>
         typename std::enable_if
         <
-            detail::radix_sort_traits
+            radix_sort_traits
             <
                 typename std::iterator_traits<RandomAccessIterator1>::value_type,
                 Map,
