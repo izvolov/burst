@@ -8,6 +8,10 @@ set(UNIT_TEST_SOURCES test_main.cpp
     algorithm/sorting/counting_sort.cpp
     algorithm/sorting/radix_sort.cpp
     algorithm/sum.cpp
+    container/access/back.cpp
+    container/access/cback.cpp
+    container/access/cfront.cpp
+    container/access/front.cpp
     container/dynamic_tuple.cpp
     container/k_ary_search_set.cpp
     functional/low_byte.cpp
