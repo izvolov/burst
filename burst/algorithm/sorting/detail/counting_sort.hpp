@@ -8,6 +8,8 @@
 #include <type_traits>
 #include <vector>
 
+#include <burst/container/access/cback.hpp>
+
 namespace burst
 {
     namespace detail
@@ -71,7 +73,7 @@ namespace burst
             collect(first, last, map, counters);
             dispose(first, last, result, map, counters);
 
-            return result + counters[traits::value_range];
+            return result + burst::cback(counters);
         }
     } // namespace detail
 } // namespace burst
