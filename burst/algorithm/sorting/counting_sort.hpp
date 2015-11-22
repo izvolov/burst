@@ -13,8 +13,11 @@ namespace burst
         O(max(N, M)) дополнительной памяти, где N — размер входного диапазона, M — максимальное
         значение сортируемых целых чисел. Максимальное значение вычисляется на этапе компиляции,
         исходя из типа, возвращаемого отображением "Map".
-            Результат сортировки записывается в выходной диапазон, а входной диапазон остаётся без
-        изменений. Выходной диапазон должен быть не меньше входного, чтобы в него влезли
+            В версии "_copy" результат сортировки записывается в выходной диапазон, а входной
+        диапазон остаётся без изменений.
+            В версии "_move" элементы входного диапазона в результате сортировки перемещаются в
+        выходной.
+            Выходной диапазон должен быть не меньше входного, чтобы в него влезли
         отсортированные данные.
 
         \tparam ForwardIterator
@@ -42,15 +45,27 @@ namespace burst
            элементы входного диапазона на их места в отсортированном диапазоне.
      */
     template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
-    RandomAccessIterator counting_sort (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
+    RandomAccessIterator counting_sort_copy (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
     {
-        return detail::counting_sort_impl(first, last, result, detail::to_unsigned(std::move(map)));
+        return detail::counting_sort_copy_impl(first, last, result, detail::to_unsigned(std::move(map)));
     }
 
     template <typename ForwardIterator, typename RandomAccessIterator>
-    RandomAccessIterator counting_sort (ForwardIterator first, ForwardIterator last, RandomAccessIterator result)
+    RandomAccessIterator counting_sort_copy (ForwardIterator first, ForwardIterator last, RandomAccessIterator result)
     {
-        return counting_sort(first, last, result, identity<>());
+        return counting_sort_copy(first, last, result, identity<>());
+    }
+
+    template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
+    RandomAccessIterator counting_sort_move (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
+    {
+        return detail::counting_sort_move_impl(first, last, result, detail::to_unsigned(std::move(map)));
+    }
+
+    template <typename ForwardIterator, typename RandomAccessIterator>
+    RandomAccessIterator counting_sort_move (ForwardIterator first, ForwardIterator last, RandomAccessIterator result)
+    {
+        return counting_sort_move(first, last, result, identity<>());
     }
 }
 

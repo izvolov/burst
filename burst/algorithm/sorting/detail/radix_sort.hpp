@@ -141,7 +141,7 @@ namespace burst
         >
         ::type radix_sort_impl (RandomAccessIterator1 first, RandomAccessIterator1 last, RandomAccessIterator2 buffer, Map map, Radix radix)
         {
-            auto buffer_end = counting_sort_impl(first, last, buffer,
+            auto buffer_end = counting_sort_move_impl(first, last, buffer,
                 [& map, & radix] (const auto & value)
                 {
                     return radix(map(value));

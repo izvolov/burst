@@ -53,15 +53,21 @@ namespace burst
         void dispose (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map, Array & counters)
         {
             std::for_each(first, last,
-                [& result, & counters, & map] (const auto & preimage)
+                [& result, & counters, & map] (auto && preimage)
                 {
                     auto index = counters[map(preimage)]++;
-                    result[index] = preimage;
+                    result[index] = std::forward<decltype(preimage)>(preimage);
                 });
         }
 
-        template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
-        RandomAccessIterator counting_sort_impl (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
+        template <typename ForwardIterator, typename RandomAccessIterator, typename Map, typename Array>
+        void dispose_move (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map, Array & counters)
+        {
+            dispose(std::make_move_iterator(first), std::make_move_iterator(last), result, map, counters);
+        }
+
+        template <typename ForwardIterator, typename RandomAccessIterator, typename Map, typename Dispose>
+        RandomAccessIterator counting_sort_impl (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map, Dispose dispose)
         {
             using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
             using traits = counting_sort_traits<value_type, Map>;
@@ -74,6 +80,26 @@ namespace burst
             dispose(first, last, result, map, counters);
 
             return result + burst::cback(counters);
+        }
+
+        template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
+        RandomAccessIterator counting_sort_copy_impl (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
+        {
+            return counting_sort_impl(first, last, result, map,
+                [] (auto && ... xs)
+                {
+                    return dispose(std::forward<decltype(xs)>(xs)...);
+                });
+        }
+
+        template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
+        RandomAccessIterator counting_sort_move_impl (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
+        {
+            return counting_sort_impl(first, last, result, map,
+                [] (auto && ... xs)
+                {
+                    return dispose_move(std::forward<decltype(xs)>(xs)...);
+                });
         }
     } // namespace detail
 } // namespace burst
