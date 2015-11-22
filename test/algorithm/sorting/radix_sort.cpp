@@ -1,8 +1,10 @@
 #include <limits>
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
 
+#include <boost/iterator/indirect_iterator.hpp>
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 #include <boost/range/rbegin.hpp>
@@ -184,6 +186,30 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
             std::begin(values), std::end(values),
+            std::begin(expected), std::end(expected)
+        );
+    }
+
+    BOOST_AUTO_TEST_CASE(can_sort_noncopyable_objects)
+    {
+        std::vector<std::unique_ptr<std::int64_t>> pointers;
+        pointers.emplace_back(std::make_unique<std::int64_t>(30));
+        pointers.emplace_back(std::make_unique<std::int64_t>(5));
+        pointers.emplace_back(std::make_unique<std::int64_t>(-100500));
+        pointers.emplace_back(std::make_unique<std::int64_t>(20152016));
+        pointers.emplace_back(std::make_unique<std::int64_t>(0));
+
+        std::vector<std::unique_ptr<std::int64_t>> buffer(pointers.size());
+        burst::radix_sort(pointers.begin(), pointers.end(), buffer.begin(),
+            [] (const auto & p)
+            {
+                return *p;
+            });
+
+        auto expected = {-100500, 0, 5, 30, 20152016};
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            boost::make_indirect_iterator(std::begin(pointers)), boost::make_indirect_iterator(std::end(pointers)),
             std::begin(expected), std::end(expected)
         );
     }
