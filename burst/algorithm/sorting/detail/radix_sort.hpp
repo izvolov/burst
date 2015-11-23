@@ -76,52 +76,6 @@ namespace burst
             collect_impl(first, last, map, radix, counters, std::make_index_sequence<radix_count>());
         }
 
-        //!     Сортировка с пользовательским буфером.
-        /*!
-                Сортировка происходит между и входным диапазоном и буфером по следующей схеме:
-                Перед обработкой каждого чётного разряда (отсчёт от нуля) во входном диапазоне
-            лежит неотсортированная по этому разряду последовательность. Она сортируется, и
-            результат складывается в буфер.
-                Перед обработкой каждого нечётного разряда в буфере лежит неотсортированная
-            по этому разряду последовательность. Она сортируется, а результат складывается во
-            входной диапазон.
-                Таким образом, в итоге во входном диапазоне оказывается отсортированная
-            последовательность.
-
-                Важное предусловие: в сортируемых числах чётное количество разрядов.
-         */
-        template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map, typename Radix>
-        void radix_sort_with_custom_buffer
-            (
-                RandomAccessIterator1 first,
-                RandomAccessIterator1 last,
-                RandomAccessIterator2 buffer_begin,
-                Map map,
-                Radix radix
-            )
-        {
-            using value_type = typename std::iterator_traits<RandomAccessIterator1>::value_type;
-            using traits = radix_sort_traits<value_type, Map, Radix>;
-
-            using difference_type = typename std::iterator_traits<RandomAccessIterator1>::difference_type;
-            difference_type counters[traits::radix_count][traits::radix_value_range + 1] = {{0}};
-            collect(first, last, map, radix, counters);
-
-            auto buffer_end = buffer_begin + std::distance(first, last);
-
-            auto get_low_radix = [& radix, & map] (const value_type & value) { return radix(map(value)); };
-            dispose_move(first, last, buffer_begin, get_low_radix, counters[0]);
-
-            for (std::size_t radix_number = 1; radix_number < traits::radix_count - 1; radix_number += 2)
-            {
-                dispose_move(buffer_begin, buffer_end, first, nth_radix(radix_number, map, radix), counters[radix_number]);
-                dispose_move(first, last, buffer_begin, nth_radix(radix_number + 1, map, radix), counters[radix_number + 1]);
-            }
-
-            auto get_high_radix = nth_radix(traits::radix_count - 1, map, radix);
-            dispose_move(buffer_begin, buffer_end, first, get_high_radix, counters[traits::radix_count - 1]);
-        }
-
         //!     Специализация для случая, когда в сортируемом числе всего один разряд.
         /*!
                 Вызывает сортировку подсчётом из входного диапазона в буфер, а потом переносит
@@ -154,6 +108,16 @@ namespace burst
         /*!
                 Других случаев не существует по построению. Либо разряд один, либо их количество
             чётно.
+
+                Сортировка происходит между и входным диапазоном и буфером по следующей схеме:
+                Перед обработкой каждого чётного разряда (отсчёт от нуля) во входном диапазоне
+            лежит неотсортированная по этому разряду последовательность. Она сортируется, и
+            результат складывается в буфер.
+                Перед обработкой каждого нечётного разряда в буфере лежит неотсортированная
+            по этому разряду последовательность. Она сортируется, а результат складывается во
+            входной диапазон.
+                Таким образом, в итоге во входном диапазоне оказывается отсортированная
+            последовательность.
          */
         template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map, typename Radix>
         typename std::enable_if
@@ -167,9 +131,28 @@ namespace burst
             ::radix_count % 2 == 0,
             void
         >
-        ::type radix_sort_impl (RandomAccessIterator1 first, RandomAccessIterator1 last, RandomAccessIterator2 buffer, Map map, Radix radix)
+        ::type radix_sort_impl (RandomAccessIterator1 first, RandomAccessIterator1 last, RandomAccessIterator2 buffer_begin, Map map, Radix radix)
         {
-            radix_sort_with_custom_buffer(first, last, buffer, map, radix);
+            using value_type = typename std::iterator_traits<RandomAccessIterator1>::value_type;
+            using traits = radix_sort_traits<value_type, Map, Radix>;
+
+            using difference_type = typename std::iterator_traits<RandomAccessIterator1>::difference_type;
+            difference_type counters[traits::radix_count][traits::radix_value_range + 1] = {{0}};
+            collect(first, last, map, radix, counters);
+
+            auto buffer_end = buffer_begin + std::distance(first, last);
+
+            auto get_low_radix = [& radix, & map] (const value_type & value) { return radix(map(value)); };
+            dispose_move(first, last, buffer_begin, get_low_radix, counters[0]);
+
+            for (std::size_t radix_number = 1; radix_number < traits::radix_count - 1; radix_number += 2)
+            {
+                dispose_move(buffer_begin, buffer_end, first, nth_radix(radix_number, map, radix), counters[radix_number]);
+                dispose_move(first, last, buffer_begin, nth_radix(radix_number + 1, map, radix), counters[radix_number + 1]);
+            }
+
+            auto get_high_radix = nth_radix(traits::radix_count - 1, map, radix);
+            dispose_move(buffer_begin, buffer_end, first, get_high_radix, counters[traits::radix_count - 1]);
         }
     } // namespace detail
 } // namespace burst
