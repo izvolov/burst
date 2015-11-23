@@ -20,7 +20,7 @@ namespace burst
             using image_type = typename std::decay<typename std::result_of<Map(Value)>::type>::type;
             static_assert
             (
-                std::is_integral<image_type>::value,
+                std::is_integral<image_type>::value && std::is_unsigned<image_type>::value,
                 "Сортируемые элементы должны быть отображены в целые числа."
             );
 
