@@ -60,14 +60,14 @@ test_call_type get_call_for_integer (const std::string & integer_type)
 {
     static const std::unordered_map<std::string, test_call_type> test_calls
     {
-        {"u8", &test_all<std::uint8_t>},
-        {"u16", &test_all<std::uint16_t>},
-        {"u32", &test_all<std::uint32_t>},
-        {"u64", &test_all<std::uint64_t>},
-        {"i8", &test_all<std::int8_t>},
-        {"i16", &test_all<std::int16_t>},
-        {"i32", &test_all<std::int32_t>},
-        {"i64", &test_all<std::int64_t>}
+        {"uint8", &test_all<std::uint8_t>},
+        {"uint16", &test_all<std::uint16_t>},
+        {"uint32", &test_all<std::uint32_t>},
+        {"uint64", &test_all<std::uint64_t>},
+        {"int8", &test_all<std::int8_t>},
+        {"int16", &test_all<std::int16_t>},
+        {"int32", &test_all<std::int32_t>},
+        {"int64", &test_all<std::int64_t>}
     };
 
     auto call = test_calls.find(integer_type);
@@ -89,7 +89,7 @@ int main (int argc, const char * argv[])
     description.add_options()
         ("help,h", "Подсказка")
         ("attempts", bpo::value<std::size_t>()->default_value(1000), "Количество испытаний")
-        ("integer", bpo::value<std::string>()->default_value("u32"), "Тип сортируемых чисел. Допустимые значения: u8, u16, u32, u64, i8, i16, i32, i64");
+        ("integer", bpo::value<std::string>()->default_value("uint32"), "Тип сортируемых чисел. Допустимые значения: uint8, uint16, uint32, uint64, int8, int16, int32, int64");
 
     try
     {
