@@ -1,3 +1,4 @@
+#include <chrono>
 #include <iostream>
 
 #include <boost/program_options.hpp>
@@ -6,10 +7,12 @@
 
 void test (std::size_t size, std::size_t attempt_count)
 {
-    clock_t total_time = 0;
+    using namespace std::chrono;
+    auto total_time = steady_clock::duration{0};
+
     for (std::size_t attempt = 0; attempt < attempt_count; ++attempt)
     {
-        clock_t attempt_time = clock();
+        auto attempt_start_time = steady_clock::now();
 
         burst::dynamic_tuple t;
         for (std::size_t iteration = 0; iteration < size; ++iteration)
@@ -17,12 +20,12 @@ void test (std::size_t size, std::size_t attempt_count)
             t.push_back('a');
         }
 
-        attempt_time = clock() - attempt_time;
+        auto attempt_time = steady_clock::now() - attempt_start_time;
 
         total_time += attempt_time;
     }
 
-    std::cout << "Время: " << static_cast<double>(total_time) / CLOCKS_PER_SEC << std::endl;
+    std::cout << "Время: " << ' ' << duration_cast<duration<double>>(total_time).count() << std::endl;
 }
 
 int main (int argc, const char * argv[])
