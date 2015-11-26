@@ -22,7 +22,7 @@ void test (std::size_t size, std::size_t attempt_count)
         total_time += attempt_time;
     }
 
-    std::cout << "Среднее время: " << static_cast<double>(total_time) / static_cast<double>(attempt_count) / CLOCKS_PER_SEC << std::endl;
+    std::cout << "Время: " << static_cast<double>(total_time) / CLOCKS_PER_SEC << std::endl;
 }
 
 int main (int argc, const char * argv[])
