@@ -1,7 +1,5 @@
 #include <iostream>
 #include <numeric>
-#include <sstream>
-#include <string>
 #include <vector>
 
 #include <boost/assert.hpp>
@@ -11,18 +9,6 @@
 #include <burst/range/merge.hpp>
 #include <burst/iterator/merge_iterator.hpp>
 #include <input.hpp>
-
-template <typename Container>
-void read_values (std::istream & stream, Container & values)
-{
-    for (std::string line; std::getline(stream, line); /* пусто */)
-    {
-        values.resize(values.size() + 1);
-
-        std::stringstream line_stream(line);
-        read(line_stream, values.back());
-    }
-}
 
 template <typename Container>
 void test_on_the_fly_merge (const Container & values)
@@ -99,7 +85,7 @@ void test_std_merge (const Container & values)
 int main ()
 {
     std::vector<std::vector<std::int64_t>> values;
-    read_values(std::cin, values);
+    read_many(std::cin, values);
 
     test_merge_by_sorting(values);
     test_std_merge(values);

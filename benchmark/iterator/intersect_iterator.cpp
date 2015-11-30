@@ -1,7 +1,5 @@
 #include <iostream>
 #include <numeric>
-#include <sstream>
-#include <string>
 #include <vector>
 
 #include <boost/range/iterator_range.hpp>
@@ -9,18 +7,6 @@
 
 #include <burst/range/intersect.hpp>
 #include <input.hpp>
-
-template <typename Container>
-void read_values (std::istream & stream, Container & values)
-{
-    for (std::string line; std::getline(stream, line); /* пусто */)
-    {
-        values.resize(values.size() + 1);
-
-        std::stringstream line_stream(line);
-        read(line_stream, values.back());
-    }
-}
 
 template <typename Container>
 void test_on_the_fly_intersect (const Container & values)
@@ -67,7 +53,7 @@ void test_std_intersect (const Container & values)
 int main ()
 {
     std::vector<std::vector<std::int64_t>> values;
-    read_values(std::cin, values);
+    read_many(std::cin, values);
 
     test_std_intersect(values);
     test_on_the_fly_intersect(values);
