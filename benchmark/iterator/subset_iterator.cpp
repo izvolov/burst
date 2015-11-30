@@ -2,15 +2,7 @@
 #include <vector>
 
 #include <burst/iterator/subset_iterator.hpp>
-
-template <typename Container>
-void read (std::istream & stream, Container & values)
-{
-    for (typename Container::value_type n; stream >> n; /* пусто */)
-    {
-        values.push_back(n);
-    }
-}
+#include <input.hpp>
 
 template <typename Container>
 void test (const Container & numbers)

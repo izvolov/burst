@@ -10,6 +10,7 @@
 
 #include <burst/range/merge.hpp>
 #include <burst/iterator/merge_iterator.hpp>
+#include <input.hpp>
 
 template <typename Container>
 void read_values (std::istream & stream, Container & values)
@@ -19,12 +20,7 @@ void read_values (std::istream & stream, Container & values)
         values.resize(values.size() + 1);
 
         std::stringstream line_stream(line);
-
-        typedef typename Container::value_type::value_type value_type;
-        for (value_type value; line_stream >> value; /* пусто */)
-        {
-            values.back().push_back(value);
-        }
+        read(line_stream, values.back());
     }
 }
 

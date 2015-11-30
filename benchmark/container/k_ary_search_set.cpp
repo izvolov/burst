@@ -8,6 +8,7 @@
 #include <boost/program_options.hpp>
 
 #include <burst/container/k_ary_search_set.hpp>
+#include <input.hpp>
 
 template <typename Container>
 struct default_constructor
@@ -45,18 +46,6 @@ struct k_ary_constructor
     std::size_t arity;
 };
 
-template <typename Container>
-void read (std::istream & stream, Container & values)
-{
-    for (std::int64_t n; stream >> n; /* пусто */)
-    {
-        values.push_back(static_cast<typename Container::value_type>(n));
-    }
-
-    std::sort(values.begin(), values.end());
-    values.erase(std::unique(values.begin(), values.end()), values.end());
-}
-
 template <typename Container, typename SetConstructor>
 void test_one (const Container & numbers, std::size_t attempt_count, const SetConstructor & constructor)
 {
@@ -92,6 +81,8 @@ void test (const Container & arities, std::size_t attempts)
     using integer_type = std::int64_t;
     std::vector<integer_type> numbers;
     read(std::cin, numbers);
+    std::sort(numbers.begin(), numbers.end());
+    numbers.erase(std::unique(numbers.begin(), numbers.end()), numbers.end());
 
     for (auto arity: arities)
     {

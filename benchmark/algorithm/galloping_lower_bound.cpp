@@ -5,15 +5,7 @@
 #include <boost/program_options.hpp>
 
 #include <burst/algorithm/galloping_lower_bound.hpp>
-
-template <typename Container>
-void read (std::istream & stream, Container & values)
-{
-    for (typename Container::value_type n; stream >> n; /* пусто */)
-    {
-        values.push_back(n);
-    }
-}
+#include <input.hpp>
 
 template <typename Container, typename Function>
 void test (const Container & numbers, std::size_t attempts, Function lower_bound, const std::string & name)

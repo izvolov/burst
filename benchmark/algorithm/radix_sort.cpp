@@ -8,15 +8,7 @@
 #include <boost/sort/spreadsort/integer_sort.hpp>
 
 #include <burst/algorithm/sorting/radix_sort.hpp>
-
-template <typename Container>
-void read (std::istream & stream, Container & values)
-{
-    for (std::int64_t n; stream >> n; /* пусто */)
-    {
-        values.push_back(static_cast<typename Container::value_type>(n));
-    }
-}
+#include <input.hpp>
 
 template <typename Sort, typename Container>
 void test_sort (const std::string & name, Sort sort, const Container & numbers, std::size_t attempts)

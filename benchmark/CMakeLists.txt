@@ -1,3 +1,5 @@
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
 set(RANGE_GENERATOR_SOURCES range_generator.cpp)
 set(RANGE_GENERATOR_EXECUTABLE rangegen)
 add_executable(${RANGE_GENERATOR_EXECUTABLE} ${RANGE_GENERATOR_SOURCES})
