@@ -4,9 +4,9 @@ compiler:
   - gcc
 
 before_install:
-  - wget -O boost_1_57_0.tar.gz http://sourceforge.net/projects/boost/files/boost/1.57.0/boost_1_57_0.tar.gz/download
-  - tar xf boost_1_57_0.tar.gz
-  - cd boost_1_57_0
+  - wget -O boost_1_59_0.tar.gz http://sourceforge.net/projects/boost/files/boost/1.59.0/boost_1_59_0.tar.gz/download
+  - tar xf boost_1_59_0.tar.gz
+  - cd boost_1_59_0
   - ./bootstrap.sh
   - sudo ./b2 --with-test --with-program_options install -d0
   - cd ..
