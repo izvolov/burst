@@ -1,6 +1,7 @@
 #ifndef BURST_ALGORITHM_SEARCHING_DETAIL_ELEMENT_POSITION_BITMASK_TABLE_HPP
 #define BURST_ALGORITHM_SEARCHING_DETAIL_ELEMENT_POSITION_BITMASK_TABLE_HPP
 
+#include <array>
 #include <cstddef>
 #include <initializer_list>
 #include <iostream>
