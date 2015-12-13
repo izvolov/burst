@@ -80,7 +80,7 @@ namespace burst
         using base_type =
             boost::iterator_facade
             <
-                union_iterator<range_type, Compare>,
+                union_iterator,
                 typename range_type::value_type,
                 boost::forward_traversal_tag,
                 typename std::conditional
