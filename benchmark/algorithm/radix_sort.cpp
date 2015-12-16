@@ -8,7 +8,7 @@
 #include <boost/sort/spreadsort/integer_sort.hpp>
 
 #include <burst/algorithm/sorting/radix_sort.hpp>
-#include <input.hpp>
+#include <io.hpp>
 
 template <typename Sort, typename Container>
 void test_sort (const std::string & name, Sort sort, const Container & numbers, std::size_t attempts)

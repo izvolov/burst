@@ -1,9 +1,17 @@
-#ifndef BURST_BENCHMARK_INPUT_HPP
-#define BURST_BENCHMARK_INPUT_HPP
+#ifndef BURST_BENCHMARK_IO_HPP
+#define BURST_BENCHMARK_IO_HPP
 
 #include <iostream>
 #include <sstream>
 #include <string>
+
+#include <boost/range/algorithm/for_each.hpp>
+
+template <typename Container>
+void write (std::ostream & stream, const Container & values)
+{
+    boost::for_each(values, [& stream] (std::int64_t value) { stream << value << ' '; });
+}
 
 template <typename Container>
 void read (std::istream & stream, Container & values)
@@ -26,4 +34,4 @@ void read_many (std::istream & stream, Container & containers)
     }
 }
 
-#endif // BURST_BENCHMARK_INPUT_HPP
+#endif // BURST_BENCHMARK_IO_HPP

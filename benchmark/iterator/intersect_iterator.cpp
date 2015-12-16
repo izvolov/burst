@@ -6,7 +6,7 @@
 #include <boost/range/algorithm/for_each.hpp>
 
 #include <burst/range/intersect.hpp>
-#include <input.hpp>
+#include <io.hpp>
 
 template <typename Container>
 void test_on_the_fly_intersect (const Container & values)

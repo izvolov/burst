@@ -8,7 +8,7 @@
 #include <vector>
 
 #include <boost/program_options.hpp>
-#include <boost/range/algorithm/for_each.hpp>
+#include <io.hpp>
 
 void generate (std::size_t range_count, std::size_t range_length, std::int64_t min, std::int64_t max, bool seed, bool sort, bool descending)
 {
@@ -34,7 +34,7 @@ void generate (std::size_t range_count, std::size_t range_length, std::int64_t m
             }
         }
 
-        boost::for_each(range, [] (std::int64_t value) { std::cout << value << ' '; });
+        write(std::cout, range);
         std::cout << "\n";
     }
 }

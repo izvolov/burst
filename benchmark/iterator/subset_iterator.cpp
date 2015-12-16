@@ -2,7 +2,7 @@
 #include <vector>
 
 #include <burst/iterator/subset_iterator.hpp>
-#include <input.hpp>
+#include <io.hpp>
 
 template <typename Container>
 void test (const Container & numbers)

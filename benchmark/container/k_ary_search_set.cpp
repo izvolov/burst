@@ -8,7 +8,7 @@
 #include <boost/program_options.hpp>
 
 #include <burst/container/k_ary_search_set.hpp>
-#include <input.hpp>
+#include <io.hpp>
 
 template <typename Container>
 struct default_constructor

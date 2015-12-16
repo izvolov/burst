@@ -8,7 +8,7 @@
 
 #include <burst/range/merge.hpp>
 #include <burst/iterator/merge_iterator.hpp>
-#include <input.hpp>
+#include <io.hpp>
 
 template <typename Container>
 void test_on_the_fly_merge (const Container & values)

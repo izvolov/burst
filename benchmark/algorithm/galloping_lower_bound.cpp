@@ -5,7 +5,7 @@
 #include <boost/program_options.hpp>
 
 #include <burst/algorithm/galloping_lower_bound.hpp>
-#include <input.hpp>
+#include <io.hpp>
 
 template <typename Container, typename Function>
 void test (const Container & numbers, std::size_t attempts, Function lower_bound, const std::string & name)
