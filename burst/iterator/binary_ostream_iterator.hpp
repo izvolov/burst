@@ -10,13 +10,12 @@ namespace burst
 {
     namespace detail
     {
-        template <typename Value>
         struct trivial_write_t
         {
-            static_assert(std::is_trivial<Value>::value, "");
-
+            template <typename Value>
             std::ostream & operator () (std::ostream & stream, const Value & value) const
             {
+                static_assert(std::is_trivial<Value>::value, "");
                 return
                     stream.write
                     (
@@ -39,7 +38,7 @@ namespace burst
         Write write;
     };
 
-    template <typename Value, typename Write = detail::trivial_write_t<Value>>
+    template <typename Value, typename Write = detail::trivial_write_t>
     auto make_binary_ostream_iterator (std::ostream & stream, Write write = Write{})
     {
         return

@@ -13,13 +13,12 @@ namespace burst
 {
     namespace detail
     {
-        template <typename Value>
         struct trivial_read_t
         {
-            static_assert(std::is_trivial<Value>::value, "");
-
+            template <typename Value>
             std::istream & operator () (std::istream & stream, Value & value) const
             {
+                static_assert(std::is_trivial<Value>::value, "");
                 return stream.read(reinterpret_cast<char *>(std::addressof(value)), sizeof(value));
             }
         };
@@ -107,19 +106,19 @@ namespace burst
         bool m_ok;
     };
 
-    template <typename Value, typename Read = detail::trivial_read_t<Value>>
+    template <typename Value, typename Read = detail::trivial_read_t>
     auto make_binary_istream_iterator (std::istream & stream, Read read = Read{})
     {
         return binary_istream_iterator<Value, Read>(stream, std::move(read));
     }
 
-    template <typename Value, typename Read = detail::trivial_read_t<Value>>
+    template <typename Value, typename Read = detail::trivial_read_t>
     auto make_binary_istream_iterator (iterator::end_tag_t, Read read = Read{})
     {
         return binary_istream_iterator<Value, Read>{iterator::end_tag, std::move(read)};
     }
 
-    template <typename Value, typename Read = detail::trivial_read_t<Value>>
+    template <typename Value, typename Read = detail::trivial_read_t>
     auto make_binary_istream_range (std::istream & stream, Read read = Read{})
     {
         return
