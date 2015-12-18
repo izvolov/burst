@@ -43,4 +43,4 @@ set(UNIT_TEST_EXECUTABLE unit-tests)
 add_executable(${UNIT_TEST_EXECUTABLE} ${UNIT_TEST_SOURCES})
 target_link_libraries(${UNIT_TEST_EXECUTABLE} ${Boost_LIBRARIES})
 
-add_custom_target(check ALL COMMAND ${UNIT_TEST_EXECUTABLE} --report_level=short)
+add_custom_target(check ALL COMMAND ${UNIT_TEST_EXECUTABLE} --report_level=short --color_output)
