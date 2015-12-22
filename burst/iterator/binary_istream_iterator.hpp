@@ -2,28 +2,15 @@
 #define BURST_ITERATOR_BINARY_ISTREAM_ITERATOR_HPP
 
 #include <istream>
-#include <type_traits>
 
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/range/iterator_range.hpp>
 
+#include <burst/iterator/detail/trivial_read.hpp>
 #include <burst/iterator/end_tag.hpp>
 
 namespace burst
 {
-    namespace detail
-    {
-        struct trivial_read_t
-        {
-            template <typename Value>
-            std::istream & operator () (std::istream & stream, Value & value) const
-            {
-                static_assert(std::is_trivial<Value>::value, "");
-                return stream.read(reinterpret_cast<char *>(std::addressof(value)), sizeof(value));
-            }
-        };
-    } // namespace detail
-
     //!     Итератор бинарного ввода
     /*!
             Предназначен для считывания из потока последовательности объектов, записанных в

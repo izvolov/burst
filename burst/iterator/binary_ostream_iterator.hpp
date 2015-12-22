@@ -2,30 +2,13 @@
 #define BURST_ITERATOR_BINARY_OSTREAM_ITERATOR_HPP
 
 #include <ostream>
-#include <type_traits>
 
 #include <boost/function_output_iterator.hpp>
 
+#include <burst/iterator/detail/trivial_write.hpp>
+
 namespace burst
 {
-    namespace detail
-    {
-        struct trivial_write_t
-        {
-            template <typename Value>
-            std::ostream & operator () (std::ostream & stream, const Value & value) const
-            {
-                static_assert(std::is_trivial<Value>::value, "");
-                return
-                    stream.write
-                    (
-                        reinterpret_cast<const char *>(std::addressof(value)),
-                        sizeof(value)
-                    );
-            }
-        };
-    } // namespace detail
-
     template <typename Value, typename Write>
     struct binary_ostream_writer
     {
