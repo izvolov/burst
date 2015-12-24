@@ -194,10 +194,15 @@ namespace burst
                 m_ranges(std::make_shared<range_container_type>()),
                 m_outer_range_index(0),
                 m_inner_range_index(0),
-                m_items_passed(0)
+                m_items_remaining(0)
             {
                 BOOST_STATIC_ASSERT(boost::is_same<typename InputRange::value_type, range_type>::value);
                 boost::algorithm::copy_if(ranges, std::back_inserter(*m_ranges), not boost::bind(&range_type::empty, _1));
+
+                const auto to_size = [] (const auto & r) { return r.size(); };
+
+                using boost::adaptors::transformed;
+                m_items_remaining = boost::accumulate(*m_ranges | transformed(to_size), 0u);
             }
 
             //!     Создание итератора на конец склеенного диапазона.
@@ -210,21 +215,15 @@ namespace burst
 
                     Асимптотика.
 
-                Время: O(|R|).
+                Время: O(1).
                 Память: O(1).
              */
             join_iterator_impl (const join_iterator_impl & begin, iterator::end_tag_t):
                 m_ranges(begin.m_ranges),
-                m_outer_range_index(0),
+                m_outer_range_index(m_ranges->size()),
                 m_inner_range_index(0),
-                m_items_passed(0)
+                m_items_remaining(0)
             {
-                const auto to_size = [] (const auto & r) { return r.size(); };
-
-                using boost::adaptors::transformed;
-                m_items_passed = boost::accumulate(*m_ranges | transformed(to_size), 0u);
-
-                m_outer_range_index = m_ranges->size();
             }
 
             join_iterator_impl () = default;
@@ -252,7 +251,7 @@ namespace burst
             void advance (typename base_type::difference_type n)
             {
                 auto abs_n = static_cast<typename range_type::size_type>(std::abs(n));
-                m_items_passed += static_cast<typename range_type::size_type>(n);
+                m_items_remaining -= static_cast<typename range_type::size_type>(n);
 
                 if (n > 0)
                 {
@@ -323,7 +322,7 @@ namespace burst
                     m_inner_range_index = 0;
                 }
 
-                ++m_items_passed;
+                --m_items_remaining;
             }
 
             //!     Продвижение итератора на один элемент назад.
@@ -347,7 +346,7 @@ namespace burst
                     --m_inner_range_index;
                 }
 
-                --m_items_passed;
+                ++m_items_remaining;
             }
 
         private:
@@ -359,12 +358,12 @@ namespace burst
 
             bool equal (const join_iterator_impl & that) const
             {
-                return this->m_items_passed == that.m_items_passed;
+                return this->m_items_remaining == that.m_items_remaining;
             }
 
             typename base_type::difference_type distance_to (const join_iterator_impl & that) const
             {
-                return static_cast<typename base_type::difference_type>(that.m_items_passed - this->m_items_passed);
+                return static_cast<typename base_type::difference_type>(this->m_items_remaining - that.m_items_remaining);
             }
 
         private:
@@ -373,7 +372,7 @@ namespace burst
             typename range_container_type::size_type m_outer_range_index;
             typename range_type::size_type m_inner_range_index;
 
-            typename range_type::size_type m_items_passed;
+            typename range_type::size_type m_items_remaining;
         };
     }
 }
