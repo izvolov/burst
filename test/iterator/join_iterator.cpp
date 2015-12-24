@@ -8,14 +8,14 @@
 #include <burst/range/make_range_vector.hpp>
 
 BOOST_AUTO_TEST_SUITE(join_iterator)
-    BOOST_AUTO_TEST_CASE(join_iterator_end_is_created_using_special_tag)
+    BOOST_AUTO_TEST_CASE(join_iterator_end_is_created_from_begin_using_special_tag)
     {
         auto  first = {500, 100};
         auto second = {600, 200};
         auto ranges = burst::make_range_vector(first, second);
 
         auto joined_begin = burst::make_join_iterator(ranges);
-        auto   joined_end = burst::make_join_iterator(ranges, burst::iterator::end_tag);
+        auto   joined_end = burst::make_join_iterator(joined_begin, burst::iterator::end_tag);
 
         auto expected_collection = {500, 100, 600, 200};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
         auto ranges = burst::make_range_vector(first, second);
 
         auto joined_begin = burst::make_join_iterator(ranges);
-        auto joined_end   = burst::make_join_iterator(ranges, burst::iterator::end_tag);
+        auto joined_end   = burst::make_join_iterator(joined_begin, burst::iterator::end_tag);
 
         BOOST_CONCEPT_ASSERT((boost::RandomAccessIterator<decltype(joined_begin)>));
         BOOST_CONCEPT_ASSERT((boost::RandomAccessIterator<decltype(joined_end)>));
@@ -44,7 +44,8 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
         auto second = {1, 0};
         auto ranges = burst::make_range_vector(first, second);
 
-        auto joined_end = burst::make_join_iterator(ranges, burst::iterator::end_tag);
+        auto joined_begin = burst::make_join_iterator(ranges);
+        auto joined_end = burst::make_join_iterator(joined_begin, burst::iterator::end_tag);
         --joined_end;
 
         BOOST_CHECK_EQUAL(*joined_end, 0);
@@ -72,7 +73,7 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
         auto ranges = burst::make_range_vector(first, second);
 
         auto joined_begin = burst::make_join_iterator(ranges);
-        auto joined_end   = burst::make_join_iterator(ranges, burst::iterator::end_tag);
+        auto joined_end   = burst::make_join_iterator(joined_begin, burst::iterator::end_tag);
 
         joined_begin += 2;
         BOOST_CHECK_EQUAL(*joined_begin, 1);

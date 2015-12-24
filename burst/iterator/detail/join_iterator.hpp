@@ -84,8 +84,8 @@ namespace burst
 
             //!     Создание итератора на конец склеенного диапазона.
             /*!
-                    Принимает последовательность диапазонов, которые нужно склеить, и метку,
-                обозначающую, что нужно создать именно итератор-конец.
+                    Принимает итератор на начала склеенного диапазона и метку, обозначающую, что
+                нужно создать именно итератор-конец.
                     Ничего не делает, входные аргументы игнорирует.
 
                     Асимптотика.
@@ -93,8 +93,7 @@ namespace burst
                 Время: O(1).
                 Память: O(1).
              */
-            template <typename BidirectionalRange>
-            join_iterator_impl (const BidirectionalRange &, iterator::end_tag_t):
+            join_iterator_impl (const join_iterator_impl &, iterator::end_tag_t):
                 m_ranges()
             {
             }
@@ -202,9 +201,9 @@ namespace burst
 
             //!     Создание итератора на конец склеенного диапазона.
             /*!
-                    Принимает последовательность диапазонов, которые нужно склеить, и метку,
-                обозначающую, что нужно создать именно итератор-конец.
-                    Копирует непустые диапазоны во внутренний буфер, устанавливает индекс текущего
+                    Принимает итератор на начало склеенного диапазона и метку, обозначающую, что
+                нужно создать именно итератор-конец.
+                    Берёт из входного итератора указатель на буфер, устанавливает индекс текущего
                 диапазона на конец буфера, а индекс элемента в буфере на ноль. Также устанавливает
                 счётчик пройденных элементов равным суммарному размеру входных диапазонов.
 
@@ -213,15 +212,12 @@ namespace burst
                 Время: O(|R|).
                 Память: O(1).
              */
-            template <typename InputRange>
-            explicit join_iterator_impl (const InputRange & ranges, iterator::end_tag_t):
-                m_ranges(std::make_shared<range_container_type>()),
+            join_iterator_impl (const join_iterator_impl & begin, iterator::end_tag_t):
+                m_ranges(begin.m_ranges),
                 m_outer_range_index(0),
                 m_inner_range_index(0),
                 m_items_passed(0)
             {
-                BOOST_STATIC_ASSERT(boost::is_same<typename InputRange::value_type, range_type>::value);
-                boost::algorithm::copy_if(ranges, std::back_inserter(*m_ranges), not boost::bind(&range_type::empty, _1));
                 m_items_passed = boost::accumulate
                 (
                     *m_ranges,

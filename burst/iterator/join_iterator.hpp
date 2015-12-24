@@ -72,14 +72,14 @@ namespace burst
 
     //!     Функция для создания итератора на конец склейки.
     /*!
-            Принимает на вход набор диапазонов, который не используется, а нужен только для
-        автоматического вывода типа итератора.
+            Принимает на вход итератор на начало склеенного диапазона и специальную метку,
+        обозначающую, что нужно создать итератор на конец диапазона.
             Возвращает итератор на конец склеенного списка.
      */
-    template <typename RangeRange>
-    join_iterator<typename RangeRange::value_type> make_join_iterator (const RangeRange & ranges, iterator::end_tag_t)
+    template <typename Range>
+    join_iterator<Range> make_join_iterator (const join_iterator<Range> & begin, iterator::end_tag_t)
     {
-        return join_iterator<typename RangeRange::value_type>(ranges, iterator::end_tag);
+        return join_iterator<Range>(begin, iterator::end_tag);
     }
 } // namespace burst
 

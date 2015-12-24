@@ -22,11 +22,8 @@ namespace burst
     >
     join (const RangeRange & ranges)
     {
-        return boost::make_iterator_range
-        (
-            make_join_iterator(ranges),
-            make_join_iterator(ranges, iterator::end_tag)
-        );
+        auto begin = make_join_iterator(ranges);
+        return boost::make_iterator_range(begin, make_join_iterator(begin, iterator::end_tag));
     }
 
     //!     Функция для создания склеенного диапазона из списка инициализации.
@@ -41,11 +38,8 @@ namespace burst
     >
     join (std::initializer_list<Range> ranges)
     {
-        return boost::make_iterator_range
-        (
-            make_join_iterator(ranges),
-            make_join_iterator(ranges, iterator::end_tag)
-        );
+        auto begin = make_join_iterator(ranges);
+        return boost::make_iterator_range(begin, make_join_iterator(begin, iterator::end_tag));
     }
 }
 
