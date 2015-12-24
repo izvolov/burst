@@ -23,6 +23,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     iterator/merge_iterator.cpp
     iterator/semiintersect_iterator.cpp
     iterator/subset_iterator.cpp
+    iterator/take_n_iterator.cpp
     iterator/union_iterator.cpp
     math/intlog.cpp
     math/intlog2.cpp
