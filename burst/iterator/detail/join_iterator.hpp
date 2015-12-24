@@ -10,6 +10,7 @@
 #include <boost/bind.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/range/adaptor/reversed.hpp>
+#include <boost/range/adaptor/transformed.hpp>
 #include <boost/range/numeric.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -218,12 +219,11 @@ namespace burst
                 m_inner_range_index(0),
                 m_items_passed(0)
             {
-                m_items_passed = boost::accumulate
-                (
-                    *m_ranges,
-                    0u,
-                    boost::bind(std::plus<typename range_type::size_type>(), _1, boost::bind(&range_type::size, _2))
-                );
+                const auto to_size = [] (const auto & r) { return r.size(); };
+
+                using boost::adaptors::transformed;
+                m_items_passed = boost::accumulate(*m_ranges | transformed(to_size), 0u);
+
                 m_outer_range_index = m_ranges->size();
             }
 
