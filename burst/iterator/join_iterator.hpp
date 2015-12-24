@@ -55,11 +55,7 @@ namespace burst
         detail::join_iterator_impl
         <
             Range,
-            typename boost::iterators::pure_traversal_tag
-            <
-                typename boost::iterator_traversal<typename Range::iterator>::type
-            >
-            ::type
+            typename boost::iterators::pure_iterator_traversal<typename Range::iterator>::type
         >;
 
     //!     Функция для создания итератора склейки.
