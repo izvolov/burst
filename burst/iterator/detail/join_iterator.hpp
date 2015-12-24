@@ -358,6 +358,7 @@ namespace burst
 
             bool equal (const join_iterator_impl & that) const
             {
+                assert(this->m_ranges == that.m_ranges);
                 return this->m_items_remaining == that.m_items_remaining;
             }
 
