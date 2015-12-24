@@ -17,6 +17,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     functional/low_byte.cpp
     iterator/binary_stream_iterators.cpp
     iterator/bitap_iterator.cpp
+    iterator/cache_iterator.cpp
     iterator/difference_iterator.cpp
     iterator/intersect_iterator.cpp
     iterator/join_iterator.cpp
