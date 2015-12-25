@@ -7,6 +7,27 @@
 #include <utility>
 #include <vector>
 
+namespace test_detail
+{
+    template <typename Range>
+    std::ostream & print_range (std::ostream & stream, const Range & range)
+    {
+        stream << "[";
+
+        if (not range.empty())
+        {
+            stream << range.front();
+            std::for_each(std::next(range.begin()), range.end(),
+                [& stream] (const auto & value)
+                {
+                    stream << ", " << value;
+                });
+        }
+
+        return stream << "]";
+    }
+}
+
 namespace std
 {
     template <typename First, typename Second>
@@ -18,19 +39,7 @@ namespace std
     template <typename T>
     std::ostream & operator << (std::ostream & stream, const std::vector<T> & vector)
     {
-        stream << "[";
-
-        if (not vector.empty())
-        {
-            stream << vector.front();
-            std::for_each(std::next(vector.begin()), vector.end(),
-                [& stream] (const auto & value)
-                {
-                    stream << ", " << value;
-                });
-        }
-
-        return stream << "]";
+        return ::test_detail::print_range(stream, vector);
     }
 }
 
