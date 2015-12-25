@@ -37,6 +37,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     range/skip_to_lower_bound.cpp
     range/skip_to_upper_bound.cpp
     range/subsets.cpp
+    range/take_n.cpp
     range/unite.cpp
 )
 
