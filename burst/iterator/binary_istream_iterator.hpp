@@ -4,6 +4,7 @@
 #include <istream>
 
 #include <boost/iterator/iterator_facade.hpp>
+#include <boost/optional.hpp>
 #include <boost/range/iterator_range.hpp>
 
 #include <burst/iterator/detail/trivial_read.hpp>
@@ -56,19 +57,17 @@ namespace burst
         {
         }
 
-        // FIXME Этот конструктор нужен для того, чтобы корректно обрабатывать лямбды — они не
-        // имеют конструктора по-умолчанию. Надо научиться обрабатывать этот случай отдельно.
-        binary_istream_iterator (iterator::end_tag_t, Read read):
+        binary_istream_iterator ():
             m_value{},
             m_stream(nullptr),
-            m_read(std::move(read)),
+            m_read{},
             m_ok(false)
         {
         }
 
         bool try_to_read ()
         {
-            return static_cast<bool>(m_read(*m_stream, m_value));
+            return static_cast<bool>((*m_read)(*m_stream, m_value));
         }
 
         void increment ()
@@ -89,7 +88,7 @@ namespace burst
     private:
         Value m_value;
         std::istream * m_stream;
-        Read m_read;
+        boost::optional<Read> m_read;
         bool m_ok;
     };
 
@@ -99,10 +98,10 @@ namespace burst
         return binary_istream_iterator<Value, Read>(stream, std::move(read));
     }
 
-    template <typename Value, typename Read = detail::trivial_read_t>
-    auto make_binary_istream_iterator (iterator::end_tag_t, Read read = Read{})
+    template <typename Value, typename Read>
+    auto make_binary_istream_iterator (const binary_istream_iterator<Value, Read> &, iterator::end_tag_t)
     {
-        return binary_istream_iterator<Value, Read>{iterator::end_tag, std::move(read)};
+        return binary_istream_iterator<Value, Read>{};
     }
 } // namespace burst
 

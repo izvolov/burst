@@ -13,12 +13,10 @@ namespace burst
     template <typename Value, typename Read = detail::trivial_read_t>
     auto make_binary_istream_range (std::istream & stream, Read read = Read{})
     {
-        return
-            boost::make_iterator_range
-            (
-                make_binary_istream_iterator<Value>(stream, read),
-                make_binary_istream_iterator<Value, Read>(iterator::end_tag, read)
-            );
+        auto begin = make_binary_istream_iterator<Value>(stream, read);
+        auto end = make_binary_istream_iterator(begin, iterator::end_tag);
+
+        return boost::make_iterator_range(std::move(begin), std::move(end));
     }
 } // namespace burst
 
