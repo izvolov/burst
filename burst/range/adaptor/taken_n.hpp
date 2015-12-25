@@ -39,12 +39,12 @@ namespace burst
 
                 `take_n(range, 10)`.
      */
-    constexpr auto taken_n =
-        [] (auto n)
-        {
-            static_assert(std::is_integral<decltype(n)>::value, "");
-            return detail::item_count_forwarder<decltype(n)>{n};
-        };
+    template <typename Integer>
+    auto taken_n (Integer n)
+    {
+        static_assert(std::is_integral<Integer>::value, "");
+        return detail::item_count_forwarder<Integer>{n};
+    };
 } // namespace burst
 
 #endif // BURST_RANGE_ADAPTOR_TAKEN_N_HPP
