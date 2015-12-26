@@ -44,7 +44,7 @@ namespace burst
     {
         static_assert(std::is_integral<Integer>::value, "");
         return detail::item_count_forwarder<Integer>{n};
-    };
+    }
 } // namespace burst
 
 #endif // BURST_RANGE_ADAPTOR_TAKEN_N_HPP
