@@ -61,7 +61,7 @@ namespace burst
         {
         }
 
-        take_n_iterator (iterator::end_tag_t):
+        take_n_iterator ():
             m_iterator{},
             m_remaining(0)
         {
@@ -131,7 +131,7 @@ namespace burst
             iterator::end_tag_t
         )
     {
-        return take_n_iterator<Iterator>(iterator::end_tag);
+        return take_n_iterator<Iterator>{};
     }
 } // namespace burst
 
