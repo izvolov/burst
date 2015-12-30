@@ -21,11 +21,11 @@ namespace burst
         auto
             operator |
             (
-                Range & range,
+                Range && range,
                 detail::item_count_forwarder<typename boost::range_difference<Range>::type> n
             )
         {
-            return take_n(range, n.value);
+            return take_n(std::forward<Range>(range), n.value);
         }
     }
 

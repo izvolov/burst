@@ -22,12 +22,12 @@ namespace burst
         auto
             take_n_impl
             (
-                Range & range,
+                Range && range,
                 typename boost::range_difference<Range>::type n,
                 Category
             )
         {
-            auto begin = burst::make_take_n_iterator(std::begin(range), n);
+            auto begin = burst::make_take_n_iterator(std::begin(std::forward<Range>(range)), n);
             auto end = burst::make_take_n_iterator(begin, iterator::end_tag);
 
             return boost::make_iterator_range(std::move(begin), std::move(end));
@@ -41,7 +41,7 @@ namespace burst
         auto
             take_n_impl
             (
-                Range & range,
+                Range && range,
                 typename boost::range_difference<Range>::type n,
                 boost::random_access_traversal_tag
             )

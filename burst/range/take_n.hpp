@@ -19,7 +19,7 @@ namespace burst
         пользователе.
      */
     template <typename Range>
-    auto take_n (Range & range, typename boost::range_difference<Range>::type n)
+    auto take_n (Range && range, typename boost::range_difference<Range>::type n)
     {
         using range_iterator = typename boost::range_iterator<Range>::type;
         using category =
@@ -30,7 +30,7 @@ namespace burst
             >
             ::type;
 
-        return detail::take_n_impl(range, n, category{});
+        return detail::take_n_impl(std::forward<Range>(range), n, category{});
     }
 } // namespace burst
 
