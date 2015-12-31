@@ -15,7 +15,7 @@ BOOST_AUTO_TEST_SUITE(bitap)
 
         auto match_position = search(text.begin() + 1, text.end());
 
-        typedef typename std::iterator_traits<std::string::iterator>::difference_type difference_type;
+        using difference_type = typename std::iterator_traits<std::string::iterator>::difference_type;
         difference_type repeat_offset = static_cast<difference_type>(pattern.size());
         BOOST_CHECK(match_position == text.begin() + repeat_offset);
     }

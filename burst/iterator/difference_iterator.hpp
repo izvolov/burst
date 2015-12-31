@@ -75,14 +75,14 @@ namespace burst
         using subtrahend_range_type = ForwardRange2;
         using compare_type = Compare;
 
-        typedef boost::iterator_facade
-        <
-            difference_iterator,
-            typename minuend_range_type::value_type,
-            boost::forward_traversal_tag,
-            typename minuend_range_type::reference
-        >
-        base_type;
+        using base_type =
+            boost::iterator_facade
+            <
+                difference_iterator,
+                typename minuend_range_type::value_type,
+                boost::forward_traversal_tag,
+                typename minuend_range_type::reference
+            >;
 
     public:
         difference_iterator

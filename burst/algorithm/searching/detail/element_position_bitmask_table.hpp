@@ -23,9 +23,9 @@ namespace burst
             class element_position_bitmask_table
             {
             public:
-                typedef Map map_type;
-                typedef typename map_type::key_type key_type;
-                typedef typename map_type::mapped_type bitmask_type;
+                using map_type = Map;
+                using key_type = typename map_type::key_type;
+                using bitmask_type = typename map_type::mapped_type;
 
             public:
                 template <typename InputIterator>
@@ -49,7 +49,7 @@ namespace burst
                 template <typename InputIterator>
                 void initialize (InputIterator first, InputIterator last)
                 {
-                    typedef typename std::iterator_traits<InputIterator>::value_type iterated_type;
+                    using iterated_type = typename std::iterator_traits<InputIterator>::value_type;
                     static_assert(std::is_same<iterated_type, key_type>::value, "Неверно задан тип входного элемента.");
 
                     std::size_t elements_count = 0;
@@ -124,9 +124,9 @@ namespace burst
             class element_position_bitmask_table <std::array<Bitmask, Size>>
             {
             public:
-                typedef std::array<Bitmask, Size> array_type;
-                typedef typename array_type::size_type key_type;
-                typedef typename array_type::value_type bitmask_type;
+                using array_type = std::array<Bitmask, Size>;
+                using key_type = typename array_type::size_type;
+                using bitmask_type = typename array_type::value_type;
 
             public:
                 template <typename InputIterator>
@@ -153,7 +153,7 @@ namespace burst
                 template <typename InputIterator>
                 void initialize (InputIterator first, InputIterator last)
                 {
-                    typedef typename std::iterator_traits<InputIterator>::value_type iterated_type;
+                    using iterated_type = typename std::iterator_traits<InputIterator>::value_type;
                     static_assert(std::is_integral<iterated_type>::value && sizeof(iterated_type) == 1, "Входной элемент должен быть однобайтовым целым числом.");
 
                     std::size_t elements_count = 0;

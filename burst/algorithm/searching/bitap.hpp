@@ -45,10 +45,10 @@ namespace burst
         class bitap
         {
         public:
-            typedef Value value_type;
-            typedef Bitmask bitmask_type;
-            typedef Map map_type;
-            typedef detail::element_position_bitmask_table<map_type> bitmask_table_type;
+            using value_type = Value;
+            using bitmask_type = Bitmask;
+            using map_type = Map;
+            using bitmask_table_type = detail::element_position_bitmask_table<map_type>;
 
         public:
             template <typename InputIterator>
@@ -74,7 +74,7 @@ namespace burst
             template <typename ForwardIterator>
             ForwardIterator operator () (ForwardIterator corpus_begin, ForwardIterator corpus_end) const
             {
-                typedef typename std::iterator_traits<ForwardIterator>::value_type iterated_type;
+                using iterated_type = typename std::iterator_traits<ForwardIterator>::value_type;
                 static_assert(std::is_same<iterated_type, value_type>::value, "Тип элементов обыскиваемой последовательности должен совпадать с типом элементов образца.");
 
                 return do_search(corpus_begin, corpus_end);

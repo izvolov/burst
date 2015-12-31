@@ -63,16 +63,16 @@ namespace burst
     {
     private:
         BOOST_CONCEPT_ASSERT((boost::ForwardRangeConcept<ForwardRange>));
-        typedef ForwardRange range_type;
+        using range_type = ForwardRange;
 
-        typedef boost::iterator_facade
-        <
-            merge_iterator,
-            typename range_type::value_type,
-            boost::forward_traversal_tag,
-            typename range_type::reference
-        >
-        base_type;
+        using base_type =
+            boost::iterator_facade
+            <
+                merge_iterator,
+                typename range_type::value_type,
+                boost::forward_traversal_tag,
+                typename range_type::reference
+            >;
 
     public:
         template <typename RandomAccessRange>
@@ -125,7 +125,7 @@ namespace burst
 
         // invert_comparison устраняет путаницу с обратным порядком в пирамиде при работе с
         // std::make(push, pop)_heap.
-        typedef detail::front_value_comparator<detail::invert_comparison<Compare>> heap_order_type;
+        using heap_order_type = detail::front_value_comparator<detail::invert_comparison<Compare>>;
         heap_order_type m_heap_order;
     };
 

@@ -53,7 +53,7 @@ BOOST_AUTO_TEST_SUITE(bitap)
 
         const auto match = matches.front();
 
-        typedef typename std::iterator_traits<std::string::iterator>::difference_type difference_type;
+        using difference_type = typename std::iterator_traits<std::string::iterator>::difference_type;
         const difference_type match_offset = static_cast<difference_type>(text.find_first_not_of("FU"));
 
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -102,7 +102,7 @@ BOOST_AUTO_TEST_SUITE(bitap)
         BOOST_REQUIRE(not matches.empty());
         BOOST_REQUIRE_EQUAL(std::distance(matches.begin(), matches.end()), 2);
 
-        typedef typename std::iterator_traits<std::string::iterator>::difference_type difference_type;
+        using difference_type = typename std::iterator_traits<std::string::iterator>::difference_type;
         const auto first_match_start_position = static_cast<difference_type>(text.find_first_not_of(" "));
         const auto second_match_end_position = static_cast<difference_type>(text.find_first_of(" ", static_cast<std::size_t>(first_match_start_position)));
         const auto pattern_size = static_cast<difference_type>(pattern.size());

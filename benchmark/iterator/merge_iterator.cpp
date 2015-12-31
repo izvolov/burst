@@ -13,7 +13,7 @@
 template <typename Container>
 void test_on_the_fly_merge (const Container & values)
 {
-    typedef typename Container::value_type nested_container_type;
+    using nested_container_type = typename Container::value_type;
 
     std::vector<boost::iterator_range<typename nested_container_type::const_iterator>> ranges;
     boost::for_each(values,

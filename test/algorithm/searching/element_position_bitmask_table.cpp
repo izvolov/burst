@@ -10,8 +10,8 @@
 
 #include <burst/algorithm/searching/detail/element_position_bitmask_table.hpp>
 
-typedef burst::algorithm::detail::element_position_bitmask_table<std::array<std::bitset<32>, (1 << sizeof(char) * CHAR_BIT)>> char_masks;
-typedef burst::algorithm::detail::element_position_bitmask_table<std::map<int, std::bitset<64>>> integral_masks;
+using char_masks = burst::algorithm::detail::element_position_bitmask_table<std::array<std::bitset<32>, (1 << sizeof(char) * CHAR_BIT)>>;
+using integral_masks = burst::algorithm::detail::element_position_bitmask_table<std::map<int, std::bitset<64>>>;
 
 BOOST_AUTO_TEST_SUITE(element_position_bitmask_table)
     BOOST_AUTO_TEST_CASE(mask_created_from_empty_pattern_is_empty)

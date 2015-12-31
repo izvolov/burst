@@ -82,23 +82,23 @@ namespace burst
     {
     private:
         BOOST_CONCEPT_ASSERT((boost::ForwardRangeConcept<ForwardRange>));
-        typedef ForwardRange range_type;
-        typedef Compare compare_type;
+        using range_type = ForwardRange;
+        using compare_type = Compare;
 
-        typedef boost::iterator_facade
-        <
-            intersect_iterator,
-            typename range_type::value_type,
-            boost::forward_traversal_tag,
-            typename std::conditional
+        using base_type =
+            boost::iterator_facade
             <
-                std::is_lvalue_reference<typename range_type::reference>::value,
-                typename std::remove_reference<typename range_type::reference>::type const &,
-                typename range_type::reference
-            >
-            ::type
-        >
-        base_type;
+                intersect_iterator,
+                typename range_type::value_type,
+                boost::forward_traversal_tag,
+                typename std::conditional
+                <
+                    std::is_lvalue_reference<typename range_type::reference>::value,
+                    typename std::remove_reference<typename range_type::reference>::type const &,
+                    typename range_type::reference
+                >
+                ::type
+            >;
 
     public:
         template <typename ForwardRange1>

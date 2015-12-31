@@ -37,16 +37,16 @@ namespace burst
             >
         {
         private:
-            typedef ForwardRange range_type;
+            using range_type = ForwardRange;
 
-            typedef boost::iterator_facade
-            <
-                join_iterator_impl,
-                typename range_type::value_type,
-                boost::forward_traversal_tag,
-                typename range_type::reference
-            >
-            base_type;
+            using base_type =
+                boost::iterator_facade
+                <
+                    join_iterator_impl,
+                    typename range_type::value_type,
+                    boost::forward_traversal_tag,
+                    typename range_type::reference
+                >;
 
         public:
             //!     Создание итератора на начало склеенного диапазона.
@@ -166,17 +166,17 @@ namespace burst
             >
         {
         private:
-            typedef RandomAccessRange range_type;
-            typedef std::vector<range_type> range_container_type;
+            using range_type = RandomAccessRange;
+            using range_container_type = std::vector<range_type>;
 
-            typedef boost::iterator_facade
-            <
-                join_iterator_impl,
-                typename range_type::value_type,
-                boost::random_access_traversal_tag,
-                typename range_type::reference
-            >
-            base_type;
+            using base_type =
+                boost::iterator_facade
+                <
+                    join_iterator_impl,
+                    typename range_type::value_type,
+                    boost::random_access_traversal_tag,
+                    typename range_type::reference
+                >;
 
         public:
             //!     Создание итератора на начало склеенного диапазона.
