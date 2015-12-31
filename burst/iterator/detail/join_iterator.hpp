@@ -251,7 +251,7 @@ namespace burst
             void advance (typename base_type::difference_type n)
             {
                 auto abs_n = static_cast<typename range_type::size_type>(std::abs(n));
-                m_items_remaining -= static_cast<typename range_type::size_type>(n);
+                m_items_remaining -= n;
 
                 if (n > 0)
                 {
@@ -364,7 +364,7 @@ namespace burst
 
             typename base_type::difference_type distance_to (const join_iterator_impl & that) const
             {
-                return static_cast<typename base_type::difference_type>(this->m_items_remaining - that.m_items_remaining);
+                return this->m_items_remaining - that.m_items_remaining;
             }
 
         private:
@@ -373,7 +373,7 @@ namespace burst
             typename range_container_type::size_type m_outer_range_index;
             typename range_type::size_type m_inner_range_index;
 
-            typename range_type::size_type m_items_remaining;
+            typename base_type::difference_type m_items_remaining;
         };
     }
 }
