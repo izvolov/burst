@@ -197,11 +197,12 @@ namespace burst
                 m_items_remaining(0)
             {
                 BOOST_STATIC_ASSERT(boost::is_same<typename InputRange::value_type, range_type>::value);
-                boost::algorithm::copy_if(ranges, std::back_inserter(*m_ranges), not boost::bind(&range_type::empty, _1));
 
-                const auto to_size = [] (const auto & r) { return r.size(); };
+                const auto not_empty = [] (const auto & r) { return not r.empty(); };
+                boost::algorithm::copy_if(ranges, std::back_inserter(*m_ranges), not_empty);
 
                 using boost::adaptors::transformed;
+                const auto to_size = [] (const auto & r) { return r.size(); };
                 m_items_remaining = boost::accumulate(*m_ranges | transformed(to_size), 0u);
             }
 
