@@ -21,30 +21,30 @@ namespace burst
 {
     namespace detail
     {
-        //!     Однонаправленный итератор склейки.
+        //!     Однопроходный итератор склейки.
         /*!
                 Специализация итератора склейки для того случая, когда склеиваемые диапазоны не
             являются диапазонами произвольного доступа.
          */
-        template <typename ForwardRange, typename IteratorCategory>
+        template <typename InputRange, typename IteratorCategory>
         class join_iterator_impl:
             public boost::iterator_facade
             <
-                join_iterator_impl<ForwardRange, IteratorCategory>,
-                typename ForwardRange::value_type,
-                boost::forward_traversal_tag,
-                typename ForwardRange::reference
+                join_iterator_impl<InputRange, IteratorCategory>,
+                typename InputRange::value_type,
+                boost::single_pass_traversal_tag,
+                typename InputRange::reference
             >
         {
         private:
-            using range_type = ForwardRange;
+            using range_type = InputRange;
 
             using base_type =
                 boost::iterator_facade
                 <
                     join_iterator_impl,
                     typename range_type::value_type,
-                    boost::forward_traversal_tag,
+                    boost::single_pass_traversal_tag,
                     typename range_type::reference
                 >;
 
