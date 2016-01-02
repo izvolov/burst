@@ -4,16 +4,14 @@
 #include <algorithm>
 #include <iterator>
 #include <memory>
-#include <vector>
 
-#include <boost/algorithm/cxx11/copy_if.hpp>
-#include <boost/bind.hpp>
+#include <boost/iterator/iterator_categories.hpp>
 #include <boost/iterator/iterator_facade.hpp>
-#include <boost/range/adaptor/reversed.hpp>
 #include <boost/range/adaptor/transformed.hpp>
+#include <boost/range/difference_type.hpp>
 #include <boost/range/numeric.hpp>
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_same.hpp>
+#include <boost/range/reference.hpp>
+#include <boost/range/value_type.hpp>
 
 #include <burst/iterator/end_tag.hpp>
 
@@ -31,35 +29,29 @@ namespace burst
             public boost::iterator_facade
             <
                 join_iterator_impl<InputRange, IteratorCategory>,
-                typename InputRange::value_type,
+                typename boost::range_value<typename boost::range_value<InputRange>::type>::type,
                 boost::single_pass_traversal_tag,
-                typename InputRange::reference
+                typename boost::range_reference<typename boost::range_value<InputRange>::type>::type
             >
         {
         private:
-            using range_type = InputRange;
+            using outer_range_type = InputRange;
+            using inner_range_type = typename boost::range_value<outer_range_type>::type;
 
             using base_type =
                 boost::iterator_facade
                 <
                     join_iterator_impl,
-                    typename range_type::value_type,
+                    typename boost::range_value<inner_range_type>::type,
                     boost::single_pass_traversal_tag,
-                    typename range_type::reference
+                    typename boost::range_reference<inner_range_type>::type
                 >;
 
         public:
             //!     Создание итератора на начало склеенного диапазона.
             /*!
-                    Принимает последовательность диапазонов, которые нужно склеить, и копирует
-                непустые диапазоны во внутренний буфер.
-                    Склейка будет происходить в том порядке, в котором диапазоны перечислены в
-                последовательности. Иначе говоря, в склеенном диапазоне вначале будут все элементы
-                первой последовательности, затем все элементы второй, и т.д:
-
-                    join(R_1, ..., R_n) = R_1[1], ..., R_1[len_1], ..., R_n[1], ..., R_n[len_n]
-
-                где R_i — i-й склеиваемый диапазон, len_i — длина i-го слеиваемого диапазона.
+                    Принимает диапазон диапазонов, которые нужно склеить, и копирует его себе
+                внутрь. Затем продвигает внешний диапазон так, чтобы поддерживался инвариант.
 
                     Асимптотика.
 
@@ -67,20 +59,11 @@ namespace burst
                     |R| — количество склеиваемых диапазонов.
 
                 Память: O(1).
-                    Учитывается только собственная память конструктора. Сам созданный объект хранит
-                    весь набор склеиваемых диапазонов.
              */
-            template <typename BidirectionalRange>
-            explicit join_iterator_impl (const BidirectionalRange & ranges):
-                m_ranges()
+            explicit join_iterator_impl (outer_range_type ranges):
+                m_ranges(std::move(ranges))
             {
-                BOOST_STATIC_ASSERT(boost::is_same<typename BidirectionalRange::value_type, range_type>::value);
-                boost::algorithm::copy_if
-                (
-                    boost::adaptors::reverse(ranges),
-                    std::back_inserter(m_ranges),
-                    not boost::bind(&range_type::empty, _1)
-                );
+                maintain_invariant();
             }
 
             //!     Создание итератора на конец склеенного диапазона.
@@ -94,8 +77,8 @@ namespace burst
                 Время: O(1).
                 Память: O(1).
              */
-            join_iterator_impl (const join_iterator_impl &, iterator::end_tag_t):
-                m_ranges()
+            join_iterator_impl (const join_iterator_impl & begin, iterator::end_tag_t):
+                m_ranges(std::end(begin.m_ranges), std::end(begin.m_ranges))
             {
             }
 
@@ -104,106 +87,123 @@ namespace burst
         private:
             friend class boost::iterator_core_access;
 
-            //!     Продвижение итератора на один элемент вперёд.
+            //!     Поддержать инвариант.
             /*!
-                    Продвигает текущий из склеиваемых диапазонов на один элемент вперёд. Если тот
-                опустел, то выбрасывает его и переходит к следующему по порядку диапазону.
+                    Инвариант состоит в том, что либо внешний диапазон пуст, либо первый из
+                внутренних диапазонов непуст.
 
                     Асимптотика.
 
-                Время: O(move) + O(drop),
-                    O(move) — время продвижения хранимого диапазона на единицу вперёд.
-                    O(drop) — время выбрасывания опустевшего диапазона из буфера. В настоящий
-                    момент буфером является std::vector, поэтому эта операция занимает O(1).
-                    Соответственно, если продвижение хранимого диапазона происходит за O(1), то и
-                    вся операция выполняется за O(1).
+                Время: O(|R|),
+                    |R| — количество склеиваемых диапазонов.
+                    Худший случай достигается тогда, когда все внутренние диапазоны пусты.
+
+                Память: O(1).
+             */
+            void maintain_invariant ()
+            {
+                while (not m_ranges.empty() && m_ranges.front().empty())
+                {
+                    m_ranges.advance_begin(1);
+                }
+            }
+
+            //!     Продвижение итератора на один элемент вперёд.
+            /*!
+                    Продвигает текущий из склеиваемых диапазонов на один элемент вперёд, а затем
+                поддерживает инвариант.
+
+                    Асимптотика.
+
+                Время: O(|R|),
+                    |R| — количество склеиваемых диапазонов.
 
                 Память: O(1).
              */
             void increment ()
             {
-                m_ranges.back().advance_begin(1);
-                if (m_ranges.back().empty())
-                {
-                    m_ranges.pop_back();
-                }
+                m_ranges.front().advance_begin(1);
+                maintain_invariant();
             }
 
         private:
             typename base_type::reference dereference () const
             {
-                return m_ranges.back().front();
+                return m_ranges.front().front();
             }
 
             bool equal (const join_iterator_impl & that) const
             {
-                return this->m_ranges == that.m_ranges;
+                return
+                    (this->m_ranges.empty() && that.m_ranges.empty()) ||
+                    (not this->m_ranges.empty() && not that.m_ranges.empty() &&
+                        this->m_ranges.begin() == that.m_ranges.begin() &&
+                        this->m_ranges.front().begin() == that.m_ranges.front().begin());
             }
 
         private:
-            std::vector<range_type> m_ranges;
+            outer_range_type m_ranges;
         };
 
         //!     Итератор склейки произвольного доступа.
         /*!
                 Специализация итератора склейки для того случая, когда склеиваемые диапазоны
             являются диапазонами произвольного доступа.
-                Особенностью этой специализации является то, что склеиваемые диапазоны хранятся в
-            буфере в неизменном виде, а текущая позиция в склеенном диапазоне задаётся двумя
-            индексами: индексом текущего диапазона в буфере и индексом элемента в текущем
-            диапазоне.
-                Также буфер хранится не по значению, а по указателю, что позволяет копировать
-            итератор склейки произвольного доступа за O(1).
+                Особенностью этой специализации является то, что склеиваемый диапазон диапазонов
+            хранится в буфере в неизменном виде, а текущая позиция в склеенном диапазоне задаётся
+            двумя индексами: индексом во внешнем и внутреннем диапазонах.
+                Диапазон хранится не по значению, а по указателю, что позволяет копировать итератор
+            склейки произвольного доступа за O(1).
          */
         template <typename RandomAccessRange>
         class join_iterator_impl<RandomAccessRange, boost::random_access_traversal_tag>:
             public boost::iterator_facade
             <
                 join_iterator_impl<RandomAccessRange, boost::random_access_traversal_tag>,
-                typename RandomAccessRange::value_type,
+                typename boost::range_value<typename boost::range_value<RandomAccessRange>::type>::type,
                 boost::random_access_traversal_tag,
-                typename RandomAccessRange::reference
+                typename boost::range_reference<typename boost::range_value<RandomAccessRange>::type>::type
             >
         {
         private:
-            using range_type = RandomAccessRange;
-            using range_container_type = std::vector<range_type>;
+            using outer_range_type = RandomAccessRange;
+            using inner_range_type = typename boost::range_value<outer_range_type>::type;
+
+            using outer_difference = typename boost::range_difference<outer_range_type>::type;
+            using inner_difference = typename boost::range_difference<inner_range_type>::type;
 
             using base_type =
                 boost::iterator_facade
                 <
                     join_iterator_impl,
-                    typename range_type::value_type,
+                    typename boost::range_value<inner_range_type>::type,
                     boost::random_access_traversal_tag,
-                    typename range_type::reference
+                    typename boost::range_reference<inner_range_type>::type
                 >;
 
         public:
             //!     Создание итератора на начало склеенного диапазона.
             /*!
-                    Копирует непустые диапазоны во внутренний буфер, а также устанавливает
-                позиционирующие индексы и количество пройденных элементов в ноль.
+                    Копирует диапазон диапазонов, а также устанавливает позиционирующие индексы в
+                ноль и подсчитывает количество оставшихся элементов, равное суммарному размеру
+                входных диапазонов.
 
                     Асимптотика.
 
                 Время: O(|R|).
                 Память: O(1).
              */
-            template <typename InputRange>
-            explicit join_iterator_impl (const InputRange & ranges):
-                m_ranges(std::make_shared<range_container_type>()),
+            explicit join_iterator_impl (outer_range_type ranges):
+                m_ranges(std::make_shared<outer_range_type>(std::move(ranges))),
                 m_outer_range_index(0),
                 m_inner_range_index(0),
                 m_items_remaining(0)
             {
-                BOOST_STATIC_ASSERT(boost::is_same<typename InputRange::value_type, range_type>::value);
-
-                const auto not_empty = [] (const auto & r) { return not r.empty(); };
-                boost::algorithm::copy_if(ranges, std::back_inserter(*m_ranges), not_empty);
-
                 using boost::adaptors::transformed;
                 const auto to_size = [] (const auto & r) { return r.size(); };
                 m_items_remaining = boost::accumulate(*m_ranges | transformed(to_size), 0u);
+
+                maintain_invariant();
             }
 
             //!     Создание итератора на конец склеенного диапазона.
@@ -212,7 +212,7 @@ namespace burst
                 нужно создать именно итератор-конец.
                     Берёт из входного итератора указатель на буфер, устанавливает индекс текущего
                 диапазона на конец буфера, а индекс элемента в буфере на ноль. Также устанавливает
-                счётчик пройденных элементов равным суммарному размеру входных диапазонов.
+                счётчик оставшихся элементов в ноль.
 
                     Асимптотика.
 
@@ -231,6 +231,21 @@ namespace burst
 
         private:
             friend class boost::iterator_core_access;
+
+            //!     Поддержать инвариант.
+            /*!
+                    Индексы всегда установлены либо на первый элемент непустого диапазона, либо за
+                последним элементом последнего диапазона.
+             */
+            void maintain_invariant ()
+            {
+                while (m_outer_range_index < m_ranges->size() &&
+                    m_inner_range_index == (*m_ranges)[static_cast<outer_difference>(m_outer_range_index)].size())
+                {
+                    ++m_outer_range_index;
+                    m_inner_range_index = 0;
+                }
+            }
 
             //!     Продвижение итератора на несколько позиций сразу.
             /*!
@@ -251,7 +266,7 @@ namespace burst
              */
             void advance (typename base_type::difference_type n)
             {
-                auto abs_n = static_cast<typename range_type::size_type>(std::abs(n));
+                auto abs_n = static_cast<typename inner_range_type::size_type>(std::abs(n));
                 m_items_remaining -= n;
 
                 if (n > 0)
@@ -265,41 +280,41 @@ namespace burst
             }
 
             //!     Вперёд на n элементов.
-            void forward (typename range_type::size_type n)
+            void forward (typename inner_range_type::size_type n)
             {
                 while (n > 0)
                 {
-                    auto items_remaining_in_current_range = (*m_ranges)[m_outer_range_index].size() - m_inner_range_index;
+                    auto items_remaining_in_current_range =
+                        (*m_ranges)[static_cast<outer_difference>(m_outer_range_index)].size() - m_inner_range_index;
                     auto items_to_scroll_in_current_range = std::min(n, items_remaining_in_current_range);
                     n -= items_to_scroll_in_current_range;
 
                     m_inner_range_index += items_to_scroll_in_current_range;
-                    if (m_inner_range_index == (*m_ranges)[m_outer_range_index].size())
+                    if (m_inner_range_index == (*m_ranges)[static_cast<outer_difference>(m_outer_range_index)].size())
                     {
                         ++m_outer_range_index;
                         m_inner_range_index = 0;
                     }
                 }
+
+                maintain_invariant();
             }
 
             //!     Назад на n элементов.
-            void backward (typename range_type::size_type n)
+            void backward (typename inner_range_type::size_type n)
             {
                 while (n > 0)
                 {
                     if (m_inner_range_index == 0)
                     {
                         --m_outer_range_index;
-                        m_inner_range_index = (*m_ranges)[m_outer_range_index].size() - 1;
-                        --n;
+                        m_inner_range_index = (*m_ranges)[static_cast<outer_difference>(m_outer_range_index)].size();
                     }
-                    else
-                    {
-                        auto items_remaining_in_current_range = m_inner_range_index;
-                        auto items_to_scroll_in_current_range = std::min(n, items_remaining_in_current_range);
-                        n -= items_to_scroll_in_current_range;
-                        m_inner_range_index -= items_to_scroll_in_current_range;
-                    }
+
+                    auto items_remaining_in_current_range = m_inner_range_index;
+                    auto items_to_scroll_in_current_range = std::min(n, items_remaining_in_current_range);
+                    n -= items_to_scroll_in_current_range;
+                    m_inner_range_index -= items_to_scroll_in_current_range;
                 }
             }
 
@@ -308,21 +323,23 @@ namespace burst
                     Увеличивает индекс в текущем диапазоне на единицу. Если индекс попал в конец
                 текущего диапазона, то увеличивает индекс в буфере диапазонов на один, а индекс
                 текущего элемента устанавливает в ноль.
+                    Затем поддерживает инвариант.
 
                     Асимптотика.
 
-                Время: O(1).
+                Время: O(|R|).
                 Память: O(1).
              */
             void increment ()
             {
                 ++m_inner_range_index;
-                if (m_inner_range_index == (*m_ranges)[m_outer_range_index].size())
+                if (m_inner_range_index == (*m_ranges)[static_cast<outer_difference>(m_outer_range_index)].size())
                 {
                     ++m_outer_range_index;
                     m_inner_range_index = 0;
                 }
 
+                maintain_invariant();
                 --m_items_remaining;
             }
 
@@ -337,24 +354,22 @@ namespace burst
              */
             void decrement ()
             {
-                if (m_inner_range_index == 0)
+                while (m_inner_range_index == 0)
                 {
                     --m_outer_range_index;
-                    m_inner_range_index = (*m_ranges)[m_outer_range_index].size() - 1;
-                }
-                else
-                {
-                    --m_inner_range_index;
+                    m_inner_range_index = (*m_ranges)[static_cast<outer_difference>(m_outer_range_index)].size();
                 }
 
+                --m_inner_range_index;
                 ++m_items_remaining;
             }
 
         private:
             typename base_type::reference dereference () const
             {
-                auto inner_range_index = static_cast<typename base_type::difference_type>(m_inner_range_index);
-                return (*m_ranges)[m_outer_range_index][inner_range_index];
+                auto outer_range_index = static_cast<outer_difference>(m_outer_range_index);
+                auto inner_range_index = static_cast<inner_difference>(m_inner_range_index);
+                return (*m_ranges)[outer_range_index][inner_range_index];
             }
 
             bool equal (const join_iterator_impl & that) const
@@ -369,10 +384,10 @@ namespace burst
             }
 
         private:
-            std::shared_ptr<range_container_type> m_ranges;
+            std::shared_ptr<outer_range_type> m_ranges;
 
-            typename range_container_type::size_type m_outer_range_index;
-            typename range_type::size_type m_inner_range_index;
+            typename outer_range_type::size_type m_outer_range_index;
+            typename inner_range_type::size_type m_inner_range_index;
 
             typename base_type::difference_type m_items_remaining;
         };

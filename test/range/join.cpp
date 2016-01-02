@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 
+#include <boost/range/adaptor/reversed.hpp>
 #include <boost/range/algorithm/for_each.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <boost/range/rbegin.hpp>
@@ -20,7 +21,7 @@ BOOST_AUTO_TEST_SUITE(join)
         std::vector<int> second;
         auto ranges = burst::make_range_vector(first, second);
 
-        auto joint_range = burst::join(ranges);
+        auto joint_range = burst::join(boost::make_iterator_range(ranges));
 
         BOOST_CHECK(joint_range.empty());
     }
@@ -30,7 +31,7 @@ BOOST_AUTO_TEST_SUITE(join)
         int array[] = {1, 2, 3, 4};
         auto ranges = burst::make_range_vector(array);
 
-        auto joint_range = burst::join(ranges);
+        auto joint_range = burst::join(boost::make_iterator_range(ranges));
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
@@ -45,7 +46,7 @@ BOOST_AUTO_TEST_SUITE(join)
         auto second = burst::make_list({2, 3, 4});
         auto ranges = burst::make_range_vector(first, second);
 
-        auto joint_range = burst::join(ranges);
+        auto joint_range = burst::join(boost::make_iterator_range(ranges));
 
         auto expected_collection = {1, 2, 3, 2, 3, 4};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -62,7 +63,7 @@ BOOST_AUTO_TEST_SUITE(join)
         auto  third = {'o', '!'};
         auto ranges = burst::make_range_vector(first, second, third);
 
-        auto joint_range = burst::join(ranges);
+        auto joint_range = burst::join(boost::make_iterator_range(ranges));
 
         std::string expected_collection("hello!");
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -78,7 +79,7 @@ BOOST_AUTO_TEST_SUITE(join)
         auto second = burst::make_vector({70, 30});
         auto ranges = burst::make_range_vector(first, second);
 
-        auto joint_range = burst::join(ranges);
+        auto joint_range = burst::join(boost::make_iterator_range(ranges));
         boost::for_each(joint_range, [] (int & x) { x /= 10; });
 
         BOOST_CHECK_EQUAL(first[0], 10);
@@ -87,32 +88,13 @@ BOOST_AUTO_TEST_SUITE(join)
         BOOST_CHECK_EQUAL(second[1], 3);
     }
 
-    BOOST_AUTO_TEST_CASE(join_function_accepts_inplace_initializer_list)
-    {
-        std::string hello("hello");
-        std::string world("world");
-
-        auto joint_range = burst::join
-        ({
-            boost::make_iterator_range(hello),
-            boost::make_iterator_range(world)
-        });
-
-        std::string helloworld("helloworld");
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            std::begin(helloworld), std::end(helloworld),
-            std::begin(joint_range), std::end(joint_range)
-        );
-    }
-
     BOOST_AUTO_TEST_CASE(random_access_joined_range_has_size_method)
     {
         auto  first = burst::make_vector({1, 0});
         auto second = burst::make_vector({3, 2});
         auto ranges = burst::make_range_vector(first, second);
 
-        auto joint_range = burst::join(ranges);
+        auto joint_range = burst::join(boost::make_iterator_range(ranges));
 
         BOOST_CHECK_EQUAL(joint_range.size(), 4);
     }
@@ -126,7 +108,7 @@ BOOST_AUTO_TEST_SUITE(join)
         std::string reversed("reversed");
         auto ranges = burst::make_range_vector(join, iterator, can, be, reversed);
 
-        auto joint_range = burst::join(ranges);
+        auto joint_range = burst::join(boost::make_iterator_range(ranges));
         auto reversed_range = boost::adaptors::reverse(joint_range);
 
         std::string expected = join + iterator + can + be + reversed;
@@ -134,6 +116,104 @@ BOOST_AUTO_TEST_SUITE(join)
         (
             std::begin(reversed_range), std::end(reversed_range),
             boost::rbegin(expected), boost::rend(expected)
+        );
+    }
+
+    BOOST_AUTO_TEST_CASE(single_pass_join_range_skips_empty_range_at_the_beginning)
+    {
+        const auto empty = burst::make_list<int>({});
+        const auto first = burst::make_list({17, 19, 23});
+        auto ranges = burst::make_range_vector(empty, first);
+
+        const auto joint_range = burst::join(boost::make_iterator_range(ranges));
+
+        const auto expected_collection = {17, 19, 23};
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            std::begin(joint_range), std::end(joint_range),
+            std::begin(expected_collection), std::end(expected_collection)
+        );
+    }
+
+    BOOST_AUTO_TEST_CASE(single_pass_join_range_skips_empty_range_in_the_middle)
+    {
+        const auto first = burst::make_list({17, 19, 23});
+        const auto empty = burst::make_list<int>({});
+        const auto second = burst::make_list({29, 31, 37});
+        auto ranges = burst::make_range_vector(first, empty, second);
+
+        const auto joint_range = burst::join(boost::make_iterator_range(ranges));
+
+        const auto expected_collection = {17, 19, 23, 29, 31, 37};
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            std::begin(joint_range), std::end(joint_range),
+            std::begin(expected_collection), std::end(expected_collection)
+        );
+    }
+
+    BOOST_AUTO_TEST_CASE(single_pass_join_range_skips_empty_range_at_the_end)
+    {
+        const auto first = burst::make_list({17, 19, 23});
+        const auto empty = burst::make_list<int>({});
+        auto ranges = burst::make_range_vector(first, empty);
+
+        const auto joint_range = burst::join(boost::make_iterator_range(ranges));
+
+        const auto expected_collection = {17, 19, 23};
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            std::begin(joint_range), std::end(joint_range),
+            std::begin(expected_collection), std::end(expected_collection)
+        );
+    }
+
+    BOOST_AUTO_TEST_CASE(random_access_join_range_skips_empty_range_at_the_beginning)
+    {
+        const auto empty = burst::make_vector<int>({});
+        const auto first = burst::make_vector({17, 19, 23});
+        auto ranges = burst::make_range_vector(empty, first);
+
+        const auto joint_range = burst::join(boost::make_iterator_range(ranges));
+
+        const auto expected_collection = {17, 19, 23};
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            std::begin(joint_range), std::end(joint_range),
+            std::begin(expected_collection), std::end(expected_collection)
+        );
+    }
+
+    BOOST_AUTO_TEST_CASE(random_access_join_range_skips_empty_range_in_the_middle)
+    {
+        const auto first = burst::make_vector({17, 19, 23});
+        const auto empty = burst::make_vector<int>({});
+        const auto second = burst::make_vector({29, 31, 37});
+        auto ranges = burst::make_range_vector(first, empty, second);
+
+        const auto joint_range = burst::join(boost::make_iterator_range(ranges));
+
+        const auto expected_collection = {17, 19, 23, 29, 31, 37};
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            std::begin(joint_range), std::end(joint_range),
+            std::begin(expected_collection), std::end(expected_collection)
+        );
+    }
+
+    BOOST_AUTO_TEST_CASE(random_access_join_range_skips_empty_range_at_the_end)
+    {
+        const auto first = burst::make_vector({17, 19, 23});
+        const auto empty = burst::make_vector<int>({});
+        auto ranges = burst::make_range_vector(first, empty);
+
+        const auto joint_range = burst::join(boost::make_iterator_range(ranges));
+
+        const auto expected_collection = {17, 19, 23};
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            std::begin(joint_range), std::end(joint_range),
+            std::begin(expected_collection), std::end(expected_collection)
         );
     }
 BOOST_AUTO_TEST_SUITE_END()
