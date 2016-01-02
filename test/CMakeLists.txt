@@ -29,6 +29,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     math/intlog.cpp
     math/intlog2.cpp
     math/intpow.cpp
+    range/adaptor/cached_one.cpp
     range/adaptor/joined.cpp
     range/adaptor/taken_n.cpp
     range/bitap.cpp
