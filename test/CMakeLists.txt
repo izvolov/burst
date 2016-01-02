@@ -32,6 +32,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     range/adaptor/joined.cpp
     range/adaptor/taken_n.cpp
     range/bitap.cpp
+    range/cache_one.cpp
     range/difference.cpp
     range/intersect.cpp
     range/join.cpp
