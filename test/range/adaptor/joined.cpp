@@ -33,9 +33,14 @@ BOOST_AUTO_TEST_SUITE(joined)
     {
         const auto joined =
             boost::irange(0, 10)
-                | boost::adaptors::transformed([] (auto n) { return boost::irange(n, n + 1); })
+                | boost::adaptors::transformed([] (auto n) { return boost::irange(n * 2, n * 2 + 2); })
                 | burst::joined;
 
-        BOOST_CHECK(joined == boost::irange(0, 10));
+        const auto expected = boost::irange(0, 20);
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            std::begin(joined), std::end(joined),
+            std::begin(expected), std::end(expected)
+        );
     }
 BOOST_AUTO_TEST_SUITE_END()
