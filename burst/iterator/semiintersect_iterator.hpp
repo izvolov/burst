@@ -3,7 +3,6 @@
 
 #include <boost/algorithm/cxx11/all_of.hpp>
 #include <boost/algorithm/cxx11/is_sorted.hpp>
-#include <boost/bind.hpp>
 #include <boost/range/adaptor/transformed.hpp>
 #include <boost/range/algorithm/count.hpp>
 #include <boost/range/algorithm/count_if.hpp>
@@ -112,7 +111,11 @@ namespace burst
             m_compare(compare)
         {
             BOOST_STATIC_ASSERT(boost::is_same<typename ForwardRange1::value_type, range_type>::value);
-            BOOST_ASSERT(boost::algorithm::all_of(ranges, boost::bind(&boost::algorithm::is_sorted<range_type, compare_type>, _1, m_compare)));
+            BOOST_ASSERT(boost::algorithm::all_of(ranges,
+                [this] (const auto & range)
+                {
+                    return boost::algorithm::is_sorted(range, m_compare);
+                }));
             BOOST_ASSERT_MSG(min_items > 0, "Невозможно получить полупересечение из нуля элементов.");
 
             auto non_empty = [] (const auto & range) { return not range.empty(); };

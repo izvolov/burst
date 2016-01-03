@@ -9,7 +9,6 @@
 #include <boost/algorithm/cxx11/copy_if.hpp>
 #include <boost/algorithm/cxx11/is_sorted.hpp>
 #include <boost/assert.hpp>
-#include <boost/bind.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/range/concepts.hpp>
 #include <boost/static_assert.hpp>
@@ -81,10 +80,18 @@ namespace burst
             m_heap_order(compare)
         {
             BOOST_STATIC_ASSERT(boost::is_same<typename RandomAccessRange::value_type, range_type>::value);
-            BOOST_ASSERT(boost::algorithm::all_of(ranges, boost::bind(&boost::algorithm::is_sorted<range_type, Compare>, _1, compare)));
+            BOOST_ASSERT(boost::algorithm::all_of(ranges,
+                [& compare] (const auto & range)
+                {
+                    return boost::algorithm::is_sorted(range, compare);
+                }));
 
             m_range_heap.reserve(ranges.size());
-            boost::algorithm::copy_if(ranges, std::back_inserter(m_range_heap), not boost::bind(&range_type::empty, _1));
+            boost::algorithm::copy_if(ranges, std::back_inserter(m_range_heap),
+                [] (const auto & range)
+                {
+                    return not range.empty();
+                });
             std::make_heap(m_range_heap.begin(), m_range_heap.end(), m_heap_order);
         }
 

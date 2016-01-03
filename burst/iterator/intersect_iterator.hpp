@@ -10,7 +10,6 @@
 #include <boost/algorithm/cxx11/is_sorted.hpp>
 #include <boost/algorithm/cxx11/none_of.hpp>
 #include <boost/assert.hpp>
-#include <boost/bind.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/range/algorithm/sort.hpp>
 #include <boost/range/concepts.hpp>
@@ -108,9 +107,14 @@ namespace burst
         {
             BOOST_STATIC_ASSERT(boost::is_same<typename ForwardRange1::value_type, range_type>::value);
 
-            if (boost::algorithm::none_of(ranges, boost::bind(&range_type::empty, _1)))
+            if (boost::algorithm::none_of(ranges, [] (const auto & range) { return range.empty(); }))
             {
-                BOOST_ASSERT(boost::algorithm::all_of(ranges.begin(), ranges.end(), boost::bind(&boost::algorithm::is_sorted<range_type, Compare>, _1, compare)));
+                BOOST_ASSERT((boost::algorithm::all_of(ranges,
+                    [this] (const auto & range)
+                    {
+                        return boost::algorithm::is_sorted(range, m_compare);
+                    })));
+
                 m_ranges.assign(ranges.begin(), ranges.end());
                 boost::sort(m_ranges, detail::compare_by_front_value(m_compare));
                 settle();

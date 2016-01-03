@@ -9,7 +9,6 @@
 #include <boost/algorithm/cxx11/all_of.hpp>
 #include <boost/algorithm/cxx11/is_sorted.hpp>
 #include <boost/assert.hpp>
-#include <boost/bind.hpp>
 #include <boost/range/algorithm/upper_bound.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 
@@ -99,7 +98,11 @@ namespace burst
             m_compare(compare)
         {
             BOOST_STATIC_ASSERT(std::is_same<typename RandomAccessRange::value_type, range_type>::value);
-            BOOST_ASSERT(boost::algorithm::all_of(ranges, boost::bind(&boost::algorithm::is_sorted<range_type, compare_type>, _1, m_compare)));
+            BOOST_ASSERT(boost::algorithm::all_of(ranges,
+                [this] (const auto & range)
+                {
+                    return boost::algorithm::is_sorted(range, m_compare);
+                }));
 
             m_ranges.reserve(ranges.size());
 
