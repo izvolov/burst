@@ -1,14 +1,14 @@
+#include <burst/container/k_ary_search_set.hpp>
+#include <io.hpp>
+
+#include <boost/container/flat_set.hpp>
+#include <boost/program_options.hpp>
+
 #include <algorithm>
 #include <iostream>
 #include <set>
 #include <unordered_set>
 #include <vector>
-
-#include <boost/container/flat_set.hpp>
-#include <boost/program_options.hpp>
-
-#include <burst/container/k_ary_search_set.hpp>
-#include <io.hpp>
 
 template <typename Container>
 struct default_constructor

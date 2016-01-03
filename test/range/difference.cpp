@@ -1,15 +1,15 @@
-#include <functional>
-#include <vector>
+#include <burst/container/make_list.hpp>
+#include <burst/container/make_set.hpp>
+#include <burst/container/make_vector.hpp>
+#include <burst/range/difference.hpp>
 
 #include <boost/range/algorithm/for_each.hpp>
 #include <boost/range/algorithm/set_algorithm.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <burst/container/make_list.hpp>
-#include <burst/container/make_set.hpp>
-#include <burst/container/make_vector.hpp>
-#include <burst/range/difference.hpp>
+#include <functional>
+#include <vector>
 
 BOOST_AUTO_TEST_SUITE(difference)
     BOOST_AUTO_TEST_CASE(difference_of_two_ranges_is_set_of_elements_in_first_range_but_not_in_second_range)

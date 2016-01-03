@@ -1,8 +1,8 @@
-#include <boost/test/unit_test.hpp>
-
 #include <burst/container/access/cback.hpp>
 #include <burst/container/make_list.hpp>
 #include <burst/container/make_vector.hpp>
+
+#include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_SUITE(cback)
     BOOST_AUTO_TEST_CASE(always_returns_const_reference_of_container)

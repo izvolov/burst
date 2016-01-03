@@ -1,7 +1,7 @@
-#include <boost/test/unit_test.hpp>
-
 #include <burst/container/access/front.hpp>
 #include <burst/container/make_vector.hpp>
+
+#include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_SUITE(front)
     BOOST_AUTO_TEST_CASE(returns_a_mutable_reference_of_a_mutable_container)

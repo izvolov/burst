@@ -1,13 +1,13 @@
 #ifndef BURST_RANGE_TAKE_N_HPP
 #define BURST_RANGE_TAKE_N_HPP
 
-#include <type_traits>
+#include <burst/range/detail/take_n.hpp>
 
 #include <boost/iterator/iterator_categories.hpp>
 #include <boost/range/difference_type.hpp>
 #include <boost/range/iterator.hpp>
 
-#include <burst/range/detail/take_n.hpp>
+#include <type_traits>
 
 namespace burst
 {

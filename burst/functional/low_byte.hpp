@@ -1,6 +1,7 @@
 #ifndef BURST_FUNCTIONAL_LOW_BYTE_HPP
 #define BURST_FUNCTIONAL_LOW_BYTE_HPP
 
+#include <cstdint>
 #include <type_traits>
 
 namespace burst

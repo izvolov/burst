@@ -1,12 +1,12 @@
-#include <iostream>
-#include <algorithm>
-#include <numeric>
-#include <vector>
+#include <burst/container/k_ary_search_set.hpp>
+#include <burst/container/make_vector.hpp>
 
 #include <boost/test/unit_test.hpp>
 
-#include <burst/container/k_ary_search_set.hpp>
-#include <burst/container/make_vector.hpp>
+#include <algorithm>
+#include <iostream>
+#include <numeric>
+#include <vector>
 
 BOOST_AUTO_TEST_SUITE(k_ary_search)
     BOOST_AUTO_TEST_CASE(k_ary_search_set_initialized_with_default_constructor_is_empty)

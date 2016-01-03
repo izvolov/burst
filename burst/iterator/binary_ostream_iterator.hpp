@@ -1,11 +1,11 @@
 #ifndef BURST_ITERATOR_BINARY_OSTREAM_ITERATOR_HPP
 #define BURST_ITERATOR_BINARY_OSTREAM_ITERATOR_HPP
 
-#include <ostream>
+#include <burst/iterator/detail/trivial_write.hpp>
 
 #include <boost/function_output_iterator.hpp>
 
-#include <burst/iterator/detail/trivial_write.hpp>
+#include <ostream>
 
 namespace burst
 {

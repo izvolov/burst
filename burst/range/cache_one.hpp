@@ -1,11 +1,11 @@
 #ifndef BURST_RANGE_CACHE_ONE_HPP
 #define BURST_RANGE_CACHE_ONE_HPP
 
-#include <iterator>
+#include <burst/iterator/cache_iterator.hpp>
 
 #include <boost/range/iterator_range.hpp>
 
-#include <burst/iterator/cache_iterator.hpp>
+#include <iterator>
 
 namespace burst
 {

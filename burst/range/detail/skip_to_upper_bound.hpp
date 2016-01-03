@@ -1,11 +1,11 @@
 #ifndef BURST_RANGE_DETAIL_SKIP_TO_UPPER_BOUND_HPP
 #define BURST_RANGE_DETAIL_SKIP_TO_UPPER_BOUND_HPP
 
-#include <type_traits>
-#include <iterator>
-
 #include <boost/range/algorithm/upper_bound.hpp>
 #include <boost/range/iterator_range.hpp>
+
+#include <iterator>
+#include <type_traits>
 
 namespace burst
 {

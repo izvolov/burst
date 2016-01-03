@@ -1,10 +1,10 @@
-#include <string>
-
-#include <boost/test/unit_test.hpp>
-
 #include <burst/algorithm/searching/bitap.hpp>
 #include <burst/iterator/bitap_iterator.hpp>
 #include <burst/iterator/end_tag.hpp>
+
+#include <boost/test/unit_test.hpp>
+
+#include <string>
 
 BOOST_AUTO_TEST_SUITE(bitap_iterator)
     BOOST_AUTO_TEST_CASE(copied_iterator_is_independent)

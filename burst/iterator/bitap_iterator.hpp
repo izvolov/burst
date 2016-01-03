@@ -1,15 +1,15 @@
 #ifndef BURST_ITERATOR_BITAP_ITERATOR_HPP
 #define BURST_ITERATOR_BITAP_ITERATOR_HPP
 
-#include <iterator>
-#include <type_traits>
+#include <burst/algorithm/searching/bitap.hpp>
+#include <burst/iterator/end_tag.hpp>
 
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/range/concepts.hpp>
 #include <boost/range/iterator_range.hpp>
 
-#include <burst/algorithm/searching/bitap.hpp>
-#include <burst/iterator/end_tag.hpp>
+#include <iterator>
+#include <type_traits>
 
 namespace burst
 {

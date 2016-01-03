@@ -1,19 +1,20 @@
 #ifndef BURST_ITERATOR_UNION_ITERATOR_HPP
 #define BURST_ITERATOR_UNION_ITERATOR_HPP
 
-#include <algorithm>
-#include <functional>
-#include <iterator>
-#include <type_traits>
+#include <burst/iterator/detail/front_value_compare.hpp>
+#include <burst/iterator/end_tag.hpp>
 
 #include <boost/algorithm/cxx11/all_of.hpp>
 #include <boost/algorithm/cxx11/is_sorted.hpp>
 #include <boost/assert.hpp>
-#include <boost/range/algorithm/upper_bound.hpp>
 #include <boost/iterator/iterator_facade.hpp>
+#include <boost/range/algorithm/upper_bound.hpp>
 
-#include <burst/iterator/detail/front_value_compare.hpp>
-#include <burst/iterator/end_tag.hpp>
+#include <algorithm>
+#include <functional>
+#include <iterator>
+#include <type_traits>
+#include <vector>
 
 namespace burst
 {

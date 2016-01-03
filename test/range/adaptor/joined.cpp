@@ -1,12 +1,12 @@
-#include <iterator>
+#include <burst/container/make_forward_list.hpp>
+#include <burst/range/adaptor/joined.hpp>
+#include <burst/range/make_range_vector.hpp>
 
 #include <boost/range/irange.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <burst/container/make_forward_list.hpp>
-#include <burst/range/adaptor/joined.hpp>
-#include <burst/range/make_range_vector.hpp>
+#include <iterator>
 
 BOOST_AUTO_TEST_SUITE(joined)
     BOOST_AUTO_TEST_CASE(acts_just_like_join_function)

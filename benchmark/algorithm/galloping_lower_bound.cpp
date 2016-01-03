@@ -1,11 +1,11 @@
-#include <algorithm>
-#include <iostream>
-#include <vector>
+#include <burst/algorithm/galloping_lower_bound.hpp>
+#include <io.hpp>
 
 #include <boost/program_options.hpp>
 
-#include <burst/algorithm/galloping_lower_bound.hpp>
-#include <io.hpp>
+#include <algorithm>
+#include <iostream>
+#include <vector>
 
 template <typename Container, typename Function>
 void test (const Container & numbers, std::size_t attempts, Function lower_bound, const std::string & name)

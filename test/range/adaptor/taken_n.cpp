@@ -1,10 +1,10 @@
-#include <iterator>
+#include <burst/container/make_forward_list.hpp>
+#include <burst/range/adaptor/taken_n.hpp>
 
 #include <boost/range/irange.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <burst/container/make_forward_list.hpp>
-#include <burst/range/adaptor/taken_n.hpp>
+#include <iterator>
 
 BOOST_AUTO_TEST_SUITE(taken_n)
     BOOST_AUTO_TEST_CASE(takes_exactly_specified_number_of_elements)

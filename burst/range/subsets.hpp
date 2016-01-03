@@ -1,12 +1,12 @@
 #ifndef BURST_RANGE_SUBSETS_HPP
 #define BURST_RANGE_SUBSETS_HPP
 
-#include <type_traits>
-#include <utility>
+#include <burst/iterator/subset_iterator.hpp>
 
 #include <boost/range/iterator_range.hpp>
 
-#include <burst/iterator/subset_iterator.hpp>
+#include <type_traits>
+#include <utility>
 
 namespace burst
 {

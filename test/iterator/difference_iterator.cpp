@@ -1,11 +1,11 @@
-#include <forward_list>
-#include <iterator>
+#include <burst/container/make_forward_list.hpp>
+#include <burst/iterator/difference_iterator.hpp>
 
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <burst/container/make_forward_list.hpp>
-#include <burst/iterator/difference_iterator.hpp>
+#include <forward_list>
+#include <iterator>
 
 BOOST_AUTO_TEST_SUITE(difference_iterator)
     BOOST_AUTO_TEST_CASE(difference_iterator_end_is_created_using_special_tag)

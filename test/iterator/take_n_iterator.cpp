@@ -1,13 +1,13 @@
-#include <iterator>
-#include <sstream>
-
-#include <boost/range/concepts.hpp>
-#include <boost/test/unit_test.hpp>
-
 #include <burst/container/make_forward_list.hpp>
 #include <burst/container/make_list.hpp>
 #include <burst/container/make_vector.hpp>
 #include <burst/iterator/take_n_iterator.hpp>
+
+#include <boost/range/concepts.hpp>
+#include <boost/test/unit_test.hpp>
+
+#include <iterator>
+#include <sstream>
 
 BOOST_AUTO_TEST_SUITE(take_n_iterator)
     BOOST_AUTO_TEST_CASE(iterator_category_falls_back_to_forward_iterator)

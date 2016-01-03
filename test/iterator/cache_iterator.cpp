@@ -1,12 +1,12 @@
-#include <iterator>
-#include <type_traits>
+#include <burst/container/make_forward_list.hpp>
+#include <burst/container/make_vector.hpp>
+#include <burst/iterator/cache_iterator.hpp>
 
 #include <boost/iterator/transform_iterator.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <burst/container/make_forward_list.hpp>
-#include <burst/container/make_vector.hpp>
-#include <burst/iterator/cache_iterator.hpp>
+#include <iterator>
+#include <type_traits>
 
 BOOST_AUTO_TEST_SUITE(cache_iterator)
     BOOST_AUTO_TEST_CASE(iterator_returning_an_lvalue_reference_is_forwarded)

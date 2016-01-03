@@ -1,11 +1,11 @@
+#include <burst/algorithm/galloping_upper_bound.hpp>
+
+#include <boost/test/unit_test.hpp>
+
 #include <functional>
 #include <list>
 #include <string>
 #include <vector>
-
-#include <boost/test/unit_test.hpp>
-
-#include <burst/algorithm/galloping_upper_bound.hpp>
 
 BOOST_AUTO_TEST_SUITE(galloping_upper_bound)
     BOOST_AUTO_TEST_CASE(searching_an_empty_range_results_range_end)

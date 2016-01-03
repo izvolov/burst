@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <iterator>
 
 namespace burst
 {
@@ -66,8 +67,8 @@ namespace burst
                     Compare compare
                 )
         {
-            auto subset_rbegin = boost::make_reverse_iterator(subset_end);
-            auto subset_rend = boost::make_reverse_iterator(subset_begin);
+            auto subset_rbegin = std::make_reverse_iterator(subset_end);
+            auto subset_rend = std::make_reverse_iterator(subset_begin);
 
             auto moving = subset_rbegin;
             while (moving != subset_rend)

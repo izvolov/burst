@@ -1,9 +1,9 @@
-#include <chrono>
-#include <iostream>
+#include <burst/container/dynamic_tuple.hpp>
 
 #include <boost/program_options.hpp>
 
-#include <burst/container/dynamic_tuple.hpp>
+#include <chrono>
+#include <iostream>
 
 void test (std::size_t size, std::size_t attempt_count)
 {

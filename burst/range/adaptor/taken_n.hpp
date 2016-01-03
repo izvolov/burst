@@ -1,11 +1,11 @@
 #ifndef BURST_RANGE_ADAPTOR_TAKEN_N_HPP
 #define BURST_RANGE_ADAPTOR_TAKEN_N_HPP
 
-#include <type_traits>
+#include <burst/range/take_n.hpp>
 
 #include <boost/range/difference_type.hpp>
 
-#include <burst/range/take_n.hpp>
+#include <type_traits>
 
 namespace burst
 {

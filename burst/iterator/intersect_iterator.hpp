@@ -1,10 +1,9 @@
 #ifndef BURST_ITERATOR_INTERSECT_ITERATOR_HPP
 #define BURST_ITERATOR_INTERSECT_ITERATOR_HPP
 
-#include <algorithm>
-#include <functional>
-#include <type_traits>
-#include <vector>
+#include <burst/iterator/detail/front_value_compare.hpp>
+#include <burst/iterator/end_tag.hpp>
+#include <burst/range/skip_to_lower_bound.hpp>
 
 #include <boost/algorithm/cxx11/all_of.hpp>
 #include <boost/algorithm/cxx11/is_sorted.hpp>
@@ -16,9 +15,10 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-#include <burst/iterator/detail/front_value_compare.hpp>
-#include <burst/iterator/end_tag.hpp>
-#include <burst/range/skip_to_lower_bound.hpp>
+#include <algorithm>
+#include <functional>
+#include <type_traits>
+#include <vector>
 
 namespace burst
 {

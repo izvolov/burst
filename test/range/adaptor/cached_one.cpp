@@ -1,7 +1,7 @@
+#include <burst/range/adaptor/cached_one.hpp>
+
 #include <boost/range/irange.hpp>
 #include <boost/test/unit_test.hpp>
-
-#include <burst/range/adaptor/cached_one.hpp>
 
 BOOST_AUTO_TEST_SUITE(cached_one)
     BOOST_AUTO_TEST_CASE(accepts_a_range_by_lvalue)

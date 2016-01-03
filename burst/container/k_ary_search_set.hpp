@@ -1,20 +1,20 @@
 #ifndef BURST_CONTAINER_K_ARY_SEARCH_SET_HPP
 #define BURST_CONTAINER_K_ARY_SEARCH_SET_HPP
 
+#include <burst/container/unique_ordered_tag.hpp>
+#include <burst/math/intlog.hpp>
+#include <burst/math/intpow.hpp>
+
+#include <boost/assert.hpp>
+#include <boost/container/container_fwd.hpp>
+#include <boost/range/iterator_range.hpp>
+
 #include <algorithm>
 #include <functional>
 #include <iterator>
 #include <stack>
 #include <utility>
 #include <vector>
-
-#include <boost/assert.hpp>
-#include <boost/container/container_fwd.hpp>
-#include <boost/range/iterator_range.hpp>
-
-#include <burst/container/unique_ordered_tag.hpp>
-#include <burst/math/intlog.hpp>
-#include <burst/math/intpow.hpp>
 
 namespace burst
 {

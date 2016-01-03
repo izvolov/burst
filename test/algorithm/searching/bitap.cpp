@@ -1,10 +1,10 @@
-#include <bitset>
-#include <string>
-#include <forward_list>
+#include <burst/algorithm/searching/bitap.hpp>
 
 #include <boost/test/unit_test.hpp>
 
-#include <burst/algorithm/searching/bitap.hpp>
+#include <bitset>
+#include <forward_list>
+#include <string>
 
 BOOST_AUTO_TEST_SUITE(bitap)
     BOOST_AUTO_TEST_CASE(pattern_is_found_at_the_next_match_when_search_started_in_the_middle_of_the_first_match)

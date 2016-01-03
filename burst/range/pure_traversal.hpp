@@ -1,8 +1,8 @@
 #ifndef BURST_RANGE_PURE_TRAVERSAL_HPP
 #define BURST_RANGE_PURE_TRAVERSAL_HPP
 
-#include <boost/range/traversal.hpp>
 #include <boost/iterator/iterator_categories.hpp>
+#include <boost/range/traversal.hpp>
 
 namespace burst
 {

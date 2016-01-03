@@ -1,17 +1,17 @@
 #ifndef BURST_CONTAINER_DYNAMIC_TUPLE_HPP
 #define BURST_CONTAINER_DYNAMIC_TUPLE_HPP
 
+#include <burst/algorithm/sum.hpp>
+#include <burst/container/detail/lifetime_manager.hpp>
+#include <burst/variadic.hpp>
+
+#include <boost/assert.hpp>
+
 #include <algorithm>
 #include <cstdint>
 #include <memory>
 #include <utility>
 #include <vector>
-
-#include <boost/assert.hpp>
-
-#include <burst/algorithm/sum.hpp>
-#include <burst/container/detail/lifetime_manager.hpp>
-#include <burst/variadic.hpp>
 
 namespace burst
 {

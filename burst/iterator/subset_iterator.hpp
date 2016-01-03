@@ -1,18 +1,18 @@
 #ifndef BURST_ITERATOR_SUBSET_ITERATOR_HPP
 #define BURST_ITERATOR_SUBSET_ITERATOR_HPP
 
-#include <functional>
-#include <type_traits>
-#include <utility>
-#include <vector>
+#include <burst/iterator/detail/subset.hpp>
+#include <burst/iterator/end_tag.hpp>
 
 #include <boost/assert.hpp>
 #include <boost/iterator/indirect_iterator.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/range/iterator_range.hpp>
 
-#include <burst/iterator/detail/subset.hpp>
-#include <burst/iterator/end_tag.hpp>
+#include <functional>
+#include <type_traits>
+#include <utility>
+#include <vector>
 
 namespace burst
 {

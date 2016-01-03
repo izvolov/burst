@@ -1,13 +1,13 @@
-#include <iostream>
-#include <iterator>
-#include <sstream>
-#include <vector>
+#include <burst/iterator/binary_ostream_iterator.hpp>
+#include <burst/range/binary_istream_range.hpp>
 
 #include <boost/range/algorithm/copy.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <burst/iterator/binary_ostream_iterator.hpp>
-#include <burst/range/binary_istream_range.hpp>
+#include <iostream>
+#include <iterator>
+#include <sstream>
+#include <vector>
 
 BOOST_AUTO_TEST_SUITE(binary_stream_iterators)
     BOOST_AUTO_TEST_CASE(trivial_objects_are_written_and_read_by_default_io_functions)

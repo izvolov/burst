@@ -1,14 +1,14 @@
 #ifndef BURST_ALGORITHM_SORTING_DETAIL_COUNTING_SORT_HPP
 #define BURST_ALGORITHM_SORTING_DETAIL_COUNTING_SORT_HPP
 
+#include <burst/container/access/cback.hpp>
+
 #include <algorithm>
 #include <iterator>
 #include <limits>
 #include <numeric>
 #include <type_traits>
 #include <vector>
-
-#include <burst/container/access/cback.hpp>
 
 namespace burst
 {

@@ -1,9 +1,7 @@
 #ifndef BURST_ITERATOR_DETAIL_JOIN_ITERATOR_HPP
 #define BURST_ITERATOR_DETAIL_JOIN_ITERATOR_HPP
 
-#include <algorithm>
-#include <iterator>
-#include <memory>
+#include <burst/iterator/end_tag.hpp>
 
 #include <boost/iterator/iterator_categories.hpp>
 #include <boost/iterator/iterator_facade.hpp>
@@ -13,7 +11,9 @@
 #include <boost/range/reference.hpp>
 #include <boost/range/value_type.hpp>
 
-#include <burst/iterator/end_tag.hpp>
+#include <algorithm>
+#include <iterator>
+#include <memory>
 
 namespace burst
 {

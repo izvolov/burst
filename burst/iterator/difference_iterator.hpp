@@ -1,15 +1,15 @@
 #ifndef BURST_ITERATOR_DIFFERENCE_ITERATOR_HPP
 #define BURST_ITERATOR_DIFFERENCE_ITERATOR_HPP
 
-#include <functional>
+#include <burst/iterator/end_tag.hpp>
+#include <burst/range/skip_to_lower_bound.hpp>
 
 #include <boost/algorithm/cxx11/is_sorted.hpp>
 #include <boost/assert.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/range/concepts.hpp>
 
-#include <burst/iterator/end_tag.hpp>
-#include <burst/range/skip_to_lower_bound.hpp>
+#include <functional>
 
 namespace burst
 {

@@ -1,10 +1,10 @@
 #ifndef BURST_RANGE_JOIN_HPP
 #define BURST_RANGE_JOIN_HPP
 
-#include <boost/range/iterator_range.hpp>
-
 #include <burst/iterator/end_tag.hpp>
 #include <burst/iterator/join_iterator.hpp>
+
+#include <boost/range/iterator_range.hpp>
 
 namespace burst
 {

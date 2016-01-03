@@ -1,11 +1,11 @@
 #ifndef BURST_BENCHMARK_IO_HPP
 #define BURST_BENCHMARK_IO_HPP
 
+#include <boost/range/algorithm/for_each.hpp>
+
 #include <iostream>
 #include <sstream>
 #include <string>
-
-#include <boost/range/algorithm/for_each.hpp>
 
 template <typename Container>
 void write (std::ostream & stream, const Container & values)

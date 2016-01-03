@@ -1,10 +1,10 @@
-#include <forward_list>
-#include <iterator>
+#include <burst/iterator/union_iterator.hpp>
 
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <burst/iterator/union_iterator.hpp>
+#include <forward_list>
+#include <iterator>
 
 BOOST_AUTO_TEST_SUITE(union_iterator)
     BOOST_AUTO_TEST_CASE(union_iterator_end_is_created_using_special_tag)

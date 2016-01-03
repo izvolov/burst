@@ -1,10 +1,10 @@
 #ifndef BURST_RANGE_DIFFERENCE_HPP
 #define BURST_RANGE_DIFFERENCE_HPP
 
-#include <boost/range/iterator_range.hpp>
-
 #include <burst/iterator/difference_iterator.hpp>
 #include <burst/iterator/end_tag.hpp>
+
+#include <boost/range/iterator_range.hpp>
 
 namespace burst
 {

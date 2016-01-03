@@ -1,9 +1,9 @@
-#include <stdexcept>
-#include <type_traits>
+#include <burst/math/intpow.hpp>
 
 #include <boost/test/unit_test.hpp>
 
-#include <burst/math/intpow.hpp>
+#include <stdexcept>
+#include <type_traits>
 
 BOOST_AUTO_TEST_SUITE(intpow)
     BOOST_AUTO_TEST_CASE(any_power_of_zero_is_zero)

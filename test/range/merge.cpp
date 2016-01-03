@@ -1,15 +1,15 @@
-#include <functional>
-#include <iterator>
-#include <vector>
+#include <burst/container/make_list.hpp>
+#include <burst/container/make_vector.hpp>
+#include <burst/range/make_range_vector.hpp>
+#include <burst/range/merge.hpp>
 
 #include <boost/range/algorithm/for_each.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <burst/container/make_list.hpp>
-#include <burst/container/make_vector.hpp>
-#include <burst/range/make_range_vector.hpp>
-#include <burst/range/merge.hpp>
+#include <functional>
+#include <iterator>
+#include <vector>
 
 BOOST_AUTO_TEST_SUITE(merge)
     BOOST_AUTO_TEST_CASE(merging_empty_ranges_results_empty_range)

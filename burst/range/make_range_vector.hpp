@@ -1,9 +1,9 @@
 #ifndef BURST_RANGE_MAKE_RANGE_VECTOR_HPP
 #define BURST_RANGE_MAKE_RANGE_VECTOR_HPP
 
-#include <boost/range/iterator_range.hpp>
-
 #include <burst/container/make_vector.hpp>
+
+#include <boost/range/iterator_range.hpp>
 
 namespace burst
 {

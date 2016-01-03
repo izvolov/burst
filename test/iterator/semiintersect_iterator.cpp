@@ -1,9 +1,9 @@
-#include <iterator>
+#include <burst/iterator/semiintersect_iterator.hpp>
+#include <burst/range/make_range_vector.hpp>
 
 #include <boost/test/unit_test.hpp>
 
-#include <burst/iterator/semiintersect_iterator.hpp>
-#include <burst/range/make_range_vector.hpp>
+#include <iterator>
 
 BOOST_AUTO_TEST_SUITE(semiintersect_iterator)
     BOOST_AUTO_TEST_CASE(semiintersect_iterator_end_is_created_using_special_tag)

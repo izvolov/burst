@@ -1,14 +1,14 @@
+#include <burst/iterator/merge_iterator.hpp>
+#include <burst/range/merge.hpp>
+#include <io.hpp>
+
+#include <boost/assert.hpp>
+#include <boost/range/algorithm/for_each.hpp>
+#include <boost/range/iterator_range.hpp>
+
 #include <iostream>
 #include <numeric>
 #include <vector>
-
-#include <boost/assert.hpp>
-#include <boost/range/iterator_range.hpp>
-#include <boost/range/algorithm/for_each.hpp>
-
-#include <burst/range/merge.hpp>
-#include <burst/iterator/merge_iterator.hpp>
-#include <io.hpp>
 
 template <typename Container>
 void test_on_the_fly_merge (const Container & values)

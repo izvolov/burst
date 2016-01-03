@@ -1,9 +1,9 @@
 #ifndef BURST_RANGE_ADAPTOR_JOINED_HPP
 #define BURST_RANGE_ADAPTOR_JOINED_HPP
 
-#include <utility>
-
 #include <burst/range/join.hpp>
+
+#include <utility>
 
 namespace burst
 {

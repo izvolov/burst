@@ -1,9 +1,9 @@
 #ifndef BURST_ITERATOR_MERGE_ITERATOR_HPP
 #define BURST_ITERATOR_MERGE_ITERATOR_HPP
 
-#include <algorithm>
-#include <functional>
-#include <vector>
+#include <burst/iterator/detail/front_value_compare.hpp>
+#include <burst/iterator/detail/invert_compare.hpp>
+#include <burst/iterator/end_tag.hpp>
 
 #include <boost/algorithm/cxx11/all_of.hpp>
 #include <boost/algorithm/cxx11/copy_if.hpp>
@@ -14,9 +14,9 @@
 #include <boost/static_assert.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-#include <burst/iterator/detail/front_value_compare.hpp>
-#include <burst/iterator/detail/invert_compare.hpp>
-#include <burst/iterator/end_tag.hpp>
+#include <algorithm>
+#include <functional>
+#include <vector>
 
 namespace burst
 {

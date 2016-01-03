@@ -1,9 +1,9 @@
 #ifndef BURST_RANGE_MERGE_HPP
 #define BURST_RANGE_MERGE_HPP
 
-#include <boost/range/iterator_range.hpp>
-
 #include <burst/iterator/merge_iterator.hpp>
+
+#include <boost/range/iterator_range.hpp>
 
 namespace burst
 {

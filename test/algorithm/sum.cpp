@@ -1,6 +1,6 @@
-#include <boost/test/unit_test.hpp>
-
 #include <burst/algorithm/sum.hpp>
+
+#include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_SUITE(sum)
     BOOST_AUTO_TEST_CASE(sum_is_a_constexpr_function)

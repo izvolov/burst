@@ -1,12 +1,12 @@
 #ifndef BURST_ITERATOR_CACHE_ITERATOR_HPP
 #define BURST_ITERATOR_CACHE_ITERATOR_HPP
 
+#include <boost/iterator/iterator_facade.hpp>
+#include <boost/optional.hpp>
+
 #include <iterator>
 #include <type_traits>
 #include <utility>
-
-#include <boost/iterator/iterator_facade.hpp>
-#include <boost/optional.hpp>
 
 namespace burst
 {

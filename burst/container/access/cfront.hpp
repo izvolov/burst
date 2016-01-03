@@ -1,6 +1,8 @@
 #ifndef BURST_CONTAINER_ACCESS_CFRONT_HPP
 #define BURST_CONTAINER_ACCESS_CFRONT_HPP
 
+#include <cstddef>
+
 namespace burst
 {
     template <class T, std::size_t Size>

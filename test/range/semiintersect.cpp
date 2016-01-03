@@ -1,15 +1,15 @@
-#include <functional>
-#include <iterator>
-#include <list>
-#include <string>
-#include <vector>
+#include <burst/range/make_range_vector.hpp>
+#include <burst/range/semiintersect.hpp>
 
 #include <boost/range/irange.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <burst/range/make_range_vector.hpp>
-#include <burst/range/semiintersect.hpp>
+#include <functional>
+#include <iterator>
+#include <list>
+#include <string>
+#include <vector>
 
 BOOST_AUTO_TEST_SUITE(semiintersect)
     BOOST_AUTO_TEST_CASE(semiintersecting_empty_ranges_results_empty_range)

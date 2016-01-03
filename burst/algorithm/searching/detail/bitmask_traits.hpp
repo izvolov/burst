@@ -2,8 +2,8 @@
 #define BURST_ALGORITHM_SEARCHING_DETAIL_BITMASK_TRAITS_HPP
 
 #include <bitset>
-#include <type_traits>
 #include <climits>
+#include <type_traits>
 
 #define TYPE_IS_NOT_INTEGRAL_ERROR_MESSAGE \
 "Тип битовой маски не является целочисленным. \

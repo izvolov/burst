@@ -1,8 +1,8 @@
-#include <limits>
+#include <burst/math/intlog2.hpp>
 
 #include <boost/test/unit_test.hpp>
 
-#include <burst/math/intlog2.hpp>
+#include <limits>
 
 BOOST_AUTO_TEST_SUITE(intlog2)
     BOOST_AUTO_TEST_CASE(intlog2_of_zero_is_maximal_value_of_integer)

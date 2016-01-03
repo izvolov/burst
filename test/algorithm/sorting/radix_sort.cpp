@@ -1,8 +1,5 @@
-#include <limits>
-#include <memory>
-#include <string>
-#include <utility>
-#include <vector>
+#include <burst/algorithm/sorting/radix_sort.hpp>
+#include <test/output.hpp>
 
 #include <boost/iterator/indirect_iterator.hpp>
 #include <boost/range/begin.hpp>
@@ -11,8 +8,11 @@
 #include <boost/range/rend.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <burst/algorithm/sorting/radix_sort.hpp>
-#include <test/output.hpp>
+#include <limits>
+#include <memory>
+#include <string>
+#include <utility>
+#include <vector>
 
 BOOST_AUTO_TEST_SUITE(radix_sort)
     BOOST_AUTO_TEST_CASE(sorting_empty_range_does_nothing)

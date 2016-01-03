@@ -1,11 +1,11 @@
-#include <string>
-#include <vector>
+#include <burst/container/dynamic_tuple.hpp>
+#include <iostream>
+#include <test/output.hpp>
 
 #include <boost/test/unit_test.hpp>
 
-#include <iostream>
-#include <burst/container/dynamic_tuple.hpp>
-#include <test/output.hpp>
+#include <string>
+#include <vector>
 
 BOOST_AUTO_TEST_SUITE(dynamic_tuple)
     struct X

@@ -1,11 +1,11 @@
-#include <iterator>
-#include <list>
-#include <vector>
+#include <burst/iterator/subset_iterator.hpp>
 
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <burst/iterator/subset_iterator.hpp>
+#include <iterator>
+#include <list>
+#include <vector>
 
 BOOST_AUTO_TEST_SUITE(subset_iterator)
     BOOST_AUTO_TEST_CASE(empty_set_has_no_subsets)

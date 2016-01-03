@@ -1,12 +1,12 @@
+#include <burst/range/intersect.hpp>
+#include <io.hpp>
+
+#include <boost/range/algorithm/for_each.hpp>
+#include <boost/range/iterator_range.hpp>
+
 #include <iostream>
 #include <numeric>
 #include <vector>
-
-#include <boost/range/iterator_range.hpp>
-#include <boost/range/algorithm/for_each.hpp>
-
-#include <burst/range/intersect.hpp>
-#include <io.hpp>
 
 template <typename Container>
 void test_on_the_fly_intersect (const Container & values)

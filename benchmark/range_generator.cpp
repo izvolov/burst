@@ -1,3 +1,7 @@
+#include <io.hpp>
+
+#include <boost/program_options.hpp>
+
 #include <algorithm>
 #include <chrono>
 #include <cstdint>
@@ -6,9 +10,6 @@
 #include <iostream>
 #include <random>
 #include <vector>
-
-#include <boost/program_options.hpp>
-#include <io.hpp>
 
 void generate (std::size_t range_count, std::size_t range_length, std::int64_t min, std::int64_t max, bool seed, bool sort, bool descending)
 {

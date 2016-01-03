@@ -1,11 +1,11 @@
 #ifndef BURST_ALGORITHM_GALLOPING_LOWER_BOUND_HPP
 #define BURST_ALGORITHM_GALLOPING_LOWER_BOUND_HPP
 
+#include <boost/assert.hpp>
+
 #include <algorithm>
 #include <functional>
 #include <iterator>
-
-#include <boost/assert.hpp>
 
 namespace burst
 {

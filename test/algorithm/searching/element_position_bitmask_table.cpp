@@ -1,14 +1,14 @@
-#include <array>
-#include <climits>
-#include <map>
-#include <set>
-#include <string>
-#include <bitset>
+#include <burst/algorithm/searching/detail/element_position_bitmask_table.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <boost/utility/binary.hpp>
 
-#include <burst/algorithm/searching/detail/element_position_bitmask_table.hpp>
+#include <array>
+#include <bitset>
+#include <climits>
+#include <map>
+#include <set>
+#include <string>
 
 using char_masks = burst::algorithm::detail::element_position_bitmask_table<std::array<std::bitset<32>, (1 << sizeof(char) * CHAR_BIT)>>;
 using integral_masks = burst::algorithm::detail::element_position_bitmask_table<std::map<int, std::bitset<64>>>;

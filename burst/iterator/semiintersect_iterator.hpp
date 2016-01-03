@@ -1,6 +1,10 @@
 #ifndef BURST_ITERATOR_SEMIINTERSECT_ITERATOR_HPP
 #define BURST_ITERATOR_SEMIINTERSECT_ITERATOR_HPP
 
+#include <burst/iterator/detail/front_value_compare.hpp>
+#include <burst/iterator/end_tag.hpp>
+#include <burst/range/skip_to_lower_bound.hpp>
+
 #include <boost/algorithm/cxx11/all_of.hpp>
 #include <boost/algorithm/cxx11/is_sorted.hpp>
 #include <boost/range/adaptor/transformed.hpp>
@@ -8,9 +12,11 @@
 #include <boost/range/algorithm/count_if.hpp>
 #include <boost/range/algorithm/remove_if.hpp>
 
-#include <burst/iterator/detail/front_value_compare.hpp>
-#include <burst/iterator/end_tag.hpp>
-#include <burst/range/skip_to_lower_bound.hpp>
+#include <algorithm>
+#include <functional>
+#include <iterator>
+#include <type_traits>
+#include <vector>
 
 namespace burst
 {

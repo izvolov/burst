@@ -1,14 +1,14 @@
 #ifndef BURST_ITERATOR_BINARY_ISTREAM_ITERATOR_HPP
 #define BURST_ITERATOR_BINARY_ISTREAM_ITERATOR_HPP
 
-#include <istream>
+#include <burst/iterator/detail/trivial_read.hpp>
+#include <burst/iterator/end_tag.hpp>
 
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/optional.hpp>
 #include <boost/range/iterator_range.hpp>
 
-#include <burst/iterator/detail/trivial_read.hpp>
-#include <burst/iterator/end_tag.hpp>
+#include <istream>
 
 namespace burst
 {

@@ -1,14 +1,14 @@
 #ifndef BURST_RANGE_DETAIL_TAKE_N_HPP
 #define BURST_RANGE_DETAIL_TAKE_N_HPP
 
-#include <iterator>
+#include <burst/iterator/end_tag.hpp>
+#include <burst/iterator/take_n_iterator.hpp>
 
 #include <boost/iterator/iterator_categories.hpp>
 #include <boost/range/difference_type.hpp>
 #include <boost/range/iterator_range.hpp>
 
-#include <burst/iterator/end_tag.hpp>
-#include <burst/iterator/take_n_iterator.hpp>
+#include <iterator>
 
 namespace burst
 {

@@ -1,14 +1,14 @@
+#include <burst/container/make_forward_list.hpp>
+#include <burst/range/bitap.hpp>
+
+#include <boost/test/unit_test.hpp>
+
 #include <algorithm>
 #include <bitset>
 #include <cstdint>
 #include <iterator>
 #include <string>
 #include <unordered_map>
-
-#include <boost/test/unit_test.hpp>
-
-#include <burst/container/make_forward_list.hpp>
-#include <burst/range/bitap.hpp>
 
 BOOST_AUTO_TEST_SUITE(bitap)
     BOOST_AUTO_TEST_CASE(pattern_is_found_when_equal_to_whole_text)

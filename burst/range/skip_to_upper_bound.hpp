@@ -1,10 +1,10 @@
 #ifndef BURST_RANGE_SKIP_TO_UPPER_BOUND_HPP
 #define BURST_RANGE_SKIP_TO_UPPER_BOUND_HPP
 
+#include <burst/range/detail/skip_to_upper_bound.hpp>
+
 #include <boost/algorithm/cxx11/is_sorted.hpp>
 #include <boost/assert.hpp>
-
-#include <burst/range/detail/skip_to_upper_bound.hpp>
 
 namespace burst
 {

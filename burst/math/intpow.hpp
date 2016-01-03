@@ -2,6 +2,7 @@
 #define BURST_MATH_INTPOW_HPP
 
 #include <limits>
+#include <stdexcept>
 #include <type_traits>
 
 namespace burst

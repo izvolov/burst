@@ -1,13 +1,13 @@
 #ifndef BURST_ITERATOR_TAKE_N_ITERATOR_HPP
 #define BURST_ITERATOR_TAKE_N_ITERATOR_HPP
 
-#include <iterator>
-#include <type_traits>
+#include <burst/iterator/end_tag.hpp>
 
 #include <boost/iterator/iterator_categories.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 
-#include <burst/iterator/end_tag.hpp>
+#include <iterator>
+#include <type_traits>
 
 namespace burst
 {

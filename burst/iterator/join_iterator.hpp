@@ -1,14 +1,14 @@
 #ifndef BURST_ITERATOR_JOIN_ITERATOR_HPP
 #define BURST_ITERATOR_JOIN_ITERATOR_HPP
 
-#include <utility>
+#include <burst/iterator/detail/join_iterator.hpp>
+#include <burst/iterator/end_tag.hpp>
+#include <burst/range/pure_traversal.hpp>
 
 #include <boost/iterator/minimum_category.hpp>
 #include <boost/range/value_type.hpp>
 
-#include <burst/iterator/detail/join_iterator.hpp>
-#include <burst/iterator/end_tag.hpp>
-#include <burst/range/pure_traversal.hpp>
+#include <utility>
 
 namespace burst
 {

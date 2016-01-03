@@ -1,9 +1,9 @@
 #ifndef BURST_RANGE_ADAPTOR_CACHED_ONE_HPP
 #define BURST_RANGE_ADAPTOR_CACHED_ONE_HPP
 
-#include <utility>
-
 #include <burst/range/cache_one.hpp>
+
+#include <utility>
 
 namespace burst
 {

@@ -1,6 +1,6 @@
-#include <boost/test/unit_test.hpp>
-
 #include <burst/functional/low_byte.hpp>
+
+#include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_SUITE(low_byte)
     BOOST_AUTO_TEST_CASE(low_byte_has_a_constexpr_parentheses)

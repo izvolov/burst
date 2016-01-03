@@ -1,16 +1,16 @@
-#include <functional>
-#include <iterator>
-#include <string>
-#include <vector>
+#include <burst/container/make_list.hpp>
+#include <burst/container/make_vector.hpp>
+#include <burst/range/intersect.hpp>
+#include <burst/range/make_range_vector.hpp>
 
 #include <boost/range/irange.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <burst/container/make_list.hpp>
-#include <burst/container/make_vector.hpp>
-#include <burst/range/intersect.hpp>
-#include <burst/range/make_range_vector.hpp>
+#include <functional>
+#include <iterator>
+#include <string>
+#include <vector>
 
 BOOST_AUTO_TEST_SUITE(intersect)
     BOOST_AUTO_TEST_CASE(intersecting_empty_ranges_results_empty_range)

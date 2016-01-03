@@ -1,8 +1,8 @@
-#include <iostream>
-#include <vector>
-
 #include <burst/iterator/subset_iterator.hpp>
 #include <io.hpp>
+
+#include <iostream>
+#include <vector>
 
 template <typename Container>
 void test (const Container & numbers)

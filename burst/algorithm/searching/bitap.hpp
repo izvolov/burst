@@ -1,18 +1,18 @@
 #ifndef BURST_ALGORITHM_SEARCHING_BITAP_HPP
 #define BURST_ALGORITHM_SEARCHING_BITAP_HPP
 
+#include <burst/algorithm/searching/detail/bitmask_traits.hpp>
+#include <burst/algorithm/searching/detail/element_position_bitmask_table.hpp>
+
+#include <boost/assert.hpp>
+#include <boost/range/iterator_range.hpp>
+
 #include <array>
 #include <climits>
 #include <iterator>
 #include <map>
 #include <memory>
 #include <type_traits>
-
-#include <boost/assert.hpp>
-#include <boost/range/iterator_range.hpp>
-
-#include <burst/algorithm/searching/detail/element_position_bitmask_table.hpp>
-#include <burst/algorithm/searching/detail/bitmask_traits.hpp>
 
 namespace burst
 {

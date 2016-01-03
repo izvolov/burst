@@ -1,14 +1,14 @@
+#include <burst/algorithm/sorting/radix_sort.hpp>
+#include <io.hpp>
+
+#include <boost/program_options.hpp>
+#include <boost/sort/spreadsort/integer_sort.hpp>
+
 #include <algorithm>
 #include <chrono>
 #include <iostream>
 #include <unordered_map>
 #include <vector>
-
-#include <boost/program_options.hpp>
-#include <boost/sort/spreadsort/integer_sort.hpp>
-
-#include <burst/algorithm/sorting/radix_sort.hpp>
-#include <io.hpp>
 
 template <typename Sort, typename Container>
 void test_sort (const std::string & name, Sort sort, const Container & numbers, std::size_t attempts)

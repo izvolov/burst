@@ -1,8 +1,8 @@
-#include <boost/range/adaptor/transformed.hpp>
-#include <boost/test/unit_test.hpp>
-
 #include <burst/container/make_forward_list.hpp>
 #include <burst/range/cache_one.hpp>
+
+#include <boost/range/adaptor/transformed.hpp>
+#include <boost/test/unit_test.hpp>
 
 BOOST_AUTO_TEST_SUITE(cache_one)
     BOOST_AUTO_TEST_CASE(caches_each_dereferenced_value_of_a_range)

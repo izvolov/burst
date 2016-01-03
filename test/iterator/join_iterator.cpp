@@ -1,11 +1,11 @@
-#include <iterator>
-#include <vector>
-
-#include <boost/test/unit_test.hpp>
-
 #include <burst/container/make_vector.hpp>
 #include <burst/iterator/join_iterator.hpp>
 #include <burst/range/make_range_vector.hpp>
+
+#include <boost/test/unit_test.hpp>
+
+#include <iterator>
+#include <vector>
 
 BOOST_AUTO_TEST_SUITE(join_iterator)
     BOOST_AUTO_TEST_CASE(join_iterator_end_is_created_from_begin_using_special_tag)

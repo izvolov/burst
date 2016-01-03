@@ -1,11 +1,11 @@
-#include <vector>
-#include <functional>
+#include <burst/container/make_vector.hpp>
+#include <burst/range/skip_to_upper_bound.hpp>
 
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <burst/container/make_vector.hpp>
-#include <burst/range/skip_to_upper_bound.hpp>
+#include <functional>
+#include <vector>
 
 BOOST_AUTO_TEST_SUITE(skip_to_upper_bound)
     BOOST_AUTO_TEST_CASE(skipping_by_value_in_empty_range_results_empty_range)

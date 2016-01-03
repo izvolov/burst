@@ -1,12 +1,12 @@
 #ifndef BURST_ITERATOR_BINARY_ISTREAM_RANGE_HPP
 #define BURST_ITERATOR_BINARY_ISTREAM_RANGE_HPP
 
-#include <istream>
+#include <burst/iterator/binary_istream_iterator.hpp>
+#include <burst/iterator/end_tag.hpp>
 
 #include <boost/range/iterator_range.hpp>
 
-#include <burst/iterator/binary_istream_iterator.hpp>
-#include <burst/iterator/end_tag.hpp>
+#include <istream>
 
 namespace burst
 {

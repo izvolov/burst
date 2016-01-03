@@ -1,13 +1,13 @@
-#include <iterator>
-#include <limits>
-#include <memory>
-#include <vector>
+#include <burst/algorithm/sorting/counting_sort.hpp>
 
 #include <boost/algorithm/cxx11/all_of.hpp>
 #include <boost/iterator/indirect_iterator.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <burst/algorithm/sorting/counting_sort.hpp>
+#include <iterator>
+#include <limits>
+#include <memory>
+#include <vector>
 
 BOOST_AUTO_TEST_SUITE(counting_sort)
     BOOST_AUTO_TEST_CASE(sorting_already_sorted_range_results_the_same_range)

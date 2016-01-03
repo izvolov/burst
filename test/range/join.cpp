@@ -1,6 +1,7 @@
-#include <iterator>
-#include <string>
-#include <vector>
+#include <burst/container/make_list.hpp>
+#include <burst/container/make_vector.hpp>
+#include <burst/range/join.hpp>
+#include <burst/range/make_range_vector.hpp>
 
 #include <boost/range/adaptor/reversed.hpp>
 #include <boost/range/algorithm/for_each.hpp>
@@ -9,10 +10,9 @@
 #include <boost/range/rend.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <burst/container/make_list.hpp>
-#include <burst/container/make_vector.hpp>
-#include <burst/range/join.hpp>
-#include <burst/range/make_range_vector.hpp>
+#include <iterator>
+#include <string>
+#include <vector>
 
 BOOST_AUTO_TEST_SUITE(join)
     BOOST_AUTO_TEST_CASE(joining_empty_ranges_results_empty_range)

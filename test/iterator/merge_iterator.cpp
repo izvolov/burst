@@ -1,10 +1,10 @@
-#include <functional>
-#include <iterator>
+#include <burst/iterator/merge_iterator.hpp>
+#include <burst/range/make_range_vector.hpp>
 
 #include <boost/test/unit_test.hpp>
 
-#include <burst/iterator/merge_iterator.hpp>
-#include <burst/range/make_range_vector.hpp>
+#include <functional>
+#include <iterator>
 
 BOOST_AUTO_TEST_SUITE(merge_iterator)
     BOOST_AUTO_TEST_CASE(merge_iterator_end_is_created_using_special_tag)
