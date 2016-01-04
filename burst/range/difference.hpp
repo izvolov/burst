@@ -19,11 +19,10 @@ namespace burst
     template <typename ForwardRange1, typename ForwardRange2, typename Compare>
     auto difference (const ForwardRange1 & minuend, const ForwardRange2 & subtrahend, Compare compare)
     {
-        return boost::make_iterator_range
-        (
-            make_difference_iterator(minuend, subtrahend, compare),
-            make_difference_iterator(minuend, subtrahend, compare, iterator::end_tag)
-        );
+        auto begin = make_difference_iterator(minuend, subtrahend, compare);
+        auto end = make_difference_iterator(begin, iterator::end_tag);
+
+        return boost::make_iterator_range(std::move(begin), std::move(end));
     }
 
     //!     Функция для создания разности диапазонов.
@@ -35,11 +34,10 @@ namespace burst
     template <typename ForwardRange1, typename ForwardRange2>
     auto difference (const ForwardRange1 & minuend, const ForwardRange2 & subtrahend)
     {
-        return boost::make_iterator_range
-        (
-            make_difference_iterator(minuend, subtrahend),
-            make_difference_iterator(minuend, subtrahend, iterator::end_tag)
-        );
+        auto begin = make_difference_iterator(minuend, subtrahend);
+        auto end = make_difference_iterator(begin, iterator::end_tag);
+
+        return boost::make_iterator_range(std::move(begin), std::move(end));
     }
 }
 

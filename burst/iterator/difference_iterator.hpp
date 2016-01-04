@@ -101,7 +101,12 @@ namespace burst
             maintain_invariant();
         }
 
-        difference_iterator () = default;
+        difference_iterator (const difference_iterator & begin, iterator::end_tag_t):
+            m_minuend(begin.m_minuend.end(), begin.m_minuend.end()),
+            m_subtrahend{},
+            m_compare(begin.m_compare)
+        {
+        }
 
     private:
         friend class boost::iterator_core_access;
@@ -195,29 +200,14 @@ namespace burst
 
     //!     Функция для создания итератора на конец разности с предикатом.
     /*!
-            Принимает на вход два диапазона, предикат и индикатор конца итератора.
-            Диапазоны и предикат не используются, они нужны только для автоматического вывода типа
-        итератора.
+            Принимает на вход итератор на начало разности и индикатор конца итератора.
             Возвращает итератор-конец, который, если до него дойти, покажет, что элементы разности
         закончились.
      */
     template <typename ForwardRange1, typename ForwardRange2, typename Compare>
-    auto make_difference_iterator (const ForwardRange1 &, const ForwardRange2 &, Compare, iterator::end_tag_t)
+    auto make_difference_iterator (const difference_iterator<ForwardRange1, ForwardRange2, Compare> & begin, iterator::end_tag_t)
     {
-        return difference_iterator<ForwardRange1, ForwardRange2, Compare>();
-    }
-
-    //!     Функция для создания итератора на конец разности.
-    /*!
-            Принимает на вход два диапазона, которые не используются, а нужны только для
-        автоматического вывода типа итератора.
-            Возвращает итератор на конец разности.
-            Отношение порядка берётся по-умолчанию.
-     */
-    template <typename ForwardRange1, typename ForwardRange2>
-    auto make_difference_iterator (const ForwardRange1 &, const ForwardRange2 &, iterator::end_tag_t)
-    {
-        return difference_iterator<ForwardRange1, ForwardRange2>();
+        return difference_iterator<ForwardRange1, ForwardRange2, Compare>(begin, iterator::end_tag);
     }
 } // namespace burst
 
