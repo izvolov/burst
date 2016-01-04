@@ -164,7 +164,7 @@ namespace burst
 
         bool equal (const difference_iterator & that) const
         {
-            return this->m_minuend == that.m_minuend;
+            return std::begin(this->m_minuend) == std::begin(that.m_minuend);
         }
 
     private:
