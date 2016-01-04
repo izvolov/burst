@@ -86,17 +86,17 @@ namespace burst
 
     public:
         difference_iterator
-                (
-                    const minuend_range_type & minuend,
-                    const subtrahend_range_type & subtrahend,
-                    Compare compare = Compare()
-                ):
-            m_minuend(minuend),
-            m_subtrahend(subtrahend),
+            (
+                minuend_range_type minuend,
+                subtrahend_range_type subtrahend,
+                Compare compare = Compare()
+            ):
+            m_minuend(std::move(minuend)),
+            m_subtrahend(std::move(subtrahend)),
             m_compare(compare)
         {
-            BOOST_ASSERT(boost::algorithm::is_sorted(minuend, compare));
-            BOOST_ASSERT(boost::algorithm::is_sorted(subtrahend, compare));
+            BOOST_ASSERT(boost::algorithm::is_sorted(m_minuend, compare));
+            BOOST_ASSERT(boost::algorithm::is_sorted(m_subtrahend, compare));
 
             maintain_invariant();
         }
@@ -181,9 +181,15 @@ namespace burst
             Возвращает итератор на первый элемент разности входных диапазонов.
      */
     template <typename ForwardRange1, typename ForwardRange2, typename Compare>
-    auto make_difference_iterator (const ForwardRange1 & minuend, const ForwardRange2 & subtrahend, Compare compare)
+    auto make_difference_iterator (ForwardRange1 minuend, ForwardRange2 subtrahend, Compare compare)
     {
-        return difference_iterator<ForwardRange1, ForwardRange2, Compare>(minuend, subtrahend, compare);
+        return
+            difference_iterator<ForwardRange1, ForwardRange2, Compare>
+            (
+                std::move(minuend),
+                std::move(subtrahend),
+                compare
+            );
     }
 
     //!     Функция для создания итератора разности.
@@ -193,9 +199,14 @@ namespace burst
             Отношение порядка для элементов диапазонов выбирается по-умолчанию.
      */
     template <typename ForwardRange1, typename ForwardRange2>
-    auto make_difference_iterator (const ForwardRange1 & minuend, const ForwardRange2 & subtrahend)
+    auto make_difference_iterator (ForwardRange1 minuend, ForwardRange2 subtrahend)
     {
-        return difference_iterator<ForwardRange1, ForwardRange2>(minuend, subtrahend);
+        return
+            difference_iterator<ForwardRange1, ForwardRange2>
+            (
+                std::move(minuend),
+                std::move(subtrahend)
+            );
     }
 
     //!     Функция для создания итератора на конец разности с предикатом.

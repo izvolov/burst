@@ -17,9 +17,9 @@ namespace burst
         которого одновременно есть в уменьшаемом и отсутствует в вычитаемом.
      */
     template <typename ForwardRange1, typename ForwardRange2, typename Compare>
-    auto difference (const ForwardRange1 & minuend, const ForwardRange2 & subtrahend, Compare compare)
+    auto difference (ForwardRange1 minuend, ForwardRange2 subtrahend, Compare compare)
     {
-        auto begin = make_difference_iterator(minuend, subtrahend, compare);
+        auto begin = make_difference_iterator(std::move(minuend), std::move(subtrahend), compare);
         auto end = make_difference_iterator(begin, iterator::end_tag);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));
@@ -32,9 +32,9 @@ namespace burst
             Отношение порядка выбирается по-умолчанию.
      */
     template <typename ForwardRange1, typename ForwardRange2>
-    auto difference (const ForwardRange1 & minuend, const ForwardRange2 & subtrahend)
+    auto difference (ForwardRange1 minuend, ForwardRange2 subtrahend)
     {
-        auto begin = make_difference_iterator(minuend, subtrahend);
+        auto begin = make_difference_iterator(std::move(minuend), std::move(subtrahend));
         auto end = make_difference_iterator(begin, iterator::end_tag);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));
