@@ -216,7 +216,12 @@ namespace burst
         закончились.
      */
     template <typename ForwardRange1, typename ForwardRange2, typename Compare>
-    auto make_difference_iterator (const difference_iterator<ForwardRange1, ForwardRange2, Compare> & begin, iterator::end_tag_t)
+    auto
+        make_difference_iterator
+        (
+            const difference_iterator<ForwardRange1, ForwardRange2, Compare> & begin,
+            iterator::end_tag_t
+        )
     {
         return difference_iterator<ForwardRange1, ForwardRange2, Compare>(begin, iterator::end_tag);
     }
