@@ -49,7 +49,7 @@ namespace burst
     template
     <
         typename ForwardRange,
-        typename Compare = std::less<typename ForwardRange::value_type>
+        typename Compare = std::less<>
     >
     class merge_iterator:
         public boost::iterator_facade
