@@ -76,21 +76,21 @@ namespace burst
 
     public:
         explicit merge_iterator (outer_range_type ranges, Compare compare = Compare()):
-            m_range_heap(std::move(ranges)),
+            m_ranges(std::move(ranges)),
             m_heap_order(compare)
         {
-            BOOST_ASSERT(boost::algorithm::all_of(m_range_heap,
+            BOOST_ASSERT(boost::algorithm::all_of(m_ranges,
                 [& compare] (const auto & range)
                 {
                     return boost::algorithm::is_sorted(range, compare);
                 }));
 
             remove_empty_ranges();
-            std::make_heap(m_range_heap.begin(), m_range_heap.end(), m_heap_order);
+            std::make_heap(m_ranges.begin(), m_ranges.end(), m_heap_order);
         }
 
         merge_iterator (const merge_iterator & begin, iterator::end_tag_t):
-            m_range_heap(std::begin(begin.m_range_heap), std::begin(begin.m_range_heap)),
+            m_ranges(std::begin(begin.m_ranges), std::begin(begin.m_ranges)),
             m_heap_order(begin.m_heap_order)
         {
         }
@@ -102,45 +102,45 @@ namespace burst
 
         void remove_empty_ranges ()
         {
-            m_range_heap.advance_end
+            m_ranges.advance_end
             (
                 -std::distance
                 (
-                    boost::remove_if(m_range_heap, [] (const auto & r) { return r.empty(); }),
-                    std::end(m_range_heap)
+                    boost::remove_if(m_ranges, [] (const auto & r) { return r.empty(); }),
+                    std::end(m_ranges)
                 )
             );
         }
 
         void increment ()
         {
-            std::pop_heap(m_range_heap.begin(), m_range_heap.end(), m_heap_order);
-            auto & range = m_range_heap.back();
+            std::pop_heap(m_ranges.begin(), m_ranges.end(), m_heap_order);
+            auto & range = m_ranges.back();
 
             range.advance_begin(1);
             if (not range.empty())
             {
-                std::push_heap(m_range_heap.begin(), m_range_heap.end(), m_heap_order);
+                std::push_heap(m_ranges.begin(), m_ranges.end(), m_heap_order);
             }
             else
             {
-                m_range_heap.advance_end(-1);
+                m_ranges.advance_end(-1);
             }
         }
 
     private:
         typename base_type::reference dereference () const
         {
-            return m_range_heap.front().front();
+            return m_ranges.front().front();
         }
 
         bool equal (const merge_iterator & that) const
         {
-            return this->m_range_heap == that.m_range_heap;
+            return this->m_ranges == that.m_ranges;
         }
 
     private:
-        outer_range_type m_range_heap;
+        outer_range_type m_ranges;
 
         // invert_comparison устраняет путаницу с обратным порядком в пирамиде при работе с
         // std::make(push, pop)_heap.
