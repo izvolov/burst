@@ -18,12 +18,10 @@ namespace burst
     template <typename RandomAccessRange, typename Compare>
     auto merge (RandomAccessRange ranges, Compare compare)
     {
-        return
-            boost::make_iterator_range
-            (
-                make_merge_iterator(std::move(ranges), compare),
-                make_merge_iterator(ranges, compare, iterator::end_tag)
-            );
+        auto begin = make_merge_iterator(std::move(ranges), compare);
+        auto end = make_merge_iterator(begin, iterator::end_tag);
+
+        return boost::make_iterator_range(std::move(begin), std::move(end));
     }
 
     //!     Функция для создания диапазона слияний.
@@ -35,12 +33,10 @@ namespace burst
     template <typename RandomAccessRange>
     auto merge (RandomAccessRange ranges)
     {
-        return
-            boost::make_iterator_range
-            (
-                make_merge_iterator(std::move(ranges)),
-                make_merge_iterator(ranges, iterator::end_tag)
-            );
+        auto begin = make_merge_iterator(std::move(ranges));
+        auto end = make_merge_iterator(begin, iterator::end_tag);
+
+        return boost::make_iterator_range(std::move(begin), std::move(end));
     }
 }
 

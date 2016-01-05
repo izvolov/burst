@@ -89,6 +89,12 @@ namespace burst
             std::make_heap(m_range_heap.begin(), m_range_heap.end(), m_heap_order);
         }
 
+        merge_iterator (const merge_iterator & begin, iterator::end_tag_t):
+            m_range_heap(std::begin(begin.m_range_heap), std::begin(begin.m_range_heap)),
+            m_heap_order(begin.m_heap_order)
+        {
+        }
+
         merge_iterator () = default;
 
     private:
@@ -170,29 +176,14 @@ namespace burst
 
     //!     Функция для создания итератора на конец слияния с предикатом.
     /*!
-            Принимает на вход диапазон диапазонов, предикат и индикатор конца итератора.
-            Диапазон диапазонов и предикат не используются, они нужны только для автоматического
-        вывода типа итератора.
+            Принимает на вход итератор на начало сливаемых диапазонов и индикатор конца итератора.
             Возвращает итератор-конец, который, если до него дойти, покажет, что элементы слияния
         закончились.
      */
     template <typename RandomAccessRange, typename Compare>
-    auto make_merge_iterator (const RandomAccessRange &, Compare, iterator::end_tag_t)
+    auto make_merge_iterator (const merge_iterator<RandomAccessRange, Compare> & begin, iterator::end_tag_t)
     {
-        return merge_iterator<RandomAccessRange, Compare>{};
-    }
-
-    //!     Функция для создания итератора на конец слияния.
-    /*!
-            Принимает на вход диапазон диапазонов, который не используется, а нужен только для
-        автоматического вывода типа итератора.
-            Возвращает итератор на конец слияния.
-            Отношение порядка берётся по-умолчанию.
-     */
-    template <typename RandomAccessRange>
-    auto make_merge_iterator (const RandomAccessRange &, iterator::end_tag_t)
-    {
-        return merge_iterator<RandomAccessRange>{};
+        return merge_iterator<RandomAccessRange, Compare>(begin, iterator::end_tag);
     }
 } // namespace burst
 
