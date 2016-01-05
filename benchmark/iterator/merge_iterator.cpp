@@ -23,7 +23,7 @@ void test_on_the_fly_merge (const Container & values)
         });
 
     clock_t merge_time = clock();
-    auto merged_range = burst::merge(ranges);
+    auto merged_range = burst::merge(boost::make_iterator_range(ranges));
     auto distance = static_cast<std::size_t>(std::distance(merged_range.begin(), merged_range.end()));
     merge_time = clock() - merge_time;
 

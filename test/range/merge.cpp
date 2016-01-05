@@ -18,16 +18,16 @@ BOOST_AUTO_TEST_SUITE(merge)
         std::vector<int> second;
         auto ranges = burst::make_range_vector(first, second);
 
-        auto merged_range = burst::merge(ranges);
+        auto merged_range = burst::merge(boost::make_iterator_range(ranges));
         BOOST_CHECK(merged_range.empty());
     }
 
     BOOST_AUTO_TEST_CASE(merging_one_range_results_the_same_range)
     {
         int array[] = {1, 2, 3, 4};
-        auto ranges = {boost::make_iterator_range(array)};
+        auto ranges = burst::make_range_vector(array);
 
-        auto merged_range = burst::merge(ranges);
+        auto merged_range = burst::merge(boost::make_iterator_range(ranges));
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
             std::begin(array), std::end(array),
@@ -41,7 +41,7 @@ BOOST_AUTO_TEST_SUITE(merge)
         auto second = burst::make_list({'g', 'e', 'c', 'a'});
         auto ranges = burst::make_range_vector(first, second);
 
-        auto merged_range = burst::merge(ranges, std::greater<char>());
+        auto merged_range = burst::merge(boost::make_iterator_range(ranges), std::greater<char>());
 
         auto expected_collection = {'h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_SUITE(merge)
         auto  third = {7, 8, 9};
         auto ranges = burst::make_range_vector(first, second, third);
 
-        auto merged_range = burst::merge(ranges, std::less<int>());
+        auto merged_range = burst::merge(boost::make_iterator_range(ranges), std::less<int>());
 
         auto expected_collection = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -75,31 +75,12 @@ BOOST_AUTO_TEST_SUITE(merge)
 
         auto ranges = burst::make_range_vector(first, second);
 
-        auto merged_range = burst::merge(ranges, std::greater<int>());
+        auto merged_range = burst::merge(boost::make_iterator_range(ranges), std::greater<int>());
         boost::for_each(merged_range, [] (int & x) { x /= 10; });
 
         BOOST_CHECK_EQUAL(first[0], 10);
         BOOST_CHECK_EQUAL(first[1], 5);
         BOOST_CHECK_EQUAL(second[0], 7);
         BOOST_CHECK_EQUAL(second[1], 3);
-    }
-
-    BOOST_AUTO_TEST_CASE(merge_function_accepts_inplace_initializer_list)
-    {
-        auto even = burst::make_vector({2, 4, 6});
-        auto  odd = burst::make_vector({1, 3, 5});
-
-        auto merged_range = burst::merge
-        ({
-            boost::make_iterator_range(even),
-            boost::make_iterator_range(odd)
-        });
-
-        auto all = {1, 2, 3, 4, 5, 6};
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            std::begin(all), std::end(all),
-            std::begin(merged_range), std::end(merged_range)
-        );
     }
 BOOST_AUTO_TEST_SUITE_END()
