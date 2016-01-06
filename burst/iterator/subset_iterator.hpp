@@ -52,7 +52,7 @@ namespace burst
     template
     <
         typename Range,
-        typename Compare = std::less<typename Range::value_type>,
+        typename Compare = std::less<>,
         typename SubsetContainer = std::vector<typename Range::const_iterator>
     >
     class subset_iterator:
