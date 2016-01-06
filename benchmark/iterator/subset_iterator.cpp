@@ -8,7 +8,7 @@ template <typename Container>
 void test (const Container & numbers)
 {
     auto begin = burst::make_subset_iterator(numbers);
-    auto end = burst::make_subset_iterator(numbers, burst::iterator::end_tag);
+    auto end = burst::make_subset_iterator(begin, burst::iterator::end_tag);
 
     clock_t total_time = 0;
     std::size_t iteration_count = 0;

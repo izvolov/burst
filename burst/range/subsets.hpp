@@ -30,11 +30,10 @@ namespace burst
     >
     subsets (Range && range, Compare compare)
     {
-        return boost::make_iterator_range
-        (
-            make_subset_iterator(std::forward<Range>(range), compare),
-            make_subset_iterator(std::forward<Range>(range), iterator::end_tag, compare)
-        );
+        auto begin = make_subset_iterator(std::forward<Range>(range), compare);
+        auto end = make_subset_iterator(begin, iterator::end_tag);
+
+        return boost::make_iterator_range(std::move(begin), std::move(end));
     }
 
     //!     Функция для создания диапазона подмножеств.
@@ -53,11 +52,10 @@ namespace burst
     >
     subsets (Range && range)
     {
-        return boost::make_iterator_range
-        (
-            make_subset_iterator(std::forward<Range>(range)),
-            make_subset_iterator(std::forward<Range>(range), iterator::end_tag)
-        );
+        auto begin = make_subset_iterator(std::forward<Range>(range));
+        auto end = make_subset_iterator(begin, iterator::end_tag);
+
+        return boost::make_iterator_range(std::move(begin), std::move(end));
     }
 }
 

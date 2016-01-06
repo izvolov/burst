@@ -13,7 +13,7 @@ BOOST_AUTO_TEST_SUITE(subset_iterator)
         std::vector<int> set;
 
         auto subsets_begin = burst::make_subset_iterator(set);
-        auto   subsets_end = burst::make_subset_iterator(set, burst::iterator::end_tag);
+        auto   subsets_end = burst::make_subset_iterator(subsets_begin, burst::iterator::end_tag);
 
         BOOST_CHECK(subsets_begin == subsets_end);
     }
@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_SUITE(subset_iterator)
         std::list<int> set{3};
 
         auto      subset = burst::make_subset_iterator(set);
-        auto subsets_end = burst::make_subset_iterator(set, burst::iterator::end_tag);
+        auto subsets_end = burst::make_subset_iterator(subset, burst::iterator::end_tag);
 
         std::vector<int> expected_subset{3};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_SUITE(subset_iterator)
         auto set = {1, 2, 3};
 
         auto subsets_begin = burst::make_subset_iterator(set);
-        auto   subsets_end = burst::make_subset_iterator(set, burst::iterator::end_tag);
+        auto   subsets_end = burst::make_subset_iterator(subsets_begin, burst::iterator::end_tag);
 
         BOOST_CHECK_EQUAL(std::distance(subsets_begin, subsets_end), 7);
 
@@ -57,7 +57,7 @@ BOOST_AUTO_TEST_SUITE(subset_iterator)
         auto sequence = {1, 1, 1, 1, 1};
 
         auto subsets_begin = burst::make_subset_iterator(sequence);
-        auto   subsets_end = burst::make_subset_iterator(sequence, burst::iterator::end_tag);
+        auto   subsets_end = burst::make_subset_iterator(subsets_begin, burst::iterator::end_tag);
 
         BOOST_CHECK_EQUAL(std::distance(subsets_begin, subsets_end), 1);
         BOOST_CHECK_EQUAL(subsets_begin->size(), 1);

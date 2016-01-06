@@ -87,10 +87,10 @@ namespace burst
             detail::next_subset(*m_range, m_subset, m_compare);
         }
 
-        subset_iterator (const range_type & range, iterator::end_tag_t, compare_type compare = compare_type()):
-            m_range(&range),
+        subset_iterator (const subset_iterator & begin, iterator::end_tag_t):
+            m_range(begin.m_range),
             m_subset(),
-            m_compare(compare)
+            m_compare(begin.m_compare)
         {
         }
 
@@ -166,38 +166,17 @@ namespace burst
         return subset_iterator<typename std::decay<Range>::type>(std::forward<Range>(range));
     }
 
-    //!     Функция для создания итератора на конец подмножеств с предикатом.
-    /*!
-            Принимает на вход диапазон, отношение порядка и фиктивный аргумент-индикатор,
-        сигнализирующий о том, что нужно создать итератор на конец подмножеств.
-            Возвращает итератор на пустое подмножество входного диапазона.
-     */
-    template <typename Range, typename Compare>
-    subset_iterator
-    <
-        typename std::decay<Range>::type,
-        Compare
-    >
-    make_subset_iterator (Range && range, iterator::end_tag_t, Compare compare)
-    {
-        return subset_iterator<typename std::decay<Range>::type, Compare>
-        (
-            std::forward<Range>(range),
-            iterator::end_tag,
-            compare
-        );
-    }
-
     //!     Функция для создания итератора на конец подмножеств.
     /*!
-            Принимает на вход диапазон и индикатор создания итератора на конец подмножеств.
+            Принимает на вход итератор на начало подмножеств и индикатор создания итератора на
+        конец подмножеств.
             Возвращает итератор на пустое подмножество входного диапазона.
             Отношение порядка на элементах диапазона выбирается по-умолчанию.
      */
-    template <typename Range>
-    subset_iterator<typename std::decay<Range>::type> make_subset_iterator (Range && range, iterator::end_tag_t)
+    template <typename Range, typename Compare>
+    auto make_subset_iterator (const subset_iterator<Range, Compare> & begin, iterator::end_tag_t)
     {
-        return subset_iterator<typename std::decay<Range>::type>(std::forward<Range>(range), iterator::end_tag);
+        return subset_iterator<Range, Compare>(begin, iterator::end_tag);
     }
 } // namespace burst
 
