@@ -1,6 +1,7 @@
 #ifndef BURST_ITERATOR_CACHE_ITERATOR_HPP
 #define BURST_ITERATOR_CACHE_ITERATOR_HPP
 
+#include <boost/iterator/iterator_categories.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/optional.hpp>
 
@@ -34,11 +35,7 @@ namespace burst
             <
                 cache_iterator<Iterator>,
                 typename std::iterator_traits<Iterator>::value_type,
-                typename boost::iterators::pure_traversal_tag
-                <
-                    typename boost::iterator_traversal<Iterator>::type
-                >
-                ::type,
+                typename boost::iterators::pure_iterator_traversal<Iterator>::type,
                 const typename std::iterator_traits<Iterator>::value_type &,
                 typename std::iterator_traits<Iterator>::difference_type
             >
@@ -51,11 +48,7 @@ namespace burst
             <
                 cache_iterator<Iterator>,
                 typename std::iterator_traits<Iterator>::value_type,
-                typename boost::iterators::pure_traversal_tag
-                <
-                    typename boost::iterator_traversal<Iterator>::type
-                >
-                ::type,
+                typename boost::iterators::pure_iterator_traversal<Iterator>::type,
                 const typename std::iterator_traits<Iterator>::value_type &,
                 typename std::iterator_traits<Iterator>::difference_type
             >;
