@@ -20,17 +20,9 @@ namespace burst
         получить все элементы одного из подмножеств исходного диапазона.
      */
     template <typename Range, typename Compare>
-    boost::iterator_range
-    <
-        subset_iterator
-        <
-            typename std::decay<Range>::type,
-            Compare
-        >
-    >
-    subsets (Range && range, Compare compare)
+    auto subsets (Range range, Compare compare)
     {
-        auto begin = make_subset_iterator(std::forward<Range>(range), compare);
+        auto begin = make_subset_iterator(std::move(range), compare);
         auto end = make_subset_iterator(begin, iterator::end_tag);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));
@@ -43,16 +35,9 @@ namespace burst
             Отношение порядка на элементах исходного диапазона выбирается по-умолчанию.
      */
     template <typename Range>
-    boost::iterator_range
-    <
-        subset_iterator
-        <
-            typename std::decay<Range>::type
-        >
-    >
-    subsets (Range && range)
+    auto subsets (Range range)
     {
-        auto begin = make_subset_iterator(std::forward<Range>(range));
+        auto begin = make_subset_iterator(std::move(range));
         auto end = make_subset_iterator(begin, iterator::end_tag);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));

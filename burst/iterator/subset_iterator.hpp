@@ -3,6 +3,7 @@
 
 #include <burst/iterator/detail/subset.hpp>
 #include <burst/iterator/end_tag.hpp>
+#include <burst/range/detail/has_advance_begin.hpp>
 
 #include <boost/assert.hpp>
 #include <boost/iterator/indirect_iterator.hpp>
@@ -65,6 +66,8 @@ namespace burst
         >
     {
     private:
+        static_assert(detail::has_advance_begin<Range>::value, "Контейнеры не допускаются, только диапазоны");
+
         using range_type = Range;
         using compare_type = Compare;
         using subset_container_type = SubsetContainer;
@@ -78,13 +81,13 @@ namespace burst
         >;
 
     public:
-        subset_iterator (const range_type & range, compare_type compare = compare_type()):
-            m_range(&range),
+        explicit subset_iterator (range_type range, compare_type compare = compare_type{}):
+            m_range(std::move(range)),
             m_subset(),
             m_compare(compare)
         {
-            BOOST_ASSERT(std::is_sorted(range.begin(), range.end(), compare));
-            detail::next_subset(*m_range, m_subset, m_compare);
+            BOOST_ASSERT(std::is_sorted(m_range.begin(), m_range.end(), compare));
+            detail::next_subset(m_range, m_subset, m_compare);
         }
 
         subset_iterator (const subset_iterator & begin, iterator::end_tag_t):
@@ -94,10 +97,6 @@ namespace burst
         {
         }
 
-        // Исходная последовательность обязана существовать вне итератора подмножеств.
-        subset_iterator (range_type && range) = delete;
-        subset_iterator (range_type && range, iterator::end_tag_t) = delete;
-
         subset_iterator () = default;
 
     private:
@@ -105,7 +104,7 @@ namespace burst
 
         void increment ()
         {
-            detail::next_subset(*m_range, m_subset, m_compare);
+            detail::next_subset(m_range, m_subset, m_compare);
         }
 
         typename base_type::reference dereference () const
@@ -124,8 +123,7 @@ namespace burst
         }
 
     private:
-        // Исходным диапазоном владеет кто-то другой.
-        const range_type * m_range;
+        range_type m_range;
         subset_container_type m_subset;
         compare_type m_compare;
     };
@@ -139,18 +137,9 @@ namespace burst
         если ни одного непустого подмножества не найдено, итератор на пустое множество.
      */
     template <typename Range, typename Compare>
-    subset_iterator
-    <
-        typename std::decay<Range>::type,
-        Compare
-    >
-    make_subset_iterator (Range && range, Compare compare)
+    auto make_subset_iterator (Range range, Compare compare)
     {
-        return subset_iterator<typename std::decay<Range>::type, Compare>
-        (
-            std::forward<Range>(range),
-            compare
-        );
+        return subset_iterator<Range, Compare>(std::move(range), compare);
     }
 
     //!     Функция для создания итератора подмножеств.
@@ -161,9 +150,9 @@ namespace burst
             Отношение порядка на элементах диапазона выбирается по-умолчанию.
      */
     template <typename Range>
-    subset_iterator<typename std::decay<Range>::type> make_subset_iterator (Range && range)
+    auto make_subset_iterator (Range range)
     {
-        return subset_iterator<typename std::decay<Range>::type>(std::forward<Range>(range));
+        return subset_iterator<Range>(std::move(range));
     }
 
     //!     Функция для создания итератора на конец подмножеств.
