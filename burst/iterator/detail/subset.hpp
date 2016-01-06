@@ -102,8 +102,8 @@ namespace burst
             подмножество, а если не удалась (все подмножества уже перечислены), то подмножество
             станет пустым.
          */
-        template <typename Sequence, typename Subset, typename Compare>
-        void next_subset (const Sequence & sequence, Subset & subset, Compare compare)
+        template <typename ForwardRange, typename BidirectionalRange, typename Compare>
+        void next_subset (const ForwardRange & sequence, BidirectionalRange & subset, Compare compare)
         {
             if (subset.empty() || next_fixed_size_subset(subset.begin(), subset.end(), sequence.begin(), sequence.end(), compare) != subset.end())
             {

@@ -26,7 +26,7 @@ namespace burst
             Подмножество представлено диапазоном, пробежав по которому можно получить элементы
         исходного диапазона, входящие в это подмножество.
 
-        \tparam Range
+        \tparam ForwardRange
             Тип диапазона, подмножества которого нужно перебрать. Он должен быть хотя бы
             однонаправленным, то есть удовлетворять требованиям понятия "Forward Range".
         \tparam Compare
@@ -52,23 +52,23 @@ namespace burst
      */
     template
     <
-        typename Range,
+        typename ForwardRange,
         typename Compare = std::less<>,
-        typename SubsetContainer = std::vector<typename Range::const_iterator>
+        typename SubsetContainer = std::vector<typename ForwardRange::const_iterator>
     >
     class subset_iterator:
         public boost::iterator_facade
         <
-            subset_iterator<Range, Compare, SubsetContainer>,
+            subset_iterator<ForwardRange, Compare, SubsetContainer>,
             boost::iterator_range<boost::indirect_iterator<typename SubsetContainer::const_iterator>>,
             boost::forward_traversal_tag,
             boost::iterator_range<boost::indirect_iterator<typename SubsetContainer::const_iterator>>
         >
     {
     private:
-        static_assert(detail::has_advance_begin<Range>::value, "Контейнеры не допускаются, только диапазоны");
+        static_assert(detail::has_advance_begin<ForwardRange>::value, "Контейнеры не допускаются, только диапазоны");
 
-        using range_type = Range;
+        using range_type = ForwardRange;
         using compare_type = Compare;
         using subset_container_type = SubsetContainer;
 
@@ -136,10 +136,10 @@ namespace burst
             Возвращает либо итератор на минимальное непустое подмножество входного диапазона, либо,
         если ни одного непустого подмножества не найдено, итератор на пустое множество.
      */
-    template <typename Range, typename Compare>
-    auto make_subset_iterator (Range range, Compare compare)
+    template <typename ForwardRange, typename Compare>
+    auto make_subset_iterator (ForwardRange range, Compare compare)
     {
-        return subset_iterator<Range, Compare>(std::move(range), compare);
+        return subset_iterator<ForwardRange, Compare>(std::move(range), compare);
     }
 
     //!     Функция для создания итератора подмножеств.
@@ -149,10 +149,10 @@ namespace burst
         если ни одного непустого подмножества не найдено, итератор на пустое множество.
             Отношение порядка на элементах диапазона выбирается по-умолчанию.
      */
-    template <typename Range>
-    auto make_subset_iterator (Range range)
+    template <typename ForwardRange>
+    auto make_subset_iterator (ForwardRange range)
     {
-        return subset_iterator<Range>(std::move(range));
+        return subset_iterator<ForwardRange>(std::move(range));
     }
 
     //!     Функция для создания итератора на конец подмножеств.
@@ -162,10 +162,10 @@ namespace burst
             Возвращает итератор на пустое подмножество входного диапазона.
             Отношение порядка на элементах диапазона выбирается по-умолчанию.
      */
-    template <typename Range, typename Compare>
-    auto make_subset_iterator (const subset_iterator<Range, Compare> & begin, iterator::end_tag_t)
+    template <typename ForwardRange, typename Compare>
+    auto make_subset_iterator (const subset_iterator<ForwardRange, Compare> & begin, iterator::end_tag_t)
     {
-        return subset_iterator<Range, Compare>(begin, iterator::end_tag);
+        return subset_iterator<ForwardRange, Compare>(begin, iterator::end_tag);
     }
 } // namespace burst
 
