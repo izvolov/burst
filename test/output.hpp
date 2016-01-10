@@ -17,7 +17,7 @@ namespace test_detail
 
         if (not range.empty())
         {
-            stream << range.front();
+            stream << *std::begin(range);
             std::for_each(std::next(range.begin()), range.end(),
                 [& stream] (const auto & value)
                 {
