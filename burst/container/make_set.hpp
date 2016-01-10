@@ -17,14 +17,14 @@ namespace burst
         return std::set<Value>(values);
     }
 
-    //!     Создание множества с пользовательским аллокатором.
+    //!     Создание множества с явным заданием отношения порядка
     /*!
-            Отличается наличием аллокатора, передаваемого в качестве аргумента функции.
+            Отличается наличием функции, задающей отношение порядка на элементах множества.
      */
-    template <typename Value, typename Allocator>
-    auto make_set (std::initializer_list<Value> values, const Allocator & allocator)
+    template <typename Value, typename Compare>
+    auto make_set (std::initializer_list<Value> values, const Compare & compare)
     {
-        return std::set<Value, Allocator>(values, allocator);
+        return std::set<Value, Compare>(values, compare);
     }
 } // namespace burst
 
