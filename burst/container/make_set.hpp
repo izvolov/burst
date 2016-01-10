@@ -1,6 +1,8 @@
 #ifndef BURST_CONTAINER_MAKE_SET_HPP
 #define BURST_CONTAINER_MAKE_SET_HPP
 
+#include <boost/range/value_type.hpp>
+
 #include <initializer_list>
 #include <set>
 
@@ -35,6 +37,93 @@ namespace burst
     auto make_set (std::initializer_list<Value> values, const Compare & compare, const Allocator & allocator)
     {
         return std::set<Value, Compare, Allocator>(values, compare, allocator);
+    }
+
+    //!     Создать std::set из диапазона
+    /*!
+            Принимает произвольный диапазон, из типа его значений выводит тип элементов, создаёт
+        std::set и возвращает его.
+     */
+    template <typename InputRange>
+    auto make_set (InputRange && values)
+    {
+        using value_type = typename boost::range_value<InputRange>::type;
+        return std::set<value_type>(std::begin(values), std::end(values));
+    }
+
+    //!     Создать std::set из диапазона с явно заданным отношением порядка
+    /*!
+            Отличается наличием отношения порядка на элементах множества, передаваемого в качестве
+        аргумента функции.
+     */
+    template <typename InputRange, typename Compare>
+    auto make_set (InputRange && values, const Compare & compare)
+    {
+        using value_type = typename boost::range_value<InputRange>::type;
+        return std::set<value_type, Compare>(std::begin(values), std::end(values), compare);
+    }
+
+    //!     Создать std::set из диапазона с явно заданным отношением порядка и аллокатором
+    /*!
+            Отличается наличием аллокатора, передаваемого в качестве аргумента функции.
+     */
+    template <typename InputRange, typename Compare, typename Allocator>
+    auto make_set (InputRange && values, const Compare & compare, const Allocator & allocator)
+    {
+        using value_type = typename boost::range_value<InputRange>::type;
+        return
+            std::set<value_type, Compare, Allocator>
+            (
+                std::begin(values), std::end(values),
+                compare,
+                allocator
+            );
+    }
+
+    //!     Создать std::set из диапазона с явным указанием типов его значений
+    /*!
+            Отличается тем, что тип значений множества не выводится из типа значений контейнера, а
+        указывается пользователем явно.
+
+            `make_set<std::uint32_t>(range)`
+     */
+    template <typename Value, typename InputRange>
+    auto make_set (InputRange && values)
+    {
+        return std::set<Value>(std::begin(values), std::end(values));
+    }
+
+    //!     Создать std::set из диапазона с явным указанием типов его значений и отношением порядка
+    /*!
+            Отличается тем, что тип значений множества не выводится из типа значений контейнера, а
+        указывается пользователем явно.
+
+            `make_set<std::uint32_t>(range, std::greater<>{})`
+     */
+    template <typename Value, typename InputRange, typename Compare>
+    auto make_set (InputRange && values, const Compare & compare)
+    {
+        return std::set<Value, Compare>(std::begin(values), std::end(values), compare);
+    }
+
+    //!     Создать std::set из диапазона с явным указанием типов его значений, отношением порядка и
+    //! аллокатором
+    /*!
+            Отличается тем, что тип значений множества не выводится из типа значений контейнера, а
+        указывается пользователем явно.
+
+            `make_set<std::uint32_t>(range, std::greater<>{}, allocator)`
+     */
+    template <typename Value, typename InputRange, typename Compare, typename Allocator>
+    auto make_set (InputRange && values, const Compare & compare, const Allocator & allocator)
+    {
+        return
+            std::set<Value, Compare, Allocator>
+            (
+                std::begin(values), std::end(values),
+                compare,
+                allocator
+            );
     }
 } // namespace burst
 

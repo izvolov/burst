@@ -5,6 +5,7 @@
 #include <forward_list>
 #include <iostream>
 #include <iterator>
+#include <set>
 #include <utility>
 #include <vector>
 
@@ -47,6 +48,12 @@ namespace std
     std::ostream & operator << (std::ostream & stream, const std::forward_list<T> & list)
     {
         return ::test_detail::print_range(stream, list);
+    }
+
+    template <typename ... Ts>
+    std::ostream & operator << (std::ostream & stream, const std::set<Ts...> & set)
+    {
+        return ::test_detail::print_range(stream, set);
     }
 }
 
