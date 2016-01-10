@@ -22,7 +22,7 @@ BOOST_AUTO_TEST_SUITE(subsets)
             burst::subsets
             (
                 boost::make_iterator_range(set),
-                std::greater<int>()
+                set.key_comp()
             );
 
         BOOST_CHECK_EQUAL(sequence_subsets, set_subsets);
