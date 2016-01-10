@@ -26,6 +26,16 @@ namespace burst
     {
         return std::set<Value, Compare>(values, compare);
     }
+
+    //!     Создание множества с явным заданием отношения порядка и аллокатора
+    /*!
+            Отличается наличием аллокатора, передаваемого в качестве аргумента функции.
+     */
+    template <typename Value, typename Compare, typename Allocator>
+    auto make_set (std::initializer_list<Value> values, const Compare & compare, const Allocator & allocator)
+    {
+        return std::set<Value, Compare, Allocator>(values, compare, allocator);
+    }
 } // namespace burst
 
 #endif // BURST_CONTAINER_MAKE_SET_HPP
