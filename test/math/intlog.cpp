@@ -5,9 +5,19 @@
 #include <limits>
 
 BOOST_AUTO_TEST_SUITE(intlog)
-    BOOST_AUTO_TEST_CASE(any_base_intlog_of_zero_is_maximal_value_of_integer)
+    BOOST_AUTO_TEST_CASE(throws_beyond_the_domain)
     {
-        BOOST_CHECK_EQUAL(burst::intlog(0ul, 10ul), std::numeric_limits<unsigned long>::max());
+        BOOST_CHECK_THROW(burst::intlog(0ul, 10ul), std::logic_error);
+    }
+
+    BOOST_AUTO_TEST_CASE(throws_on_non_positive_base)
+    {
+        BOOST_CHECK_THROW(burst::intlog(10ul, 0ul), std::logic_error);
+    }
+
+    BOOST_AUTO_TEST_CASE(throws_on_base_equal_to_one)
+    {
+        BOOST_CHECK_THROW(burst::intlog(10ul, 1ul), std::logic_error);
     }
 
     BOOST_AUTO_TEST_CASE(any_base_intlog_of_one_is_zero)
