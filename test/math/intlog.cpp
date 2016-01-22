@@ -40,4 +40,9 @@ BOOST_AUTO_TEST_SUITE(intlog)
         constexpr auto x = burst::intlog(20ul, 2ul);
         BOOST_CHECK_EQUAL(x, 4);
     }
+
+    BOOST_AUTO_TEST_CASE(accepts_signed_values)
+    {
+        BOOST_CHECK_EQUAL(burst::intlog(13, 3), 2);
+    }
 BOOST_AUTO_TEST_SUITE_END()

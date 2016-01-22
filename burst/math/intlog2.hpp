@@ -1,7 +1,6 @@
 #ifndef BURST_MATH_INTLOG2_HPP
 #define BURST_MATH_INTLOG2_HPP
 
-#include <limits>
 #include <stdexcept>
 #include <type_traits>
 
@@ -9,14 +8,17 @@ namespace burst
 {
     namespace detail
     {
-        template <typename UnsignedInteger>
-        constexpr UnsignedInteger intlog2_impl (UnsignedInteger integer)
+        //!     Собственно вычисление двоичного логарифма
+        /*!
+                Требуется, чтобы входное число было строго положительным.
+         */
+        template <typename Integer>
+        constexpr Integer intlog2_impl (Integer integer)
         {
-            auto degree = std::numeric_limits<UnsignedInteger>::max();
+            auto degree = Integer{0};
 
-            while (integer > 0)
+            while ((integer >>= 1) > 0)
             {
-                integer >>= 1;
                 ++degree;
             }
 
@@ -25,11 +27,10 @@ namespace burst
     }
 
     //!     Целая часть двоичного логарифма.
-    template <typename UnsignedInteger>
-    constexpr UnsignedInteger intlog2 (UnsignedInteger integer)
+    template <typename Integer>
+    constexpr Integer intlog2 (Integer integer)
     {
-        static_assert(std::is_integral<UnsignedInteger>::value, "Число должно быть целым.");
-        static_assert(std::is_unsigned<UnsignedInteger>::value, "Число должно быть беззнаковым.");
+        static_assert(std::is_integral<Integer>::value, "Число должно быть целым.");
 
         return integer > 0
             ? detail::intlog2_impl(integer)

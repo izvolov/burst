@@ -9,11 +9,11 @@ namespace burst
 {
     namespace detail
     {
-        template <typename UnsignedInteger>
-        constexpr UnsignedInteger intlog_impl (UnsignedInteger number, UnsignedInteger base)
+        template <typename Integer>
+        constexpr Integer intlog_impl (Integer number, Integer base)
         {
-            UnsignedInteger degree = 0;
-            UnsignedInteger exponent = 1;
+            Integer degree = 0;
+            Integer exponent = 1;
 
             while (exponent < number)
             {
@@ -35,11 +35,10 @@ namespace burst
     /*!
             Вычисляет целую часть логарифма числа по заданному основанию.
      */
-    template <typename UnsignedInteger>
-    constexpr UnsignedInteger intlog (UnsignedInteger number, UnsignedInteger base)
+    template <typename Integer>
+    constexpr Integer intlog (Integer number, Integer base)
     {
-        static_assert(std::is_integral<UnsignedInteger>::value, "Число должно быть целым.");
-        static_assert(std::is_unsigned<UnsignedInteger>::value, "Число должно быть беззнаковым.");
+        static_assert(std::is_integral<Integer>::value, "Число должно быть целым.");
 
         return
             base > 0
