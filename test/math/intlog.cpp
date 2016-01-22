@@ -45,4 +45,38 @@ BOOST_AUTO_TEST_SUITE(intlog)
     {
         BOOST_CHECK_EQUAL(burst::intlog(13, 3), 2);
     }
+
+    BOOST_AUTO_TEST_CASE(accepts_different_argument_types)
+    {
+        BOOST_CHECK_EQUAL
+        (
+            burst::intlog
+            (
+                std::int32_t{14},
+                std::uint64_t{std::numeric_limits<std::int32_t>::max()} + 1
+            ),
+            0
+        );
+
+        BOOST_CHECK_EQUAL
+        (
+            burst::intlog
+            (
+                std::uint32_t{std::numeric_limits<std::int8_t>::max()} + 1,
+                std::int8_t{5}
+            ),
+            3
+        );
+    }
+
+    BOOST_AUTO_TEST_CASE(return_value_type_is_type_of_first_argument)
+    {
+        using first_argument_type = std::uint32_t;
+        using second_argument_type = std::int64_t;
+        static_assert(not std::is_same<first_argument_type, second_argument_type>::value, "");
+
+        using result_type = decltype(burst::intlog(first_argument_type{2}, second_argument_type{5}));
+
+        BOOST_CHECK((std::is_same<result_type, first_argument_type>::value));
+    }
 BOOST_AUTO_TEST_SUITE_END()
