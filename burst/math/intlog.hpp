@@ -12,8 +12,8 @@ namespace burst
         template <typename Integer>
         constexpr Integer intlog_impl (Integer number, Integer base)
         {
-            Integer degree = 0;
-            Integer exponent = 1;
+            auto degree = Integer{0};
+            auto exponent = Integer{1};
 
             while (exponent < number)
             {
