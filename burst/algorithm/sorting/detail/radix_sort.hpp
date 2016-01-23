@@ -20,14 +20,14 @@ namespace burst
         template <typename Value, typename Map, typename Radix>
         struct radix_sort_traits
         {
-            using integer_type = typename std::decay<typename std::result_of<Map(Value)>::type>::type;
+            using integer_type = std::decay_t<std::result_of_t<Map(Value)>>;
             static_assert
             (
                 std::is_integral<integer_type>::value && std::is_unsigned<integer_type>::value,
                 "Сортируемые элементы должны быть отображены в целые беззнаковые числа."
             );
 
-            using radix_type = typename std::decay<typename std::result_of<Radix(integer_type)>::type>::type;
+            using radix_type = std::decay_t<std::result_of_t<Radix(integer_type)>>;
             static_assert
             (
                 std::is_integral<radix_type>::value,
@@ -44,7 +44,7 @@ namespace burst
         {
             return [radix_number, map = std::move(map), radix = std::move(radix)] (const auto & value)
             {
-                using value_type = typename std::remove_reference<decltype(value)>::type;
+                using value_type = std::remove_reference_t<decltype(value)>;
                 using traits = radix_sort_traits<value_type, Map, Radix>;
 
                 return radix(static_cast<typename traits::integer_type>(map(value) >> (traits::radix_size * radix_number)));
