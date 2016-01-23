@@ -34,9 +34,9 @@ namespace burst
                 "Тип разряда, выделяемого из целого числа, тоже должен быть целым."
             );
 
-            constexpr static const auto radix_value_range = std::numeric_limits<radix_type>::max() + 1;
-            constexpr static const auto radix_size = intlog2<std::uint64_t>(radix_value_range);
-            constexpr static const auto radix_count = sizeof(integer_type) * CHAR_BIT / radix_size;
+            constexpr static auto radix_value_range = std::numeric_limits<radix_type>::max() + 1;
+            constexpr static auto radix_size = intlog2<std::uint64_t>(radix_value_range);
+            constexpr static auto radix_count = sizeof(integer_type) * CHAR_BIT / radix_size;
         };
 
         template <typename Map, typename Radix>
