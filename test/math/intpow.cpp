@@ -89,4 +89,15 @@ BOOST_AUTO_TEST_SUITE(intpow)
         constexpr auto power = burst::intpow(3, 4);
         BOOST_CHECK_EQUAL(power, 81);
     }
+
+    BOOST_AUTO_TEST_CASE(return_value_type_is_type_of_first_argument)
+    {
+        using first_argument_type = std::uint32_t;
+        using second_argument_type = std::int64_t;
+        static_assert(not std::is_same<first_argument_type, second_argument_type>::value, "");
+
+        using result_type = decltype(burst::intpow(first_argument_type{2}, second_argument_type{5}));
+
+        BOOST_CHECK((std::is_same<result_type, first_argument_type>::value));
+    }
 BOOST_AUTO_TEST_SUITE_END()
