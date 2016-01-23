@@ -13,7 +13,7 @@ namespace burst
         constexpr Integer intlog_impl (Integer number, Integer base)
         {
             auto degree = Integer{0};
-            auto exponent = Integer{1};
+            auto exponent = base;
 
             while (exponent < number)
             {
@@ -23,11 +23,11 @@ namespace burst
 
             if (exponent == number)
             {
-                return degree;
+                return degree + 1;
             }
             else
             {
-                return degree - 1;
+                return degree;
             }
         }
     }
