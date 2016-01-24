@@ -1,4 +1,4 @@
-#include <burst/math/intpow.hpp>
+#include <burst/integer/intpow.hpp>
 
 #include <boost/test/unit_test.hpp>
 

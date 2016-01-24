@@ -2,8 +2,8 @@
 #define BURST_CONTAINER_K_ARY_SEARCH_SET_HPP
 
 #include <burst/container/unique_ordered_tag.hpp>
-#include <burst/math/intlog.hpp>
-#include <burst/math/intpow.hpp>
+#include <burst/integer/intlog.hpp>
+#include <burst/integer/intpow.hpp>
 
 #include <boost/assert.hpp>
 #include <boost/container/container_fwd.hpp>

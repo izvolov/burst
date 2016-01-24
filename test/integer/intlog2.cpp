@@ -1,4 +1,4 @@
-#include <burst/math/intlog2.hpp>
+#include <burst/integer/intlog2.hpp>
 
 #include <boost/test/unit_test.hpp>
 

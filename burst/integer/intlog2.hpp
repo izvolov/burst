@@ -1,5 +1,5 @@
-#ifndef BURST_MATH_INTLOG2_HPP
-#define BURST_MATH_INTLOG2_HPP
+#ifndef BURST_INTEGER_INTLOG2_HPP
+#define BURST_INTEGER_INTLOG2_HPP
 
 #include <stdexcept>
 #include <type_traits>
@@ -38,4 +38,4 @@ namespace burst
     }
 }
 
-#endif // BURST_MATH_INTLOG2_HPP
+#endif // BURST_INTEGER_INTLOG2_HPP

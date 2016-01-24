@@ -2,7 +2,7 @@
 #define BURST_ALGORITHM_SORTING_DETAIL_RADIX_SORT_HPP
 
 #include <burst/algorithm/sorting/detail/counting_sort.hpp>
-#include <burst/math/intlog2.hpp>
+#include <burst/integer/intlog2.hpp>
 #include <burst/variadic.hpp>
 
 #include <algorithm>

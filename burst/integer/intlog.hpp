@@ -1,5 +1,5 @@
-#ifndef BURST_MATH_INTLOG_HPP
-#define BURST_MATH_INTLOG_HPP
+#ifndef BURST_INTEGER_INTLOG_HPP
+#define BURST_INTEGER_INTLOG_HPP
 
 #include <limits>
 #include <stdexcept>
@@ -59,4 +59,4 @@ namespace burst
     }
 }
 
-#endif // BURST_MATH_INTLOG_HPP
+#endif // BURST_INTEGER_INTLOG_HPP

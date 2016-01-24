@@ -17,6 +17,9 @@ set(UNIT_TEST_SOURCES test_main.cpp
     container/make_set.cpp
     container/make_vector.cpp
     functional/low_byte.cpp
+    integer/intlog.cpp
+    integer/intlog2.cpp
+    integer/intpow.cpp
     iterator/binary_stream_iterators.cpp
     iterator/bitap_iterator.cpp
     iterator/cache_iterator.cpp
@@ -28,9 +31,6 @@ set(UNIT_TEST_SOURCES test_main.cpp
     iterator/subset_iterator.cpp
     iterator/take_n_iterator.cpp
     iterator/union_iterator.cpp
-    math/intlog.cpp
-    math/intlog2.cpp
-    math/intpow.cpp
     range/adaptor/cached_one.cpp
     range/adaptor/joined.cpp
     range/adaptor/merged.cpp
