@@ -3,6 +3,7 @@
 
 #include <burst/algorithm/sorting/detail/counting_sort.hpp>
 #include <burst/integer/intlog2.hpp>
+#include <burst/integer/right_shift.hpp>
 #include <burst/variadic.hpp>
 
 #include <algorithm>
@@ -47,7 +48,7 @@ namespace burst
                 using value_type = std::remove_reference_t<decltype(value)>;
                 using traits = radix_sort_traits<value_type, Map, Radix>;
 
-                return radix(static_cast<typename traits::integer_type>(map(value) >> (traits::radix_size * radix_number)));
+                return radix(right_shift(map(value), traits::radix_size * radix_number));
             };
         }
 
