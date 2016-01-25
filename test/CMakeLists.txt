@@ -20,6 +20,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     integer/intlog.cpp
     integer/intlog2.cpp
     integer/intpow.cpp
+    integer/left_shift.cpp
     integer/right_shift.cpp
     iterator/binary_stream_iterators.cpp
     iterator/bitap_iterator.cpp
