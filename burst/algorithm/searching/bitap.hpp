@@ -3,6 +3,7 @@
 
 #include <burst/algorithm/searching/detail/bitmask_traits.hpp>
 #include <burst/algorithm/searching/detail/element_position_bitmask_table.hpp>
+#include <burst/integer/left_shift.hpp>
 
 #include <boost/assert.hpp>
 #include <boost/range/iterator_range.hpp>
@@ -202,10 +203,7 @@ namespace burst
              */
             static bitmask_type bit_shift (bitmask_type bitmask)
             {
-                bitmask = static_cast<bitmask_type>(bitmask << 1);
-                bitmask_type low_bit = 0x01;
-
-                return bitmask | low_bit;
+                return left_shift(bitmask, 1u) | bitmask_type{0b1};
             }
 
         public:
