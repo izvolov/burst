@@ -37,6 +37,15 @@ namespace burst
         private:
             using outer_range_type = InputRange;
             using inner_range_type = typename boost::range_value<outer_range_type>::type;
+            static_assert
+            (
+                std::is_lvalue_reference
+                <
+                    typename boost::range_reference<outer_range_type>::type
+                >
+                ::value,
+                ""
+            );
 
             using base_type =
                 boost::iterator_facade

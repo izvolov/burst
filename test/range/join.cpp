@@ -3,6 +3,8 @@
 #include <burst/range/join.hpp>
 #include <burst/range/make_range_vector.hpp>
 
+#include <boost/algorithm/cxx11/all_of.hpp>
+#include <boost/algorithm/cxx11/none_of.hpp>
 #include <boost/range/adaptor/reversed.hpp>
 #include <boost/range/algorithm/for_each.hpp>
 #include <boost/range/iterator_range.hpp>
@@ -215,5 +217,19 @@ BOOST_AUTO_TEST_SUITE(join)
             std::begin(joint_range), std::end(joint_range),
             std::begin(expected_collection), std::end(expected_collection)
         );
+    }
+
+    BOOST_AUTO_TEST_CASE(single_pass_join_range_empties_inner_ranges)
+    {
+        const auto one = burst::make_list({1, 2, 3});
+        const auto another = burst::make_list({4, 5, 6});
+        auto ranges = burst::make_range_vector(one, another);
+
+        const auto empty = [] (const auto & range) { return range.empty(); };
+        BOOST_REQUIRE(boost::algorithm::none_of(ranges, empty));
+
+        for (auto x: burst::join(boost::make_iterator_range(ranges))) { static_cast<void>(x); };
+
+        BOOST_CHECK(boost::algorithm::all_of(ranges, empty));
     }
 BOOST_AUTO_TEST_SUITE_END()
