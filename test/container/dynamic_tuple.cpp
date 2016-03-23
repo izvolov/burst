@@ -169,14 +169,8 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
 
     BOOST_AUTO_TEST_CASE(does_not_leak_when_inserted_element_throws)
     {
-        try
-        {
-            burst::dynamic_tuple t(kamikaze{}, kamikaze{});
-        }
-        catch (std::runtime_error &)
-        {
-            BOOST_CHECK_EQUAL(kamikaze::instances_count, 0);
-        }
+        BOOST_REQUIRE_THROW(burst::dynamic_tuple(kamikaze{}, kamikaze{}, kamikaze{}), std::runtime_error);
+        BOOST_CHECK_EQUAL(kamikaze::instances_count, 0);
     }
 
     BOOST_AUTO_TEST_CASE(underlying_items_can_be_mutated)
