@@ -185,4 +185,17 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
         vector.clear();
         BOOST_CHECK(t.get<std::vector<char>>(1).empty());
     }
+
+    BOOST_AUTO_TEST_CASE(inlying_objects_move_together_with_dynamic_tuple)
+    {
+        BOOST_REQUIRE_EQUAL(dummy::instances_count, 0);
+        burst::dynamic_tuple one(dummy{});
+        BOOST_REQUIRE_EQUAL(dummy::instances_count, 1);
+
+        burst::dynamic_tuple another(std::move(one));
+        BOOST_CHECK_EQUAL(dummy::instances_count, 1);
+
+        one = std::move(another);
+        BOOST_CHECK_EQUAL(dummy::instances_count, 1);
+    }
 BOOST_AUTO_TEST_SUITE_END()
