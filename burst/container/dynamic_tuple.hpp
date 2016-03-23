@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <memory>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -105,10 +106,10 @@ namespace burst
                 Сложность: O(size()) в худшем случае, O(1) в среднем.
          */
         template <typename T>
-        void push_back (T object)
+        void push_back (T && object)
         {
             auto creation_place = set_up_creation_place(object);
-            accomodate(std::move(object), creation_place);
+            accomodate(std::forward<T>(object), creation_place);
         }
 
         //!     Удалить все элементы из контейнера.
@@ -233,10 +234,10 @@ namespace burst
             размещения нового объекта.
          */
         template <typename T>
-        void push_back_no_realloc (T object)
+        void push_back_no_realloc (T && object)
         {
             auto creation_place = force_align(object);
-            accomodate(std::move(object), creation_place);
+            accomodate(std::forward<T>(object), creation_place);
         }
 
         //!     Попытаться разместить объект в имеющемся буфере.
@@ -273,14 +274,15 @@ namespace burst
             времени жизни, — а также задаёт новый объём с учётом размещённого объекта.
          */
         template <typename T>
-        void accomodate (T object, std::int8_t * creation_place)
+        void accomodate (T && object, std::int8_t * creation_place)
         {
-            new (creation_place) T(std::move(object));
+            using raw_type = std::decay_t<T>;
+            new (creation_place) raw_type(std::forward<T>(object));
 
             const auto new_offset = static_cast<std::size_t>(creation_place - data());
             m_offsets.push_back(new_offset);
-            m_volume = new_offset + sizeof(T);
-            m_lifetime_managers.emplace_back(make_lifetime_manager<T>());
+            m_volume = new_offset + sizeof(raw_type);
+            m_lifetime_managers.emplace_back(make_lifetime_manager<raw_type>());
         }
 
         void destroy (std::size_t first, std::size_t last)
