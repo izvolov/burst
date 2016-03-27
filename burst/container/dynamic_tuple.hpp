@@ -38,13 +38,13 @@ namespace burst
 
     public:
         template <typename ... Types>
-        explicit dynamic_tuple (Types && ... objects):
+        explicit dynamic_tuple (Types ... objects):
             m_capacity(std::max(std::size_t{DEFAULT_CAPACITY}, sum({sizeof(Types) + alignof(Types)...}))),
             m_data(std::make_unique<std::int8_t[]>(m_capacity))
         {
             try
             {
-                BURST_EXPAND_VARIADIC(push_back_no_realloc(std::forward<Types>(objects)));
+                BURST_EXPAND_VARIADIC(push_back_no_realloc(std::move(objects)));
             }
             catch (...)
             {
