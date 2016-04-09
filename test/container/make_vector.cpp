@@ -1,9 +1,11 @@
 #include <burst/container/make_vector.hpp>
 #include <output.hpp>
 
+#include <boost/algorithm/cxx11/all_of.hpp>
 #include <boost/range/irange.hpp>
 #include <boost/test/unit_test.hpp>
 
+#include <string>
 #include <type_traits>
 #include <vector>
 
@@ -55,5 +57,14 @@ BOOST_AUTO_TEST_SUITE(make_vector)
             >
             ::value
         ));
+    }
+
+    BOOST_AUTO_TEST_CASE(constructs_with_n_copies_of_a_given_value)
+    {
+        const auto v = burst::make_vector(5u, std::string{});
+
+        BOOST_CHECK_EQUAL(v.size(), 5);
+        BOOST_CHECK((std::is_same<decltype(v)::value_type, std::string>::value));
+        BOOST_CHECK(boost::algorithm::all_of(v, [] (const auto & s) {return s.empty();}));
     }
 BOOST_AUTO_TEST_SUITE_END()

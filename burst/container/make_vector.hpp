@@ -1,10 +1,14 @@
 #ifndef BURST_CONTAINER_MAKE_VECTOR_HPP
 #define BURST_CONTAINER_MAKE_VECTOR_HPP
 
+#include <burst/concept.hpp>
+#include <burst/container/detail/make_vector.hpp>
+
 #include <boost/range/value_type.hpp>
 
 #include <initializer_list>
 #include <iterator>
+#include <type_traits>
 #include <vector>
 
 namespace burst
@@ -42,15 +46,32 @@ namespace burst
         return std::vector<value_type>(std::begin(values), std::end(values));
     }
 
-    //!     Создать std::vector из диапазона с аллокатором
+    //!     Создать std::vector из двух аргументов
     /*!
-            Отличается наличием аллокатора, передаваемого в качестве аргумента функции.
+            Включает в себя два случая:
+
+            1. Аргументы — диапазон и аллокатор.
+
+                Тип элементов вектора выводится из значений диапазона и вызывается конструктор от
+                диапазона и аллокатора:
+
+                `std::vector<range_value<R>>(range.begin(), range.end(), allocator)`
+
+            2. Аргументы — целое число и произвольное значение.
+
+                Тип элементов вектора выводится из типа второго аргумента и вызывается конструктор
+
+                `std::vector<V>(size, value)`
      */
-    template <typename InputRange, typename Allocator>
-    auto make_vector (InputRange && values, const Allocator & allocator)
+    template <typename First, typename Second>
+    auto make_vector (First && first, Second && second)
     {
-        using value_type = typename boost::range_value<InputRange>::type;
-        return std::vector<value_type, Allocator>(std::begin(values), std::end(values), allocator);
+        return
+            detail::make_vector_impl
+            (
+                std::forward<First>(first), std::forward<Second>(second),
+                std::is_integral<std::decay_t<First>>{}
+            );
     }
 
     //!     Создать std::vector из диапазона с явным указанием типа его значений
@@ -73,7 +94,8 @@ namespace burst
 
             `make_vector<std::uint32_t>(range)`
      */
-    template <typename Value, typename InputRange, typename Allocator>
+    template <typename Value, typename InputRange, typename Allocator,
+        typename = Not<Integer, std::decay_t<InputRange>>>
     auto make_vector (InputRange && values, const Allocator & allocator)
     {
         return std::vector<Value, Allocator>(std::begin(values), std::end(values), allocator);
