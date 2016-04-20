@@ -285,20 +285,20 @@ namespace burst
             m_lifetime_managers.emplace_back(make_lifetime_manager<raw_type>());
         }
 
-        void destroy (std::size_t first, std::size_t last)
+        void destroy (std::size_t first, std::size_t last, std::int8_t * data)
         {
             for (auto index = first; index < last; ++index)
             {
                 const auto & manager = m_lifetime_managers[index];
                 const auto offset = m_offsets[index];
 
-                manager.destroy(data() + offset);
+                manager.destroy(data + offset);
             }
         }
 
         void destroy_all ()
         {
-            destroy(0, size());
+            destroy(0, size(), data());
         }
 
         void move (std::size_t first, std::size_t last, std::int8_t * new_data)
