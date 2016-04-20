@@ -91,7 +91,7 @@ namespace burst
                 auto new_data = std::make_unique<std::int8_t[]>(new_capacity);
                 m_capacity = new_capacity;
 
-                move(0, size(), new_data.get());
+                move(0, size(), data(), new_data.get());
                 std::swap(m_data, new_data);
             }
         }
@@ -301,15 +301,15 @@ namespace burst
             destroy(0, size(), data());
         }
 
-        void move (std::size_t first, std::size_t last, std::int8_t * new_data)
+        void move (std::size_t first, std::size_t last, std::int8_t * data, std::int8_t * new_data)
         {
             for (auto index = first; index < last; ++index)
             {
                 const auto & manager = m_lifetime_managers[index];
                 const auto offset = m_offsets[index];
 
-                manager.move(data() + offset, new_data + offset);
-                manager.destroy(data() + offset);
+                manager.move(data + offset, new_data + offset);
+                manager.destroy(data + offset);
             }
         }
 
