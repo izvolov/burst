@@ -306,15 +306,22 @@ namespace burst
             destroy(m_objects.begin(), m_objects.end(), data());
         }
 
-        template <typename InputIterator>
-        void move (InputIterator first, InputIterator last, std::int8_t * data, std::int8_t * new_data)
+        template <typename ForwardIterator>
+        void move (ForwardIterator first, ForwardIterator last, std::int8_t * data, std::int8_t * new_data)
         {
-            while (first != last)
+            for (auto current = first; current != last; ++current)
             {
-                first->manager.move(data + first->offset, new_data + first->offset);
-                first->manager.destroy(data + first->offset);
-                ++first;
+                try
+                {
+                    current->manager.move(data + current->offset, new_data + current->offset);
+                }
+                catch (...)
+                {
+                    destroy(first, current, new_data);
+                    throw;
+                }
             }
+            destroy(first, last, data);
         }
 
         //!     Минимальная вместительность контейнера.

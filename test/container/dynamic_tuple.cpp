@@ -16,26 +16,38 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
 
     struct dummy
     {
-        dummy ()
+        dummy ():
+            alive(true)
         {
             ++instances_count;
         }
 
-        dummy (const dummy &)
+        dummy (const dummy &):
+            alive(true)
         {
             ++instances_count;
         }
 
-        dummy (dummy &&)
+        dummy (dummy &&):
+            alive(true)
         {
             ++instances_count;
         }
 
         ~dummy ()
         {
+            if (alive)
+            {
+                alive = false;
+            }
+            else
+            {
+                throw std::runtime_error(u8"Двойное уничтожение!");
+            }
             --instances_count;
         }
 
+        bool alive;
         static int instances_count;
     };
 
@@ -197,5 +209,36 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
 
         one = std::move(another);
         BOOST_CHECK_EQUAL(dummy::instances_count, 1);
+    }
+
+    struct throw_on_move
+    {
+        throw_on_move () = default;
+        throw_on_move (const throw_on_move &) = default;
+        throw_on_move & operator = (const throw_on_move &) = default;
+        throw_on_move (throw_on_move &&)
+        {
+            throw std::runtime_error(u8"Пока!");
+        }
+        throw_on_move & operator = (throw_on_move &&) = default;
+        ~throw_on_move () = default;
+    };
+
+    BOOST_AUTO_TEST_CASE(does_not_leak_when_inlying_element_throws_being_moved)
+    {
+        const throw_on_move thrower{};
+
+        BOOST_REQUIRE_EQUAL(dummy::instances_count, 0);
+        {
+            burst::dynamic_tuple t;
+            t.push_back(dummy{});
+            t.push_back(thrower);
+            BOOST_REQUIRE_EQUAL(dummy::instances_count, 1);
+
+            BOOST_REQUIRE_THROW(t.reserve(t.capacity() + 1), std::runtime_error);
+            BOOST_CHECK_EQUAL(dummy::instances_count, 1);
+        }
+        BOOST_CHECK_EQUAL(dummy::instances_count, 0);
+
     }
 BOOST_AUTO_TEST_SUITE_END()
