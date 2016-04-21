@@ -32,9 +32,17 @@ namespace burst
      */
     class dynamic_tuple
     {
+    private:
+        struct object_info_t
+        {
+            std::size_t offset;
+            lifetime_manager manager;
+        };
+
+        using object_info_container_type = std::vector<object_info_t>;
+
     public:
-        using lifetime_manager_container_type = std::vector<lifetime_manager>;
-        using size_type = typename lifetime_manager_container_type::size_type;
+        using size_type = typename object_info_container_type::size_type;
 
     public:
         template <typename ... Types>
@@ -122,8 +130,7 @@ namespace burst
         void clear ()
         {
             destroy_all();
-            m_offsets.clear();
-            m_lifetime_managers.clear();
+            m_objects.clear();
             m_volume = 0;
         }
 
@@ -136,7 +143,7 @@ namespace burst
         template <typename T>
         const T & get (size_type index) const
         {
-            return *static_cast<const T *>(static_cast<const void *>(data() + m_offsets[index]));
+            return *static_cast<const T *>(static_cast<const void *>(data() + m_objects[index].offset));
         }
 
         //!     Доступ к изменяемому элементу по индексу.
@@ -146,7 +153,7 @@ namespace burst
         template <typename T>
         T & get (size_type index)
         {
-            return *static_cast<T *>(static_cast<void *>(data() + m_offsets[index]));
+            return *static_cast<T *>(static_cast<void *>(data() + m_objects[index].offset));
         }
 
         //!     Размер контейнера.
@@ -157,7 +164,7 @@ namespace burst
          */
         size_type size () const
         {
-            return m_lifetime_managers.size();
+            return m_objects.size();
         }
 
         //!     Объём контейнера.
@@ -191,7 +198,7 @@ namespace burst
          */
         bool empty () const
         {
-            return m_lifetime_managers.empty();
+            return m_objects.empty();
         }
 
     private:
@@ -280,19 +287,17 @@ namespace burst
             new (creation_place) raw_type(std::forward<T>(object));
 
             const auto new_offset = static_cast<std::size_t>(creation_place - data());
-            m_offsets.push_back(new_offset);
+            m_objects.push_back(object_info_t{new_offset, make_lifetime_manager<raw_type>()});
             m_volume = new_offset + sizeof(raw_type);
-            m_lifetime_managers.emplace_back(make_lifetime_manager<raw_type>());
         }
 
         void destroy (std::size_t first, std::size_t last, std::int8_t * data)
         {
             for (auto index = first; index < last; ++index)
             {
-                const auto & manager = m_lifetime_managers[index];
-                const auto offset = m_offsets[index];
+                const auto & object = m_objects[index];
 
-                manager.destroy(data + offset);
+                object.manager.destroy(data + object.offset);
             }
         }
 
@@ -305,11 +310,10 @@ namespace burst
         {
             for (auto index = first; index < last; ++index)
             {
-                const auto & manager = m_lifetime_managers[index];
-                const auto offset = m_offsets[index];
+                const auto & object = m_objects[index];
 
-                manager.move(data + offset, new_data + offset);
-                manager.destroy(data + offset);
+                object.manager.move(data + object.offset, new_data + object.offset);
+                object.manager.destroy(data + object.offset);
             }
         }
 
@@ -323,8 +327,7 @@ namespace burst
         std::size_t m_capacity = DEFAULT_CAPACITY;
         std::unique_ptr<std::int8_t[]> m_data;
 
-        std::vector<std::size_t> m_offsets;
-        lifetime_manager_container_type m_lifetime_managers;
+        object_info_container_type m_objects;
         std::size_t m_volume = 0;
     };
 } // namespace burst
