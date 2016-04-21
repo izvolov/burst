@@ -99,7 +99,7 @@ namespace burst
                 auto new_data = std::make_unique<std::int8_t[]>(new_capacity);
                 m_capacity = new_capacity;
 
-                move(0, size(), data(), new_data.get());
+                move(m_objects.begin(), m_objects.end(), data(), new_data.get());
                 std::swap(m_data, new_data);
             }
         }
@@ -291,29 +291,29 @@ namespace burst
             m_volume = new_offset + sizeof(raw_type);
         }
 
-        void destroy (std::size_t first, std::size_t last, std::int8_t * data)
+        template <typename InputIterator>
+        void destroy (InputIterator first, InputIterator last, std::int8_t * data)
         {
-            for (auto index = first; index < last; ++index)
+            while (first != last)
             {
-                const auto & object = m_objects[index];
-
-                object.manager.destroy(data + object.offset);
+                first->manager.destroy(data + first->offset);
+                ++first;
             }
         }
 
         void destroy_all ()
         {
-            destroy(0, size(), data());
+            destroy(m_objects.begin(), m_objects.end(), data());
         }
 
-        void move (std::size_t first, std::size_t last, std::int8_t * data, std::int8_t * new_data)
+        template <typename InputIterator>
+        void move (InputIterator first, InputIterator last, std::int8_t * data, std::int8_t * new_data)
         {
-            for (auto index = first; index < last; ++index)
+            while (first != last)
             {
-                const auto & object = m_objects[index];
-
-                object.manager.move(data + object.offset, new_data + object.offset);
-                object.manager.destroy(data + object.offset);
+                first->manager.move(data + first->offset, new_data + first->offset);
+                first->manager.destroy(data + first->offset);
+                ++first;
             }
         }
 
