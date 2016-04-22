@@ -239,7 +239,123 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
             BOOST_CHECK_EQUAL(dummy::instances_count, 1);
         }
         BOOST_CHECK_EQUAL(dummy::instances_count, 0);
+    }
 
+    BOOST_AUTO_TEST_CASE(proper_ctor_dtor_calls_of_inlying_objects_in_dyntuple_copy_constructor)
+    {
+        BOOST_REQUIRE_EQUAL(dummy::instances_count, 0);
+        {
+            burst::dynamic_tuple initial(dummy{});
+
+            BOOST_REQUIRE_EQUAL(dummy::instances_count, 1);
+            {
+                burst::dynamic_tuple copy(initial);
+                BOOST_CHECK_EQUAL(dummy::instances_count, 2);
+            }
+            BOOST_CHECK_EQUAL(dummy::instances_count, 1);
+        }
+        BOOST_CHECK_EQUAL(dummy::instances_count, 0);
+    }
+
+    BOOST_AUTO_TEST_CASE(proper_ctor_dtor_calls_of_inlying_objects_in_dyntuple_copy_assignment)
+    {
+        BOOST_REQUIRE_EQUAL(dummy::instances_count, 0);
+        {
+            burst::dynamic_tuple initial(dummy{});
+
+            BOOST_REQUIRE_EQUAL(dummy::instances_count, 1);
+            {
+                burst::dynamic_tuple copy(dummy{});
+                copy = initial;
+                BOOST_CHECK_EQUAL(dummy::instances_count, 2);
+            }
+            BOOST_CHECK_EQUAL(dummy::instances_count, 1);
+        }
+        BOOST_CHECK_EQUAL(dummy::instances_count, 0);
+    }
+
+    BOOST_AUTO_TEST_CASE(copy_construction_is_deep)
+    {
+        burst::dynamic_tuple initial(std::string("cat"));
+
+        auto copy = burst::dynamic_tuple(initial);
+        BOOST_REQUIRE_EQUAL(copy.get<std::string>(0), "cat");
+
+        initial.get<std::string>(0).append("harsis");
+        BOOST_CHECK_EQUAL(copy.get<std::string>(0), "cat");
+    }
+
+    BOOST_AUTO_TEST_CASE(copy_assignment_is_deep)
+    {
+        burst::dynamic_tuple initial(std::vector<std::string>(1, "dog"));
+
+        burst::dynamic_tuple copy(std::string("qwerty"));
+        copy = initial;
+        BOOST_REQUIRE_EQUAL(copy.get<std::vector<std::string>>(0), std::vector<std::string>(1, "dog"));
+
+        initial.get<std::vector<std::string>>(0).push_back("horse");
+        BOOST_CHECK_EQUAL(copy.get<std::vector<std::string>>(0), std::vector<std::string>(1, "dog"));
+    }
+
+    BOOST_AUTO_TEST_CASE(volume_is_equal_after_copy_assignment)
+    {
+        burst::dynamic_tuple initial(std::string("cat"), 5, 3.14, std::vector<int>{1, 2});
+
+        burst::dynamic_tuple copy(true, 2.71);
+        copy = initial;
+        BOOST_CHECK_EQUAL(initial.volume(), copy.volume());
+    }
+
+    BOOST_AUTO_TEST_CASE(sizes_are_equal_after_copy_assignment)
+    {
+        burst::dynamic_tuple initial(std::string("cat"), 5, 3.14, std::vector<int>{1, 2});
+
+        burst::dynamic_tuple copy(17);
+        copy = initial;
+        BOOST_CHECK_EQUAL(initial.size(), copy.size());
+    }
+
+    BOOST_AUTO_TEST_CASE(copy_assignment_of_empty_tuple_results_empty_tuple)
+    {
+        burst::dynamic_tuple initial;
+        BOOST_REQUIRE(initial.empty());
+
+        burst::dynamic_tuple copy(std::string("123"), 'a');
+        copy = initial;
+        BOOST_CHECK(copy.empty());
+    }
+
+    BOOST_AUTO_TEST_CASE(throws_on_attempt_to_copy_noncopyable_object)
+    {
+        burst::dynamic_tuple initial(std::make_unique<int>(5));
+        BOOST_CHECK_THROW(burst::dynamic_tuple copy(initial), std::runtime_error);
+    }
+
+    BOOST_AUTO_TEST_CASE(does_not_leak_when_inlying_element_throws_being_copy_constructed)
+    {
+        BOOST_REQUIRE_EQUAL(dummy::instances_count, 0);
+        {
+            burst::dynamic_tuple t(dummy{}, std::make_unique<int>(17));
+            BOOST_REQUIRE_EQUAL(dummy::instances_count, 1);
+
+            BOOST_REQUIRE_THROW(burst::dynamic_tuple copy(t), std::runtime_error);
+            BOOST_CHECK_EQUAL(dummy::instances_count, 1);
+        }
+        BOOST_CHECK_EQUAL(dummy::instances_count, 0);
+    }
+
+    BOOST_AUTO_TEST_CASE(does_not_leak_when_inlying_element_throws_being_copy_assigned)
+    {
+        BOOST_REQUIRE_EQUAL(dummy::instances_count, 0);
+        {
+            burst::dynamic_tuple t(dummy{}, std::make_unique<int>(17));
+            burst::dynamic_tuple copy(dummy{});
+            BOOST_REQUIRE_EQUAL(dummy::instances_count, 2);
+
+            BOOST_REQUIRE_THROW(copy = t, std::runtime_error);
+            BOOST_CHECK_EQUAL(dummy::instances_count, 2);
+        }
+        BOOST_CHECK_EQUAL(dummy::instances_count, 0);
     }
 
     BOOST_AUTO_TEST_CASE(does_not_leak_being_move_assigned)

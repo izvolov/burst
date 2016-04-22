@@ -75,8 +75,19 @@ namespace burst
             return *this;
         }
 
-        dynamic_tuple (const dynamic_tuple &) = delete;
-        dynamic_tuple & operator = (const dynamic_tuple &) = delete;
+        dynamic_tuple (const dynamic_tuple & that):
+            m_capacity(that.m_capacity),
+            m_data(std::make_unique<std::int8_t[]>(m_capacity)),
+            m_objects(that.m_objects),
+            m_volume(that.m_volume)
+        {
+            copy(m_objects.begin(), m_objects.end(), that.data(), this->data());
+        }
+
+        dynamic_tuple & operator = (const dynamic_tuple & that)
+        {
+            return *this = dynamic_tuple(that);
+        }
 
         ~dynamic_tuple ()
         {
@@ -335,6 +346,23 @@ namespace burst
                 }
             }
             destroy(first, last, data);
+        }
+
+        template <typename ForwardIterator>
+        void copy (ForwardIterator first, ForwardIterator last, const std::int8_t * data, std::int8_t * new_data)
+        {
+            for (auto current = first; current != last; ++current)
+            {
+                try
+                {
+                    current->manager.copy(data + current->offset, new_data + current->offset);
+                }
+                catch (...)
+                {
+                    destroy(first, current, new_data);
+                    throw;
+                }
+            }
         }
 
         //!     Минимальная вместительность контейнера.
