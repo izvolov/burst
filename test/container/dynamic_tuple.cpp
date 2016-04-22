@@ -241,4 +241,20 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
         BOOST_CHECK_EQUAL(dummy::instances_count, 0);
 
     }
+
+    BOOST_AUTO_TEST_CASE(does_not_leak_being_move_assigned)
+    {
+        BOOST_REQUIRE_EQUAL(dummy::instances_count, 0);
+        {
+            burst::dynamic_tuple t(dummy{});
+            BOOST_REQUIRE_EQUAL(dummy::instances_count, 1);
+
+            burst::dynamic_tuple copy(dummy{});
+            BOOST_REQUIRE_EQUAL(dummy::instances_count, 2);
+
+            copy = std::move(t);
+            BOOST_CHECK_EQUAL(dummy::instances_count, 2);
+        }
+        BOOST_CHECK_EQUAL(dummy::instances_count, 0);
+    }
 BOOST_AUTO_TEST_SUITE_END()

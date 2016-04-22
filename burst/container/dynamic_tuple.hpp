@@ -68,7 +68,12 @@ namespace burst
         }
 
         dynamic_tuple (dynamic_tuple &&) = default;
-        dynamic_tuple & operator = (dynamic_tuple &&) = default;
+
+        dynamic_tuple & operator = (dynamic_tuple && that)
+        {
+            this->swap(that);
+            return *this;
+        }
 
         dynamic_tuple (const dynamic_tuple &) = delete;
         dynamic_tuple & operator = (const dynamic_tuple &) = delete;
@@ -76,6 +81,14 @@ namespace burst
         ~dynamic_tuple ()
         {
             destroy_all();
+        }
+
+        void swap (dynamic_tuple & that)
+        {
+            std::swap(this->m_capacity, that.m_capacity);
+            this->m_data.swap(that.m_data);
+            this->m_objects.swap(that.m_objects);
+            std::swap(this->m_volume, that.m_volume);
         }
 
         //!     Обеспечить необходимую вместительность контейнера.
