@@ -331,35 +331,35 @@ namespace burst
         }
 
         template <typename ForwardIterator>
-        void move (ForwardIterator first, ForwardIterator last, std::int8_t * data, std::int8_t * new_data)
+        void move (ForwardIterator first, ForwardIterator last, std::int8_t * source, std::int8_t * destination)
         {
             for (auto current = first; current != last; ++current)
             {
                 try
                 {
-                    current->manager.move(data + current->offset, new_data + current->offset);
+                    current->manager.move(source + current->offset, destination + current->offset);
                 }
                 catch (...)
                 {
-                    destroy(first, current, new_data);
+                    destroy(first, current, destination);
                     throw;
                 }
             }
-            destroy(first, last, data);
+            destroy(first, last, source);
         }
 
         template <typename ForwardIterator>
-        void copy (ForwardIterator first, ForwardIterator last, const std::int8_t * data, std::int8_t * new_data)
+        void copy (ForwardIterator first, ForwardIterator last, const std::int8_t * source, std::int8_t * destination)
         {
             for (auto current = first; current != last; ++current)
             {
                 try
                 {
-                    current->manager.copy(data + current->offset, new_data + current->offset);
+                    current->manager.copy(source + current->offset, destination + current->offset);
                 }
                 catch (...)
                 {
-                    destroy(first, current, new_data);
+                    destroy(first, current, destination);
                     throw;
                 }
             }
