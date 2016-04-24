@@ -1,6 +1,7 @@
 #ifndef BURST_CONTAINER_DETAIL_LIFETIME_MANAGER_HPP
 #define BURST_CONTAINER_DETAIL_LIFETIME_MANAGER_HPP
 
+#include <cassert>
 #include <stdexcept>
 #include <type_traits>
 #include <utility>
@@ -42,29 +43,40 @@ namespace burst
         {
             static_cast<T *>(object)->~T();
         }
-    }
 
-    struct lifetime_manager
-    {
-        using copier_type = void (*) (const void *, void *);
-        using mover_type = void (*) (void *, void *);
-        using destroyer_type = void (*) (void *);
-
-        copier_type copy;
-        mover_type move;
-        destroyer_type destroy;
-    };
-
-    template <typename T>
-    lifetime_manager make_lifetime_manager ()
-    {
-        return lifetime_manager
+        enum struct operation_t
         {
-            &lifetime::copy<T>,
-            &lifetime::move<T>,
-            &lifetime::destroy<T>
+            copy,
+            move,
+            destroy
         };
-    }
+
+        using manager_t = void (*) (operation_t, const void *, void *);
+
+        template <typename T>
+        void manage (operation_t todo, const void * source, void * destination)
+        {
+            switch (todo)
+            {
+                case operation_t::copy:
+                {
+                    copy<T>(source, destination);
+                    break;
+                }
+                case operation_t::move:
+                {
+                    move<T>(const_cast<void *>(source), destination);
+                    break;
+                }
+                case operation_t::destroy:
+                {
+                    assert(source == nullptr);
+                    destroy<T>(destination);
+                    break;
+                }
+            }
+        }
+    } // namespace lifetime
 } // namespace burst
 
 #endif // BURST_CONTAINER_DETAIL_LIFETIME_MANAGER_HPP
