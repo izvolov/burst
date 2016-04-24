@@ -2,30 +2,132 @@
 
 #include <boost/program_options.hpp>
 
+#include <algorithm>
 #include <chrono>
+#include <cstddef>
+#include <functional>
 #include <iostream>
+#include <map>
+#include <memory>
+#include <random>
+#include <utility>
+#include <vector>
 
-void test (std::size_t size, std::size_t attempt_count)
+struct A
+{
+    std::size_t x = 0;
+};
+
+template <typename T>
+burst::dynamic_tuple create_dynamic_tuple (std::size_t size)
+{
+    burst::dynamic_tuple t;
+
+    for (std::size_t i = 0; i < size; ++i)
+    {
+        t.push_back(T{});
+    }
+
+    return t;
+}
+
+template <typename T>
+auto create_pointer_array (std::size_t size)
+{
+    std::vector<std::unique_ptr<A>> pointer_array;
+
+    for (std::size_t i = 0; i < size; ++i)
+    {
+        pointer_array.push_back(std::make_unique<A>());
+    }
+
+    return pointer_array;
+}
+
+template <typename T, typename URNG>
+auto create_shuffled_pointer_array (std::size_t size, std::size_t spread, URNG && generator)
+{
+    std::vector<std::unique_ptr<A>> pointer_array = create_pointer_array<T>(size * spread);
+
+    std::shuffle(pointer_array.begin(), pointer_array.end(), std::forward<URNG>(generator));
+    pointer_array.resize(size);
+
+    return pointer_array;
+}
+
+template <typename T>
+auto create_sparse_pointer_array (std::size_t size, std::size_t spread)
+{
+    std::vector<std::unique_ptr<A>> pointer_array = create_pointer_array<T>(size * spread);
+
+    auto last =
+        std::remove_if(pointer_array.begin(), pointer_array.end(),
+            [spread, index = 0ul] (const auto &) mutable
+            {
+                return index++ % spread != 0;
+            });
+    pointer_array.erase(last, pointer_array.end());
+    assert(pointer_array.size() == size);
+
+    return pointer_array;
+}
+
+template <typename Container, typename Access>
+double test_consecutive_access (Container container, Access access, std::size_t attempt_count)
 {
     using namespace std::chrono;
-    auto total_time = steady_clock::duration{0};
+
+    std::size_t total = 0;
+
+    auto start_time = steady_clock::now();
 
     for (std::size_t attempt = 0; attempt < attempt_count; ++attempt)
     {
-        auto attempt_start_time = steady_clock::now();
-
-        burst::dynamic_tuple t;
-        for (std::size_t iteration = 0; iteration < size; ++iteration)
+        for (std::size_t index = 0; index < container.size(); ++index)
         {
-            t.push_back('a');
+            total += access(container, index);
         }
-
-        auto attempt_time = steady_clock::now() - attempt_start_time;
-
-        total_time += attempt_time;
     }
 
-    std::cout << "Время: " << ' ' << duration_cast<duration<double>>(total_time).count() << std::endl;
+    auto total_time = steady_clock::now() - start_time;
+
+    std::clog << total << std::endl;
+    return duration_cast<duration<double>>(total_time).count();
+}
+
+void test_dyntuple_access (std::size_t size, std::size_t attempt_count)
+{
+    auto tuple = create_dynamic_tuple<A>(size);
+
+    auto access = [] (const auto & t, std::size_t index) {return t.template get<A>(index).x;};
+    auto time = test_consecutive_access(tuple, access, attempt_count);
+    std::cout << "Доступ в ДК: " << ' ' << time << std::endl;
+}
+
+void test_pointer_array_access
+    (
+        std::size_t size,
+        std::size_t attempt_count,
+        const std::string & type,
+        std::size_t spread
+    )
+{
+    using create_tuple_type = std::function<std::vector<std::unique_ptr<A>> ()>;
+    static const std::map<std::string, create_tuple_type> create
+    {
+        {"plain", [size]
+            {return create_pointer_array<A>(size);}},
+        {"sparse", [size, spread]
+            {return create_sparse_pointer_array<A>(size, spread);}},
+        {"shuffled", [size, spread]
+            {return create_shuffled_pointer_array<A>(size, spread, std::default_random_engine{});}}
+    };
+
+    auto pointer_array = create.at(type)();
+
+    auto access = [] (const auto & a, std::size_t index) {return a[index]->x;};
+    auto time = test_consecutive_access(std::move(pointer_array), access, attempt_count);
+    std::cout << "Доступ в МУ: " << ' ' << time << std::endl;
 }
 
 int main (int argc, const char * argv[])
@@ -34,9 +136,18 @@ int main (int argc, const char * argv[])
 
     bpo::options_description description("Опции");
     description.add_options()
-        ("help,h", "Подсказка")
-        ("size", bpo::value<std::size_t>()->default_value(1000))
-        ("attempts", bpo::value<std::size_t>()->default_value(1000));
+        ("help,h", "Подсказка.")
+        ("size", bpo::value<std::size_t>()->default_value(1000),
+            "Размер испытываемых массивов.")
+        ("attempts", bpo::value<std::size_t>()->default_value(1000),
+            "Количество испытаний.")
+        ("type", bpo::value<std::string>()->default_value("sparse"),
+            "Тип массива указателей.\nДопустимые значения: plain, sparse, shuffled.")
+        ("spread", bpo::value<std::size_t>()->default_value(1),
+            "Степень разреженности массива указателей.\n"
+            "Создаёт массив указателей размера `size * spread`, который затем, в зависимости от "
+            "выбранного типа массива, либо прореживается, либо перемешивается.\n"
+            "В случае с простым (plain) массивом опция игнорируется.");
 
     try
     {
@@ -50,10 +161,13 @@ int main (int argc, const char * argv[])
         }
         else
         {
-            std::size_t size = vm["size"].as<std::size_t>();
-            std::size_t attempts = vm["attempts"].as<std::size_t>();
+            auto size = vm["size"].as<std::size_t>();
+            auto attempts = vm["attempts"].as<std::size_t>();
+            auto type = vm["type"].as<std::string>();
+            auto spread = vm["spread"].as<std::size_t>();
 
-            test(size, attempts);
+            test_dyntuple_access(size, attempts);
+            test_pointer_array_access(size, attempts, type, spread);
         }
     }
     catch (bpo::error & e)
