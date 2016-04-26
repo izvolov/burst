@@ -84,11 +84,12 @@ Burst
   std::string hello("hello");
   std::string world("world");
 
-  auto helloworld = burst::join
-  ({
-      boost::make_iterator_range(hello),
-      boost::make_iterator_range(world)
-  });
+  auto helloworld =
+      burst::join
+      ({
+          boost::make_iterator_range(hello),
+          boost::make_iterator_range(world)
+      });
 
   assert(helloworld == std::string("helloworld"));
   ```
@@ -104,11 +105,12 @@ Burst
   std::vector<int> even{2, 4, 6};
   std::vector<int>  odd{1, 3, 5};
 
-  auto merged_range = burst::merge
-  ({
-      boost::make_iterator_range(even),
-      boost::make_iterator_range(odd)
-  });
+  auto merged_range =
+      burst::merge
+      ({
+          boost::make_iterator_range(even),
+          boost::make_iterator_range(odd)
+      });
 
   assert((merged_range == std::vector<int>{1, 2, 3, 4, 5, 6}));
   ```
@@ -125,12 +127,13 @@ Burst
   std::vector<int> prime{2, 3, 5, 7};
   std::vector<int> odd{1, 3, 5, 7};
 
-  auto intersected_range = burst::intersect
-  ({
-      boost::make_iterator_range(natural),
-      boost::make_iterator_range(prime),
-      boost::make_iterator_range(odd)
-  });
+  auto intersected_range =
+      burst::intersect
+      ({
+          boost::make_iterator_range(natural),
+          boost::make_iterator_range(prime),
+          boost::make_iterator_range(odd)
+      });
 
   assert((intersected_range == std::vector<int>{3, 5, 7}));
   ```
@@ -148,12 +151,13 @@ Burst
   auto  third = {      1, 1, 1, 2};
   //             ^     ^  ^     ^
 
-  auto semiintersection = burst::semiintersect
-  ({
-      boost::make_iterator_range(first),
-      boost::make_iterator_range(second),
-      boost::make_iterator_range(third)
-  }, 2);
+  auto semiintersection =
+      burst::semiintersect
+      ({
+          boost::make_iterator_range(first),
+          boost::make_iterator_range(second),
+          boost::make_iterator_range(third)
+      }, 2);
 
   auto expected_collection = {0, 1, 1, 2};
   ```
@@ -170,12 +174,13 @@ Burst
   std::vector<int>   two{   2, 3   };
   std::vector<int> three{      3, 4};
 
-  auto range_union = burst::unite
-  ({
-      boost::make_iterator_range(one),
-      boost::make_iterator_range(two),
-      boost::make_iterator_range(three)
-  });
+  auto range_union =
+      burst::unite
+      ({
+          boost::make_iterator_range(one),
+          boost::make_iterator_range(two),
+          boost::make_iterator_range(three)
+      });
 
   assert((range_union == std::vector<int>{1, 2, 3, 4}));
   ```
