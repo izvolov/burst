@@ -160,6 +160,7 @@ Burst
       }, 2);
 
   auto expected_collection = {0, 1, 1, 2};
+  assert(semiintersection == expected_collection);
   ```
 
   В заголовке
