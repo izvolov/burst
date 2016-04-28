@@ -1,5 +1,5 @@
-#ifndef BURST_CONTAINER_DETAIL_LIFETIME_MANAGER_HPP
-#define BURST_CONTAINER_DETAIL_LIFETIME_MANAGER_HPP
+#ifndef BURST_CONTAINER_DETAIL_DYNAMIC_TUPLE_MANAGEMENT_HPP
+#define BURST_CONTAINER_DETAIL_DYNAMIC_TUPLE_MANAGEMENT_HPP
 
 #include <cassert>
 #include <stdexcept>
@@ -8,7 +8,7 @@
 
 namespace burst
 {
-    namespace lifetime
+    namespace management
     {
         template <typename T>
         auto copy (const void * source, void * destination)
@@ -76,7 +76,7 @@ namespace burst
                 }
             }
         }
-    } // namespace lifetime
+    } // namespace management
 } // namespace burst
 
-#endif // BURST_CONTAINER_DETAIL_LIFETIME_MANAGER_HPP
+#endif // BURST_CONTAINER_DETAIL_DYNAMIC_TUPLE_MANAGEMENT_HPP

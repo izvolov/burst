@@ -2,7 +2,7 @@
 #define BURST_CONTAINER_DYNAMIC_TUPLE_HPP
 
 #include <burst/algorithm/sum.hpp>
-#include <burst/container/detail/lifetime_manager.hpp>
+#include <burst/container/detail/dynamic_tuple_management.hpp>
 #include <burst/variadic.hpp>
 
 #include <boost/assert.hpp>
@@ -36,7 +36,7 @@ namespace burst
         struct object_info_t
         {
             std::size_t offset;
-            lifetime::manager_t manage;
+            management::manager_t manage;
         };
 
         using object_info_container_type = std::vector<object_info_t>;
@@ -311,7 +311,7 @@ namespace burst
             new (creation_place) raw_type(std::forward<T>(object));
 
             const auto new_offset = static_cast<std::size_t>(creation_place - data());
-            m_objects.push_back(object_info_t{new_offset, &lifetime::manage<raw_type>});
+            m_objects.push_back(object_info_t{new_offset, &management::manage<raw_type>});
             m_volume = new_offset + sizeof(raw_type);
         }
 
@@ -320,7 +320,7 @@ namespace burst
         {
             while (first != last)
             {
-                first->manage(lifetime::operation_t::destroy, nullptr, data + first->offset);
+                first->manage(management::operation_t::destroy, nullptr, data + first->offset);
                 ++first;
             }
         }
@@ -337,7 +337,7 @@ namespace burst
             {
                 try
                 {
-                    current->manage(lifetime::operation_t::move,
+                    current->manage(management::operation_t::move,
                         source + current->offset, destination + current->offset);
                 }
                 catch (...)
@@ -356,7 +356,7 @@ namespace burst
             {
                 try
                 {
-                    current->manage(lifetime::operation_t::copy,
+                    current->manage(management::operation_t::copy,
                         source + current->offset, destination + current->offset);
                 }
                 catch (...)
