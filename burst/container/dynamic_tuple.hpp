@@ -33,13 +33,7 @@ namespace burst
     class dynamic_tuple
     {
     private:
-        struct object_info_t
-        {
-            std::size_t offset;
-            management::manager_t manage;
-        };
-
-        using object_info_container_type = std::vector<object_info_t>;
+        using object_info_container_type = std::vector<management::object_info_t>;
 
     public:
         using size_type = typename object_info_container_type::size_type;
@@ -81,7 +75,7 @@ namespace burst
             m_objects(that.m_objects),
             m_volume(that.m_volume)
         {
-            copy(m_objects.begin(), m_objects.end(), that.data(), this->data());
+            management::copy(m_objects.begin(), m_objects.end(), that.data(), this->data());
         }
 
         dynamic_tuple & operator = (const dynamic_tuple & that)
@@ -123,7 +117,7 @@ namespace burst
                 auto new_data = std::make_unique<std::int8_t[]>(new_capacity);
                 m_capacity = new_capacity;
 
-                move(m_objects.begin(), m_objects.end(), data(), new_data.get());
+                management::move(m_objects.begin(), m_objects.end(), data(), new_data.get());
                 std::swap(m_data, new_data);
             }
         }
@@ -311,60 +305,13 @@ namespace burst
             new (creation_place) raw_type(std::forward<T>(object));
 
             const auto new_offset = static_cast<std::size_t>(creation_place - data());
-            m_objects.push_back(object_info_t{new_offset, &management::manage<raw_type>});
+            m_objects.push_back(management::make_object_info<raw_type>(new_offset));
             m_volume = new_offset + sizeof(raw_type);
-        }
-
-        template <typename InputIterator>
-        void destroy (InputIterator first, InputIterator last, std::int8_t * data)
-        {
-            while (first != last)
-            {
-                first->manage(management::operation_t::destroy, nullptr, data + first->offset);
-                ++first;
-            }
         }
 
         void destroy_all ()
         {
-            destroy(m_objects.begin(), m_objects.end(), data());
-        }
-
-        template <typename ForwardIterator>
-        void move (ForwardIterator first, ForwardIterator last, std::int8_t * source, std::int8_t * destination)
-        {
-            for (auto current = first; current != last; ++current)
-            {
-                try
-                {
-                    current->manage(management::operation_t::move,
-                        source + current->offset, destination + current->offset);
-                }
-                catch (...)
-                {
-                    destroy(first, current, destination);
-                    throw;
-                }
-            }
-            destroy(first, last, source);
-        }
-
-        template <typename ForwardIterator>
-        void copy (ForwardIterator first, ForwardIterator last, const std::int8_t * source, std::int8_t * destination)
-        {
-            for (auto current = first; current != last; ++current)
-            {
-                try
-                {
-                    current->manage(management::operation_t::copy,
-                        source + current->offset, destination + current->offset);
-                }
-                catch (...)
-                {
-                    destroy(first, current, destination);
-                    throw;
-                }
-            }
+            management::destroy(m_objects.begin(), m_objects.end(), data());
         }
 
         //!     Минимальная вместительность контейнера.

@@ -2,6 +2,7 @@
 #define BURST_CONTAINER_DETAIL_DYNAMIC_TUPLE_MANAGEMENT_HPP
 
 #include <cassert>
+#include <cstdint>
 #include <stdexcept>
 #include <type_traits>
 #include <utility>
@@ -73,6 +74,65 @@ namespace burst
                     assert(source == nullptr);
                     destroy<T>(destination);
                     break;
+                }
+            }
+        }
+
+        struct object_info_t
+        {
+            std::size_t offset;
+            manager_t manage;
+        };
+
+        template <typename T>
+        object_info_t make_object_info (std::size_t offset)
+        {
+            return object_info_t{offset, &manage<T>};
+        }
+
+        template <typename InputIterator>
+        void destroy (InputIterator first, InputIterator last, std::int8_t * data)
+        {
+            while (first != last)
+            {
+                first->manage(operation_t::destroy, nullptr, data + first->offset);
+                ++first;
+            }
+        }
+
+        template <typename ForwardIterator>
+        void move (ForwardIterator first, ForwardIterator last, std::int8_t * source, std::int8_t * destination)
+        {
+            for (auto current = first; current != last; ++current)
+            {
+                try
+                {
+                    current->manage(operation_t::move,
+                        source + current->offset, destination + current->offset);
+                }
+                catch (...)
+                {
+                    destroy(first, current, destination);
+                    throw;
+                }
+            }
+            destroy(first, last, source);
+        }
+
+        template <typename ForwardIterator>
+        void copy (ForwardIterator first, ForwardIterator last, const std::int8_t * source, std::int8_t * destination)
+        {
+            for (auto current = first; current != last; ++current)
+            {
+                try
+                {
+                    current->manage(operation_t::copy,
+                        source + current->offset, destination + current->offset);
+                }
+                catch (...)
+                {
+                    destroy(first, current, destination);
+                    throw;
                 }
             }
         }
