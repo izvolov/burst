@@ -1,13 +1,12 @@
 #ifndef BURST_CONCEPT_HPP
 #define BURST_CONCEPT_HPP
 
+#include <burst/type_traits/void_t.hpp>
+
 #include <type_traits>
 
 namespace burst
 {
-    template <typename ...>
-    using void_t = void;
-
     template <template <typename ...> class C, typename T, typename = void_t<>>
     struct satisfies: std::false_type{};
 
