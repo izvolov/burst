@@ -72,8 +72,8 @@ auto create_sparse_pointer_array (std::size_t size, std::size_t spread)
     return pointer_array;
 }
 
-template <typename Container, typename Access>
-double test_consecutive_access (Container container, Access access, std::size_t attempt_count)
+template <typename Container, typename Range, typename Access>
+double test_consecutive_access (Container container, Range && positions, Access access, std::size_t attempt_count)
 {
     using namespace std::chrono;
 
@@ -83,9 +83,9 @@ double test_consecutive_access (Container container, Access access, std::size_t 
 
     for (std::size_t attempt = 0; attempt < attempt_count; ++attempt)
     {
-        for (std::size_t index = 0; index < container.size(); ++index)
+        for (auto position: positions)
         {
-            total += access(container, index);
+            total += access(container, position);
         }
     }
 
@@ -99,8 +99,16 @@ void test_dyntuple_access (std::size_t size, std::size_t attempt_count)
 {
     auto tuple = create_dynamic_tuple<A>(size);
 
-    auto access = [] (const auto & t, std::size_t index) {return t.template get<A>(index).x;};
-    auto time = test_consecutive_access(tuple, access, attempt_count);
+    std::vector<std::size_t> offsets(size);
+    std::iota(offsets.begin(), offsets.end(), 0);
+    std::transform(offsets.begin(), offsets.end(), offsets.begin(),
+        [& tuple] (std::size_t index)
+        {
+            return tuple.offset_of(index);
+        });
+
+    auto access = [] (const auto & t, std::size_t offset) {return t.template get_by_offset<A>(offset).x;};
+    auto time = test_consecutive_access(tuple, offsets, access, attempt_count);
     std::cout << "Доступ в ДК: " << ' ' << time << std::endl;
 }
 
@@ -125,8 +133,11 @@ void test_pointer_array_access
 
     auto pointer_array = create.at(type)();
 
+    std::vector<std::size_t> indices(size);
+    std::iota(indices.begin(), indices.end(), 0);
+
     auto access = [] (const auto & a, std::size_t index) {return a[index]->x;};
-    auto time = test_consecutive_access(std::move(pointer_array), access, attempt_count);
+    auto time = test_consecutive_access(std::move(pointer_array), indices, access, attempt_count);
     std::cout << "Доступ в МУ: " << ' ' << time << std::endl;
 }
 
