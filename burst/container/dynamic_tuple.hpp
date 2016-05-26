@@ -174,6 +174,41 @@ namespace burst
             return *static_cast<T *>(static_cast<void *>(data() + m_objects[index].offset));
         }
 
+        //!     Отступ элемента, находящегося по заданному индексу.
+        /*!
+                Возвращает отступ элемента от начала хранилища.
+                В дальнейшем может использоваться для передачи в метод `get_by_offset`.
+
+                Сложность: O(1).
+         */
+        size_type offset_of (size_type index) const
+        {
+            return m_objects[index].offset;
+        }
+
+        //!     Доступ к неизменяемому элементу по отступу.
+        /*!
+                Более эффективен, чем доступ по индексу, поскольку при доступе по индексу всё равно
+            придётся вычислять отступ. А здесь он дан изначально.
+
+                Сложность: O(1).
+         */
+        template <typename T>
+        const T & get_by_offset (size_type offset) const
+        {
+            return *static_cast<const T *>(static_cast<const void *>(data() + offset));
+        }
+
+        //!     Доступ к изменяемому элементу по отступу.
+        /*!
+                Сложность: O(1).
+         */
+        template <typename T>
+        T & get_by_offset (size_type offset)
+        {
+            return *static_cast<T *>(static_cast<void *>(data() + offset));
+        }
+
         //!     Размер контейнера.
         /*!
                 Возвращает количество элементов, лежащих в контейнере.

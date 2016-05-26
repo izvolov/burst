@@ -373,4 +373,25 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
         }
         BOOST_CHECK_EQUAL(dummy::instances_count, 0);
     }
+
+    BOOST_AUTO_TEST_CASE(can_give_const_element_by_offset)
+    {
+        const burst::dynamic_tuple t(std::string("123"), 42, true);
+        auto int_offset = t.offset_of(1);
+        BOOST_CHECK_EQUAL(t.get_by_offset<int>(int_offset), 42);
+    }
+
+    BOOST_AUTO_TEST_CASE(can_give_mutable_element_by_offset)
+    {
+        auto old_value = 42;
+        auto new_value = 99;
+
+        burst::dynamic_tuple t(std::string("123"), old_value, true);
+        auto int_offset = t.offset_of(1);
+
+        BOOST_REQUIRE_EQUAL(t.get<int>(1), old_value);
+        t.get_by_offset<int>(int_offset) = new_value;
+
+        BOOST_CHECK_EQUAL(t.get<int>(1), new_value);
+    }
 BOOST_AUTO_TEST_SUITE_END()
