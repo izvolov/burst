@@ -1,0 +1,70 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
+from subprocess import Popen, PIPE
+import argparse
+import numpy as np
+import matplotlib
+matplotlib.use('agg')
+import matplotlib.pyplot as plt
+import sys
+from itertools import cycle
+
+def measure (array_size, spreading_type, spreads, attempts):
+    measurements = {}
+
+    for spread, attempts in [(l, attempts) for l in spreads]:
+        command = "@CMAKE_BINARY_DIR@/benchmark/container/dyntuple --size=" + str(array_size) + " --attempts=" + str(attempts) + " --type=" + spreading_type + " --spread=" + str(spread) + " 2> /dev/null"
+        results = Popen(command, shell=True, stdin=PIPE, stdout=PIPE).stdout.read().splitlines()
+
+        for container, time in [(c.decode('utf8'), float(t) / attempts) for c, t in [item.split() for item in results]]:
+            times = measurements.setdefault(container, [])
+            times += [time]
+
+    return measurements
+
+def plot (array_size, spreading_type, spreads, measurements, file_name):
+    spreading_names = {'sparse': u'Разреженный', 'shuffled': u'Перемешанный'}
+
+    plt.figure(num=1)
+    plt.title(spreading_names[spreading_type] + u' массив размера ' + str(array_size), size=14)
+    plt.xlabel(u'Показатель разброса, ед', size=14)
+    plt.ylabel(u'Среднее время доступа, с', size=14)
+
+    x = np.array(spreads)
+    plt.xticks(x)
+
+    markers = ["x","o","+"]
+    markercycle = cycle(markers)
+
+    for container, times in measurements.items():
+        y = np.array(times)
+        plt.plot(x, y, label=container, marker=next(markercycle))
+
+    ymin, ymax = plt.ylim()
+    plt.ylim(0.0, ymax)
+    plt.legend(loc='lower left')
+    plt.savefig(file_name, format='png')
+
+def parse_command_line (options):
+    parser = argparse.ArgumentParser(options[0])
+    parser.add_argument('--size', type=str, default='100')
+    parser.add_argument('--attempts', type=int, default='1000')
+    parser.add_argument('--type', type=str, default='sparse')
+    parser.add_argument('--begin', type=int, default=1)
+    parser.add_argument('--end', type=int, default=20)
+    parser.add_argument('--step', type=int, default=2)
+    parser.add_argument('--prefix', type=str, default='dyntuple')
+    args = parser.parse_args(options[1:])
+    return args.size, args.attempts, args.type, args.begin, args.end, args.step, args.prefix
+
+def create_suffix (array_size, spreading_type, begin, end, step):
+    return str(array_size) + '_' + spreading_type + '_' + str(begin) + '_' + str(end) + '_' + str(step)
+
+size, attempts, spreading_type, begin, end, step, prefix = parse_command_line(sys.argv)
+file_name = prefix + create_suffix(size, spreading_type, begin, end, step)
+
+spreads = range(begin, end, step)
+
+measurements = measure(size, spreading_type, spreads, attempts)
+plot(size, spreading_type, spreads, measurements, file_name + '.png')

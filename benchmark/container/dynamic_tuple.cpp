@@ -109,7 +109,7 @@ void test_dyntuple_access (std::size_t size, std::size_t attempt_count)
 
     auto access = [] (const auto & t, std::size_t offset) {return t.template get_by_offset<A>(offset).x;};
     auto time = test_consecutive_access(tuple, offsets, access, attempt_count);
-    std::cout << "Доступ в ДК: " << ' ' << time << std::endl;
+    std::cout << "burst::dynamic_tuple " << ' ' << time << std::endl;
 }
 
 void test_pointer_array_access
@@ -138,7 +138,7 @@ void test_pointer_array_access
 
     auto access = [] (const auto & a, std::size_t index) {return a[index]->x;};
     auto time = test_consecutive_access(std::move(pointer_array), indices, access, attempt_count);
-    std::cout << "Доступ в МУ: " << ' ' << time << std::endl;
+    std::cout << "массив_указателей " << ' ' << time << std::endl;
 }
 
 int main (int argc, const char * argv[])
