@@ -64,6 +64,24 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
         BOOST_CHECK_EQUAL(t.get<X>(3).b, (std::vector<int>{1, 2, 3}));
     }
 
+    BOOST_AUTO_TEST_CASE(size_of_newly_created_tuple_is_zero)
+    {
+        const auto t = burst::dynamic_tuple{};
+        BOOST_CHECK_EQUAL(t.size(), 0);
+    }
+
+    BOOST_AUTO_TEST_CASE(volume_of_newly_created_tuple_is_zero)
+    {
+        const auto t = burst::dynamic_tuple{};
+        BOOST_CHECK_EQUAL(t.volume(), 0);
+    }
+
+    BOOST_AUTO_TEST_CASE(capacity_of_newly_created_tuple_is_zero)
+    {
+        const auto t = burst::dynamic_tuple{};
+        BOOST_CHECK_EQUAL(t.capacity(), 0);
+    }
+
     BOOST_AUTO_TEST_CASE(volume_of_dynamic_tuple_is_between_sum_of_sizes_and_sizes_plus_alignments_of_inlying_types)
     {
         const auto some_vector = std::vector<std::size_t>{};

@@ -41,7 +41,7 @@ namespace burst
     public:
         template <typename ... Types>
         explicit dynamic_tuple (Types ... objects):
-            m_capacity(std::max(std::size_t{DEFAULT_CAPACITY}, sum({sizeof(Types) + alignof(Types)...}))),
+            m_capacity(sum({sizeof(Types) + alignof(Types)...})),
             m_data(std::make_unique<std::int8_t[]>(m_capacity))
         {
             try
@@ -55,11 +55,7 @@ namespace burst
             }
         }
 
-        dynamic_tuple ():
-            m_capacity(DEFAULT_CAPACITY),
-            m_data(std::make_unique<std::int8_t[]>(m_capacity))
-        {
-        }
+        dynamic_tuple () = default;
 
         dynamic_tuple (dynamic_tuple &&) = default;
 
@@ -349,14 +345,12 @@ namespace burst
             management::destroy(m_objects.begin(), m_objects.end(), data());
         }
 
-        //!     Минимальная вместительность контейнера.
-        static const auto DEFAULT_CAPACITY = std::size_t{64};
         //!     Коэффициент роста вместимости контейнера.
         static const auto CAPACITY_INCREASING_FACTOR = std::size_t{2};
         //!     Порог, по достижении которого необходимо уменьшить вместимость.
         static const auto CAPACITY_DECREASING_THRESHOLD = std::size_t{4};
 
-        std::size_t m_capacity = DEFAULT_CAPACITY;
+        std::size_t m_capacity = 0;
         std::unique_ptr<std::int8_t[]> m_data;
 
         object_info_container_type m_objects;
