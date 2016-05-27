@@ -112,6 +112,18 @@ void test_dyntuple_access (std::size_t size, std::size_t attempt_count)
     std::cout << "burst::dynamic_tuple " << ' ' << time << std::endl;
 }
 
+void test_vector_access (std::size_t size, std::size_t attempt_count)
+{
+    auto vector = std::vector<A>(size);
+
+    std::vector<std::size_t> indices(size);
+    std::iota(indices.begin(), indices.end(), 0);
+
+    auto access = [] (const auto & a, std::size_t index) {return a[index].x;};
+    auto time = test_consecutive_access(vector, indices, access, attempt_count);
+    std::cout << "std::vector " << ' ' << time << std::endl;
+}
+
 void test_pointer_array_access
     (
         std::size_t size,
@@ -177,8 +189,9 @@ int main (int argc, const char * argv[])
             auto type = vm["type"].as<std::string>();
             auto spread = vm["spread"].as<std::size_t>();
 
-            test_dyntuple_access(size, attempts);
             test_pointer_array_access(size, attempts, type, spread);
+            test_dyntuple_access(size, attempts);
+            test_vector_access(size, attempts);
         }
     }
     catch (bpo::error & e)
