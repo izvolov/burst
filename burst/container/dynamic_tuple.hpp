@@ -306,7 +306,8 @@ namespace burst
         {
             auto space_left = capacity() - volume();
             void * creation_place = data() + volume();
-            return static_cast<std::int8_t *>(std::align(alignof(T), sizeof(T), creation_place, space_left));
+            auto aligned_place = std::align(alignof(T), sizeof(T), creation_place, space_left);
+            return static_cast<std::int8_t *>(aligned_place);
         }
 
         //!     Разместить объект в имеющемся буфере.
