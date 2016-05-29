@@ -1,6 +1,8 @@
 #ifndef BURST_CONTAINER_DETAIL_DYNAMIC_TUPLE_MANAGEMENT_HPP
 #define BURST_CONTAINER_DETAIL_DYNAMIC_TUPLE_MANAGEMENT_HPP
 
+#include <boost/type_index/ctti_type_index.hpp>
+
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
@@ -31,7 +33,8 @@ namespace burst
                     not std::is_copy_constructible<T>::value
                 >
         {
-            throw std::runtime_error(u8"Объект некопируем");
+            auto type_name = boost::typeindex::ctti_type_index::type_id<T>().pretty_name();
+            throw std::runtime_error(u8"Объект типа " + type_name + u8" некопируем");
         }
 
         template <typename T>
