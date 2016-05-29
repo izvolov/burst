@@ -146,15 +146,30 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
         BOOST_CHECK_EQUAL(dummy::instances_count, 0);
     }
 
+    BOOST_AUTO_TEST_CASE(volume_is_zero_after_clear)
+    {
+        burst::dynamic_tuple t(1, 3.14, true, std::string("qwe"));
+        BOOST_REQUIRE_GT(t.volume(), 0);
+
+        t.clear();
+        BOOST_CHECK_EQUAL(t.volume(), 0);
+    }
+
+    BOOST_AUTO_TEST_CASE(size_is_zero_after_clear)
+    {
+        burst::dynamic_tuple t(1, 3.14, true, std::string("qwe"));
+        BOOST_REQUIRE_GT(t.size(), 0);
+
+        t.clear();
+        BOOST_CHECK_EQUAL(t.size(), 0);
+    }
+
     BOOST_AUTO_TEST_CASE(dynamic_tuple_is_empty_after_clear)
     {
         burst::dynamic_tuple t(1, 3.14, true, std::string("qwe"));
-
-        BOOST_REQUIRE_EQUAL(t.size(), 4);
         BOOST_REQUIRE(not t.empty());
-        t.clear();
 
-        BOOST_CHECK_EQUAL(t.size(), 0);
+        t.clear();
         BOOST_CHECK(t.empty());
     }
 
@@ -164,8 +179,8 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
 
         const auto capacity = t.capacity();
         BOOST_REQUIRE_GT(capacity, 0);
-        t.clear();
 
+        t.clear();
         BOOST_CHECK_EQUAL(t.capacity(), capacity);
     }
 
