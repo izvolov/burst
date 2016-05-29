@@ -1,6 +1,7 @@
 #ifndef BURST_CONTAINER_DETAIL_DYNAMIC_TUPLE_MANAGEMENT_HPP
 #define BURST_CONTAINER_DETAIL_DYNAMIC_TUPLE_MANAGEMENT_HPP
 
+#include <algorithm>
 #include <cassert>
 #include <cstdint>
 #include <stdexcept>
@@ -93,11 +94,11 @@ namespace burst
         template <typename InputIterator>
         void destroy (InputIterator first, InputIterator last, std::int8_t * data)
         {
-            while (first != last)
-            {
-                first->manage(operation_t::destroy, nullptr, data + first->offset);
-                ++first;
-            }
+            std::for_each(first, last,
+                [data] (const auto & object)
+                {
+                    object.manage(operation_t::destroy, nullptr, data + object.offset);
+                });
         }
 
         template <typename ForwardIterator>
