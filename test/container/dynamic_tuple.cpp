@@ -427,4 +427,49 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
 
         BOOST_CHECK_EQUAL(t.get<int>(1), new_value);
     }
+
+    BOOST_AUTO_TEST_CASE(pop_back_decrements_tuple_size)
+    {
+        auto t = burst::dynamic_tuple(true, 3.14, 42);
+        BOOST_REQUIRE_EQUAL(t.size(), 3);
+
+        t.pop_back();
+        BOOST_CHECK_EQUAL(t.size(), 2);
+    }
+
+    BOOST_AUTO_TEST_CASE(volume_after_pop_back_is_equal_to_volume_of_tuple_without_last_element)
+    {
+        auto t = burst::dynamic_tuple(true, 42);
+        t.pop_back();
+
+        BOOST_CHECK_EQUAL(t.volume(), burst::dynamic_tuple(true).volume());
+    }
+
+    BOOST_AUTO_TEST_CASE(popped_element_is_destructed)
+    {
+        auto t = burst::dynamic_tuple(std::string("qwerty"), 42, dummy{});
+        BOOST_REQUIRE_EQUAL(dummy::instances_count, 1);
+
+        t.pop_back();
+        BOOST_CHECK_EQUAL(dummy::instances_count, 0);
+    }
+
+    BOOST_AUTO_TEST_CASE(capacity_does_not_change_after_pop_back)
+    {
+        burst::dynamic_tuple t;
+        for (auto i = 0; i < 100; ++i)
+        {
+            t.push_back(3.14);
+        }
+        BOOST_REQUIRE_EQUAL(t.size(), 100);
+
+        auto old_capacity = t.capacity();
+        BOOST_REQUIRE_GT(old_capacity, 0);
+
+        while (not t.empty())
+        {
+            t.pop_back();
+        }
+        BOOST_CHECK_EQUAL(t.capacity(), old_capacity);
+    }
 BOOST_AUTO_TEST_SUITE_END()

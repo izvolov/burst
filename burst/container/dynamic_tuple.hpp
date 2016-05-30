@@ -134,6 +134,32 @@ namespace burst
             accomodate(std::forward<T>(object), creation_place);
         }
 
+        //!     Удалить последний элемент контейнера.
+        /*!
+                Разрушает последний элемент в кортеже, уменьшает размер на единицу, а объём делает
+            равным объёму кортежа, составленного из всех элементов, кроме последнего.
+                Вместительность не изменяется.
+
+                Сложность: O(1).
+         */
+        void pop_back ()
+        {
+            management::destroy(m_objects.back(), data());
+            m_objects.pop_back();
+
+            if (not m_objects.empty())
+            {
+                auto offset = m_objects.back().offset;
+                auto size = management::size_of(m_objects.back());
+
+                m_volume = offset + size;
+            }
+            else
+            {
+                m_volume = 0;
+            }
+        }
+
         //!     Удалить все элементы из контейнера.
         /*!
                 Все ссылки на лежавшие внутри объекты становятся недействительными.

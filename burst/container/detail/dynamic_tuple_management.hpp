@@ -53,7 +53,8 @@ namespace burst
         {
             copy,
             move,
-            destroy
+            destroy,
+            size
         };
 
         using manager_t = void (*) (operation_t, const void *, void *);
@@ -77,6 +78,12 @@ namespace burst
                 {
                     assert(source == nullptr);
                     destroy<T>(destination);
+                    break;
+                }
+                case operation_t::size:
+                {
+                    assert(source == nullptr);
+                    *static_cast<std::size_t *>(destination) = sizeof(T);
                     break;
                 }
             }
@@ -144,6 +151,14 @@ namespace burst
                     throw;
                 }
             }
+        }
+
+        inline std::size_t size_of (const object_info_t & object)
+        {
+            std::size_t size;
+            object.manage(operation_t::size, nullptr, std::addressof(size));
+
+            return size;
         }
     } // namespace management
 } // namespace burst
