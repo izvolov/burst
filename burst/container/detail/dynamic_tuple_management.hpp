@@ -94,13 +94,18 @@ namespace burst
             return object_info_t{offset, &manage<T>};
         }
 
+        inline void destroy (const object_info_t & object, std::int8_t * data)
+        {
+            object.manage(operation_t::destroy, nullptr, data + object.offset);
+        }
+
         template <typename InputIterator>
         void destroy (InputIterator first, InputIterator last, std::int8_t * data)
         {
             std::for_each(first, last,
                 [data] (const auto & object)
                 {
-                    object.manage(operation_t::destroy, nullptr, data + object.offset);
+                    destroy(object, data);
                 });
         }
 
