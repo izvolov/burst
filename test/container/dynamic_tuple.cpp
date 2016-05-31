@@ -64,49 +64,93 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
         BOOST_CHECK_EQUAL(t.get<X>(3).b, (std::vector<int>{1, 2, 3}));
     }
 
-    BOOST_AUTO_TEST_CASE(size_of_newly_created_tuple_is_zero)
+    BOOST_AUTO_TEST_CASE(newly_created_tuple_with_no_elements_is_empty)
+    {
+        const auto t = burst::dynamic_tuple{};
+        BOOST_CHECK(t.empty());
+    }
+
+    BOOST_AUTO_TEST_CASE(size_of_newly_created_tuple_with_no_elements_is_zero)
     {
         const auto t = burst::dynamic_tuple{};
         BOOST_CHECK_EQUAL(t.size(), 0);
     }
 
-    BOOST_AUTO_TEST_CASE(volume_of_newly_created_tuple_is_zero)
+    BOOST_AUTO_TEST_CASE(volume_of_newly_created_tuple_with_no_elements_is_zero)
     {
         const auto t = burst::dynamic_tuple{};
         BOOST_CHECK_EQUAL(t.volume(), 0);
     }
 
-    BOOST_AUTO_TEST_CASE(capacity_of_newly_created_tuple_is_zero)
+    BOOST_AUTO_TEST_CASE(capacity_of_newly_created_tuple_with_no_elements_is_zero)
     {
         const auto t = burst::dynamic_tuple{};
         BOOST_CHECK_EQUAL(t.capacity(), 0);
     }
 
-    BOOST_AUTO_TEST_CASE(volume_of_dynamic_tuple_is_between_sum_of_sizes_and_sizes_plus_alignments_of_inlying_types)
+    BOOST_AUTO_TEST_CASE(newly_created_tuple_with_some_elements_is_not_empty)
     {
-        const auto some_vector = std::vector<std::size_t>{};
-        const auto some_integer = 42;
-        const auto some_struct = X{};
-        const auto some_floating = 3.14;
+        const auto t = burst::dynamic_tuple(42, 3.14);
+        BOOST_CHECK(not t.empty());
+    }
 
-        burst::dynamic_tuple t(some_vector, some_integer, some_struct, some_floating);
-        BOOST_CHECK_GE
-        (
-            t.volume(),
-            sizeof(some_vector) +
-            sizeof(some_integer) +
-            sizeof(some_struct) +
-            sizeof(some_floating)
-        );
+    BOOST_AUTO_TEST_CASE(size_of_newly_created_tuple_with_some_elements_is_amount_of_those_elements)
+    {
+        const auto t = burst::dynamic_tuple(std::string("123"), 42, 2.71, false);
+        BOOST_CHECK_EQUAL(t.size(), 4);
+    }
 
-        BOOST_CHECK_LE
-        (
-            t.volume(),
-            sizeof(some_vector) + alignof(decltype(some_vector)) +
-            sizeof(some_integer) + alignof(decltype(some_integer)) +
-            sizeof(some_struct) + alignof(decltype(some_struct)) +
-            sizeof(some_floating) + alignof(decltype(some_floating))
-        );
+    BOOST_AUTO_TEST_CASE(volume_of_newly_created_tuple_with_some_elements_is_equal_to_size_of_respective_struct)
+    {
+        const auto t = burst::dynamic_tuple(42, 3.14, std::string("123"));
+
+        using respective = struct{int a; double b; std::string c;};
+        BOOST_CHECK_EQUAL(t.volume(), sizeof(respective));
+    }
+
+    BOOST_AUTO_TEST_CASE(capacity_of_newly_created_tuple_with_some_elements_is_greater_than_or_equal_to_volume)
+    {
+        const auto t = burst::dynamic_tuple(std::vector<std::size_t>{}, 42, X{}, 3.14);
+        BOOST_CHECK_GE(t.capacity(), t.volume());
+    }
+
+    BOOST_AUTO_TEST_CASE(reserving_less_space_than_already_present_does_nothing)
+    {
+        auto t = burst::dynamic_tuple(true, 42, std::string("qwe"));
+        auto old_capacity = t.capacity();
+
+        t.reserve(t.capacity() / 2);
+
+        BOOST_CHECK_EQUAL(t.capacity(), old_capacity);
+    }
+
+    BOOST_AUTO_TEST_CASE(reserving_space_equal_to_current_capacity_does_nothing)
+    {
+        auto t = burst::dynamic_tuple(true, 42, std::string("qwe"));
+        auto old_capacity = t.capacity();
+
+        t.reserve(t.capacity());
+
+        BOOST_CHECK_EQUAL(t.capacity(), old_capacity);
+    }
+
+    BOOST_AUTO_TEST_CASE(new_capacity_of_empty_tuple_is_greater_or_equal_to_value_of_reserved_space)
+    {
+        auto t = burst::dynamic_tuple{};
+
+        t.reserve(10);
+
+        BOOST_CHECK_GE(t.capacity(), 10);
+    }
+
+    BOOST_AUTO_TEST_CASE(new_capacity_of_non_empty_tuple_is_greater_or_equal_to_value_of_reserved_space)
+    {
+        auto t = burst::dynamic_tuple(false, 3.14, 42);
+
+        auto desired_capacity = t.capacity() + 10;
+        t.reserve(desired_capacity);
+
+        BOOST_CHECK_GE(t.capacity(), desired_capacity);
     }
 
     BOOST_AUTO_TEST_CASE(size_of_dynamic_tuple_is_equal_to_count_of_inlying_objects)
@@ -149,38 +193,37 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
     BOOST_AUTO_TEST_CASE(volume_is_zero_after_clear)
     {
         burst::dynamic_tuple t(1, 3.14, true, std::string("qwe"));
-        BOOST_REQUIRE_GT(t.volume(), 0);
 
         t.clear();
+
         BOOST_CHECK_EQUAL(t.volume(), 0);
     }
 
     BOOST_AUTO_TEST_CASE(size_is_zero_after_clear)
     {
         burst::dynamic_tuple t(1, 3.14, true, std::string("qwe"));
-        BOOST_REQUIRE_GT(t.size(), 0);
 
         t.clear();
+
         BOOST_CHECK_EQUAL(t.size(), 0);
     }
 
     BOOST_AUTO_TEST_CASE(dynamic_tuple_is_empty_after_clear)
     {
         burst::dynamic_tuple t(1, 3.14, true, std::string("qwe"));
-        BOOST_REQUIRE(not t.empty());
 
         t.clear();
+
         BOOST_CHECK(t.empty());
     }
 
     BOOST_AUTO_TEST_CASE(capacity_does_not_change_after_clear)
     {
         burst::dynamic_tuple t(1, 3.14, true, std::string("qwe"));
-
         const auto capacity = t.capacity();
-        BOOST_REQUIRE_GT(capacity, 0);
 
         t.clear();
+
         BOOST_CHECK_EQUAL(t.capacity(), capacity);
     }
 
@@ -351,7 +394,6 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
     BOOST_AUTO_TEST_CASE(copy_assignment_of_empty_tuple_results_empty_tuple)
     {
         burst::dynamic_tuple initial;
-        BOOST_REQUIRE(initial.empty());
 
         burst::dynamic_tuple copy(std::string("123"), 'a');
         copy = initial;
@@ -431,7 +473,6 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
     BOOST_AUTO_TEST_CASE(pop_back_decrements_tuple_size)
     {
         auto t = burst::dynamic_tuple(true, 3.14, 42);
-        BOOST_REQUIRE_EQUAL(t.size(), 3);
 
         t.pop_back();
         BOOST_CHECK_EQUAL(t.size(), 2);
@@ -454,6 +495,30 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
         BOOST_CHECK_EQUAL(dummy::instances_count, 0);
     }
 
+    BOOST_AUTO_TEST_CASE(push_back_increases_size_by_one)
+    {
+        auto t = burst::dynamic_tuple{};
+
+        t.push_back(1);
+        BOOST_CHECK_EQUAL(t.size(), 1);
+
+        t.push_back(3.14);
+        BOOST_CHECK_EQUAL(t.size(), 2);
+    }
+
+    BOOST_AUTO_TEST_CASE(push_back_increases_volume_to_size_of_respective_struct)
+    {
+        auto t = burst::dynamic_tuple{};
+
+        t.push_back(1);
+        t.push_back(3.14);
+        t.push_back(true);
+        t.push_back(std::string("qwe"));
+
+        using respective = struct{int a; double b; bool c; std::string d;};
+        BOOST_CHECK_EQUAL(t.volume(), sizeof(respective));
+    }
+
     BOOST_AUTO_TEST_CASE(capacity_does_not_change_after_pop_back)
     {
         burst::dynamic_tuple t;
@@ -461,10 +526,8 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
         {
             t.push_back(3.14);
         }
-        BOOST_REQUIRE_EQUAL(t.size(), 100);
 
         auto old_capacity = t.capacity();
-        BOOST_REQUIRE_GT(old_capacity, 0);
 
         while (not t.empty())
         {
