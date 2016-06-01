@@ -150,7 +150,7 @@ void test_pointer_array_access
 
     auto access = [] (const auto & a, std::size_t index) {return a[index]->x;};
     auto time = test_consecutive_access(std::move(pointer_array), indices, access, attempt_count);
-    std::cout << "массив_указателей " << ' ' << time << std::endl;
+    std::cout << type << ' ' << time << std::endl;
 }
 
 int main (int argc, const char * argv[])
@@ -164,8 +164,8 @@ int main (int argc, const char * argv[])
             "Размер испытываемых массивов.")
         ("attempts", bpo::value<std::size_t>()->default_value(1000),
             "Количество испытаний.")
-        ("type", bpo::value<std::string>()->default_value("sparse"),
-            "Тип массива указателей.\nДопустимые значения: plain, sparse, shuffled.")
+        ("type", bpo::value<std::vector<std::string>>()->multitoken(),
+            "Типы массива указателей.\nДопустимые значения: plain, sparse, shuffled.")
         ("spread", bpo::value<std::size_t>()->default_value(1),
             "Степень разреженности массива указателей.\n"
             "Создаёт массив указателей размера `size * spread`, который затем, в зависимости от "
@@ -186,12 +186,15 @@ int main (int argc, const char * argv[])
         {
             auto size = vm["size"].as<std::size_t>();
             auto attempts = vm["attempts"].as<std::size_t>();
-            auto type = vm["type"].as<std::string>();
+            auto types = vm["type"].as<std::vector<std::string>>();
             auto spread = vm["spread"].as<std::size_t>();
 
-            test_pointer_array_access(size, attempts, type, spread);
             test_dyntuple_access(size, attempts);
             test_vector_access(size, attempts);
+            for (const auto & type: types)
+            {
+                test_pointer_array_access(size, attempts, type, spread);
+            }
         }
     }
     catch (bpo::error & e)
