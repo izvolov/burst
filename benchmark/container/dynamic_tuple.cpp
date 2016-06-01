@@ -108,7 +108,7 @@ void test_dyntuple_access (std::size_t size, std::size_t attempt_count)
         });
 
     auto access = [] (const auto & t, std::size_t offset) {return t.template get_by_offset<A>(offset).x;};
-    auto time = test_consecutive_access(tuple, offsets, access, attempt_count);
+    auto time = test_consecutive_access(std::move(tuple), offsets, access, attempt_count);
     std::cout << "burst::dynamic_tuple " << ' ' << time << std::endl;
 }
 
@@ -120,7 +120,7 @@ void test_vector_access (std::size_t size, std::size_t attempt_count)
     std::iota(indices.begin(), indices.end(), 0);
 
     auto access = [] (const auto & a, std::size_t index) {return a[index].x;};
-    auto time = test_consecutive_access(vector, indices, access, attempt_count);
+    auto time = test_consecutive_access(std::move(vector), indices, access, attempt_count);
     std::cout << "std::vector " << ' ' << time << std::endl;
 }
 
