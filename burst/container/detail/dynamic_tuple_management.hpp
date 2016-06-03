@@ -8,6 +8,7 @@
 #include <cstdint>
 #include <stdexcept>
 #include <type_traits>
+#include <typeinfo>
 #include <utility>
 
 namespace burst
@@ -54,7 +55,8 @@ namespace burst
             copy,
             move,
             destroy,
-            size
+            size,
+            type
         };
 
         using manager_t = void (*) (operation_t, const void *, void *);
@@ -84,6 +86,12 @@ namespace burst
                 {
                     assert(source == nullptr);
                     *static_cast<std::size_t *>(destination) = sizeof(T);
+                    break;
+                }
+                case operation_t::type:
+                {
+                    assert(source == nullptr);
+                    *static_cast<const std::type_info **>(destination) = std::addressof(typeid(T));
                     break;
                 }
             }
@@ -159,6 +167,14 @@ namespace burst
             object.manage(operation_t::size, nullptr, std::addressof(size));
 
             return size;
+        }
+
+        inline const std::type_info & type (const object_info_t & object)
+        {
+            const std::type_info * type;
+            object.manage(operation_t::type, nullptr, std::addressof(type));
+
+            return *type;
         }
     } // namespace management
 } // namespace burst

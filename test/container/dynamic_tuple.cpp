@@ -535,4 +535,10 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
         }
         BOOST_CHECK_EQUAL(t.capacity(), old_capacity);
     }
+
+    BOOST_AUTO_TEST_CASE(can_give_type_info_by_index)
+    {
+        const auto t = burst::dynamic_tuple(std::string("123"));
+        BOOST_CHECK(t.type(0) == typeid(std::string));
+    }
 BOOST_AUTO_TEST_SUITE_END()

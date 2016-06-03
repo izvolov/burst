@@ -276,6 +276,15 @@ namespace burst
             return m_objects.empty();
         }
 
+        //!     Информация о типе объекта по индексу.
+        /*!
+                Сложность: O(1).
+         */
+        const std::type_info & type (size_type index) const
+        {
+            return management::type(m_objects[index]);
+        }
+
     private:
         std::int8_t * data ()
         {
