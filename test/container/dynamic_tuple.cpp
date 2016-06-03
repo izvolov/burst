@@ -541,4 +541,85 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
         const auto t = burst::dynamic_tuple(std::string("123"));
         BOOST_CHECK(t.type(0) == typeid(std::string));
     }
+
+    BOOST_AUTO_TEST_CASE(shrink_to_fit_reduces_capacity_to_volume)
+    {
+        auto t = burst::dynamic_tuple(std::string("123"), 2.71, true);
+
+        t.reserve(t.volume() * 2);
+        t.shrink_to_fit();
+
+        BOOST_CHECK_EQUAL(t.capacity(), t.volume());
+    }
+
+    BOOST_AUTO_TEST_CASE(empty_tuple_shrink_to_fit_reduces_capacity_to_zero)
+    {
+        auto t = burst::dynamic_tuple{};
+
+        t.reserve(100);
+        t.shrink_to_fit();
+
+        BOOST_CHECK_EQUAL(t.capacity(), 0);
+    }
+
+    BOOST_AUTO_TEST_CASE(shrinked_to_fit_empty_tuple_remains_empty)
+    {
+        auto t = burst::dynamic_tuple{};
+
+        t.reserve(100);
+        t.shrink_to_fit();
+
+        BOOST_CHECK(t.empty());
+    }
+
+    BOOST_AUTO_TEST_CASE(shrinked_to_fit_non_empty_tuple_remains_non_empty)
+    {
+        auto t = burst::dynamic_tuple{1, false};
+
+        t.reserve(t.volume() * 2);
+        t.shrink_to_fit();
+
+        BOOST_CHECK(not t.empty());
+    }
+
+    BOOST_AUTO_TEST_CASE(shrink_to_fit_does_not_affect_empty_tuple_size)
+    {
+        auto t = burst::dynamic_tuple{};
+
+        t.reserve(100);
+        t.shrink_to_fit();
+
+        BOOST_CHECK_EQUAL(t.size(), 0);
+    }
+
+    BOOST_AUTO_TEST_CASE(shrink_to_fit_does_not_affect_non_empty_tuple_size)
+    {
+        auto t = burst::dynamic_tuple(1, true, 3.14);
+
+        t.reserve(t.volume() * 2);
+        t.shrink_to_fit();
+
+        BOOST_CHECK_EQUAL(t.size(), 3);
+    }
+
+    BOOST_AUTO_TEST_CASE(shrink_to_fit_does_not_affect_empty_tuple_volume)
+    {
+        auto t = burst::dynamic_tuple{};
+
+        t.reserve(10);
+        t.shrink_to_fit();
+
+        BOOST_CHECK_EQUAL(t.volume(), 0);
+    }
+
+    BOOST_AUTO_TEST_CASE(shrink_to_fit_does_not_affect_non_empty_tuple_volume)
+    {
+        auto t = burst::dynamic_tuple(1, true, 3.14);
+        auto old_volume = t.volume();
+
+        t.reserve(t.volume() * 2);
+        t.shrink_to_fit();
+
+        BOOST_CHECK_EQUAL(t.volume(), old_volume);
+    }
 BOOST_AUTO_TEST_SUITE_END()
