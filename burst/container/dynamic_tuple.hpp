@@ -109,12 +109,7 @@ namespace burst
         {
             if (new_capacity > m_capacity)
             {
-                new_capacity = std::max(new_capacity, m_capacity * CAPACITY_INCREASING_FACTOR);
-                auto new_data = std::make_unique<std::int8_t[]>(new_capacity);
-                m_capacity = new_capacity;
-
-                management::move(m_objects.begin(), m_objects.end(), data(), new_data.get());
-                std::swap(m_data, new_data);
+                reallocate(std::max(new_capacity, m_capacity * CAPACITY_INCREASING_FACTOR));
             }
         }
 
@@ -286,6 +281,23 @@ namespace burst
         }
 
     private:
+        //!     Переразместить данные в новой области памяти.
+        /*!
+                Выделяет новую область памяти заданного размера и переносит все объекты из старой
+            области в новую. Старая область памяти освобождается.
+
+                Сложность: O(size()).
+         */
+        void reallocate (std::size_t new_capacity)
+        {
+            assert(new_capacity >= m_volume);
+            auto new_data = std::make_unique<std::int8_t[]>(new_capacity);
+            m_capacity = new_capacity;
+
+            management::move(m_objects.begin(), m_objects.end(), data(), new_data.get());
+            std::swap(m_data, new_data);
+        }
+
         std::int8_t * data ()
         {
             return m_data.get();
