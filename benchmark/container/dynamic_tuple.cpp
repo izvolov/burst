@@ -104,7 +104,7 @@ void test_dyntuple_access (std::size_t size, std::size_t attempt_count)
     std::transform(offsets.begin(), offsets.end(), offsets.begin(),
         [& tuple] (std::size_t index)
         {
-            return tuple.offset_of(index);
+            return tuple.offset(index);
         });
 
     auto access = [] (const auto & t, std::size_t offset) {return t.template get_by_offset<A>(offset).x;};
