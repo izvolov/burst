@@ -200,6 +200,7 @@ namespace burst
         template <typename T>
         const T & get (size_type index) const
         {
+            assert(&management::manage<T> == m_objects[index].manage);
             return *static_cast<const T *>(static_cast<const void *>(data() + offset(index)));
         }
 
@@ -210,6 +211,7 @@ namespace burst
         template <typename T>
         T & get (size_type index)
         {
+            assert(&management::manage<T> == m_objects[index].manage);
             return *static_cast<T *>(static_cast<void *>(data() + offset(index)));
         }
 
