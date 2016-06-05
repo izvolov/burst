@@ -622,4 +622,12 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
 
         BOOST_CHECK_EQUAL(t.volume(), old_volume);
     }
+
+    BOOST_AUTO_TEST_CASE(has_free_swap_function)
+    {
+        auto t = burst::dynamic_tuple(1, 3.14);
+        auto u = burst::dynamic_tuple(std::string("qwe"), true);
+
+        swap(t, u);
+    }
 BOOST_AUTO_TEST_SUITE_END()

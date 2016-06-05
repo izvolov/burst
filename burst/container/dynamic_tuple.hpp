@@ -428,6 +428,11 @@ namespace burst
         object_info_container_type m_objects;
         std::size_t m_volume = 0;
     };
+
+    inline void swap (dynamic_tuple & left, dynamic_tuple & right)
+    {
+        left.swap(right);
+    }
 } // namespace burst
 
 #endif // BURST_CONTAINER_DYNAMIC_TUPLE_HPP
