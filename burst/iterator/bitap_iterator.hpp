@@ -98,12 +98,7 @@ namespace burst
         тексте, где встретился образец.
      */
     template <typename Value, typename Bitmask, typename Map, typename ForwardRange>
-    bitap_iterator
-    <
-        algorithm::bitap<Value, Bitmask, Map>,
-        ForwardRange
-    >
-    make_bitap_iterator (const algorithm::bitap<Value, Bitmask, Map> & bitap, const ForwardRange & text)
+    auto make_bitap_iterator (const algorithm::bitap<Value, Bitmask, Map> & bitap, const ForwardRange & text)
     {
         static_assert(std::is_same<Value, typename ForwardRange::value_type>::value, "");
         return bitap_iterator<algorithm::bitap<Value, Bitmask, Map>, ForwardRange>(bitap, text);
@@ -116,12 +111,8 @@ namespace burst
         закончились.
      */
     template <typename Value, typename Bitmask, typename Map, typename ForwardRange>
-    bitap_iterator
-    <
-        algorithm::bitap<Value, Bitmask, Map>,
-        ForwardRange
-    >
-    make_bitap_iterator
+    auto
+        make_bitap_iterator
         (
             const algorithm::bitap<Value, Bitmask, Map> & bitap,
             const ForwardRange & text,

@@ -234,12 +234,7 @@ namespace burst
             Возвращает итератор на первое пересечение входных диапазонов.
      */
     template <typename ForwardRange, typename Compare>
-    intersect_iterator
-    <
-        typename ForwardRange::value_type,
-        Compare
-    >
-    make_intersect_iterator (const ForwardRange & ranges, Compare compare)
+    auto make_intersect_iterator (const ForwardRange & ranges, Compare compare)
     {
         return intersect_iterator<typename ForwardRange::value_type, Compare>(ranges, compare);
     }
@@ -251,11 +246,7 @@ namespace burst
             Отношение порядка для элементов диапазона выбирается по-умолчанию.
      */
     template <typename ForwardRange>
-    intersect_iterator
-    <
-        typename ForwardRange::value_type
-    >
-    make_intersect_iterator (const ForwardRange & ranges)
+    auto make_intersect_iterator (const ForwardRange & ranges)
     {
         return intersect_iterator<typename ForwardRange::value_type>(ranges);
     }
@@ -269,12 +260,7 @@ namespace burst
         закончились.
      */
     template <typename ForwardRange, typename Compare>
-    intersect_iterator
-    <
-        typename ForwardRange::value_type,
-        Compare
-    >
-    make_intersect_iterator (const ForwardRange &, Compare, iterator::end_tag_t)
+    auto make_intersect_iterator (const ForwardRange &, Compare, iterator::end_tag_t)
     {
         return intersect_iterator<typename ForwardRange::value_type, Compare>();
     }
@@ -287,11 +273,7 @@ namespace burst
             Отношение порядка берётся по-умолчанию.
      */
     template <typename ForwardRange>
-    intersect_iterator
-    <
-        typename ForwardRange::value_type
-    >
-    make_intersect_iterator (const ForwardRange &, iterator::end_tag_t)
+    auto make_intersect_iterator (const ForwardRange &, iterator::end_tag_t)
     {
         return intersect_iterator<typename ForwardRange::value_type>();
     }

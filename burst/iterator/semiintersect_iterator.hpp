@@ -358,12 +358,7 @@ namespace burst
             Возвращает итератор на первое полупересечение входных диапазонов.
      */
     template <typename ForwardRange, typename Compare>
-    semiintersect_iterator
-    <
-        typename ForwardRange::value_type,
-        Compare
-    >
-    make_semiintersect_iterator (const ForwardRange & ranges, std::size_t min_items, Compare compare)
+    auto make_semiintersect_iterator (const ForwardRange & ranges, std::size_t min_items, Compare compare)
     {
         return semiintersect_iterator<typename ForwardRange::value_type, Compare>(ranges, min_items, compare);
     }
@@ -376,11 +371,7 @@ namespace burst
             Отношение порядка для элементов диапазона выбирается по-умолчанию.
      */
     template <typename ForwardRange>
-    semiintersect_iterator
-    <
-        typename ForwardRange::value_type
-    >
-    make_semiintersect_iterator (const ForwardRange & ranges, std::size_t min_items)
+    auto make_semiintersect_iterator (const ForwardRange & ranges, std::size_t min_items)
     {
         return semiintersect_iterator<typename ForwardRange::value_type>(ranges, min_items);
     }
@@ -394,12 +385,7 @@ namespace burst
         закончились.
      */
     template <typename ForwardRange, typename Compare>
-    semiintersect_iterator
-    <
-        typename ForwardRange::value_type,
-        Compare
-    >
-    make_semiintersect_iterator (const ForwardRange &, Compare, iterator::end_tag_t)
+    auto make_semiintersect_iterator (const ForwardRange &, Compare, iterator::end_tag_t)
     {
         return semiintersect_iterator<typename ForwardRange::value_type, Compare>();
     }
@@ -412,11 +398,7 @@ namespace burst
             Отношение порядка берётся по-умолчанию.
      */
     template <typename ForwardRange>
-    semiintersect_iterator
-    <
-        typename ForwardRange::value_type
-    >
-    make_semiintersect_iterator (const ForwardRange &, iterator::end_tag_t)
+    auto make_semiintersect_iterator (const ForwardRange &, iterator::end_tag_t)
     {
         return semiintersect_iterator<typename ForwardRange::value_type>();
     }

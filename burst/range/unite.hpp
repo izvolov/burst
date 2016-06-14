@@ -16,11 +16,7 @@ namespace burst
         которого соответствует одному элементу, который есть хотя бы в одном из входных диапазонов.
      */
     template <typename RandomAccessRange, typename Compare>
-    boost::iterator_range
-    <
-        union_iterator<typename RandomAccessRange::value_type, Compare>
-    >
-    unite (const RandomAccessRange & ranges, Compare compare)
+    auto unite (const RandomAccessRange & ranges, Compare compare)
     {
         return boost::make_iterator_range
         (
@@ -36,11 +32,7 @@ namespace burst
             Отношение порядка выбирается по-умолчанию.
      */
     template <typename RandomAccessRange>
-    boost::iterator_range
-    <
-        union_iterator<typename RandomAccessRange::value_type>
-    >
-    unite (const RandomAccessRange & ranges)
+    auto unite (const RandomAccessRange & ranges)
     {
         return boost::make_iterator_range
         (
@@ -57,11 +49,7 @@ namespace burst
         которого есть хотя бы в одном из входных диапазонов.
      */
     template <typename ForwardRange, typename Compare>
-    boost::iterator_range
-    <
-        union_iterator<ForwardRange, Compare>
-    >
-    unite (std::initializer_list<ForwardRange> ranges, Compare compare)
+    auto unite (std::initializer_list<ForwardRange> ranges, Compare compare)
     {
         return boost::make_iterator_range
         (
@@ -78,11 +66,7 @@ namespace burst
             Отношение порядка выбирается по-умолчанию.
      */
     template <typename ForwardRange>
-    boost::iterator_range
-    <
-        union_iterator<ForwardRange>
-    >
-    unite (std::initializer_list<ForwardRange> ranges)
+    auto unite (std::initializer_list<ForwardRange> ranges)
     {
         return boost::make_iterator_range
         (

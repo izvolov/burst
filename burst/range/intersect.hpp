@@ -17,11 +17,7 @@ namespace burst
         которого соответствует одному элементу, который есть в каждом из входных диапазонов.
      */
     template <typename ForwardRange, typename Compare>
-    boost::iterator_range
-    <
-        intersect_iterator<typename ForwardRange::value_type, Compare>
-    >
-    intersect (const ForwardRange & ranges, Compare compare)
+    auto intersect (const ForwardRange & ranges, Compare compare)
     {
         return boost::make_iterator_range
         (
@@ -37,11 +33,7 @@ namespace burst
             Отношение порядка выбирается по-умолчанию.
      */
     template <typename ForwardRange>
-    boost::iterator_range
-    <
-        intersect_iterator<typename ForwardRange::value_type>
-    >
-    intersect (const ForwardRange & ranges)
+    auto intersect (const ForwardRange & ranges)
     {
         return boost::make_iterator_range
         (
@@ -58,11 +50,7 @@ namespace burst
         которого есть в каждом из входных диапазонов.
      */
     template <typename ForwardRange, typename Compare>
-    boost::iterator_range
-    <
-        intersect_iterator<ForwardRange, Compare>
-    >
-    intersect (std::initializer_list<ForwardRange> ranges, Compare compare)
+    auto intersect (std::initializer_list<ForwardRange> ranges, Compare compare)
     {
         return boost::make_iterator_range
         (
@@ -78,11 +66,7 @@ namespace burst
             Отношение порядка выбирается по-умолчанию.
      */
     template <typename ForwardRange>
-    boost::iterator_range
-    <
-        intersect_iterator<ForwardRange>
-    >
-    intersect (std::initializer_list<ForwardRange> ranges)
+    auto intersect (std::initializer_list<ForwardRange> ranges)
     {
         return boost::make_iterator_range
         (

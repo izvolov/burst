@@ -165,12 +165,7 @@ namespace burst
             Возвращает итератор на первый элемент объединения входных диапазонов.
      */
     template <typename RandomAccessRange, typename Compare>
-    union_iterator
-    <
-        typename RandomAccessRange::value_type,
-        Compare
-    >
-    make_union_iterator (const RandomAccessRange & ranges, Compare compare)
+    auto make_union_iterator (const RandomAccessRange & ranges, Compare compare)
     {
         return union_iterator<typename RandomAccessRange::value_type, Compare>(ranges, compare);
     }
@@ -184,12 +179,7 @@ namespace burst
         объединения закончились.
      */
     template <typename RandomAccessRange, typename Compare>
-    union_iterator
-    <
-        typename RandomAccessRange::value_type,
-        Compare
-    >
-    make_union_iterator (const RandomAccessRange &, Compare, iterator::end_tag_t)
+    auto make_union_iterator (const RandomAccessRange &, Compare, iterator::end_tag_t)
     {
         return union_iterator<typename RandomAccessRange::value_type, Compare>();
     }
@@ -201,11 +191,7 @@ namespace burst
             Отношение порядка для элементов диапазона выбирается по-умолчанию.
      */
     template <typename RandomAccessRange>
-    union_iterator
-    <
-        typename RandomAccessRange::value_type
-    >
-    make_union_iterator (const RandomAccessRange & ranges)
+    auto make_union_iterator (const RandomAccessRange & ranges)
     {
         return union_iterator<typename RandomAccessRange::value_type>(ranges);
     }
@@ -218,11 +204,7 @@ namespace burst
             Отношение порядка берётся по-умолчанию.
      */
     template <typename RandomAccessRange>
-    union_iterator
-    <
-        typename RandomAccessRange::value_type
-    >
-    make_union_iterator (const RandomAccessRange &, iterator::end_tag_t)
+    auto make_union_iterator (const RandomAccessRange &, iterator::end_tag_t)
     {
         return union_iterator<typename RandomAccessRange::value_type>();
     }

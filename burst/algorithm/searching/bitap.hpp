@@ -223,12 +223,7 @@ namespace burst
             элементов.
          */
         template <typename Bitmask, typename ForwardRange>
-        bitap
-        <
-            typename ForwardRange::value_type,
-            Bitmask
-        >
-        make_bitap (const ForwardRange & pattern)
+        auto make_bitap (const ForwardRange & pattern)
         {
             return bitap<typename ForwardRange::value_type, Bitmask>(pattern);
         }
@@ -239,13 +234,7 @@ namespace burst
             тип, в котором будет храниться отображение из элементов образца в битовые маски.
          */
         template <typename Bitmask, typename Map, typename ForwardRange>
-        bitap
-        <
-            typename ForwardRange::value_type,
-            Bitmask,
-            Map
-        >
-        make_bitap (const ForwardRange & pattern)
+        auto make_bitap (const ForwardRange & pattern)
         {
             return bitap<typename ForwardRange::value_type, Bitmask, Map>(pattern);
         }

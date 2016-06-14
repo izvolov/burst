@@ -17,15 +17,7 @@ namespace burst
         идентичная образцу.
      */
     template <typename Bitmask, typename ForwardRange1, typename ForwardRange2>
-    boost::iterator_range
-    <
-        bitap_iterator
-        <
-            decltype(algorithm::make_bitap<Bitmask>(std::declval<ForwardRange1>())),
-            ForwardRange2
-        >
-    >
-    bitap (const ForwardRange1 & pattern, const ForwardRange2 & text)
+    auto bitap (const ForwardRange1 & pattern, const ForwardRange2 & text)
     {
         const auto bitap = algorithm::make_bitap<Bitmask>(pattern);
 
@@ -42,15 +34,7 @@ namespace burst
         храниться отображение элементов образца в битовые маски.
      */
     template <typename Bitmask, typename Map, typename ForwardRange1, typename ForwardRange2>
-    boost::iterator_range
-    <
-        bitap_iterator
-        <
-            decltype(algorithm::make_bitap<Bitmask, Map>(std::declval<ForwardRange1>())),
-            ForwardRange2
-        >
-    >
-    bitap (const ForwardRange1 & pattern, const ForwardRange2 & text)
+    auto bitap (const ForwardRange1 & pattern, const ForwardRange2 & text)
     {
         const auto bitap = algorithm::make_bitap<Bitmask, Map>(pattern);
 

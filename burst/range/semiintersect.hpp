@@ -19,11 +19,7 @@ namespace burst
         входных диапазонов.
      */
     template <typename ForwardRange, typename Compare>
-    boost::iterator_range
-    <
-        semiintersect_iterator<typename ForwardRange::value_type, Compare>
-    >
-    semiintersect (const ForwardRange & ranges, std::size_t min_items, Compare compare)
+    auto semiintersect (const ForwardRange & ranges, std::size_t min_items, Compare compare)
     {
         return boost::make_iterator_range
         (
@@ -41,11 +37,7 @@ namespace burst
             Отношение порядка выбирается по-умолчанию.
      */
     template <typename ForwardRange>
-    boost::iterator_range
-    <
-        semiintersect_iterator<typename ForwardRange::value_type>
-    >
-    semiintersect (const ForwardRange & ranges, std::size_t min_items)
+    auto semiintersect (const ForwardRange & ranges, std::size_t min_items)
     {
         return boost::make_iterator_range
         (
@@ -63,11 +55,7 @@ namespace burst
         которого есть не менее чем в заданном количестве входных диапазонов.
      */
     template <typename ForwardRange, typename Compare>
-    boost::iterator_range
-    <
-        semiintersect_iterator<ForwardRange, Compare>
-    >
-    semiintersect (std::initializer_list<ForwardRange> ranges, std::size_t min_items, Compare compare)
+    auto semiintersect (std::initializer_list<ForwardRange> ranges, std::size_t min_items, Compare compare)
     {
         return boost::make_iterator_range
         (
@@ -85,11 +73,7 @@ namespace burst
             Отношение порядка выбирается по-умолчанию.
      */
     template <typename ForwardRange>
-    boost::iterator_range
-    <
-        semiintersect_iterator<ForwardRange>
-    >
-    semiintersect (std::initializer_list<ForwardRange> ranges, std::size_t min_items)
+    auto semiintersect (std::initializer_list<ForwardRange> ranges, std::size_t min_items)
     {
         return boost::make_iterator_range
         (
