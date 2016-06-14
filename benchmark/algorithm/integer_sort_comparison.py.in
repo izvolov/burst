@@ -21,6 +21,7 @@ def measure (lengths, max_attempts, integer_type):
     return measurements
 
 def plot (lengths, measurements, integer_type, file_name):
+    plt.rc('font',**{'family':'verdana'})
     plt.figure(num=1)
     plt.title(u'Производительность целочисленных сортировок (' + integer_type + ')', size=14)
     plt.xlabel(u'Количество элементов в массиве, шт', size=14)
