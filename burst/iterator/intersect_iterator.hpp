@@ -2,6 +2,7 @@
 #define BURST_ITERATOR_INTERSECT_ITERATOR_HPP
 
 #include <burst/iterator/detail/front_value_compare.hpp>
+#include <burst/iterator/detail/range_range.hpp>
 #include <burst/iterator/end_tag.hpp>
 #include <burst/range/skip_to_lower_bound.hpp>
 
@@ -12,13 +13,12 @@
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/range/algorithm/sort.hpp>
 #include <boost/range/concepts.hpp>
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_same.hpp>
 
 #include <algorithm>
 #include <functional>
+#include <iterator>
 #include <type_traits>
-#include <vector>
+#include <utility>
 
 namespace burst
 {
@@ -33,18 +33,18 @@ namespace burst
         выдаваемые итератором элементы есть в каждом из входных диапазонов, а значит, нельзя
         однозначно выбрать из них какой-то один для записи нового значения.
 
-        \tparam ForwardRange
-            Тип принимаемого на вход диапазона. Он должен быть однонаправленным, то есть
-            удовлетворять требованиям понятия "Forward Range".
+        \tparam RandomAccessRange
+            Тип принимаемого на вход внешнего диапазона. Он должен быть диапазоном произвольного
+            доступа, то есть удовлетворять требованиям понятия "Random Access Range".
         \tparam Compare
-            Бинарная операция, задающая отношение строгого порядка на элементах входных диапазонов.
-            Если пользователем явно не указана операция, то, по-умолчанию, берётся отношение
-            "меньше", задаваемое функциональным объектом "std::less<T>".
+            Бинарная операция, задающая отношение строгого порядка на элементах внутренних
+            диапазонов. Если пользователем явно не указана операция, то, по-умолчанию, берётся
+            отношение "меньше", задаваемое функциональным объектом "std::less<>".
 
             Алгоритм работы.
 
-        1. Диапазоны склыдываются в массив, в котором диапазон с наибольшим по заданному отношению
-           порядка первым элементом всегда стоит последним.
+        1. Внешний диапазон переупорядочивается так, что внутренний диапазон с наибольшим по
+           заданному отношению порядка первым элементом всегда стоит последним.
         2. Поиск нового пересечения.
            а. Каждый диапазон продвигается так, чтобы его первый элемент был не меньше первого
               элемента последнего диапазона.
@@ -61,52 +61,53 @@ namespace burst
      */
     template
     <
-        typename ForwardRange,
-        typename Compare = std::less<typename ForwardRange::value_type>
+        typename RandomAccessRange,
+        typename Compare = std::less<>
     >
     class intersect_iterator:
         public boost::iterator_facade
         <
-            intersect_iterator<ForwardRange, Compare>,
-            typename ForwardRange::value_type,
-            boost::forward_traversal_tag,
+            intersect_iterator<RandomAccessRange, Compare>,
+            detail::range_range_value_t<RandomAccessRange>,
+            boost::single_pass_traversal_tag,
             typename std::conditional
             <
-                std::is_lvalue_reference<typename ForwardRange::reference>::value,
-                typename std::remove_reference<typename ForwardRange::reference>::type const &,
-                typename ForwardRange::reference
+                std::is_lvalue_reference<detail::range_range_reference_t<RandomAccessRange>>::value,
+                std::remove_reference_t<detail::range_range_reference_t<RandomAccessRange>> const &,
+                detail::range_range_reference_t<RandomAccessRange>
             >
             ::type
         >
     {
     private:
-        BOOST_CONCEPT_ASSERT((boost::ForwardRangeConcept<ForwardRange>));
-        using range_type = ForwardRange;
+        using outer_range_type = RandomAccessRange;
+        BOOST_CONCEPT_ASSERT((boost::RandomAccessRangeConcept<outer_range_type>));
+
+        using inner_range_type = typename boost::range_value<outer_range_type>::type;
+        BOOST_CONCEPT_ASSERT((boost::ForwardRangeConcept<inner_range_type>));
+
         using compare_type = Compare;
 
         using base_type =
             boost::iterator_facade
             <
                 intersect_iterator,
-                typename range_type::value_type,
-                boost::forward_traversal_tag,
+                detail::range_range_value_t<outer_range_type>,
+                boost::single_pass_traversal_tag,
                 typename std::conditional
                 <
-                    std::is_lvalue_reference<typename range_type::reference>::value,
-                    typename std::remove_reference<typename range_type::reference>::type const &,
-                    typename range_type::reference
+                    std::is_lvalue_reference<detail::range_range_reference_t<outer_range_type>>::value,
+                    std::remove_reference_t<detail::range_range_reference_t<outer_range_type>> const &,
+                    detail::range_range_reference_t<outer_range_type>
                 >
                 ::type
             >;
 
     public:
-        template <typename ForwardRange1>
-        explicit intersect_iterator (const ForwardRange1 & ranges, Compare compare = Compare()):
+        explicit intersect_iterator (outer_range_type ranges, Compare compare = Compare()):
             m_ranges(),
             m_compare(compare)
         {
-            BOOST_STATIC_ASSERT(boost::is_same<typename ForwardRange1::value_type, range_type>::value);
-
             if (boost::algorithm::none_of(ranges, [] (const auto & range) { return range.empty(); }))
             {
                 BOOST_ASSERT((boost::algorithm::all_of(ranges,
@@ -115,10 +116,16 @@ namespace burst
                         return boost::algorithm::is_sorted(range, m_compare);
                     })));
 
-                m_ranges.assign(ranges.begin(), ranges.end());
+                m_ranges = std::move(ranges);
                 boost::sort(m_ranges, detail::compare_by_front_value(m_compare));
                 settle();
             }
+        }
+
+        intersect_iterator (const intersect_iterator & begin, iterator::end_tag_t):
+            m_ranges(std::begin(begin.m_ranges), std::begin(begin.m_ranges)),
+            m_compare(begin.m_compare)
+        {
         }
 
         intersect_iterator () = default;
@@ -207,7 +214,7 @@ namespace burst
 
         void scroll_to_end ()
         {
-            m_ranges.clear();
+            m_ranges = outer_range_type(m_ranges.begin(), m_ranges.begin());
         }
 
     private:
@@ -222,7 +229,7 @@ namespace burst
         }
 
     private:
-        std::vector<range_type> m_ranges;
+        outer_range_type m_ranges;
         compare_type m_compare;
     };
 
@@ -233,10 +240,10 @@ namespace burst
             Сами диапазоны должны быть упорядочены относительно этой операции.
             Возвращает итератор на первое пересечение входных диапазонов.
      */
-    template <typename ForwardRange, typename Compare>
-    auto make_intersect_iterator (const ForwardRange & ranges, Compare compare)
+    template <typename RandomAccessRange, typename Compare>
+    auto make_intersect_iterator (RandomAccessRange ranges, Compare compare)
     {
-        return intersect_iterator<typename ForwardRange::value_type, Compare>(ranges, compare);
+        return intersect_iterator<RandomAccessRange, Compare>(std::move(ranges), compare);
     }
 
     //!     Функция для создания итератора пересечения.
@@ -245,37 +252,28 @@ namespace burst
             Возвращает итератор на первое пересечение входных диапазонов.
             Отношение порядка для элементов диапазона выбирается по-умолчанию.
      */
-    template <typename ForwardRange>
-    auto make_intersect_iterator (const ForwardRange & ranges)
+    template <typename RandomAccessRange>
+    auto make_intersect_iterator (RandomAccessRange ranges)
     {
-        return intersect_iterator<typename ForwardRange::value_type>(ranges);
-    }
-
-    //!     Функция для создания итератора на конец пересечения с предикатом.
-    /*!
-            Принимает на вход набор диапазонов, предикат и индикатор конца итератора.
-            Набор диапазонов и предикат не используются, они нужны только для автоматического
-        вывода типа итератора.
-            Возвращает итератор-конец, который, если до него дойти, покажет, что пересечения
-        закончились.
-     */
-    template <typename ForwardRange, typename Compare>
-    auto make_intersect_iterator (const ForwardRange &, Compare, iterator::end_tag_t)
-    {
-        return intersect_iterator<typename ForwardRange::value_type, Compare>();
+        return intersect_iterator<RandomAccessRange>(std::move(ranges));
     }
 
     //!     Функция для создания итератора на конец пересечения.
     /*!
-            Принимает на вход набор диапазонов, который не используется, а нужен только для
-        автоматического вывода типа итератора.
-            Возвращает итератор на конец последовательности пересечений.
-            Отношение порядка берётся по-умолчанию.
+            Принимает на вход итератор на начало пересекаемых диапазонов и индикатор конца
+        итератора.
+            Возвращает итератор-конец, который, если до него дойти, покажет, что элементы
+        пересечения закончились.
      */
-    template <typename ForwardRange>
-    auto make_intersect_iterator (const ForwardRange &, iterator::end_tag_t)
+    template <typename RandomAccessRange, typename Compare>
+    auto
+        make_intersect_iterator
+        (
+            const intersect_iterator<RandomAccessRange, Compare> & begin,
+            iterator::end_tag_t
+        )
     {
-        return intersect_iterator<typename ForwardRange::value_type>();
+        return intersect_iterator<RandomAccessRange, Compare>(begin, iterator::end_tag);
     }
 } // namespace burst
 

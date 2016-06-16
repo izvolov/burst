@@ -12,8 +12,10 @@ BOOST_AUTO_TEST_SUITE(intersect_iterator)
         auto second = {0, 2, 4};
         auto ranges = burst::make_range_vector(first, second);
 
-        auto intersected_begin = burst::make_intersect_iterator(ranges);
-        auto   intersected_end = burst::make_intersect_iterator(ranges, burst::iterator::end_tag);
+        auto intersected_begin =
+            burst::make_intersect_iterator(boost::make_iterator_range(ranges));
+        auto intersected_end =
+            burst::make_intersect_iterator(intersected_begin, burst::iterator::end_tag);
 
         auto expected_collection = {2};
         BOOST_CHECK_EQUAL_COLLECTIONS

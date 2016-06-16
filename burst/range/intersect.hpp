@@ -6,6 +6,8 @@
 
 #include <boost/range/iterator_range.hpp>
 
+#include <utility>
+
 namespace burst
 {
     //!     Функция для создания диапазона пересечений с предикатом.
@@ -16,14 +18,13 @@ namespace burst
             Возвращает диапазон, упорядоченный относительно всё той же операции, каждое значение
         которого соответствует одному элементу, который есть в каждом из входных диапазонов.
      */
-    template <typename ForwardRange, typename Compare>
-    auto intersect (const ForwardRange & ranges, Compare compare)
+    template <typename RandomAccessRange, typename Compare>
+    auto intersect (RandomAccessRange && ranges, Compare compare)
     {
-        return boost::make_iterator_range
-        (
-            make_intersect_iterator(ranges, compare),
-            make_intersect_iterator(ranges, compare, iterator::end_tag)
-        );
+        auto begin = make_intersect_iterator(std::forward<RandomAccessRange>(ranges), compare);
+        auto end = make_intersect_iterator(begin, iterator::end_tag);
+
+        return boost::make_iterator_range(std::move(begin), std::move(end));
     }
 
     //!     Функция для создания диапазона пересечений.
@@ -32,47 +33,13 @@ namespace burst
             Возвращает диапазон элементов, которые есть в каждом из входных диапазонов.
             Отношение порядка выбирается по-умолчанию.
      */
-    template <typename ForwardRange>
-    auto intersect (const ForwardRange & ranges)
+    template <typename RandomAccessRange>
+    auto intersect (RandomAccessRange && ranges)
     {
-        return boost::make_iterator_range
-        (
-            make_intersect_iterator(ranges),
-            make_intersect_iterator(ranges, iterator::end_tag)
-        );
-    }
+        auto begin = make_intersect_iterator(std::forward<RandomAccessRange>(ranges));
+        auto end = make_intersect_iterator(begin, iterator::end_tag);
 
-    //!     Функция для создания диапазона пересечений из списка инициализации с предикатом.
-    /*!
-            Принимает на вход в виде списка инициализации набор диапазонов, которые нужно пересечь,
-        и отношение строгого порядка на элементах этих диапазонов.
-            Возвращает упорядоченный относительно заданного отношения порядка диапазон, элементы
-        которого есть в каждом из входных диапазонов.
-     */
-    template <typename ForwardRange, typename Compare>
-    auto intersect (std::initializer_list<ForwardRange> ranges, Compare compare)
-    {
-        return boost::make_iterator_range
-        (
-            make_intersect_iterator(ranges, compare),
-            make_intersect_iterator(ranges, compare, iterator::end_tag)
-        );
-    }
-
-    //!     Функция для создания диапазона пересечений из списка инициализации.
-    /*!
-            Принимает на вход в виде списка инициализации набор диапазонов, которые нужно пересечь.
-            Возвращает диапазон элементов, которые есть в каждом из входных диапазонов.
-            Отношение порядка выбирается по-умолчанию.
-     */
-    template <typename ForwardRange>
-    auto intersect (std::initializer_list<ForwardRange> ranges)
-    {
-        return boost::make_iterator_range
-        (
-            make_intersect_iterator(ranges),
-            make_intersect_iterator(ranges, iterator::end_tag)
-        );
+        return boost::make_iterator_range(std::move(begin), std::move(end));
     }
 }
 
