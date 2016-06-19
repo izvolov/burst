@@ -18,14 +18,19 @@ namespace burst
         которого соответствует одному элементу, который есть не менее чем в заданном количестве
         входных диапазонов.
      */
-    template <typename ForwardRange, typename Compare>
-    auto semiintersect (const ForwardRange & ranges, std::size_t min_items, Compare compare)
+    template <typename RandomAccessRange, typename Compare>
+    auto semiintersect (RandomAccessRange && ranges, std::size_t min_items, Compare compare)
     {
-        return boost::make_iterator_range
-        (
-            make_semiintersect_iterator(ranges, min_items, compare),
-            make_semiintersect_iterator(ranges, compare, iterator::end_tag)
-        );
+        auto begin =
+            make_semiintersect_iterator
+            (
+                std::forward<RandomAccessRange>(ranges),
+                min_items,
+                compare
+            );
+        auto end = make_semiintersect_iterator(begin, iterator::end_tag);
+
+        return boost::make_iterator_range(std::move(begin), std::move(end));
     }
 
     //!     Функция для создания диапазона полупересечений.
@@ -36,50 +41,14 @@ namespace burst
         диапазонов.
             Отношение порядка выбирается по-умолчанию.
      */
-    template <typename ForwardRange>
-    auto semiintersect (const ForwardRange & ranges, std::size_t min_items)
+    template <typename RandomAccessRange>
+    auto semiintersect (RandomAccessRange && ranges, std::size_t min_items)
     {
-        return boost::make_iterator_range
-        (
-            make_semiintersect_iterator(ranges, min_items),
-            make_semiintersect_iterator(ranges, iterator::end_tag)
-        );
-    }
+        auto begin =
+            make_semiintersect_iterator(std::forward<RandomAccessRange>(ranges), min_items);
+        auto end = make_semiintersect_iterator(begin, iterator::end_tag);
 
-    //!     Функция для создания диапазона полупересечений из списка инициализации с предикатом.
-    /*!
-            Принимает на вход в виде списка инициализации набор диапазонов, для которых нужно найти
-        полупересечение, минимальное количество элементов в полупересечениии и отношение строгого
-        порядка на элементах этих диапазонов.
-            Возвращает упорядоченный относительно заданного отношения порядка диапазон, элементы
-        которого есть не менее чем в заданном количестве входных диапазонов.
-     */
-    template <typename ForwardRange, typename Compare>
-    auto semiintersect (std::initializer_list<ForwardRange> ranges, std::size_t min_items, Compare compare)
-    {
-        return boost::make_iterator_range
-        (
-            make_semiintersect_iterator(ranges, min_items, compare),
-            make_semiintersect_iterator(ranges, compare, iterator::end_tag)
-        );
-    }
-
-    //!     Функция для создания диапазона полупересечений из списка инициализации.
-    /*!
-            Принимает на вход в виде списка инициализации набор диапазонов, для которых нужно найти
-        полупересечение, и минимальное количество элементов в полупересечениии.
-            Возвращает диапазон элементов, которые есть не менее чем в заданном количестве входных
-        диапазонов.
-            Отношение порядка выбирается по-умолчанию.
-     */
-    template <typename ForwardRange>
-    auto semiintersect (std::initializer_list<ForwardRange> ranges, std::size_t min_items)
-    {
-        return boost::make_iterator_range
-        (
-            make_semiintersect_iterator(ranges, min_items),
-            make_semiintersect_iterator(ranges, iterator::end_tag)
-        );
+        return boost::make_iterator_range(std::move(begin), std::move(end));
     }
 }
 

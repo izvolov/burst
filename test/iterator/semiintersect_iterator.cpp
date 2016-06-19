@@ -13,8 +13,10 @@ BOOST_AUTO_TEST_SUITE(semiintersect_iterator)
         auto ranges = burst::make_range_vector(first, second);
 
         auto min_items_to_score = 2ul;
-        auto semiintersected_begin = burst::make_semiintersect_iterator(ranges, min_items_to_score);
-        auto   semiintersected_end = burst::make_semiintersect_iterator(ranges, burst::iterator::end_tag);
+        auto semiintersected_begin =
+            burst::make_semiintersect_iterator(boost::make_iterator_range(ranges), min_items_to_score);
+        auto semiintersected_end =
+            burst::make_semiintersect_iterator(semiintersected_begin, burst::iterator::end_tag);
 
         auto expected_collection = {2};
         BOOST_CHECK_EQUAL_COLLECTIONS
