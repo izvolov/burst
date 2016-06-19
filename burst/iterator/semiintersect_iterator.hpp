@@ -128,10 +128,7 @@ namespace burst
                 }));
             BOOST_ASSERT_MSG(min_items > 0, "Невозможно получить полупересечение из нуля элементов.");
 
-            const auto is_empty = [] (const auto & range) {return range.empty();};
-            auto first_empty = boost::remove_if(m_ranges, is_empty);
-
-            m_ranges.advance_end(-std::distance(first_empty, std::end(m_ranges)));
+            remove_empty_ranges();
             if (m_ranges.size() >= m_min_items)
             {
                 maintain_invariant();
@@ -154,6 +151,18 @@ namespace burst
 
     private:
         friend class boost::iterator_core_access;
+
+        void remove_empty_ranges ()
+        {
+            m_ranges.advance_end
+            (
+                -std::distance
+                (
+                    boost::remove_if(m_ranges, [] (const auto & r) {return r.empty();}),
+                    std::end(m_ranges)
+                )
+            );
+        }
 
         //!     Поддержать инвариант, необходимый для поиска полупересечений.
         /*!
@@ -193,10 +202,7 @@ namespace burst
                     range.advance_begin(1);
                 });
 
-            auto is_empty = [] (const auto & range) { return range.empty(); };
-
-            auto first_empty = boost::remove_if(m_ranges, is_empty);
-            m_ranges.advance_end(-std::distance(first_empty, std::end(m_ranges)));
+            remove_empty_ranges();
             if (m_ranges.size() >= m_min_items)
             {
                 maintain_invariant();
