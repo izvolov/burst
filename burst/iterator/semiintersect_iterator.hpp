@@ -117,11 +117,11 @@ namespace burst
 
     public:
         semiintersect_iterator (outer_range_type ranges, std::size_t min_items, Compare compare = Compare()):
-            m_ranges(),
+            m_ranges(std::move(ranges)),
             m_min_items(min_items),
             m_compare(compare)
         {
-            BOOST_ASSERT(boost::algorithm::all_of(ranges,
+            BOOST_ASSERT(boost::algorithm::all_of(m_ranges,
                 [this] (const auto & range)
                 {
                     return boost::algorithm::is_sorted(range, m_compare);
@@ -129,15 +129,17 @@ namespace burst
             BOOST_ASSERT_MSG(min_items > 0, "Невозможно получить полупересечение из нуля элементов.");
 
             const auto is_empty = [] (const auto & range) {return range.empty();};
-            auto first_empty = boost::remove_if(ranges, is_empty);
+            auto first_empty = boost::remove_if(m_ranges, is_empty);
 
-            ranges.advance_end(-std::distance(first_empty, std::end(ranges)));
-            if (ranges.size() >= m_min_items)
+            m_ranges.advance_end(-std::distance(first_empty, std::end(m_ranges)));
+            if (m_ranges.size() >= m_min_items)
             {
-                m_ranges = std::move(ranges);
-
                 maintain_invariant();
                 settle();
+            }
+            else
+            {
+                scroll_to_end();
             }
         }
 
