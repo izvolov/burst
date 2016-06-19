@@ -170,8 +170,11 @@ namespace burst
          */
         void maintain_invariant ()
         {
-            auto candidate = semiintersection_candidate();
-            std::nth_element(m_ranges.begin(), candidate, m_ranges.end(), detail::compare_by_front_value(m_compare));
+            std::nth_element
+            (
+                m_ranges.begin(), semiintersection_candidate(), m_ranges.end(),
+                detail::compare_by_front_value(m_compare)
+            );
         }
 
         void increment ()
@@ -220,14 +223,19 @@ namespace burst
         {
             auto candidate = semiintersection_candidate();
 
-            auto front_values = boost::make_iterator_range(std::next(candidate), m_ranges.end()) |
-                boost::adaptors::transformed([] (const auto & range)
-                {
-                    return range.front();
-                });
+            auto front_values =
+                boost::make_iterator_range(std::next(candidate), m_ranges.end())
+                    | boost::adaptors::transformed([] (const auto & range)
+                        {
+                            return range.front();
+                        });
 
             auto last_equal_to_candidate = candidate + boost::count(front_values, candidate->front());
-            std::nth_element(candidate, last_equal_to_candidate, m_ranges.end(), detail::compare_by_front_value(m_compare));
+            std::nth_element
+            (
+                candidate, last_equal_to_candidate, m_ranges.end(),
+                detail::compare_by_front_value(m_compare)
+            );
 
             return std::next(last_equal_to_candidate);
         }
