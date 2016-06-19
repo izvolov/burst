@@ -177,11 +177,7 @@ namespace burst
         void increment ()
         {
             faze();
-
-            if (not is_end())
-            {
-                settle();
-            }
+            settle();
         }
 
         //!     Вывести диапазоны из равновесия.
