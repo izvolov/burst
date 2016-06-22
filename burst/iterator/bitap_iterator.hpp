@@ -55,11 +55,11 @@ namespace burst
         {
         }
 
-        bitap_iterator (const searcher_type & bitap, const text_range_type & text, iterator::end_tag_t):
-            m_bitap(bitap),
+        bitap_iterator (const bitap_iterator & begin, iterator::end_tag_t):
+            m_bitap(begin.m_bitap),
             m_hint(0x00),
-            m_match(text.end(), text.end()),
-            m_text_end(text.end())
+            m_match(begin.m_text_end, begin.m_text_end),
+            m_text_end(begin.m_text_end)
         {
         }
 
@@ -114,13 +114,11 @@ namespace burst
     auto
         make_bitap_iterator
         (
-            const algorithm::bitap<Value, Bitmask, Map> & bitap,
-            const ForwardRange & text,
+            const bitap_iterator<algorithm::bitap<Value, Bitmask, Map>, ForwardRange> & begin,
             iterator::end_tag_t
         )
     {
-        static_assert(std::is_same<Value, typename ForwardRange::value_type>::value, "");
-        return bitap_iterator<algorithm::bitap<Value, Bitmask, Map>, ForwardRange>(bitap, text, iterator::end_tag);
+        return bitap_iterator<algorithm::bitap<Value, Bitmask, Map>, ForwardRange>(begin, iterator::end_tag);
     }
 }
 

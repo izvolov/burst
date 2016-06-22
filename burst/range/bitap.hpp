@@ -20,12 +20,10 @@ namespace burst
     auto bitap (const ForwardRange1 & pattern, const ForwardRange2 & text)
     {
         const auto bitap = algorithm::make_bitap<Bitmask>(pattern);
+        auto begin = make_bitap_iterator(bitap, text);
+        auto end = make_bitap_iterator(begin, iterator::end_tag);
 
-        return boost::make_iterator_range
-        (
-            make_bitap_iterator(bitap, text),
-            make_bitap_iterator(bitap, text, iterator::end_tag)
-        );
+        return boost::make_iterator_range(std::move(begin), std::move(end));
     }
 
     //!     Функция с произвольным отображением для создания диапазона вхождений образца в текст.
@@ -37,12 +35,10 @@ namespace burst
     auto bitap (const ForwardRange1 & pattern, const ForwardRange2 & text)
     {
         const auto bitap = algorithm::make_bitap<Bitmask, Map>(pattern);
+        auto begin = make_bitap_iterator(bitap, text);
+        auto end = make_bitap_iterator(begin, iterator::end_tag);
 
-        return boost::make_iterator_range
-        (
-            make_bitap_iterator(bitap, text),
-            make_bitap_iterator(bitap, text, iterator::end_tag)
-        );
+        return boost::make_iterator_range(std::move(begin), std::move(end));
     }
 }
 
