@@ -16,13 +16,12 @@ namespace burst
         которого соответствует одному элементу, который есть хотя бы в одном из входных диапазонов.
      */
     template <typename RandomAccessRange, typename Compare>
-    auto unite (const RandomAccessRange & ranges, Compare compare)
+    auto unite (RandomAccessRange && ranges, Compare compare)
     {
-        return boost::make_iterator_range
-        (
-            make_union_iterator(ranges, compare),
-            make_union_iterator(ranges, compare, iterator::end_tag)
-        );
+        auto begin = make_union_iterator(std::forward<RandomAccessRange>(ranges), compare);
+        auto end = make_union_iterator(begin, iterator::end_tag);
+
+        return boost::make_iterator_range(std::move(begin), std::move(end));
     }
 
     //!     Функция для создания диапазона объединений.
@@ -32,47 +31,12 @@ namespace burst
             Отношение порядка выбирается по-умолчанию.
      */
     template <typename RandomAccessRange>
-    auto unite (const RandomAccessRange & ranges)
+    auto unite (RandomAccessRange && ranges)
     {
-        return boost::make_iterator_range
-        (
-            make_union_iterator(ranges),
-            make_union_iterator(ranges, iterator::end_tag)
-        );
-    }
+        auto begin = make_union_iterator(std::forward<RandomAccessRange>(ranges));
+        auto end = make_union_iterator(begin, iterator::end_tag);
 
-    //!     Функция для создания диапазона объединений из списка инициализации с предикатом.
-    /*!
-            Принимает на вход в виде списка инициализации набор диапазонов, которые нужно
-        объединить, и отношение строгого порядка на элементах этих диапазонов.
-            Возвращает упорядоченный относительно заданного отношения порядка диапазон, элементы
-        которого есть хотя бы в одном из входных диапазонов.
-     */
-    template <typename ForwardRange, typename Compare>
-    auto unite (std::initializer_list<ForwardRange> ranges, Compare compare)
-    {
-        return boost::make_iterator_range
-        (
-            make_union_iterator(ranges, compare),
-            make_union_iterator(ranges, compare, iterator::end_tag)
-        );
-    }
-
-    //!     Функция для создания диапазона объединений из списка инициализации.
-    /*!
-            Принимает на вход в виде списка инициализации набор диапазонов, которые нужно
-        объединить.
-            Возвращает диапазон элементов, которые есть хотя бы в одном из входных диапазонов.
-            Отношение порядка выбирается по-умолчанию.
-     */
-    template <typename ForwardRange>
-    auto unite (std::initializer_list<ForwardRange> ranges)
-    {
-        return boost::make_iterator_range
-        (
-            make_union_iterator(ranges),
-            make_union_iterator(ranges, iterator::end_tag)
-        );
+        return boost::make_iterator_range(std::move(begin), std::move(end));
     }
 } // namespace burst
 

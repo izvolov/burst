@@ -17,13 +17,9 @@ BOOST_AUTO_TEST_SUITE(unite)
     {
         std::vector<int> first;
         std::vector<int> second;
+        auto ranges = burst::make_range_vector(first, second);
 
-        auto range_union =
-            burst::unite
-            ({
-                boost::make_iterator_range(first),
-                boost::make_iterator_range(second)
-            });
+        auto range_union = burst::unite(boost::make_iterator_range(ranges));
 
         BOOST_CHECK(range_union.empty());
     }
@@ -34,23 +30,20 @@ BOOST_AUTO_TEST_SUITE(unite)
         auto second = first;
         auto ranges = burst::make_range_vector(first, second);
 
-        auto range_union = burst::unite(ranges);
+        auto range_union = burst::unite(boost::make_iterator_range(ranges));
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
             std::begin(range_union), std::end(range_union),
             std::begin(first), std::end(first)
         );
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            std::begin(range_union), std::end(range_union),
-            std::begin(second), std::end(second)
-        );
     }
 
     BOOST_AUTO_TEST_CASE(uniting_one_range_results_the_same_range)
     {
-        auto range_union = burst::unite({boost::irange(1, 5)});
+        auto only = boost::irange(1, 5);
+        auto ranges = burst::make_range_vector(only);
+        auto range_union = burst::unite(boost::make_iterator_range(ranges));
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
@@ -63,13 +56,9 @@ BOOST_AUTO_TEST_SUITE(unite)
     {
         std::string  long_range("abcdef");
         std::string short_range("cde");
+        auto ranges = burst::make_range_vector(long_range, short_range);
 
-        auto range_union =
-            burst::unite
-            ({
-                boost::make_iterator_range(long_range),
-                boost::make_iterator_range(short_range)
-            });
+        auto range_union = burst::unite(boost::make_iterator_range(ranges));
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
@@ -84,7 +73,7 @@ BOOST_AUTO_TEST_SUITE(unite)
         auto second = burst::make_list({'g', 'e', 'c', 'a'});
         auto ranges = burst::make_range_vector(first, second);
 
-        auto range_union = burst::unite(ranges, std::greater<char>());
+        auto range_union = burst::unite(boost::make_iterator_range(ranges), std::greater<char>());
 
         BOOST_CHECK_EQUAL(range_union, std::string("hgfedcba"));
     }
@@ -96,7 +85,7 @@ BOOST_AUTO_TEST_SUITE(unite)
         auto  third = {5, 3, 1};
         auto ranges = burst::make_range_vector(first, second, third);
 
-        auto range_union = burst::unite(ranges, std::greater<int>());
+        auto range_union = burst::unite(boost::make_iterator_range(ranges), std::greater<int>());
 
         auto expected_collection = {5, 4, 3, 2, 1};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -111,13 +100,9 @@ BOOST_AUTO_TEST_SUITE(unite)
         auto  first = {1, 1, 1, 2, 2, 3};
         auto second = {1, 1, 2};
         auto  third = {1};
+        auto ranges = burst::make_range_vector(first, second, third);
 
-        auto range_union = burst::unite
-        ({
-            boost::make_iterator_range(first),
-            boost::make_iterator_range(second),
-            boost::make_iterator_range(third)
-        });
+        auto range_union = burst::unite(boost::make_iterator_range(ranges));
 
         auto expected_collection = {1, 1, 1, 2, 2, 3};
         BOOST_CHECK_EQUAL_COLLECTIONS
