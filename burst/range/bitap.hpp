@@ -19,8 +19,8 @@ namespace burst
     template <typename Bitmask, typename ForwardRange1, typename ForwardRange2>
     auto bitap (const ForwardRange1 & pattern, const ForwardRange2 & text)
     {
-        const auto bitap = algorithm::make_bitap<Bitmask>(pattern);
-        auto begin = make_bitap_iterator(bitap, text);
+        auto bitap = algorithm::make_bitap<Bitmask>(pattern);
+        auto begin = make_bitap_iterator(std::move(bitap), text);
         auto end = make_bitap_iterator(begin, iterator::end_tag);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));
@@ -34,8 +34,8 @@ namespace burst
     template <typename Bitmask, typename Map, typename ForwardRange1, typename ForwardRange2>
     auto bitap (const ForwardRange1 & pattern, const ForwardRange2 & text)
     {
-        const auto bitap = algorithm::make_bitap<Bitmask, Map>(pattern);
-        auto begin = make_bitap_iterator(bitap, text);
+        auto bitap = algorithm::make_bitap<Bitmask, Map>(pattern);
+        auto begin = make_bitap_iterator(std::move(bitap), text);
         auto end = make_bitap_iterator(begin, iterator::end_tag);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));

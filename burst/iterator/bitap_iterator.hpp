@@ -47,8 +47,8 @@ namespace burst
         >;
 
     public:
-        bitap_iterator (const searcher_type & bitap, const text_range_type & text):
-            m_bitap(bitap),
+        bitap_iterator (searcher_type bitap, const text_range_type & text):
+            m_bitap(std::move(bitap)),
             m_hint(0x00),
             m_match(m_bitap.find_first(text.begin(), text.end(), m_hint)),
             m_text_end(text.end())
@@ -98,10 +98,15 @@ namespace burst
         тексте, где встретился образец.
      */
     template <typename Value, typename Bitmask, typename Map, typename ForwardRange>
-    auto make_bitap_iterator (const algorithm::bitap<Value, Bitmask, Map> & bitap, const ForwardRange & text)
+    auto make_bitap_iterator (algorithm::bitap<Value, Bitmask, Map> bitap, const ForwardRange & text)
     {
         static_assert(std::is_same<Value, typename ForwardRange::value_type>::value, "");
-        return bitap_iterator<algorithm::bitap<Value, Bitmask, Map>, ForwardRange>(bitap, text);
+        return
+            bitap_iterator<algorithm::bitap<Value, Bitmask, Map>, ForwardRange>
+            (
+                std::move(bitap),
+                text
+            );
     }
 
     //!     Функция создания итератора на конец совпадений.
