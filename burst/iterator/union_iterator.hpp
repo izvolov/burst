@@ -113,8 +113,7 @@ namespace burst
                     return boost::algorithm::is_sorted(range, m_compare);
                 }));
 
-            remove_empty_ranges();
-            std::sort(m_ranges.begin(), m_ranges.end(), detail::compare_by_front_value(m_compare));
+            maintain_invariant();
         }
 
         union_iterator (const union_iterator & begin, iterator::end_tag_t):
@@ -140,6 +139,12 @@ namespace burst
             );
         }
 
+        void maintain_invariant ()
+        {
+            remove_empty_ranges();
+            std::sort(m_ranges.begin(), m_ranges.end(), detail::compare_by_front_value(m_compare));
+        }
+
         void increment ()
         {
             auto current_union_end = boost::upper_bound(m_ranges, m_ranges.front(), detail::compare_by_front_value(m_compare));
@@ -149,8 +154,7 @@ namespace burst
                     range.advance_begin(1);
                 });
 
-            remove_empty_ranges();
-            std::sort(m_ranges.begin(), m_ranges.end(), detail::compare_by_front_value(m_compare));
+            maintain_invariant();
         }
 
     private:
