@@ -29,8 +29,9 @@ namespace burst
 
         //!     Собрать счётчики.
         /*!
-                Для каждого сортируемого числа подсчитывает количество элементов, строго меньших
-            этого числа.
+                Для каждого сортируемого числа `n_i` подсчитывает количество элементов, которые меньше
+            либо равны этому числу, и записывает это число на позицию `counters[n_i]`,
+            где `n_i = map(preimage_i)`.
          */
         template <typename ForwardIterator, typename Map, typename RandomAccessIterator>
         void collect (ForwardIterator first, ForwardIterator last, Map map, RandomAccessIterator counters, RandomAccessIterator counters_end)
@@ -38,7 +39,7 @@ namespace burst
             std::for_each(first, last,
                 [& counters, & map] (const auto & preimage)
                 {
-                    ++counters[map(preimage) + 1];
+                    ++counters[map(preimage)];
                 });
 
             std::partial_sum(counters, counters_end, counters);
@@ -76,7 +77,7 @@ namespace burst
             // Единица для дополнительного нуля в начале массива.
             difference_type counters[traits::value_range + 1] = {0};
 
-            collect(first, last, map, std::begin(counters), std::end(counters));
+            collect(first, last, map, std::next(std::begin(counters)), std::end(counters));
             dispose(first, last, result, map, std::begin(counters));
 
             return result + burst::cback(counters);
