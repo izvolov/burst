@@ -82,20 +82,20 @@ namespace burst
             return result + burst::cback(counters);
         }
 
-        template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
-        RandomAccessIterator counting_sort_copy_impl (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
+        template <typename ... Arguments>
+        decltype(auto) counting_sort_copy_impl (Arguments && ... arguments)
         {
-            return counting_sort_impl(first, last, result, map,
+            return counting_sort_impl(std::forward<Arguments>(arguments)...,
                 [] (auto && ... xs)
                 {
                     return dispose(std::forward<decltype(xs)>(xs)...);
                 });
         }
 
-        template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
-        RandomAccessIterator counting_sort_move_impl (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
+        template <typename ... Arguments>
+        decltype(auto) counting_sort_move_impl (Arguments && ... arguments)
         {
-            return counting_sort_impl(first, last, result, map,
+            return counting_sort_impl(std::forward<Arguments>(arguments)...,
                 [] (auto && ... xs)
                 {
                     return dispose_move(std::forward<decltype(xs)>(xs)...);
