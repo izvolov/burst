@@ -144,16 +144,16 @@ namespace burst
             auto buffer_end = buffer_begin + std::distance(first, last);
 
             auto get_low_radix = [& radix, & map] (const value_type & value) { return radix(map(value)); };
-            dispose_move(first, last, buffer_begin, get_low_radix, counters[0]);
+            dispose_move(first, last, buffer_begin, get_low_radix, std::begin(counters[0]));
 
             for (std::size_t radix_number = 1; radix_number < traits::radix_count - 1; radix_number += 2)
             {
-                dispose_move(buffer_begin, buffer_end, first, nth_radix(radix_number, map, radix), counters[radix_number]);
-                dispose_move(first, last, buffer_begin, nth_radix(radix_number + 1, map, radix), counters[radix_number + 1]);
+                dispose_move(buffer_begin, buffer_end, first, nth_radix(radix_number, map, radix), std::begin(counters[radix_number]));
+                dispose_move(first, last, buffer_begin, nth_radix(radix_number + 1, map, radix), std::begin(counters[radix_number + 1]));
             }
 
             auto get_high_radix = nth_radix(traits::radix_count - 1, map, radix);
-            dispose_move(buffer_begin, buffer_end, first, get_high_radix, counters[traits::radix_count - 1]);
+            dispose_move(buffer_begin, buffer_end, first, get_high_radix, std::begin(counters[traits::radix_count - 1]));
         }
     } // namespace detail
 } // namespace burst

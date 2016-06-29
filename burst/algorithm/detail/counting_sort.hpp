@@ -32,8 +32,8 @@ namespace burst
                 Для каждого сортируемого числа подсчитывает количество элементов, строго меньших
             этого числа.
          */
-        template <typename ForwardIterator, typename Map, typename Array>
-        void collect (ForwardIterator first, ForwardIterator last, Map map, Array & counters)
+        template <typename ForwardIterator, typename Map, typename RandomAccessIterator>
+        void collect (ForwardIterator first, ForwardIterator last, Map map, RandomAccessIterator counters, RandomAccessIterator counters_end)
         {
             std::for_each(first, last,
                 [& counters, & map] (const auto & preimage)
@@ -41,7 +41,7 @@ namespace burst
                     ++counters[map(preimage) + 1];
                 });
 
-            std::partial_sum(std::begin(counters), std::end(counters), std::begin(counters));
+            std::partial_sum(counters, counters_end, counters);
         }
 
         //!     Расставить по местам.
@@ -49,8 +49,8 @@ namespace burst
                 Расставляет сортируемые элементы в выходной диапазон в соответствии с известным
             массивом счётчиков.
          */
-        template <typename ForwardIterator, typename RandomAccessIterator, typename Map, typename Array>
-        void dispose (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map, Array & counters)
+        template <typename ForwardIterator, typename RandomAccessIterator1, typename Map, typename RandomAccessIterator2>
+        void dispose (ForwardIterator first, ForwardIterator last, RandomAccessIterator1 result, Map map, RandomAccessIterator2 counters)
         {
             std::for_each(first, last,
                 [& result, & counters, & map] (auto && preimage)
@@ -60,8 +60,8 @@ namespace burst
                 });
         }
 
-        template <typename ForwardIterator, typename RandomAccessIterator, typename Map, typename Array>
-        void dispose_move (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map, Array & counters)
+        template <typename ForwardIterator, typename RandomAccessIterator1, typename Map, typename RandomAccessIterator2>
+        void dispose_move (ForwardIterator first, ForwardIterator last, RandomAccessIterator1 result, Map map, RandomAccessIterator2 counters)
         {
             dispose(std::make_move_iterator(first), std::make_move_iterator(last), result, map, counters);
         }
@@ -76,8 +76,8 @@ namespace burst
             // Единица для дополнительного нуля в начале массива.
             difference_type counters[traits::value_range + 1] = {0};
 
-            collect(first, last, map, counters);
-            dispose(first, last, result, map, counters);
+            collect(first, last, map, std::begin(counters), std::end(counters));
+            dispose(first, last, result, map, std::begin(counters));
 
             return result + burst::cback(counters);
         }
