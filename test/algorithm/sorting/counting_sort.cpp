@@ -4,6 +4,7 @@
 #include <boost/iterator/indirect_iterator.hpp>
 #include <boost/test/unit_test.hpp>
 
+#include <forward_list>
 #include <iterator>
 #include <limits>
 #include <memory>
@@ -197,6 +198,22 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
         (
             boost::make_indirect_iterator(std::begin(sorted)), boost::make_indirect_iterator(std::end(sorted)),
             std::begin(expected), std::end(expected)
+        );
+    }
+
+    BOOST_AUTO_TEST_CASE(forward_iterator_is_enough)
+    {
+        auto unsorted = std::vector<std::int8_t>{4, 3, 2, 1};
+        auto forward_list = std::forward_list<std::int8_t>(unsorted.begin(), unsorted.end());
+
+        std::vector<std::int8_t> sorted(unsorted.size(), 0);
+        burst::counting_sort_copy(forward_list.begin(), forward_list.end(), sorted.begin());
+
+        auto expected = {1, 2, 3, 4};
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            sorted.begin(), sorted.end(),
+            expected.begin(), expected.end()
         );
     }
 BOOST_AUTO_TEST_SUITE_END()
