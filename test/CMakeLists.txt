@@ -50,6 +50,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     range/take_n.cpp
     range/unite.cpp
     tuple/get.cpp
+    tuple/view.cpp
 )
 
 set(UNIT_TEST_EXECUTABLE unit-tests)
