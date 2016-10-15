@@ -49,6 +49,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     range/subsets.cpp
     range/take_n.cpp
     range/unite.cpp
+    tuple/apply.cpp
     tuple/by.cpp
     tuple/each.cpp
     tuple/get.cpp
