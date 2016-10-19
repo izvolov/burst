@@ -1,6 +1,7 @@
 #ifndef BURST_TUPLE_APPLY_HPP
 #define BURST_TUPLE_APPLY_HPP
 
+#include <burst/functional/compose.hpp>
 #include <burst/tuple/detail/apply.hpp>
 
 #include <tuple>
@@ -56,6 +57,12 @@ namespace burst
         -> apply_fn<std::decay_t<NaryFunction>>
     {
         return {std::forward<NaryFunction>(f)};
+    }
+
+    template <typename NaryFunction, typename R>
+    constexpr auto operator | (apply_fn<NaryFunction> l, R && r)
+    {
+        return compose(std::forward<R>(r), std::move(l));
     }
 } // namespace burst
 

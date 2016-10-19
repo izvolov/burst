@@ -1,6 +1,8 @@
 #ifndef BURST_TUPLE_EACH_HPP
 #define BURST_TUPLE_EACH_HPP
 
+#include <burst/functional/compose.hpp>
+
 #include <tuple>
 #include <utility>
 
@@ -34,6 +36,12 @@ namespace burst
         -> each_fn<std::decay_t<UnaryFunction>>
     {
         return {std::forward<UnaryFunction>(f)};
+    }
+
+    template <typename UnaryFunction, typename R>
+    constexpr auto operator | (each_fn<UnaryFunction> l, R && r)
+    {
+        return compose(std::forward<R>(r), std::move(l));
     }
 } // namespace burst
 

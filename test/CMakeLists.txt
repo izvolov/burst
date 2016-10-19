@@ -16,6 +16,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     container/k_ary_search_set.cpp
     container/make_set.cpp
     container/make_vector.cpp
+    functional/compose.cpp
     functional/low_byte.cpp
     integer/intlog.cpp
     integer/intlog2.cpp

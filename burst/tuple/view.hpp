@@ -1,6 +1,7 @@
 #ifndef BURST_TUPLE_VIEW_HPP
 #define BURST_TUPLE_VIEW_HPP
 
+#include <burst/functional/compose.hpp>
 #include <burst/tuple/get.hpp>
 
 #include <cstddef>
@@ -26,6 +27,12 @@ namespace burst
 
     template <std::size_t ... Indices>
     constexpr auto view = view_fn<Indices...>{};
+
+    template <std::size_t ... Indices, typename R>
+    constexpr auto operator | (view_fn<Indices...> l, R && r)
+    {
+        return compose(std::forward<R>(r), std::move(l));
+    }
 } // namespace burst
 
 #endif // BURST_TUPLE_VIEW_HPP

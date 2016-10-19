@@ -1,6 +1,8 @@
 #ifndef BURST_TUPLE_GET_HPP
 #define BURST_TUPLE_GET_HPP
 
+#include <burst/functional/compose.hpp>
+
 #include <cstddef>
 #include <tuple>
 #include <utility>
@@ -25,6 +27,12 @@ namespace burst
 
     template <std::size_t Index>
     constexpr auto get = get_fn<Index>{};
+
+    template <std::size_t Index, typename R>
+    constexpr auto operator | (get_fn<Index> l, R && r)
+    {
+        return compose(std::forward<R>(r), std::move(l));
+    }
 
     constexpr auto first = get<0>;
     constexpr auto second = get<1>;

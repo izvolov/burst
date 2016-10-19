@@ -1,6 +1,7 @@
 #ifndef BURST_TUPLE_BY_HPP
 #define BURST_TUPLE_BY_HPP
 
+#include <burst/functional/compose.hpp>
 #include <burst/tuple/detail/by.hpp>
 #include <burst/type_traits/make_index_range.hpp>
 
@@ -59,6 +60,12 @@ namespace burst
         -> by_fn<Index, std::decay_t<UnaryFunction>>
     {
         return {std::forward<UnaryFunction>(f)};
+    }
+
+    template <std::size_t Index, typename UnaryFunction, typename R>
+    constexpr auto operator | (by_fn<Index, UnaryFunction> l, R && r)
+    {
+        return compose(std::forward<R>(r), std::move(l));
     }
 } // namespace burst
 
