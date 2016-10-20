@@ -18,6 +18,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     container/make_vector.cpp
     functional/compose.cpp
     functional/low_byte.cpp
+    functional/part.cpp
     integer/intlog.cpp
     integer/intlog2.cpp
     integer/intpow.cpp
