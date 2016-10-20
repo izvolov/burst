@@ -48,21 +48,23 @@ BOOST_AUTO_TEST_SUITE(intlog)
 
     BOOST_AUTO_TEST_CASE(accepts_different_argument_types)
     {
+        constexpr auto int32_max = std::numeric_limits<std::int32_t>::max();
         BOOST_CHECK_EQUAL
         (
             burst::intlog
             (
                 std::int32_t{14},
-                std::uint64_t{std::numeric_limits<std::int32_t>::max()} + 1
+                std::uint64_t{int32_max} + 1
             ),
             0
         );
 
+        constexpr auto int8_max = std::numeric_limits<std::int8_t>::max();
         BOOST_CHECK_EQUAL
         (
             burst::intlog
             (
-                std::uint32_t{std::numeric_limits<std::int8_t>::max()} + 1,
+                std::uint32_t{int8_max} + 1,
                 std::int8_t{5}
             ),
             3
