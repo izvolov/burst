@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
             ++instances_count;
         }
 
-        ~dummy ()
+        ~dummy () noexcept(false)
         {
             if (alive)
             {
