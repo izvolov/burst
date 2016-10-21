@@ -1,5 +1,5 @@
-#ifndef BURST_CONCEPT_HPP
-#define BURST_CONCEPT_HPP
+#ifndef BURST_CONCEPT_CHECK_HPP
+#define BURST_CONCEPT_CHECK_HPP
 
 #include <burst/type_traits/void_t.hpp>
 
@@ -15,17 +15,6 @@ namespace burst
 
     template <typename Statement>
     using negation = std::integral_constant<bool, !Statement::value>;
-
-    template
-    <
-        typename T,
-        typename =
-            std::enable_if_t
-            <
-                std::is_integral<std::decay_t<T>>::value
-            >
-    >
-    using Integer = T;
 
     template
     <
@@ -52,4 +41,4 @@ namespace burst
     using Not = T;
 } // namespace burst
 
-#endif // BURST_CONCEPT_HPP
+#endif // BURST_CONCEPT_CHECK_HPP

@@ -1,7 +1,8 @@
 #ifndef BURST_CONTAINER_MAKE_VECTOR_HPP
 #define BURST_CONTAINER_MAKE_VECTOR_HPP
 
-#include <burst/concept.hpp>
+#include <burst/concept/check.hpp>
+#include <burst/concept/integer.hpp>
 #include <burst/container/detail/make_vector.hpp>
 
 #include <boost/range/value_type.hpp>
