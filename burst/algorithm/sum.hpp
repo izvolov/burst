@@ -20,16 +20,20 @@ namespace burst
         }
     }
 
-    template <typename T>
-    constexpr
-        typename std::enable_if
-        <
-            std::is_arithmetic<T>::value, T
-        >
-    ::type sum (std::initializer_list<T> items)
+    struct sum_fn
     {
-        return detail::sum_impl(items, T{0});
-    }
+        template <typename T>
+        constexpr
+            typename std::enable_if
+            <
+                std::is_arithmetic<T>::value, T
+            >
+        ::type operator () (std::initializer_list<T> items) const
+        {
+            return detail::sum_impl(items, T{0});
+        }
+    };
+    constexpr auto sum = sum_fn{};
 } // namespace burst
 
 #endif // BURST_ALGORITHM_SUM_HPP
