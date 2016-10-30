@@ -29,7 +29,7 @@ namespace burst
         template <typename ... Ts>
         constexpr decltype(auto) operator () (Ts && ... ts) &&
         {
-            return std::forward<L>(l)(std::forward<R>(r)(std::forward<Ts>(ts)...));
+            return std::move(l)(std::move(r)(std::forward<Ts>(ts)...));
         }
 
         L l;
