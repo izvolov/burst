@@ -6,29 +6,12 @@
 
 namespace burst
 {
-    //!     Взятие младшего байта из целого числа, параметризованное типом.
+    //!     Взятие младшего байта из целого числа
     /*!
             Тип результирующего значения зафиксирован — это std::uint8_t. Для одного байта этого
         достаточно.
      */
-    template <typename Integer = void>
-    struct low_byte
-    {
-        static_assert(std::is_integral<Integer>::value, "Младший байт можно взять только от целого числа.");
-
-        std::uint8_t operator () (Integer integer) const
-        {
-            return static_cast<std::uint8_t>(integer & 0xff);
-        }
-    };
-
-    //!     Взятие младшего байта из целого числа.
-    /*!
-            В отличие от аналогичного функционального объекта, параметризованного типом значения,
-        не зависит от типа принимаемого значения.
-     */
-    template <>
-    struct low_byte <void>
+    struct low_byte_fn
     {
         template <typename Integer>
         constexpr std::uint8_t operator () (Integer integer) const
@@ -38,6 +21,7 @@ namespace burst
             return static_cast<std::uint8_t>(integer & 0xff);
         }
     };
+    constexpr auto low_byte = low_byte_fn{};
 }
 
 #endif // BURST_FUNCTIONAL_LOW_BYTE_HPP

@@ -81,7 +81,7 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
         std::vector<std::uint8_t> numbers{0, 5, 3, 7, 1, 2, 4, 6};
 
         std::vector<std::uint8_t> buffer(numbers.size());
-        burst::radix_sort(numbers.begin(), numbers.end(), buffer.begin(), burst::identity<>(),
+        burst::radix_sort(numbers.begin(), numbers.end(), buffer.begin(), burst::identity,
             [] (const std::uint8_t & number) -> bool
             {
                 return number & 0x01;

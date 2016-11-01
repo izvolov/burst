@@ -53,7 +53,7 @@ namespace burst
     template <typename ForwardIterator, typename RandomAccessIterator>
     RandomAccessIterator counting_sort_copy (ForwardIterator first, ForwardIterator last, RandomAccessIterator result)
     {
-        return counting_sort_copy(first, last, result, identity<>());
+        return counting_sort_copy(first, last, result, identity);
     }
 
     template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
@@ -65,7 +65,7 @@ namespace burst
     template <typename ForwardIterator, typename RandomAccessIterator>
     RandomAccessIterator counting_sort_move (ForwardIterator first, ForwardIterator last, RandomAccessIterator result)
     {
-        return counting_sort_move(first, last, result, identity<>());
+        return counting_sort_move(first, last, result, identity);
     }
 
     //!     Диапазонный вариант сортировки подсчётом

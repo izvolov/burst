@@ -49,13 +49,13 @@ namespace burst
     template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map>
     void radix_sort (RandomAccessIterator1 first, RandomAccessIterator1 last, RandomAccessIterator2 buffer, Map map)
     {
-        radix_sort(first, last, buffer, map, low_byte<>());
+        radix_sort(first, last, buffer, map, low_byte);
     }
 
     template <typename RandomAccessIterator1, typename RandomAccessIterator2>
     void radix_sort (RandomAccessIterator1 first, RandomAccessIterator1 last, RandomAccessIterator2 buffer)
     {
-        radix_sort(first, last, buffer, identity<>(), low_byte<>());
+        radix_sort(first, last, buffer, identity, low_byte);
     }
 
     //!     Диапазонный вариант поразрядной сортировки
