@@ -216,4 +216,19 @@ BOOST_AUTO_TEST_SUITE(counting_sort)
             expected.begin(), expected.end()
         );
     }
+
+    BOOST_AUTO_TEST_CASE(works_with_ranges)
+    {
+        std::vector<std::uint8_t> values{5, 4, 3, 2, 1};
+
+        std::vector<std::uint8_t> sorted_values(values.size());
+        burst::counting_sort_copy(values, sorted_values.begin());
+
+        std::vector<std::uint8_t> expected{1, 2, 3, 4, 5};
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            std::begin(sorted_values), std::end(sorted_values),
+            std::begin(expected), std::end(expected)
+        );
+    }
 BOOST_AUTO_TEST_SUITE_END()

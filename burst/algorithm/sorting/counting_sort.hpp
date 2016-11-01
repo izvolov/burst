@@ -67,6 +67,34 @@ namespace burst
     {
         return counting_sort_move(first, last, result, identity<>());
     }
+
+    //!     Диапазонный вариант сортировки подсчётом
+    /*!
+            Отличается только тем, что вместо пары итераторов принимает диапазон.
+     */
+    template <typename ForwardRange, typename RandomAccessIterator, typename Map>
+    RandomAccessIterator counting_sort_copy (ForwardRange && range, RandomAccessIterator result, Map map)
+    {
+        return counting_sort_copy(range.begin(), range.end(), result, map);
+    }
+
+    template <typename ForwardRange, typename RandomAccessIterator>
+    RandomAccessIterator counting_sort_copy (ForwardRange && range, RandomAccessIterator result)
+    {
+        return counting_sort_copy(range.begin(), range.end(), result);
+    }
+
+    template <typename ForwardRange, typename RandomAccessIterator, typename Map>
+    RandomAccessIterator counting_sort_move (ForwardRange && range, RandomAccessIterator result, Map map)
+    {
+        return counting_sort_move(range.begin(), range.end(), result, map);
+    }
+
+    template <typename ForwardRange, typename RandomAccessIterator>
+    RandomAccessIterator counting_sort_move (ForwardRange && range, RandomAccessIterator result)
+    {
+        return counting_sort_move(range.begin(), range.end(), result);
+    }
 }
 
 #endif // BURST_ALGORITHM_SORTING_COUNTING_SORT_HPP

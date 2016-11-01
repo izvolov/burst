@@ -213,4 +213,19 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
             std::begin(expected), std::end(expected)
         );
     }
+
+    BOOST_AUTO_TEST_CASE(works_with_ranges)
+    {
+        std::vector<std::uint32_t> numbers{100500, 42, 99999, 1000, 0};
+
+        std::vector<std::uint32_t> buffer(numbers.size());
+        burst::radix_sort(numbers, buffer.begin());
+
+        std::vector<std::uint32_t> expected{0, 42, 1000, 99999, 100500};
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            boost::begin(numbers), boost::end(numbers),
+            boost::begin(expected), boost::end(expected)
+        );
+    }
 BOOST_AUTO_TEST_SUITE_END()

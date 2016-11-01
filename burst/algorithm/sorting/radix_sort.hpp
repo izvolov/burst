@@ -57,6 +57,29 @@ namespace burst
     {
         radix_sort(first, last, buffer, identity<>(), low_byte<>());
     }
+
+    //!     Диапазонный вариант поразрядной сортировки
+    /*!
+            Отличается только тем, что сортируемые значение задаются не парой итераторов, а
+        диапазоном.
+     */
+    template <typename RandomAccessRange, typename RandomAccessIterator, typename Map, typename Radix>
+    void radix_sort (RandomAccessRange && range, RandomAccessIterator buffer, Map map, Radix radix)
+    {
+        radix_sort(range.begin(), range.end(), buffer, map, radix);
+    }
+
+    template <typename RandomAccessRange, typename RandomAccessIterator, typename Map>
+    void radix_sort (RandomAccessRange && range, RandomAccessIterator buffer, Map map)
+    {
+        radix_sort(range.begin(), range.end(), buffer, map);
+    }
+
+    template <typename RandomAccessRange, typename RandomAccessIterator>
+    void radix_sort (RandomAccessRange && range, RandomAccessIterator buffer)
+    {
+        radix_sort(range.begin(), range.end(), buffer);
+    }
 } // namespace burst
 
 #endif // BURST_ALGORITHM_SORTING_RADIX_SORT_HPP
