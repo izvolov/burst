@@ -61,7 +61,7 @@ namespace burst
         <
             subset_iterator<ForwardRange, Compare, SubsetContainer>,
             boost::iterator_range<boost::indirect_iterator<typename SubsetContainer::const_iterator>>,
-            boost::forward_traversal_tag,
+            boost::single_pass_traversal_tag,
             boost::iterator_range<boost::indirect_iterator<typename SubsetContainer::const_iterator>>
         >
     {
@@ -76,7 +76,7 @@ namespace burst
         <
             subset_iterator,
             boost::iterator_range<boost::indirect_iterator<typename subset_container_type::const_iterator>>,
-            boost::forward_traversal_tag,
+            boost::single_pass_traversal_tag,
             boost::iterator_range<boost::indirect_iterator<typename subset_container_type::const_iterator>>
         >;
 
