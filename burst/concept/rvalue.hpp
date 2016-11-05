@@ -1,5 +1,5 @@
-#ifndef BURST_RVALUE_HPP
-#define BURST_RVALUE_HPP
+#ifndef BURST_CONCEPT_RVALUE_HPP
+#define BURST_CONCEPT_RVALUE_HPP
 
 #include <type_traits>
 
@@ -33,4 +33,4 @@ namespace burst
     using rvalue = T &&;
 }
 
-#endif // BURST_RVALUE_HPP
+#endif // BURST_CONCEPT_RVALUE_HPP
