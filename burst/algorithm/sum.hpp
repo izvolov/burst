@@ -29,6 +29,12 @@ namespace burst
         {
             return detail::sum_impl(items, T{0});
         }
+
+        template <typename ... Ts>
+        constexpr decltype(auto) operator () (Arithmetic<Ts> ... items) const
+        {
+            return (*this)({items...});
+        }
     };
     constexpr auto sum = sum_fn{};
 } // namespace burst

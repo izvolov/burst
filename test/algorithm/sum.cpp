@@ -19,4 +19,10 @@ BOOST_AUTO_TEST_SUITE(sum)
         auto empty = std::initializer_list<std::size_t>{};
         BOOST_CHECK_EQUAL(burst::sum(empty), 0ul);
     }
+
+    BOOST_AUTO_TEST_CASE(accepts_variadic)
+    {
+        constexpr auto x = burst::sum(1, 2, 3);
+        BOOST_CHECK_EQUAL(x, 6);
+    }
 BOOST_AUTO_TEST_SUITE_END()
