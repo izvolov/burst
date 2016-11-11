@@ -46,7 +46,7 @@ namespace burst
         template <typename Tuple>
         constexpr decltype(auto) operator () (Tuple && t) &&
         {
-            return apply(std::forward<NaryFunction>(f), std::forward<Tuple>(t));
+            return apply(std::move(f), std::forward<Tuple>(t));
         }
 
         NaryFunction f;

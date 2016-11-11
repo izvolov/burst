@@ -49,7 +49,7 @@ namespace burst
         template <typename Tuple>
         constexpr decltype(auto) operator () (Tuple && t) &&
         {
-            return by<Index>(std::forward<UnaryFunction>(f), std::forward<Tuple>(t));
+            return by<Index>(std::move(f), std::forward<Tuple>(t));
         }
 
         UnaryFunction f;
