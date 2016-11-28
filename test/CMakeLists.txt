@@ -17,6 +17,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     container/make_set.cpp
     container/make_vector.cpp
     functional/compose.cpp
+    functional/each.cpp
     functional/low_byte.cpp
     functional/part.cpp
     integer/intlog.cpp
@@ -53,7 +54,6 @@ set(UNIT_TEST_SOURCES test_main.cpp
     range/unite.cpp
     tuple/apply.cpp
     tuple/by.cpp
-    tuple/each.cpp
     tuple/get.cpp
     tuple/view.cpp
 )

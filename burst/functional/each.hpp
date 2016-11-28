@@ -1,5 +1,5 @@
-#ifndef BURST_TUPLE_EACH_HPP
-#define BURST_TUPLE_EACH_HPP
+#ifndef BURST_FUNCTIONAL_EACH_HPP
+#define BURST_FUNCTIONAL_EACH_HPP
 
 #include <burst/functional/compose.hpp>
 
@@ -89,4 +89,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_TUPLE_EACH_HPP
+#endif // BURST_FUNCTIONAL_EACH_HPP

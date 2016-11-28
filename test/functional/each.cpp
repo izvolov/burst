@@ -1,6 +1,6 @@
 #include <burst/algorithm/sum.hpp>
+#include <burst/functional/each.hpp>
 #include <burst/integer/intlog2.hpp>
-#include <burst/tuple/each.hpp>
 #include <burst/tuple/make_tuple.hpp>
 #include <output.hpp>
 
@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_SUITE(each)
         std::size_t & calls;
     };
 
-    BOOST_AUTO_TEST_CASE(calls_inner_function_on_every_tuple_element)
+    BOOST_AUTO_TEST_CASE(calls_inner_function_on_every_input_element)
     {
         auto calls = std::size_t{0};
         auto e = burst::each(doubler{calls}) | burst::make_tuple;
