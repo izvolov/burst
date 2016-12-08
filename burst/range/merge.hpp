@@ -16,9 +16,9 @@ namespace burst
         элементов входных списков.
      */
     template <typename RandomAccessRange, typename Compare>
-    auto merge (RandomAccessRange ranges, Compare compare)
+    auto merge (RandomAccessRange && ranges, Compare compare)
     {
-        auto begin = make_merge_iterator(std::move(ranges), compare);
+        auto begin = make_merge_iterator(std::forward<RandomAccessRange>(ranges), compare);
         auto end = make_merge_iterator(begin, iterator::end_tag);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));
@@ -31,9 +31,9 @@ namespace burst
             Отношение порядка выбирается по-умолчанию.
      */
     template <typename RandomAccessRange>
-    auto merge (RandomAccessRange ranges)
+    auto merge (RandomAccessRange && ranges)
     {
-        auto begin = make_merge_iterator(std::move(ranges));
+        auto begin = make_merge_iterator(std::forward<RandomAccessRange>(ranges));
         auto end = make_merge_iterator(begin, iterator::end_tag);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));

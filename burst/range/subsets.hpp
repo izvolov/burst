@@ -20,9 +20,9 @@ namespace burst
         получить все элементы одного из подмножеств исходного диапазона.
      */
     template <typename ForwardRange, typename Compare>
-    auto subsets (ForwardRange range, Compare compare)
+    auto subsets (ForwardRange && range, Compare compare)
     {
-        auto begin = make_subset_iterator(std::move(range), compare);
+        auto begin = make_subset_iterator(std::forward<ForwardRange>(range), compare);
         auto end = make_subset_iterator(begin, iterator::end_tag);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));
@@ -35,9 +35,9 @@ namespace burst
             Отношение порядка на элементах исходного диапазона выбирается по-умолчанию.
      */
     template <typename ForwardRange>
-    auto subsets (ForwardRange range)
+    auto subsets (ForwardRange && range)
     {
-        auto begin = make_subset_iterator(std::move(range));
+        auto begin = make_subset_iterator(std::forward<ForwardRange>(range));
         auto end = make_subset_iterator(begin, iterator::end_tag);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));

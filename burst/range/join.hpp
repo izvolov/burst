@@ -16,9 +16,9 @@ namespace burst
         диапазона сразу следует первый элемент (i + 1)-го.
      */
     template <typename Range>
-    auto join (Range ranges)
+    auto join (Range && ranges)
     {
-        auto begin = make_join_iterator(std::move(ranges));
+        auto begin = make_join_iterator(std::forward<Range>(ranges));
         auto end = make_join_iterator(begin, iterator::end_tag);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));
