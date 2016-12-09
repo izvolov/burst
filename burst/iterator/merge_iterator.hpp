@@ -89,7 +89,7 @@ namespace burst
             std::make_heap(m_ranges.begin(), m_ranges.end(), m_heap_order);
         }
 
-        merge_iterator (const merge_iterator & begin, iterator::end_tag_t):
+        merge_iterator (iterator::end_tag_t, const merge_iterator & begin):
             m_ranges(std::begin(begin.m_ranges), std::begin(begin.m_ranges)),
             m_heap_order(begin.m_heap_order)
         {
@@ -181,9 +181,9 @@ namespace burst
         закончились.
      */
     template <typename RandomAccessRange, typename Compare>
-    auto make_merge_iterator (const merge_iterator<RandomAccessRange, Compare> & begin, iterator::end_tag_t)
+    auto make_merge_iterator (iterator::end_tag_t, const merge_iterator<RandomAccessRange, Compare> & begin)
     {
-        return merge_iterator<RandomAccessRange, Compare>(begin, iterator::end_tag);
+        return merge_iterator<RandomAccessRange, Compare>(iterator::end_tag, begin);
     }
 } // namespace burst
 
