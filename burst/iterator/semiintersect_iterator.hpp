@@ -131,7 +131,7 @@ namespace burst
             settle();
         }
 
-        semiintersect_iterator (const semiintersect_iterator & begin, iterator::end_tag_t):
+        semiintersect_iterator (iterator::end_tag_t, const semiintersect_iterator & begin):
             m_ranges(std::begin(begin.m_ranges), std::begin(begin.m_ranges)),
             m_min_items(begin.m_min_items),
             m_compare(begin.m_compare)
@@ -401,11 +401,11 @@ namespace burst
     auto
         make_semiintersect_iterator
         (
-            const semiintersect_iterator<RandomAccessRange, Compare> & begin,
-            iterator::end_tag_t
+            iterator::end_tag_t,
+            const semiintersect_iterator<RandomAccessRange, Compare> & begin
         )
     {
-        return semiintersect_iterator<RandomAccessRange, Compare>(begin, iterator::end_tag);
+        return semiintersect_iterator<RandomAccessRange, Compare>(iterator::end_tag, begin);
     }
 } // namespace burst
 

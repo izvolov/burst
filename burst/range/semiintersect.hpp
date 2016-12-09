@@ -28,7 +28,7 @@ namespace burst
                 min_items,
                 compare
             );
-        auto end = make_semiintersect_iterator(begin, iterator::end_tag);
+        auto end = make_semiintersect_iterator(iterator::end_tag, begin);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));
     }
@@ -46,7 +46,7 @@ namespace burst
     {
         auto begin =
             make_semiintersect_iterator(std::forward<RandomAccessRange>(ranges), min_items);
-        auto end = make_semiintersect_iterator(begin, iterator::end_tag);
+        auto end = make_semiintersect_iterator(iterator::end_tag, begin);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));
     }
