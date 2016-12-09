@@ -16,7 +16,7 @@ BOOST_AUTO_TEST_SUITE(difference_iterator)
         const auto subtrahend = boost::make_iterator_range(second);
 
         const auto difference_begin = burst::make_difference_iterator(minuend, subtrahend);
-        const auto   difference_end = burst::make_difference_iterator(difference_begin, burst::iterator::end_tag);
+        const auto   difference_end = burst::make_difference_iterator(burst::iterator::end_tag, difference_begin);
 
         const auto expected_collection = {1, 3};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -34,7 +34,7 @@ BOOST_AUTO_TEST_SUITE(difference_iterator)
         const auto subtrahend = boost::make_iterator_range(second);
 
         const auto difference_begin = burst::make_difference_iterator(minuend, subtrahend);
-        const auto   difference_end = burst::make_difference_iterator(difference_begin, burst::iterator::end_tag);
+        const auto   difference_end = burst::make_difference_iterator(burst::iterator::end_tag, difference_begin);
 
         auto expected_collection = {5, 7};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -56,7 +56,7 @@ BOOST_AUTO_TEST_SUITE(difference_iterator)
                 boost::make_iterator_range(subtrahend)
             );
         const auto difference_end =
-            burst::make_difference_iterator(difference_begin, burst::iterator::end_tag);
+            burst::make_difference_iterator(burst::iterator::end_tag, difference_begin);
 
         auto expected_collection = {5, 7};
         BOOST_CHECK_EQUAL_COLLECTIONS

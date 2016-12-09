@@ -101,7 +101,7 @@ namespace burst
             maintain_invariant();
         }
 
-        difference_iterator (const difference_iterator & begin, iterator::end_tag_t):
+        difference_iterator (iterator::end_tag_t, const difference_iterator & begin):
             m_minuend(begin.m_minuend.end(), begin.m_minuend.end()),
             m_subtrahend{},
             m_compare(begin.m_compare)
@@ -219,11 +219,11 @@ namespace burst
     auto
         make_difference_iterator
         (
-            const difference_iterator<ForwardRange1, ForwardRange2, Compare> & begin,
-            iterator::end_tag_t
+            iterator::end_tag_t,
+            const difference_iterator<ForwardRange1, ForwardRange2, Compare> & begin
         )
     {
-        return difference_iterator<ForwardRange1, ForwardRange2, Compare>(begin, iterator::end_tag);
+        return difference_iterator<ForwardRange1, ForwardRange2, Compare>(iterator::end_tag, begin);
     }
 } // namespace burst
 

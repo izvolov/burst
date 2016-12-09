@@ -20,7 +20,7 @@ namespace burst
     auto difference (ForwardRange1 minuend, ForwardRange2 subtrahend, Compare compare)
     {
         auto begin = make_difference_iterator(std::move(minuend), std::move(subtrahend), compare);
-        auto end = make_difference_iterator(begin, iterator::end_tag);
+        auto end = make_difference_iterator(iterator::end_tag, begin);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));
     }
@@ -35,7 +35,7 @@ namespace burst
     auto difference (ForwardRange1 minuend, ForwardRange2 subtrahend)
     {
         auto begin = make_difference_iterator(std::move(minuend), std::move(subtrahend));
-        auto end = make_difference_iterator(begin, iterator::end_tag);
+        auto end = make_difference_iterator(iterator::end_tag, begin);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));
     }
