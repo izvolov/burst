@@ -28,7 +28,7 @@ namespace burst
             )
         {
             auto begin = burst::make_take_n_iterator(std::begin(std::forward<Range>(range)), n);
-            auto end = burst::make_take_n_iterator(begin, iterator::end_tag);
+            auto end = burst::make_take_n_iterator(iterator::end_tag, begin);
 
             return boost::make_iterator_range(std::move(begin), std::move(end));
         }

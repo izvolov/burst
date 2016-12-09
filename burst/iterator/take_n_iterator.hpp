@@ -127,8 +127,8 @@ namespace burst
     take_n_iterator<Iterator>
         make_take_n_iterator
         (
-            const take_n_iterator<Iterator> &,
-            iterator::end_tag_t
+            iterator::end_tag_t,
+            const take_n_iterator<Iterator> &
         )
     {
         return take_n_iterator<Iterator>{};

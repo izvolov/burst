@@ -62,7 +62,7 @@ BOOST_AUTO_TEST_SUITE(take_n_iterator)
         const auto l = burst::make_list({1, 2, 3, 4});
 
         auto first = burst::make_take_n_iterator(l.begin(), 3);
-        auto last = burst::make_take_n_iterator(first, burst::iterator::end_tag);
+        auto last = burst::make_take_n_iterator(burst::iterator::end_tag, first);
 
         BOOST_CHECK(std::next(first, 3) == last);
     }
@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_SUITE(take_n_iterator)
 
         const auto items_to_take = 2;
         auto first = burst::make_take_n_iterator(fl.begin(), items_to_take);
-        auto last = burst::make_take_n_iterator(first, burst::iterator::end_tag);
+        auto last = burst::make_take_n_iterator(burst::iterator::end_tag, first);
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
