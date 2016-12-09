@@ -15,7 +15,7 @@ BOOST_AUTO_TEST_SUITE(bitap_iterator)
         const auto bitap = burst::algorithm::make_bitap<std::uint32_t>(pattern);
 
         auto original = burst::make_bitap_iterator(bitap, text);
-        const auto end = burst::make_bitap_iterator(original, burst::iterator::end_tag);
+        const auto end = burst::make_bitap_iterator(burst::iterator::end_tag, original);
 
         auto copy = original;
 

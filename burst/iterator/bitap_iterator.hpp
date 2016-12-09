@@ -55,7 +55,7 @@ namespace burst
         {
         }
 
-        bitap_iterator (const bitap_iterator & begin, iterator::end_tag_t):
+        bitap_iterator (iterator::end_tag_t, const bitap_iterator & begin):
             m_bitap(begin.m_bitap),
             m_hint(0x00),
             m_match(begin.m_text_end, begin.m_text_end),
@@ -119,11 +119,11 @@ namespace burst
     auto
         make_bitap_iterator
         (
-            const bitap_iterator<algorithm::bitap<Value, Bitmask, Map>, ForwardRange> & begin,
-            iterator::end_tag_t
+            iterator::end_tag_t,
+            const bitap_iterator<algorithm::bitap<Value, Bitmask, Map>, ForwardRange> & begin
         )
     {
-        return bitap_iterator<algorithm::bitap<Value, Bitmask, Map>, ForwardRange>(begin, iterator::end_tag);
+        return bitap_iterator<algorithm::bitap<Value, Bitmask, Map>, ForwardRange>(iterator::end_tag, begin);
     }
 }
 

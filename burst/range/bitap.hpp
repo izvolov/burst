@@ -21,7 +21,7 @@ namespace burst
     {
         auto bitap = algorithm::make_bitap<Bitmask>(pattern);
         auto begin = make_bitap_iterator(std::move(bitap), text);
-        auto end = make_bitap_iterator(begin, iterator::end_tag);
+        auto end = make_bitap_iterator(iterator::end_tag, begin);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));
     }
@@ -36,7 +36,7 @@ namespace burst
     {
         auto bitap = algorithm::make_bitap<Bitmask, Map>(pattern);
         auto begin = make_bitap_iterator(std::move(bitap), text);
-        auto end = make_bitap_iterator(begin, iterator::end_tag);
+        auto end = make_bitap_iterator(iterator::end_tag, begin);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));
     }
