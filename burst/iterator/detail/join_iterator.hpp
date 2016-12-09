@@ -86,7 +86,7 @@ namespace burst
                 Время: O(1).
                 Память: O(1).
              */
-            join_iterator_impl (const join_iterator_impl & begin, iterator::end_tag_t):
+            join_iterator_impl (iterator::end_tag_t, const join_iterator_impl & begin):
                 m_ranges(std::end(begin.m_ranges), std::end(begin.m_ranges))
             {
             }
@@ -228,7 +228,7 @@ namespace burst
                 Время: O(1).
                 Память: O(1).
              */
-            join_iterator_impl (const join_iterator_impl & begin, iterator::end_tag_t):
+            join_iterator_impl (iterator::end_tag_t, const join_iterator_impl & begin):
                 m_ranges(begin.m_ranges),
                 m_outer_range_index(m_ranges->size()),
                 m_inner_range_index(0),

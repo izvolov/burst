@@ -15,7 +15,7 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
         auto ranges = burst::make_range_vector(first, second);
 
         auto joined_begin = burst::make_join_iterator(boost::make_iterator_range(ranges));
-        auto   joined_end = burst::make_join_iterator(joined_begin, burst::iterator::end_tag);
+        auto   joined_end = burst::make_join_iterator(burst::iterator::end_tag, joined_begin);
 
         auto expected_collection = {500, 100, 600, 200};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
         auto ranges = burst::make_range_vector(first, second);
 
         auto joined_begin = burst::make_join_iterator(boost::make_iterator_range(ranges));
-        auto joined_end   = burst::make_join_iterator(joined_begin, burst::iterator::end_tag);
+        auto joined_end   = burst::make_join_iterator(burst::iterator::end_tag, joined_begin);
 
         BOOST_CONCEPT_ASSERT((boost::RandomAccessIterator<decltype(joined_begin)>));
         BOOST_CONCEPT_ASSERT((boost::RandomAccessIterator<decltype(joined_end)>));
@@ -45,7 +45,7 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
         auto ranges = burst::make_range_vector(first, second);
 
         auto joined_begin = burst::make_join_iterator(boost::make_iterator_range(ranges));
-        auto joined_end = burst::make_join_iterator(joined_begin, burst::iterator::end_tag);
+        auto joined_end = burst::make_join_iterator(burst::iterator::end_tag, joined_begin);
         --joined_end;
 
         BOOST_CHECK_EQUAL(*joined_end, 0);
@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_SUITE(join_iterator)
         auto ranges = burst::make_range_vector(first, second);
 
         auto joined_begin = burst::make_join_iterator(boost::make_iterator_range(ranges));
-        auto joined_end   = burst::make_join_iterator(joined_begin, burst::iterator::end_tag);
+        auto joined_end   = burst::make_join_iterator(burst::iterator::end_tag, joined_begin);
 
         joined_begin += 2;
         BOOST_CHECK_EQUAL(*joined_begin, 1);

@@ -102,9 +102,9 @@ namespace burst
             Возвращает итератор на конец склеенного диапазона.
      */
     template <typename Range>
-    join_iterator<Range> make_join_iterator (const join_iterator<Range> & begin, iterator::end_tag_t)
+    join_iterator<Range> make_join_iterator (iterator::end_tag_t, const join_iterator<Range> & begin)
     {
-        return join_iterator<Range>(begin, iterator::end_tag);
+        return join_iterator<Range>(iterator::end_tag, begin);
     }
 } // namespace burst
 

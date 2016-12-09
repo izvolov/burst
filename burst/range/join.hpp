@@ -19,7 +19,7 @@ namespace burst
     auto join (Range && ranges)
     {
         auto begin = make_join_iterator(std::forward<Range>(ranges));
-        auto end = make_join_iterator(begin, iterator::end_tag);
+        auto end = make_join_iterator(iterator::end_tag, begin);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));
     }
