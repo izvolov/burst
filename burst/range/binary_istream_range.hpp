@@ -14,7 +14,7 @@ namespace burst
     auto make_binary_istream_range (std::istream & stream, Read read = Read{})
     {
         auto begin = make_binary_istream_iterator<Value>(stream, read);
-        auto end = make_binary_istream_iterator(begin, iterator::end_tag);
+        auto end = make_binary_istream_iterator(iterator::end_tag, begin);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));
     }
