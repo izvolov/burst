@@ -23,7 +23,7 @@ namespace burst
     auto subsets (ForwardRange && range, Compare compare)
     {
         auto begin = make_subset_iterator(std::forward<ForwardRange>(range), compare);
-        auto end = make_subset_iterator(begin, iterator::end_tag);
+        auto end = make_subset_iterator(iterator::end_tag, begin);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));
     }
@@ -38,7 +38,7 @@ namespace burst
     auto subsets (ForwardRange && range)
     {
         auto begin = make_subset_iterator(std::forward<ForwardRange>(range));
-        auto end = make_subset_iterator(begin, iterator::end_tag);
+        auto end = make_subset_iterator(iterator::end_tag, begin);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));
     }

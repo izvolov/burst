@@ -90,7 +90,7 @@ namespace burst
             detail::next_subset(m_range, m_subset, m_compare);
         }
 
-        subset_iterator (const subset_iterator & begin, iterator::end_tag_t):
+        subset_iterator (iterator::end_tag_t, const subset_iterator & begin):
             m_range(begin.m_range),
             m_subset(),
             m_compare(begin.m_compare)
@@ -163,9 +163,9 @@ namespace burst
             Отношение порядка на элементах диапазона выбирается по-умолчанию.
      */
     template <typename ForwardRange, typename Compare>
-    auto make_subset_iterator (const subset_iterator<ForwardRange, Compare> & begin, iterator::end_tag_t)
+    auto make_subset_iterator (iterator::end_tag_t, const subset_iterator<ForwardRange, Compare> & begin)
     {
-        return subset_iterator<ForwardRange, Compare>(begin, iterator::end_tag);
+        return subset_iterator<ForwardRange, Compare>(iterator::end_tag, begin);
     }
 } // namespace burst
 
