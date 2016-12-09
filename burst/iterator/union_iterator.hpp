@@ -116,7 +116,7 @@ namespace burst
             maintain_invariant();
         }
 
-        union_iterator (const union_iterator & begin, iterator::end_tag_t):
+        union_iterator (iterator::end_tag_t, const union_iterator & begin):
             m_ranges(std::begin(begin.m_ranges), std::begin(begin.m_ranges)),
             m_compare(begin.m_compare)
         {
@@ -209,11 +209,11 @@ namespace burst
     auto
         make_union_iterator
         (
-            const union_iterator<RandomAccessRange, Compare> & begin,
-            iterator::end_tag_t
+            iterator::end_tag_t,
+            const union_iterator<RandomAccessRange, Compare> & begin
         )
     {
-        return union_iterator<RandomAccessRange, Compare>(begin, iterator::end_tag);
+        return union_iterator<RandomAccessRange, Compare>(iterator::end_tag, begin);
     }
 } // namespace burst
 

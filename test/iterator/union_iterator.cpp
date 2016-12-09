@@ -15,7 +15,7 @@ BOOST_AUTO_TEST_SUITE(union_iterator)
         auto ranges = burst::make_range_vector(first, second);
 
         auto union_begin = burst::make_union_iterator(boost::make_iterator_range(ranges));
-        auto   union_end = burst::make_union_iterator(union_begin, burst::iterator::end_tag);
+        auto   union_end = burst::make_union_iterator(burst::iterator::end_tag, union_begin);
 
         auto expected_collection = {0, 1, 2, 2, 3, 4};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -31,7 +31,7 @@ BOOST_AUTO_TEST_SUITE(union_iterator)
         auto ranges = burst::make_range_vector(forward_range);
 
         auto union_begin = burst::make_union_iterator(boost::make_iterator_range(ranges));
-        auto   union_end = burst::make_union_iterator(union_begin, burst::iterator::end_tag);
+        auto   union_end = burst::make_union_iterator(burst::iterator::end_tag, union_begin);
 
         auto expected_collection = {1.6, 2.71, 3.14};
         BOOST_CHECK_EQUAL_COLLECTIONS
