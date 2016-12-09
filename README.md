@@ -102,7 +102,7 @@ Burst
   std::vector<int>  odd{1, 3, 5};
   auto ranges = burst::make_range_vector(even, odd);
 
-  auto merged_range = burst::merge(boost::make_iterator_range(ranges));
+  auto merged_range = burst::merge(ranges);
 
   assert((merged_range == std::vector<int>{1, 2, 3, 4, 5, 6}));
   ```

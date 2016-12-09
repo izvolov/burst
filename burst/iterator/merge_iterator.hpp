@@ -1,22 +1,21 @@
 #ifndef BURST_ITERATOR_MERGE_ITERATOR_HPP
 #define BURST_ITERATOR_MERGE_ITERATOR_HPP
 
-#include <burst/container/access/back.hpp>
 #include <burst/iterator/detail/front_value_compare.hpp>
 #include <burst/iterator/detail/invert_compare.hpp>
 #include <burst/iterator/end_tag.hpp>
 
-#include <boost/algorithm/cxx11/all_of.hpp>
 #include <boost/algorithm/cxx11/is_sorted.hpp>
 #include <boost/assert.hpp>
+#include <boost/iterator/iterator_concepts.hpp>
 #include <boost/iterator/iterator_facade.hpp>
-#include <boost/range/algorithm/remove_if.hpp>
-#include <boost/range/concepts.hpp>
 #include <boost/range/reference.hpp>
 #include <boost/range/value_type.hpp>
 
 #include <algorithm>
 #include <functional>
+#include <iterator>
+#include <utility>
 
 namespace burst
 {
@@ -30,9 +29,9 @@ namespace burst
         прочитать значения, но можно и записать в него. В результате записи в итератор будет
         изменено значение в исходном хранилище.
 
-        \tparam RandomAccessRange
-            Тип принимаемого на вход внешнего диапазона. Он должен быть диапазоном произвольного
-            доступа, то есть удовлетворять требованиям понятия "Random Access Range".
+        \tparam RandomAccessIterator
+            Тип принимаемого на вход итератора внешнего диапазона. Он должен быть итератором
+            произвольного доступа, то есть удовлетворять требованиям понятия "Random Access Iterator".
         \tparam Compare
             Бинарная операция, задающая отношение строгого порядка на элементах внутренних
             диапазонов. Если пользователем явно не указана операция, то, по-умолчанию, берётся
@@ -49,48 +48,50 @@ namespace burst
      */
     template
     <
-        typename RandomAccessRange,
+        typename RandomAccessIterator,
         typename Compare = std::less<>
     >
     class merge_iterator:
         public boost::iterator_facade
         <
-            merge_iterator<RandomAccessRange, Compare>,
-            typename boost::range_value<typename boost::range_value<RandomAccessRange>::type>::type,
+            merge_iterator<RandomAccessIterator, Compare>,
+            typename boost::range_value<typename std::iterator_traits<RandomAccessIterator>::value_type>::type,
             boost::single_pass_traversal_tag,
-            typename boost::range_reference<typename boost::range_value<RandomAccessRange>::type>::type
+            typename boost::range_reference<typename std::iterator_traits<RandomAccessIterator>::value_type>::type
         >
     {
     private:
-        BOOST_CONCEPT_ASSERT((boost::RandomAccessRangeConcept<RandomAccessRange>));
-        using outer_range_type = RandomAccessRange;
+        BOOST_CONCEPT_ASSERT((boost::RandomAccessIteratorConcept<RandomAccessIterator>));
+        using outer_range_iterator = RandomAccessIterator;
 
         using base_type =
             boost::iterator_facade
             <
                 merge_iterator,
-                typename boost::range_value<typename boost::range_value<outer_range_type>::type>::type,
+                typename boost::range_value<typename std::iterator_traits<outer_range_iterator>::value_type>::type,
                 boost::single_pass_traversal_tag,
-                typename boost::range_reference<typename boost::range_value<outer_range_type>::type>::type
+                typename boost::range_reference<typename std::iterator_traits<outer_range_iterator>::value_type>::type
             >;
 
     public:
-        explicit merge_iterator (outer_range_type ranges, Compare compare = Compare()):
-            m_ranges(std::move(ranges)),
+        explicit merge_iterator (outer_range_iterator first, outer_range_iterator last, Compare compare = Compare()):
+            m_begin(std::move(first)),
+            m_end(std::move(last)),
             m_heap_order(compare)
         {
-            BOOST_ASSERT(boost::algorithm::all_of(m_ranges,
+            BOOST_ASSERT(std::all_of(m_begin, m_end,
                 [& compare] (const auto & range)
                 {
                     return boost::algorithm::is_sorted(range, compare);
                 }));
 
             remove_empty_ranges();
-            std::make_heap(m_ranges.begin(), m_ranges.end(), m_heap_order);
+            std::make_heap(m_begin, m_end, m_heap_order);
         }
 
         merge_iterator (iterator::end_tag_t, const merge_iterator & begin):
-            m_ranges(std::begin(begin.m_ranges), std::begin(begin.m_ranges)),
+            m_begin(begin.m_begin),
+            m_end(begin.m_begin),
             m_heap_order(begin.m_heap_order)
         {
         }
@@ -102,45 +103,40 @@ namespace burst
 
         void remove_empty_ranges ()
         {
-            m_ranges.advance_end
-            (
-                -std::distance
-                (
-                    boost::remove_if(m_ranges, [] (const auto & r) { return r.empty(); }),
-                    std::end(m_ranges)
-                )
-            );
+            m_end = std::remove_if(m_begin, m_end, [] (const auto & r) {return r.empty();});
         }
 
         void increment ()
         {
-            std::pop_heap(m_ranges.begin(), m_ranges.end(), m_heap_order);
-            auto & range = m_ranges.back();
+            std::pop_heap(m_begin, m_end, m_heap_order);
+            auto & range = *std::prev(m_end);
 
             range.advance_begin(1);
             if (not range.empty())
             {
-                std::push_heap(m_ranges.begin(), m_ranges.end(), m_heap_order);
+                std::push_heap(m_begin, m_end, m_heap_order);
             }
             else
             {
-                m_ranges.advance_end(-1);
+                --m_end;
             }
         }
 
     private:
         typename base_type::reference dereference () const
         {
-            return m_ranges.front().front();
+            return m_begin->front();
         }
 
         bool equal (const merge_iterator & that) const
         {
-            return this->m_ranges == that.m_ranges;
+            assert(this->m_begin == that.m_begin);
+            return std::equal(this->m_begin, this->m_end, that.m_begin, that.m_end);
         }
 
     private:
-        outer_range_type m_ranges;
+        outer_range_iterator m_begin;
+        outer_range_iterator m_end;
 
         // invert_comparison устраняет путаницу с обратным порядком в пирамиде при работе с
         // std::make(push, pop)_heap.
@@ -156,10 +152,22 @@ namespace burst
             Возвращает итератор на наименьший относительно заданного отношения порядка элемент
         среди входных диапазонов.
      */
-    template <typename RandomAccessRange, typename Compare>
-    auto make_merge_iterator (RandomAccessRange ranges, Compare compare)
+    template <typename RandomAccessIterator, typename Compare>
+    auto make_merge_iterator (RandomAccessIterator first, RandomAccessIterator last, Compare compare)
     {
-        return merge_iterator<RandomAccessRange, Compare>(std::move(ranges), compare);
+        return merge_iterator<RandomAccessIterator, Compare>(std::move(first), std::move(last), compare);
+    }
+
+    template <typename RandomAccessRange, typename Compare>
+    auto make_merge_iterator (RandomAccessRange && ranges, Compare compare)
+    {
+        return
+            make_merge_iterator
+            (
+                std::begin(std::forward<RandomAccessRange>(ranges)),
+                std::end(std::forward<RandomAccessRange>(ranges)),
+                compare
+            );
     }
 
     //!     Функция для создания итератора слияния.
@@ -168,10 +176,21 @@ namespace burst
             Возвращает итератор на наименьший элемент среди входных диапазонов.
             Отношение порядка для элементов диапазона выбирается по-умолчанию.
      */
-    template <typename RandomAccessRange>
-    auto make_merge_iterator (RandomAccessRange ranges)
+    template <typename RandomAccessIterator>
+    auto make_merge_iterator (RandomAccessIterator first, RandomAccessIterator last)
     {
-        return merge_iterator<RandomAccessRange>(std::move(ranges));
+        return merge_iterator<RandomAccessIterator>(std::move(first), std::move(last));
+    }
+
+    template <typename RandomAccessRange>
+    auto make_merge_iterator (RandomAccessRange && ranges)
+    {
+        return
+            make_merge_iterator
+            (
+                std::begin(std::forward<RandomAccessRange>(ranges)),
+                std::end(std::forward<RandomAccessRange>(ranges))
+            );
     }
 
     //!     Функция для создания итератора на конец слияния с предикатом.
@@ -180,10 +199,10 @@ namespace burst
             Возвращает итератор-конец, который, если до него дойти, покажет, что элементы слияния
         закончились.
      */
-    template <typename RandomAccessRange, typename Compare>
-    auto make_merge_iterator (iterator::end_tag_t, const merge_iterator<RandomAccessRange, Compare> & begin)
+    template <typename RandomAccessIterator, typename Compare>
+    auto make_merge_iterator (iterator::end_tag_t, const merge_iterator<RandomAccessIterator, Compare> & begin)
     {
-        return merge_iterator<RandomAccessRange, Compare>(iterator::end_tag, begin);
+        return merge_iterator<RandomAccessIterator, Compare>(iterator::end_tag, begin);
     }
 } // namespace burst
 
