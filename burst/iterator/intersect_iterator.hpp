@@ -122,7 +122,7 @@ namespace burst
             }
         }
 
-        intersect_iterator (const intersect_iterator & begin, iterator::end_tag_t):
+        intersect_iterator (iterator::end_tag_t, const intersect_iterator & begin):
             m_ranges(std::begin(begin.m_ranges), std::begin(begin.m_ranges)),
             m_compare(begin.m_compare)
         {
@@ -269,11 +269,11 @@ namespace burst
     auto
         make_intersect_iterator
         (
-            const intersect_iterator<RandomAccessRange, Compare> & begin,
-            iterator::end_tag_t
+            iterator::end_tag_t,
+            const intersect_iterator<RandomAccessRange, Compare> & begin
         )
     {
-        return intersect_iterator<RandomAccessRange, Compare>(begin, iterator::end_tag);
+        return intersect_iterator<RandomAccessRange, Compare>(iterator::end_tag, begin);
     }
 } // namespace burst
 

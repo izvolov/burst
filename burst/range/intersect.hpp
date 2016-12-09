@@ -22,7 +22,7 @@ namespace burst
     auto intersect (RandomAccessRange && ranges, Compare compare)
     {
         auto begin = make_intersect_iterator(std::forward<RandomAccessRange>(ranges), compare);
-        auto end = make_intersect_iterator(begin, iterator::end_tag);
+        auto end = make_intersect_iterator(iterator::end_tag, begin);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));
     }
@@ -37,7 +37,7 @@ namespace burst
     auto intersect (RandomAccessRange && ranges)
     {
         auto begin = make_intersect_iterator(std::forward<RandomAccessRange>(ranges));
-        auto end = make_intersect_iterator(begin, iterator::end_tag);
+        auto end = make_intersect_iterator(iterator::end_tag, begin);
 
         return boost::make_iterator_range(std::move(begin), std::move(end));
     }
