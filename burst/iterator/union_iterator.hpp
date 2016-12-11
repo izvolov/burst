@@ -2,6 +2,7 @@
 #define BURST_ITERATOR_UNION_ITERATOR_HPP
 
 #include <burst/iterator/detail/front_value_compare.hpp>
+#include <burst/iterator/detail/prevent_writing.hpp>
 #include <burst/iterator/detail/range_range.hpp>
 #include <burst/iterator/end_tag.hpp>
 
@@ -69,13 +70,7 @@ namespace burst
             union_iterator<RandomAccessRange, Compare>,
             detail::range_range_value_t<RandomAccessRange>,
             boost::single_pass_traversal_tag,
-            typename std::conditional
-            <
-                std::is_lvalue_reference<detail::range_range_reference_t<RandomAccessRange>>::value,
-                std::remove_reference_t<detail::range_range_reference_t<RandomAccessRange>> const &,
-                detail::range_range_reference_t<RandomAccessRange>
-            >
-            ::type
+            detail::prevent_writing_t<detail::range_range_reference_t<RandomAccessRange>>
         >
     {
     public:
@@ -93,13 +88,7 @@ namespace burst
                 union_iterator,
                 detail::range_range_value_t<outer_range_type>,
                 boost::single_pass_traversal_tag,
-                typename std::conditional
-                <
-                    std::is_lvalue_reference<detail::range_range_reference_t<outer_range_type>>::value,
-                    std::remove_reference_t<detail::range_range_reference_t<outer_range_type>> const &,
-                    detail::range_range_reference_t<outer_range_type>
-                >
-                ::type
+                detail::prevent_writing_t<detail::range_range_reference_t<RandomAccessRange>>
             >;
 
     public:
