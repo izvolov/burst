@@ -120,7 +120,7 @@ Burst
   std::vector<int> odd{1, 3, 5, 7};
   auto ranges = burst::make_range_vector(natural, prime, odd);
 
-  auto intersected_range = burst::intersect(boost::make_iterator_range(ranges));
+  auto intersected_range = burst::intersect(ranges);
 
   assert((intersected_range == std::vector<int>{3, 5, 7}));
   ```
