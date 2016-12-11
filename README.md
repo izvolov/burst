@@ -174,12 +174,7 @@ Burst
   const auto natural = burst::make_vector({1, 2, 3, 4, 5, 6});
   const auto odd = burst::make_vector({1, 3, 5});
 
-  const auto difference =
-      burst::difference
-      (
-          boost::make_iterator_range(natural),
-          boost::make_iterator_range(odd)
-      );
+  const auto difference = burst::difference(natural, odd);
 
   const auto even = burst::make_vector({2, 4, 6});
   assert(difference == even);

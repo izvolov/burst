@@ -18,12 +18,7 @@ BOOST_AUTO_TEST_SUITE(difference)
         const auto     odd = burst::make_vector({1,    3,    5   });
         //                                          ^     ^     ^
 
-        const auto difference =
-            burst::difference
-            (
-                boost::make_iterator_range(natural),
-                boost::make_iterator_range(odd)
-            );
+        const auto difference = burst::difference(natural, odd);
 
         const auto even = burst::make_vector({2, 4, 6});
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -39,12 +34,7 @@ BOOST_AUTO_TEST_SUITE(difference)
         const auto subtrahend = burst::make_vector({1, 1,    2      });
         //                                                ^     ^  ^
 
-        const auto difference =
-            burst::difference
-            (
-                boost::make_iterator_range(minuend),
-                boost::make_iterator_range(subtrahend)
-            );
+        const auto difference = burst::difference(minuend, subtrahend);
 
         const auto expected = burst::make_vector({1, 2, 3});
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -58,12 +48,7 @@ BOOST_AUTO_TEST_SUITE(difference)
     {
         const auto set = burst::make_vector({'a', 'b', 'c'});
 
-        const auto difference =
-            burst::difference
-            (
-                boost::make_iterator_range(set),
-                boost::make_iterator_range(set)
-            );
+        const auto difference = burst::difference(set, set);
 
         BOOST_CHECK(difference.empty());
     }
@@ -73,13 +58,7 @@ BOOST_AUTO_TEST_SUITE(difference)
         const auto set = burst::make_vector({3, 2, 1});
         const auto empty_set = std::vector<int>{};
 
-        const auto difference =
-            burst::difference
-            (
-                boost::make_iterator_range(set),
-                boost::make_iterator_range(empty_set),
-                std::greater<>()
-            );
+        const auto difference = burst::difference(set, empty_set, std::greater<>());
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
@@ -93,12 +72,7 @@ BOOST_AUTO_TEST_SUITE(difference)
         const auto empty_set = std::vector<int>{};
         const auto set = burst::make_set({1, 2, 3});
 
-        const auto difference =
-            burst::difference
-            (
-                boost::make_iterator_range(empty_set),
-                boost::make_iterator_range(set)
-            );
+        const auto difference = burst::difference(empty_set, set);
 
         BOOST_CHECK(difference.empty());
     }
@@ -109,13 +83,7 @@ BOOST_AUTO_TEST_SUITE(difference)
         const auto subtrahend = burst::make_list({     'g',      'e',      'c',      'a'});
         //                                         ^         ^         ^         ^
 
-        const auto difference =
-            burst::difference
-            (
-                boost::make_iterator_range(minuend),
-                boost::make_iterator_range(subtrahend),
-                std::greater<>()
-            );
+        const auto difference = burst::difference(minuend, subtrahend, std::greater<>());
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
@@ -130,12 +98,7 @@ BOOST_AUTO_TEST_SUITE(difference)
         const auto subtrahend = burst::make_vector({-1, 2,         10, 11});
         //                                                 ^  ^  ^
 
-        const auto difference =
-            burst::difference
-            (
-                boost::make_iterator_range(minuend),
-                boost::make_iterator_range(subtrahend)
-            );
+        const auto difference = burst::difference(minuend, subtrahend);
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
@@ -150,12 +113,7 @@ BOOST_AUTO_TEST_SUITE(difference)
         const auto subtrahend = burst::make_vector({0, 2,    5, 6, 6,       10, 11});
         //                                                ^           ^  ^
 
-        const auto difference =
-            burst::difference
-            (
-                boost::make_iterator_range(minuend),
-                boost::make_iterator_range(subtrahend)
-            );
+        const auto difference = burst::difference(minuend, subtrahend);
 
         const auto expected = burst::make_vector({4, 7, 9});
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -171,12 +129,7 @@ BOOST_AUTO_TEST_SUITE(difference)
         auto subtrahend = burst::make_vector({   2, 3, 4, 5      });
         //                                    ^              ^  ^
 
-        auto difference =
-            burst::difference
-            (
-                boost::make_iterator_range(minuend),
-                boost::make_iterator_range(subtrahend)
-            );
+        auto difference = burst::difference(minuend, subtrahend);
 
         boost::for_each(difference, [] (auto & x) { x *= 2; });
 

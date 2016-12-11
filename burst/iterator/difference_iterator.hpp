@@ -4,12 +4,14 @@
 #include <burst/iterator/end_tag.hpp>
 #include <burst/range/skip_to_lower_bound.hpp>
 
-#include <boost/algorithm/cxx11/is_sorted.hpp>
 #include <boost/assert.hpp>
+#include <boost/iterator/iterator_concepts.hpp>
 #include <boost/iterator/iterator_facade.hpp>
-#include <boost/range/concepts.hpp>
 
+#include <algorithm>
 #include <functional>
+#include <iterator>
+#include <utility>
 
 namespace burst
 {
@@ -24,12 +26,12 @@ namespace burst
         прочитать значения, но можно и записать в него. В результате записи в итератор будет
         изменено значение в уменьшаемом.
 
-        \tparam ForwardRange1
-            Тип уменьшаемого диапазона. Он должен быть хотя бы однонаправленным, то есть
-            удовлетворять требованиям понятия "Forward Range".
-        \tparam ForwardRange2
-            Тип вычитаемого диапазона. Он должен быть хотя бы однонаправленным, то есть
-            удовлетворять требованиям понятия "Forward Range".
+        \tparam ForwardIterator1
+            Тип итератора уменьшаемого диапазона. Он должен быть хотя бы однонаправленным, то есть
+            удовлетворять требованиям понятия "Forward Iterator".
+        \tparam ForwardIterator2
+            Тип итератора вычитаемого диапазона. Он должен быть хотя бы однонаправленным, то есть
+            удовлетворять требованиям понятия "Forward Iterator".
         \tparam Compare
             Бинарная операция, задающая отношение строгого порядка на элементах входных диапазонов.
             Если пользователем явно не указана операция, то, по-умолчанию, берётся отношение
@@ -55,55 +57,61 @@ namespace burst
      */
     template
     <
-        typename ForwardRange1,
-        typename ForwardRange2,
+        typename ForwardIterator1,
+        typename ForwardIterator2,
         typename Compare = std::less<>
     >
     class difference_iterator:
         public boost::iterator_facade
         <
-            difference_iterator<ForwardRange1, ForwardRange2, Compare>,
-            typename ForwardRange1::value_type,
+            difference_iterator<ForwardIterator1, ForwardIterator2, Compare>,
+            typename std::iterator_traits<ForwardIterator1>::value_type,
             boost::forward_traversal_tag,
-            typename ForwardRange1::reference
+            typename std::iterator_traits<ForwardIterator1>::reference
         >
     {
     private:
-        BOOST_CONCEPT_ASSERT((boost::ForwardRangeConcept<ForwardRange1>));
-        BOOST_CONCEPT_ASSERT((boost::ForwardRangeConcept<ForwardRange2>));
-        using minuend_range_type = ForwardRange1;
-        using subtrahend_range_type = ForwardRange2;
+        BOOST_CONCEPT_ASSERT((boost::ForwardIteratorConcept<ForwardIterator1>));
+        BOOST_CONCEPT_ASSERT((boost::ForwardIteratorConcept<ForwardIterator2>));
+        using minuend_iterator = ForwardIterator1;
+        using subtrahend_iterator = ForwardIterator2;
         using compare_type = Compare;
 
         using base_type =
             boost::iterator_facade
             <
                 difference_iterator,
-                typename minuend_range_type::value_type,
+                typename std::iterator_traits<minuend_iterator>::value_type,
                 boost::forward_traversal_tag,
-                typename minuend_range_type::reference
+                typename std::iterator_traits<minuend_iterator>::reference
             >;
 
     public:
         difference_iterator
             (
-                minuend_range_type minuend,
-                subtrahend_range_type subtrahend,
+                minuend_iterator minuend_begin,
+                minuend_iterator minuend_end,
+                subtrahend_iterator subtrahend_begin,
+                subtrahend_iterator subtrahend_end,
                 Compare compare = Compare()
             ):
-            m_minuend(std::move(minuend)),
-            m_subtrahend(std::move(subtrahend)),
+            m_minuend_begin(std::move(minuend_begin)),
+            m_minuend_end(std::move(minuend_end)),
+            m_subtrahend_begin(std::move(subtrahend_begin)),
+            m_subtrahend_end(std::move(subtrahend_end)),
             m_compare(compare)
         {
-            BOOST_ASSERT(boost::algorithm::is_sorted(m_minuend, compare));
-            BOOST_ASSERT(boost::algorithm::is_sorted(m_subtrahend, compare));
+            BOOST_ASSERT(std::is_sorted(m_minuend_begin, m_minuend_end, compare));
+            BOOST_ASSERT(std::is_sorted(m_subtrahend_begin, m_subtrahend_end, compare));
 
             maintain_invariant();
         }
 
         difference_iterator (iterator::end_tag_t, const difference_iterator & begin):
-            m_minuend(begin.m_minuend.end(), begin.m_minuend.end()),
-            m_subtrahend{},
+            m_minuend_begin(begin.m_minuend_end),
+            m_minuend_end(begin.m_minuend_end),
+            m_subtrahend_begin{},
+            m_subtrahend_end{},
             m_compare(begin.m_compare)
         {
         }
@@ -113,7 +121,7 @@ namespace burst
 
         void increment ()
         {
-            m_minuend.advance_begin(1);
+            ++m_minuend_begin;
             maintain_invariant();
         }
 
@@ -126,11 +134,13 @@ namespace burst
          */
         void drop_subtrahend_head ()
         {
-            if (not m_minuend.empty()
-                && not m_subtrahend.empty()
-                && m_compare(m_subtrahend.front(), m_minuend.front()))
+            if (m_minuend_begin != m_minuend_end
+                && m_subtrahend_begin != m_subtrahend_end
+                && m_compare(*m_subtrahend_begin, *m_minuend_begin))
             {
-                skip_to_lower_bound(m_subtrahend, m_minuend.front(), m_compare);
+                auto subtrahend = boost::make_iterator_range(m_subtrahend_begin, m_subtrahend_end);
+                skip_to_lower_bound(subtrahend, *m_minuend_begin, m_compare);
+                m_subtrahend_begin = subtrahend.begin();
             }
         }
 
@@ -143,14 +153,14 @@ namespace burst
          */
         void maintain_invariant ()
         {
-            while (not m_subtrahend.empty()
-                && not m_minuend.empty()
-                && not m_compare(m_minuend.front(), m_subtrahend.front()))
+            while (m_subtrahend_begin != m_subtrahend_end
+                && m_minuend_begin != m_minuend_end
+                && not m_compare(*m_minuend_begin, *m_subtrahend_begin))
             {
-                if (not m_compare(m_subtrahend.front(), m_minuend.front()))
+                if (not m_compare(*m_subtrahend_begin, *m_minuend_begin))
                 {
-                    m_minuend.advance_begin(1);
-                    m_subtrahend.advance_begin(1);
+                    ++m_minuend_begin;
+                    ++m_subtrahend_begin;
                 }
                 drop_subtrahend_head();
             }
@@ -159,17 +169,19 @@ namespace burst
     private:
         typename base_type::reference dereference () const
         {
-            return m_minuend.front();
+            return *m_minuend_begin;
         }
 
         bool equal (const difference_iterator & that) const
         {
-            return std::begin(this->m_minuend) == std::begin(that.m_minuend);
+            return this->m_minuend_begin == that.m_minuend_begin;
         }
 
     private:
-        minuend_range_type m_minuend;
-        subtrahend_range_type m_subtrahend;
+        minuend_iterator m_minuend_begin;
+        minuend_iterator m_minuend_end;
+        subtrahend_iterator m_subtrahend_begin;
+        subtrahend_iterator m_subtrahend_end;
         compare_type m_compare;
     };
 
@@ -180,14 +192,42 @@ namespace burst
             Сами диапазоны должны быть упорядочены относительно этой операции.
             Возвращает итератор на первый элемент разности входных диапазонов.
      */
-    template <typename ForwardRange1, typename ForwardRange2, typename Compare>
-    auto make_difference_iterator (ForwardRange1 minuend, ForwardRange2 subtrahend, Compare compare)
+    template <typename ForwardIterator1, typename ForwardIterator2, typename Compare>
+    auto
+        make_difference_iterator
+        (
+            ForwardIterator1 minuend_begin, ForwardIterator1 minuend_end,
+            ForwardIterator2 subtrahend_begin, ForwardIterator2 subtrahend_end,
+            Compare compare
+        )
     {
         return
-            difference_iterator<ForwardRange1, ForwardRange2, Compare>
+            difference_iterator<ForwardIterator1, ForwardIterator2, Compare>
             (
-                std::move(minuend),
-                std::move(subtrahend),
+                std::move(minuend_begin),
+                std::move(minuend_end),
+                std::move(subtrahend_begin),
+                std::move(subtrahend_end),
+                compare
+            );
+    }
+
+    template <typename ForwardRange1, typename ForwardRange2, typename Compare>
+    auto
+        make_difference_iterator
+        (
+            ForwardRange1 && minuend,
+            ForwardRange2 && subtrahend,
+            Compare compare
+        )
+    {
+        return
+            make_difference_iterator
+            (
+                std::begin(std::forward<ForwardRange1>(minuend)),
+                std::end(std::forward<ForwardRange1>(minuend)),
+                std::begin(std::forward<ForwardRange2>(subtrahend)),
+                std::end(std::forward<ForwardRange2>(subtrahend)),
                 compare
             );
     }
@@ -198,14 +238,38 @@ namespace burst
             Возвращает итератор на первый элемент разности входных диапазонов.
             Отношение порядка для элементов диапазонов выбирается по-умолчанию.
      */
-    template <typename ForwardRange1, typename ForwardRange2>
-    auto make_difference_iterator (ForwardRange1 minuend, ForwardRange2 subtrahend)
+    template <typename ForwardIterator1, typename ForwardIterator2>
+    auto
+        make_difference_iterator
+        (
+            ForwardIterator1 minuend_begin, ForwardIterator1 minuend_end,
+            ForwardIterator2 subtrahend_begin, ForwardIterator2 subtrahend_end
+        )
     {
         return
-            difference_iterator<ForwardRange1, ForwardRange2>
+            difference_iterator<ForwardIterator1, ForwardIterator2>
             (
-                std::move(minuend),
-                std::move(subtrahend)
+                std::move(minuend_begin),
+                std::move(minuend_end),
+                std::move(subtrahend_begin),
+                std::move(subtrahend_end)
+            );
+    }
+
+    template <typename ForwardRange1, typename ForwardRange2,
+        typename = std::enable_if_t
+        <
+            not std::is_same<std::decay_t<ForwardRange1>, iterator::end_tag_t>::value>
+        >
+    auto make_difference_iterator (ForwardRange1 && minuend, ForwardRange2 && subtrahend)
+    {
+        return
+            make_difference_iterator
+            (
+                std::begin(std::forward<ForwardRange1>(minuend)),
+                std::end(std::forward<ForwardRange1>(minuend)),
+                std::begin(std::forward<ForwardRange2>(subtrahend)),
+                std::end(std::forward<ForwardRange2>(subtrahend))
             );
     }
 
@@ -215,15 +279,20 @@ namespace burst
             Возвращает итератор-конец, который, если до него дойти, покажет, что элементы разности
         закончились.
      */
-    template <typename ForwardRange1, typename ForwardRange2, typename Compare>
+    template <typename ForwardIterator1, typename ForwardIterator2, typename Compare>
     auto
         make_difference_iterator
         (
             iterator::end_tag_t,
-            const difference_iterator<ForwardRange1, ForwardRange2, Compare> & begin
+            const difference_iterator<ForwardIterator1, ForwardIterator2, Compare> & begin
         )
     {
-        return difference_iterator<ForwardRange1, ForwardRange2, Compare>(iterator::end_tag, begin);
+        return
+            difference_iterator<ForwardIterator1, ForwardIterator2, Compare>
+            (
+                iterator::end_tag,
+                begin
+            );
     }
 } // namespace burst
 
