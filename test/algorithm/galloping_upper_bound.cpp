@@ -39,7 +39,7 @@ BOOST_AUTO_TEST_SUITE(galloping_upper_bound)
     {
         auto range = {50, 40, 30, 20, 10};
 
-        auto search_result = burst::galloping_upper_bound(range.begin(), range.end(), 33, std::greater<int>());
+        auto search_result = burst::galloping_upper_bound(range.begin(), range.end(), 33, std::greater<>());
 
         BOOST_CHECK(search_result == range.begin() + 2);
         BOOST_CHECK_EQUAL(*search_result, 30);
@@ -69,7 +69,7 @@ BOOST_AUTO_TEST_SUITE(galloping_upper_bound)
     {
         std::vector<int> range{30, 30, 30, 20, 20, 20, 10, 10, 10};
 
-        auto search_result = burst::galloping_upper_bound(range.begin(), range.end(), 25, std::greater<int>());
+        auto search_result = burst::galloping_upper_bound(range.begin(), range.end(), 25, std::greater<>());
 
         BOOST_CHECK(search_result == range.begin() + 3);
         BOOST_CHECK_EQUAL(*search_result, 20);

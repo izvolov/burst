@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_SUITE(skip_to_upper_bound)
         auto sorted_range = boost::make_iterator_range(values);
         auto sorted_range_copy = sorted_range;
 
-        burst::skip_to_upper_bound(sorted_range, 100500, std::greater<int>());
+        burst::skip_to_upper_bound(sorted_range, 100500, std::greater<>());
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
@@ -62,7 +62,7 @@ BOOST_AUTO_TEST_SUITE(skip_to_upper_bound)
         std::vector<double> values{3.14, 2.71, 1.6};
         auto sorted_range = boost::make_iterator_range(values);
 
-        burst::skip_to_upper_bound(sorted_range, 2.5, std::greater<double>());
+        burst::skip_to_upper_bound(sorted_range, 2.5, std::greater<>());
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (

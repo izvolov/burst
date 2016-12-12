@@ -13,7 +13,7 @@ BOOST_AUTO_TEST_SUITE(merge_iterator)
         auto second = {600, 200};
         auto ranges = burst::make_range_vector(first, second);
 
-        auto merged_begin = burst::make_merge_iterator(ranges, std::greater<int>());
+        auto merged_begin = burst::make_merge_iterator(ranges, std::greater<>());
         auto merged_end = burst::make_merge_iterator(burst::iterator::end_tag, merged_begin);
 
         auto expected_collection = {600, 500, 200, 100};

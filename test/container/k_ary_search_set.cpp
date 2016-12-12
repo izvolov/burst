@@ -128,7 +128,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
     {
         auto numbers = burst::make_vector({3, 4, 6, 1, 7, 8, 2});
 
-        burst::k_ary_search_set<int, std::greater<int>> set(numbers.begin(), numbers.end(), 4);
+        burst::k_ary_search_set<int, std::greater<>> set(numbers.begin(), numbers.end(), 4);
 
         BOOST_CHECK_EQUAL(*set.find(3), 3);
     }
@@ -138,7 +138,7 @@ BOOST_AUTO_TEST_SUITE(k_ary_search)
         std::vector<int> numbers(1000);
         std::iota(numbers.rbegin(), numbers.rend(), 0);
 
-        burst::k_ary_search_set<int, std::greater<int>> set(numbers.begin(), numbers.end(), 10);
+        burst::k_ary_search_set<int, std::greater<>> set(numbers.begin(), numbers.end(), 10);
 
         BOOST_CHECK_EQUAL(*set.find(50), 50);
     }
