@@ -102,13 +102,13 @@ namespace burst
             подмножество, а если не удалась (все подмножества уже перечислены), то подмножество
             станет пустым.
          */
-        template <typename ForwardRange, typename BidirectionalRange, typename Compare>
-        void next_subset (const ForwardRange & sequence, BidirectionalRange & subset, Compare compare)
+        template <typename ForwardIterator, typename BidirectionalRange, typename Compare>
+        void next_subset (ForwardIterator sequence_begin, ForwardIterator sequence_end, BidirectionalRange & subset, Compare compare)
         {
-            if (subset.empty() || next_fixed_size_subset(subset.begin(), subset.end(), sequence.begin(), sequence.end(), compare) != subset.end())
+            if (subset.empty() || next_fixed_size_subset(subset.begin(), subset.end(), sequence_begin, sequence_end, compare) != subset.end())
             {
                 subset.resize(subset.size() + 1);
-                auto last_filled = fill_subset(subset.begin(), subset.end(), sequence.begin(), sequence.end(), compare);
+                auto last_filled = fill_subset(subset.begin(), subset.end(), sequence_begin, sequence_end, compare);
                 if (last_filled != subset.end())
                 {
                     subset.clear();
