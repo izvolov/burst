@@ -7,6 +7,7 @@
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/range/adaptor/transformed.hpp>
 #include <boost/range/difference_type.hpp>
+#include <boost/range/distance.hpp>
 #include <boost/range/numeric.hpp>
 #include <boost/range/reference.hpp>
 #include <boost/range/value_type.hpp>
@@ -227,7 +228,7 @@ namespace burst
              */
             join_iterator_impl (iterator::end_tag_t, const join_iterator_impl & begin):
                 m_ranges(begin.m_ranges),
-                m_outer_range_index(m_ranges.size()),
+                m_outer_range_index(boost::distance(m_ranges)),
                 m_inner_range_index(0),
                 m_items_remaining(0)
             {
@@ -245,8 +246,8 @@ namespace burst
              */
             void maintain_invariant ()
             {
-                while (m_outer_range_index < m_ranges.size() &&
-                    m_inner_range_index == m_ranges[static_cast<outer_difference>(m_outer_range_index)].size())
+                while (m_outer_range_index < boost::distance(m_ranges) &&
+                    m_inner_range_index == boost::distance(m_ranges[m_outer_range_index]))
                 {
                     ++m_outer_range_index;
                     m_inner_range_index = 0;
@@ -272,31 +273,30 @@ namespace burst
              */
             void advance (typename base_type::difference_type n)
             {
-                auto abs_n = static_cast<typename inner_range_type::size_type>(std::abs(n));
                 m_items_remaining -= n;
 
                 if (n > 0)
                 {
-                    forward(abs_n);
+                    forward(std::abs(n));
                 }
                 else
                 {
-                    backward(abs_n);
+                    backward(std::abs(n));
                 }
             }
 
             //!     Вперёд на n элементов.
-            void forward (typename inner_range_type::size_type n)
+            void forward (typename base_type::difference_type n)
             {
                 while (n > 0)
                 {
                     auto items_remaining_in_current_range =
-                        m_ranges[static_cast<outer_difference>(m_outer_range_index)].size() - m_inner_range_index;
+                        boost::distance(m_ranges[m_outer_range_index]) - m_inner_range_index;
                     auto items_to_scroll_in_current_range = std::min(n, items_remaining_in_current_range);
                     n -= items_to_scroll_in_current_range;
 
                     m_inner_range_index += items_to_scroll_in_current_range;
-                    if (m_inner_range_index == m_ranges[static_cast<outer_difference>(m_outer_range_index)].size())
+                    if (m_inner_range_index == boost::distance(m_ranges[m_outer_range_index]))
                     {
                         ++m_outer_range_index;
                         m_inner_range_index = 0;
@@ -307,14 +307,14 @@ namespace burst
             }
 
             //!     Назад на n элементов.
-            void backward (typename inner_range_type::size_type n)
+            void backward (typename base_type::difference_type n)
             {
                 while (n > 0)
                 {
                     if (m_inner_range_index == 0)
                     {
                         --m_outer_range_index;
-                        m_inner_range_index = m_ranges[static_cast<outer_difference>(m_outer_range_index)].size();
+                        m_inner_range_index = boost::distance(m_ranges[m_outer_range_index]);
                     }
 
                     auto items_remaining_in_current_range = m_inner_range_index;
@@ -339,7 +339,7 @@ namespace burst
             void increment ()
             {
                 ++m_inner_range_index;
-                if (m_inner_range_index == m_ranges[static_cast<outer_difference>(m_outer_range_index)].size())
+                if (m_inner_range_index == boost::distance(m_ranges[m_outer_range_index]))
                 {
                     ++m_outer_range_index;
                     m_inner_range_index = 0;
@@ -363,7 +363,7 @@ namespace burst
                 while (m_inner_range_index == 0)
                 {
                     --m_outer_range_index;
-                    m_inner_range_index = m_ranges[static_cast<outer_difference>(m_outer_range_index)].size();
+                    m_inner_range_index = boost::distance(m_ranges[m_outer_range_index]);
                 }
 
                 --m_inner_range_index;
@@ -373,9 +373,7 @@ namespace burst
         private:
             typename base_type::reference dereference () const
             {
-                auto outer_range_index = static_cast<outer_difference>(m_outer_range_index);
-                auto inner_range_index = static_cast<inner_difference>(m_inner_range_index);
-                return m_ranges[outer_range_index][inner_range_index];
+                return m_ranges[m_outer_range_index][m_inner_range_index];
             }
 
             bool equal (const join_iterator_impl & that) const
@@ -392,8 +390,8 @@ namespace burst
         private:
             outer_range_type m_ranges;
 
-            typename outer_range_type::size_type m_outer_range_index;
-            typename inner_range_type::size_type m_inner_range_index;
+            outer_difference m_outer_range_index;
+            inner_difference m_inner_range_index;
 
             typename base_type::difference_type m_items_remaining;
         };
