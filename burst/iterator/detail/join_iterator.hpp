@@ -13,7 +13,6 @@
 
 #include <algorithm>
 #include <iterator>
-#include <memory>
 
 namespace burst
 {
@@ -161,8 +160,6 @@ namespace burst
                 Особенностью этой специализации является то, что склеиваемый диапазон диапазонов
             хранится в буфере в неизменном виде, а текущая позиция в склеенном диапазоне задаётся
             двумя индексами: индексом во внешнем и внутреннем диапазонах.
-                Диапазон хранится не по значению, а по указателю, что позволяет копировать итератор
-            склейки произвольного доступа за O(1).
          */
         template <typename RandomAccessRange>
         class join_iterator_impl<RandomAccessRange, boost::random_access_traversal_tag>:
@@ -203,14 +200,14 @@ namespace burst
                 Память: O(1).
              */
             explicit join_iterator_impl (outer_range_type ranges):
-                m_ranges(std::make_shared<outer_range_type>(std::move(ranges))),
+                m_ranges(std::move(ranges)),
                 m_outer_range_index(0),
                 m_inner_range_index(0),
                 m_items_remaining(0)
             {
                 using boost::adaptors::transformed;
                 const auto to_size = [] (const auto & r) { return r.size(); };
-                m_items_remaining = boost::accumulate(*m_ranges | transformed(to_size), 0u);
+                m_items_remaining = boost::accumulate(m_ranges | transformed(to_size), 0u);
 
                 maintain_invariant();
             }
@@ -230,7 +227,7 @@ namespace burst
              */
             join_iterator_impl (iterator::end_tag_t, const join_iterator_impl & begin):
                 m_ranges(begin.m_ranges),
-                m_outer_range_index(m_ranges->size()),
+                m_outer_range_index(m_ranges.size()),
                 m_inner_range_index(0),
                 m_items_remaining(0)
             {
@@ -248,8 +245,8 @@ namespace burst
              */
             void maintain_invariant ()
             {
-                while (m_outer_range_index < m_ranges->size() &&
-                    m_inner_range_index == (*m_ranges)[static_cast<outer_difference>(m_outer_range_index)].size())
+                while (m_outer_range_index < m_ranges.size() &&
+                    m_inner_range_index == m_ranges[static_cast<outer_difference>(m_outer_range_index)].size())
                 {
                     ++m_outer_range_index;
                     m_inner_range_index = 0;
@@ -294,12 +291,12 @@ namespace burst
                 while (n > 0)
                 {
                     auto items_remaining_in_current_range =
-                        (*m_ranges)[static_cast<outer_difference>(m_outer_range_index)].size() - m_inner_range_index;
+                        m_ranges[static_cast<outer_difference>(m_outer_range_index)].size() - m_inner_range_index;
                     auto items_to_scroll_in_current_range = std::min(n, items_remaining_in_current_range);
                     n -= items_to_scroll_in_current_range;
 
                     m_inner_range_index += items_to_scroll_in_current_range;
-                    if (m_inner_range_index == (*m_ranges)[static_cast<outer_difference>(m_outer_range_index)].size())
+                    if (m_inner_range_index == m_ranges[static_cast<outer_difference>(m_outer_range_index)].size())
                     {
                         ++m_outer_range_index;
                         m_inner_range_index = 0;
@@ -317,7 +314,7 @@ namespace burst
                     if (m_inner_range_index == 0)
                     {
                         --m_outer_range_index;
-                        m_inner_range_index = (*m_ranges)[static_cast<outer_difference>(m_outer_range_index)].size();
+                        m_inner_range_index = m_ranges[static_cast<outer_difference>(m_outer_range_index)].size();
                     }
 
                     auto items_remaining_in_current_range = m_inner_range_index;
@@ -342,7 +339,7 @@ namespace burst
             void increment ()
             {
                 ++m_inner_range_index;
-                if (m_inner_range_index == (*m_ranges)[static_cast<outer_difference>(m_outer_range_index)].size())
+                if (m_inner_range_index == m_ranges[static_cast<outer_difference>(m_outer_range_index)].size())
                 {
                     ++m_outer_range_index;
                     m_inner_range_index = 0;
@@ -366,7 +363,7 @@ namespace burst
                 while (m_inner_range_index == 0)
                 {
                     --m_outer_range_index;
-                    m_inner_range_index = (*m_ranges)[static_cast<outer_difference>(m_outer_range_index)].size();
+                    m_inner_range_index = m_ranges[static_cast<outer_difference>(m_outer_range_index)].size();
                 }
 
                 --m_inner_range_index;
@@ -378,7 +375,7 @@ namespace burst
             {
                 auto outer_range_index = static_cast<outer_difference>(m_outer_range_index);
                 auto inner_range_index = static_cast<inner_difference>(m_inner_range_index);
-                return (*m_ranges)[outer_range_index][inner_range_index];
+                return m_ranges[outer_range_index][inner_range_index];
             }
 
             bool equal (const join_iterator_impl & that) const
@@ -393,7 +390,7 @@ namespace burst
             }
 
         private:
-            std::shared_ptr<outer_range_type> m_ranges;
+            outer_range_type m_ranges;
 
             typename outer_range_type::size_type m_outer_range_index;
             typename inner_range_type::size_type m_inner_range_index;
