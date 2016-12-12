@@ -2,6 +2,7 @@
 #define BURST_CONTAINER_K_ARY_SEARCH_SET_HPP
 
 #include <burst/container/unique_ordered_tag.hpp>
+#include <burst/functional/not_fn.hpp>
 #include <burst/integer/intlog.hpp>
 #include <burst/integer/intpow.hpp>
 
@@ -286,7 +287,7 @@ namespace burst
             {
                 value_container_type buffer(range.begin(), range.end());
                 std::sort(buffer.begin(), buffer.end(), m_compare);
-                buffer.erase(std::unique(buffer.begin(), buffer.end(), std::not2(m_compare)), buffer.end());
+                buffer.erase(std::unique(buffer.begin(), buffer.end(), not_fn(m_compare)), buffer.end());
 
                 initialize_trusted(boost::make_iterator_range(buffer));
             }
@@ -307,7 +308,7 @@ namespace burst
         template <typename RandomAccessRange>
         void initialize_trusted (const RandomAccessRange & range)
         {
-            BOOST_ASSERT(std::adjacent_find(range.begin(), range.end(), std::not2(m_compare)) == range.end());
+            BOOST_ASSERT(std::adjacent_find(range.begin(), range.end(), not_fn(m_compare)) == range.end());
             if (not range.empty())
             {
                 m_values.resize(range.size());
