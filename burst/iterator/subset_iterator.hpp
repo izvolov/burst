@@ -85,17 +85,21 @@ namespace burst
             ):
             m_begin(std::move(first)),
             m_end(std::move(last)),
-            m_subset(),
+            m_subset(static_cast<std::size_t>(std::distance(m_begin, m_end))),
+            m_subset_size(0),
             m_compare(compare)
         {
             BOOST_ASSERT(std::is_sorted(m_begin, m_end, m_compare));
-            detail::next_subset(m_begin, m_end, m_subset, m_compare);
+            const auto new_subset_end =
+                detail::next_subset(m_begin, m_end, subset_begin(), subset_end(), m_compare);
+            m_subset_size = std::distance(subset_begin(), new_subset_end);
         }
 
         subset_iterator (iterator::end_tag_t, const subset_iterator & begin):
             m_begin(begin.m_begin),
             m_end(begin.m_end),
             m_subset(),
+            m_subset_size(),
             m_compare(begin.m_compare)
         {
         }
@@ -107,15 +111,17 @@ namespace burst
 
         void increment ()
         {
-            detail::next_subset(m_begin, m_end, m_subset, m_compare);
+            const auto new_subset_end =
+                detail::next_subset(m_begin, m_end, subset_begin(), subset_end(), m_compare);
+            m_subset_size = std::distance(subset_begin(), new_subset_end);
         }
 
         typename base_type::reference dereference () const
         {
             return boost::make_iterator_range
             (
-                boost::make_indirect_iterator(m_subset.begin()),
-                boost::make_indirect_iterator(m_subset.end())
+                boost::make_indirect_iterator(subset_begin()),
+                boost::make_indirect_iterator(subset_end())
             );
         }
 
@@ -123,13 +129,39 @@ namespace burst
         {
             BOOST_ASSERT(this->m_begin == that.m_begin);
             BOOST_ASSERT(this->m_end == that.m_end);
-            return this->m_subset == that.m_subset;
+            return
+                std::equal
+                (
+                    this->subset_begin(), this->subset_end(),
+                    that.subset_begin(), that.subset_end()
+                );
+        }
+
+        auto subset_begin () const
+        {
+            return m_subset.begin();
+        }
+
+        auto subset_end () const
+        {
+            return subset_begin() + m_subset_size;
+        }
+
+        auto subset_end ()
+        {
+            return subset_begin() + m_subset_size;
+        }
+
+        auto subset_begin ()
+        {
+            return m_subset.begin();
         }
 
     private:
         ForwardIterator m_begin;
         ForwardIterator m_end;
         subset_container_type m_subset;
+        typename subset_container_type::difference_type m_subset_size;
         compare_type m_compare;
     };
 

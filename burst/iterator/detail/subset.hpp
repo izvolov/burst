@@ -93,27 +93,40 @@ namespace burst
         /*!
                 Принимает последовательность, подмножества которой нужно перебрать, и подмножество
             этой последовательности, которое нужно модифицировать, чтобы получить новое
-            подмножество. Оба заданы контейнерами, причём подмножество — контейнер итераторов на
-            исходную последовательность.
+            подмножество.
                 Также получает отношение порядка на элементах последовательности. Сама
             последовательность должна быть упорядочена относительно этой операции.
-                Пытается найти новое подмножество и перезаписать им входное подмножество.
-                Если попытка удалась, то в аргументе подмножества будет лежать новое действительное
-            подмножество, а если не удалась (все подмножества уже перечислены), то подмножество
-            станет пустым.
+                Пытается найти новое подмножество и перезаписать им исходное подмножество.
+                Если попытка удалась, то в диапазоне подмножества будет лежать новое действительное
+            подмножество, и будет возвращён итератор на конец нового подмножества, а если не
+            удалась (все подмножества уже перечислены), то возвращается итератор на начало
+            подмножества.
+
+                Важно отметить, что в результате работы функции может быть возвращён итератор после
+            изначального итератора на конец подмножества. Это значит, что в том буфере, в котором
+            лежит само подмножество, должно быть достаточно места для хранения нового подмножества.
          */
-        template <typename ForwardIterator, typename BidirectionalRange, typename Compare>
-        void next_subset (ForwardIterator sequence_begin, ForwardIterator sequence_end, BidirectionalRange & subset, Compare compare)
+        template <typename ForwardIterator, typename BidirectionalIterator, typename Compare>
+        BidirectionalIterator
+            next_subset
+            (
+                ForwardIterator sequence_begin, ForwardIterator sequence_end,
+                BidirectionalIterator subset_begin, BidirectionalIterator subset_end,
+                Compare compare
+            )
         {
-            if (subset.empty() || next_fixed_size_subset(subset.begin(), subset.end(), sequence_begin, sequence_end, compare) != subset.end())
+            if (subset_begin == subset_end
+                || next_fixed_size_subset(subset_begin, subset_end, sequence_begin, sequence_end, compare) != subset_end)
             {
-                subset.resize(subset.size() + 1);
-                auto last_filled = fill_subset(subset.begin(), subset.end(), sequence_begin, sequence_end, compare);
-                if (last_filled != subset.end())
+                ++subset_end;
+                auto last_filled = fill_subset(subset_begin, subset_end, sequence_begin, sequence_end, compare);
+                if (last_filled != subset_end)
                 {
-                    subset.clear();
+                    subset_end = subset_begin;
                 }
             }
+
+            return subset_end;
         }
     } // namespace detail
 } // namespace burst
