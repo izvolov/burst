@@ -3,18 +3,18 @@
 
 #include <burst/iterator/detail/front_value_compare.hpp>
 #include <burst/iterator/detail/prevent_writing.hpp>
-#include <burst/iterator/detail/range_range.hpp>
 #include <burst/iterator/end_tag.hpp>
 #include <burst/range/skip_to_lower_bound.hpp>
 
-#include <boost/algorithm/cxx11/all_of.hpp>
 #include <boost/algorithm/cxx11/is_sorted.hpp>
 #include <boost/assert.hpp>
+#include <boost/iterator/iterator_concepts.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/range/adaptor/transformed.hpp>
 #include <boost/range/algorithm/count.hpp>
-#include <boost/range/algorithm/remove_if.hpp>
 #include <boost/range/concepts.hpp>
+#include <boost/range/reference.hpp>
+#include <boost/range/value_type.hpp>
 
 #include <algorithm>
 #include <cstddef>
@@ -42,9 +42,10 @@ namespace burst
         значения.
             Между элементами результирующего диапазона сохраняется заданное отношение порядка.
 
-        \tparam RandomAccessRange
-            Тип принимаемого на вход внешнего диапазона. Он должен быть диапазоно произвольного
-            доступа, то есть удовлетворять требованиям понятия "Random Access Range".
+        \tparam RandomAccessIterator
+            Тип итератора принимаемого на вход внешнего диапазона. Он должен быть диапазоном
+            произвольного доступа, то есть удовлетворять требованиям понятия "Random Access
+            Iterator".
         \tparam Compare
             Бинарная операция, задающая отношение строгого порядка на элементах внутренних
             диапазонов. Если пользователем явно не указана операция, то, по-умолчанию, берётся
@@ -72,45 +73,60 @@ namespace burst
      */
     template
     <
-        typename RandomAccessRange,
+        typename RandomAccessIterator,
         typename Compare = std::less<>
     >
     class semiintersect_iterator:
         public boost::iterator_facade
         <
-            semiintersect_iterator<RandomAccessRange, Compare>,
-            detail::range_range_value_t<RandomAccessRange>,
+            semiintersect_iterator<RandomAccessIterator, Compare>,
+            typename boost::range_value
+            <
+                typename std::iterator_traits<RandomAccessIterator>::value_type
+            >
+            ::type,
             boost::single_pass_traversal_tag,
-            detail::prevent_writing_t<detail::range_range_reference_t<RandomAccessRange>>
+            detail::prevent_writing_t
+            <
+                typename boost::range_reference
+                <
+                    typename std::iterator_traits<RandomAccessIterator>::value_type
+                >
+                ::type
+            >
         >
     {
     private:
-        using outer_range_type = RandomAccessRange;
-        BOOST_CONCEPT_ASSERT((boost::RandomAccessRangeConcept<outer_range_type>));
+        using outer_range_iterator = RandomAccessIterator;
+        BOOST_CONCEPT_ASSERT((boost::RandomAccessIteratorConcept<outer_range_iterator>));
 
-        using inner_range_type = typename boost::range_value<outer_range_type>::type;
+        using inner_range_type = typename std::iterator_traits<outer_range_iterator>::value_type;
         BOOST_CONCEPT_ASSERT((boost::ForwardRangeConcept<inner_range_type>));
 
         using compare_type = Compare;
-
-        using outer_range_iterator = typename boost::range_iterator<outer_range_type>::type;
 
         using base_type =
             boost::iterator_facade
             <
                 semiintersect_iterator,
-                detail::range_range_value_t<outer_range_type>,
+                typename boost::range_value<inner_range_type>::type,
                 boost::single_pass_traversal_tag,
-                detail::prevent_writing_t<detail::range_range_reference_t<outer_range_type>>
+                detail::prevent_writing_t<typename boost::range_reference<inner_range_type>::type>
             >;
 
     public:
-        semiintersect_iterator (outer_range_type ranges, std::size_t min_items, Compare compare = Compare()):
-            m_ranges(std::move(ranges)),
+        semiintersect_iterator
+            (
+                outer_range_iterator first, outer_range_iterator last,
+                std::size_t min_items,
+                Compare compare = Compare()
+            ):
+            m_begin(std::move(first)),
+            m_end(std::move(last)),
             m_min_items(min_items),
             m_compare(compare)
         {
-            BOOST_ASSERT(boost::algorithm::all_of(m_ranges,
+            BOOST_ASSERT(std::all_of(m_begin, m_end,
                 [this] (const auto & range)
                 {
                     return boost::algorithm::is_sorted(range, m_compare);
@@ -121,7 +137,8 @@ namespace burst
         }
 
         semiintersect_iterator (iterator::end_tag_t, const semiintersect_iterator & begin):
-            m_ranges(std::begin(begin.m_ranges), std::begin(begin.m_ranges)),
+            m_begin(begin.m_begin),
+            m_end(begin.m_begin),
             m_min_items(begin.m_min_items),
             m_compare(begin.m_compare)
         {
@@ -134,14 +151,7 @@ namespace burst
 
         void remove_empty_ranges ()
         {
-            m_ranges.advance_end
-            (
-                -std::distance
-                (
-                    boost::remove_if(m_ranges, [] (const auto & r) {return r.empty();}),
-                    std::end(m_ranges)
-                )
-            );
+            m_end = std::remove_if(m_begin, m_end, [] (const auto & r) {return r.empty();});
         }
 
         //!     Поддержать инвариант, необходимый для поиска полупересечений.
@@ -152,7 +162,7 @@ namespace burst
         {
             std::nth_element
             (
-                m_ranges.begin(), semiintersection_candidate(), m_ranges.end(),
+                m_begin, semiintersection_candidate(), m_end,
                 detail::compare_by_front_value(m_compare)
             );
         }
@@ -168,7 +178,7 @@ namespace burst
          */
         void increment ()
         {
-            std::for_each(m_ranges.begin(), semiintersection_end(),
+            std::for_each(m_begin, semiintersection_end(),
                 [] (auto & range)
                 {
                     range.advance_begin(1);
@@ -187,7 +197,7 @@ namespace burst
         void settle ()
         {
             remove_empty_ranges();
-            if (m_ranges.size() >= m_min_items)
+            if (range_count() >= m_min_items)
             {
                 maintain_invariant();
                 next_semiintersection();
@@ -210,7 +220,7 @@ namespace burst
             auto candidate = semiintersection_candidate();
 
             auto front_values =
-                boost::make_iterator_range(std::next(candidate), m_ranges.end())
+                boost::make_iterator_range(std::next(candidate), m_end)
                     | boost::adaptors::transformed([] (const auto & range)
                         {
                             return range.front();
@@ -219,7 +229,7 @@ namespace burst
             auto last_equal_to_candidate = candidate + boost::count(front_values, candidate->front());
             std::nth_element
             (
-                candidate, last_equal_to_candidate, m_ranges.end(),
+                candidate, last_equal_to_candidate, m_end,
                 detail::compare_by_front_value(m_compare)
             );
 
@@ -242,7 +252,7 @@ namespace burst
         {
             while (not is_end())
             {
-                auto skipped_until = skip_while_less(m_ranges.begin(), semiintersection_candidate());
+                auto skipped_until = skip_while_less(m_begin, semiintersection_candidate());
                 if (skipped_until == semiintersection_candidate())
                 {
                     BOOST_ASSERT(not m_compare(skipped_until->front(), semiintersection_candidate()->front()));
@@ -297,10 +307,10 @@ namespace burst
          */
         void drop_empty_range (outer_range_iterator empty_range)
         {
-            if (m_ranges.size() - 1 >= m_min_items)
+            if (range_count() - 1 >= m_min_items)
             {
-                std::rotate(empty_range, std::next(empty_range), m_ranges.end());
-                m_ranges.advance_end(-1);
+                std::rotate(empty_range, std::next(empty_range), m_end);
+                --m_end;
 
                 maintain_invariant();
             }
@@ -312,18 +322,19 @@ namespace burst
 
         void scroll_to_end ()
         {
-            m_ranges = outer_range_type(std::begin(m_ranges), std::begin(m_ranges));
+            m_end = m_begin;
         }
 
     private:
         typename base_type::reference dereference () const
         {
-            return m_ranges.front().front();
+            return m_begin->front();
         }
 
         bool equal (const semiintersect_iterator & that) const
         {
-            return this->m_ranges == that.m_ranges;
+            assert(this->m_begin == that.m_begin);
+            return std::equal(this->m_begin, this->m_end, that.m_begin, that.m_end);
         }
 
         //!     Итератор на кандидата полупересечения.
@@ -339,16 +350,22 @@ namespace burst
                 >
                 ::difference_type;
 
-            return m_ranges.begin() + static_cast<difference_type>(m_min_items - 1);
+            return m_begin + static_cast<difference_type>(m_min_items - 1);
         }
 
         bool is_end () const
         {
-            return m_ranges.empty();
+            return m_begin == m_end;
+        }
+
+        std::size_t range_count () const
+        {
+            return static_cast<std::size_t>(std::distance(m_begin, m_end));
         }
 
     private:
-        outer_range_type m_ranges;
+        outer_range_iterator m_begin;
+        outer_range_iterator m_end;
         std::size_t m_min_items;
         compare_type m_compare;
     };
@@ -361,10 +378,41 @@ namespace burst
             Сами диапазоны должны быть упорядочены относительно этой операции.
             Возвращает итератор на первое полупересечение входных диапазонов.
      */
-    template <typename RandomAccessRange, typename Compare>
-    auto make_semiintersect_iterator (RandomAccessRange ranges, std::size_t min_items, Compare compare)
+    template <typename RandomAccessIterator, typename Compare>
+    auto
+        make_semiintersect_iterator
+        (
+            RandomAccessIterator first, RandomAccessIterator last,
+            std::size_t min_items,
+            Compare compare
+        )
     {
-        return semiintersect_iterator<RandomAccessRange, Compare>(std::move(ranges), min_items, compare);
+        return
+            semiintersect_iterator<RandomAccessIterator, Compare>
+            (
+                std::move(first), std::move(last),
+                min_items,
+                compare
+            );
+    }
+
+    template <typename RandomAccessRange, typename Compare>
+    auto
+        make_semiintersect_iterator
+        (
+            RandomAccessRange && ranges,
+            std::size_t min_items,
+            Compare compare
+        )
+    {
+        return
+            make_semiintersect_iterator
+            (
+                std::begin(std::forward<RandomAccessRange>(ranges)),
+                std::end(std::forward<RandomAccessRange>(ranges)),
+                min_items,
+                compare
+            );
     }
 
     //!     Функция для создания итератора полупересечения.
@@ -374,10 +422,32 @@ namespace burst
             Возвращает итератор на первое полупересечение входных диапазонов.
             Отношение порядка для элементов диапазона выбирается по-умолчанию.
      */
-    template <typename RandomAccessRange>
-    auto make_semiintersect_iterator (RandomAccessRange ranges, std::size_t min_items)
+    template <typename RandomAccessIterator>
+    auto
+        make_semiintersect_iterator
+        (
+            RandomAccessIterator first, RandomAccessIterator last,
+            std::size_t min_items
+        )
     {
-        return semiintersect_iterator<RandomAccessRange>(std::move(ranges), min_items);
+        return
+            semiintersect_iterator<RandomAccessIterator>
+            (
+                std::move(first), std::move(last),
+                min_items
+            );
+    }
+
+    template <typename RandomAccessRange>
+    auto make_semiintersect_iterator (RandomAccessRange && ranges, std::size_t min_items)
+    {
+        return
+            make_semiintersect_iterator
+            (
+                std::begin(std::forward<RandomAccessRange>(ranges)),
+                std::end(std::forward<RandomAccessRange>(ranges)),
+                min_items
+            );
     }
 
     //!     Функция для создания итератора на конец полупересечения.
@@ -386,15 +456,15 @@ namespace burst
             Возвращает итератор-конец, который, если до него дойти, покажет, что элементы
         полупересечения закончились.
      */
-    template <typename RandomAccessRange, typename Compare>
+    template <typename RandomAccessIterator, typename Compare>
     auto
         make_semiintersect_iterator
         (
             iterator::end_tag_t,
-            const semiintersect_iterator<RandomAccessRange, Compare> & begin
+            const semiintersect_iterator<RandomAccessIterator, Compare> & begin
         )
     {
-        return semiintersect_iterator<RandomAccessRange, Compare>(iterator::end_tag, begin);
+        return semiintersect_iterator<RandomAccessIterator, Compare>(iterator::end_tag, begin);
     }
 } // namespace burst
 
