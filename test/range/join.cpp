@@ -82,7 +82,7 @@ BOOST_AUTO_TEST_SUITE(join)
         auto ranges = burst::make_range_vector(first, second);
 
         auto joint_range = burst::join(boost::make_iterator_range(ranges));
-        boost::for_each(joint_range, [] (int & x) { x /= 10; });
+        boost::for_each(joint_range, [] (auto & x) { x /= 10; });
 
         BOOST_CHECK_EQUAL(first[0], 10);
         BOOST_CHECK_EQUAL(first[1], 5);

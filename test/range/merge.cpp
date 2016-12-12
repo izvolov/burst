@@ -76,7 +76,7 @@ BOOST_AUTO_TEST_SUITE(merge)
         auto ranges = burst::make_range_vector(first, second);
 
         auto merged_range = burst::merge(ranges, std::greater<>{});
-        boost::for_each(merged_range, [] (int & x) { x /= 10; });
+        boost::for_each(merged_range, [] (auto & x) { x /= 10; });
 
         BOOST_CHECK_EQUAL(first[0], 10);
         BOOST_CHECK_EQUAL(first[1], 5);
