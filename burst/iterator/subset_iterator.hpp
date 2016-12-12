@@ -90,9 +90,7 @@ namespace burst
             m_compare(compare)
         {
             BOOST_ASSERT(std::is_sorted(m_begin, m_end, m_compare));
-            const auto new_subset_end =
-                detail::next_subset(m_begin, m_end, subset_begin(), subset_end(), m_compare);
-            m_subset_size = std::distance(subset_begin(), new_subset_end);
+            increment();
         }
 
         subset_iterator (iterator::end_tag_t, const subset_iterator & begin):
