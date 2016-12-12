@@ -96,8 +96,8 @@ namespace burst
         subset_iterator (iterator::end_tag_t, const subset_iterator & begin):
             m_begin(begin.m_begin),
             m_end(begin.m_end),
-            m_subset(),
-            m_subset_size(),
+            m_subset{},
+            m_subset_size{},
             m_compare(begin.m_compare)
         {
         }

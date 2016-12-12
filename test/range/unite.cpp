@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_SUITE(unite)
         auto second = burst::make_list({'g', 'e', 'c', 'a'});
         auto ranges = burst::make_range_vector(first, second);
 
-        auto range_union = burst::unite(ranges, std::greater<>());
+        auto range_union = burst::unite(ranges, std::greater<>{});
 
         BOOST_CHECK_EQUAL(range_union, std::string("hgfedcba"));
     }
@@ -85,7 +85,7 @@ BOOST_AUTO_TEST_SUITE(unite)
         auto  third = {5, 3, 1};
         auto ranges = burst::make_range_vector(first, second, third);
 
-        auto range_union = burst::unite(ranges, std::greater<>());
+        auto range_union = burst::unite(ranges, std::greater<>{});
 
         auto expected_collection = {5, 4, 3, 2, 1};
         BOOST_CHECK_EQUAL_COLLECTIONS

@@ -125,7 +125,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
         std::list<char> second{     'g',      'e',      'c',      'a'};
         auto ranges = burst::make_range_vector(first, second);
 
-        auto semiintersection = burst::semiintersect(ranges, 2, std::greater<>());
+        auto semiintersection = burst::semiintersect(ranges, 2, std::greater<>{});
 
         BOOST_CHECK(semiintersection.empty());
     }
@@ -137,7 +137,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
         //                      ^    ^    ^    ^    ^    ^    ^    ^
         auto ranges = burst::make_range_vector(first, second);
 
-        auto semiintersection = burst::semiintersect(ranges, 1, std::greater<>());
+        auto semiintersection = burst::semiintersect(ranges, 1, std::greater<>{});
 
         BOOST_CHECK_EQUAL(semiintersection, std::string("hgfedcba"));
     }
@@ -149,7 +149,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
         //                ^     ^
         auto ranges = burst::make_range_vector(first, second);
 
-        auto semiintersection = burst::semiintersect(ranges, 2, std::greater<>());
+        auto semiintersection = burst::semiintersect(ranges, 2, std::greater<>{});
 
         auto expected_collection = {3, 2};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -202,7 +202,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
         auto  third = {                  7, 8, 9};
         auto ranges = burst::make_range_vector(first, second, third);
 
-        auto semiintersection = burst::semiintersect(ranges, 2, std::less<>());
+        auto semiintersection = burst::semiintersect(ranges, 2, std::less<>{});
 
         BOOST_CHECK(semiintersection.empty());
     }
@@ -215,7 +215,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
         //             ^  ^  ^  ^  ^  ^  ^  ^  ^
         auto ranges = burst::make_range_vector(first, second, third);
 
-        auto semiintersection = burst::semiintersect(ranges, 1, std::less<>());
+        auto semiintersection = burst::semiintersect(ranges, 1, std::less<>{});
 
         auto expected = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -234,7 +234,7 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
         auto ranges = burst::make_range_vector(first, second, third);
 
         auto semiintersection =
-            burst::semiintersect(ranges, 2, std::less<>());
+            burst::semiintersect(ranges, 2, std::less<>{});
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (

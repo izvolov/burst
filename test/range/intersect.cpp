@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_SUITE(intersect)
         auto second = burst::make_list({     'g',      'e',      'c',      'a'});
         auto ranges = burst::make_range_vector(first, second);
 
-        auto intersected_range = burst::intersect(ranges, std::greater<>());
+        auto intersected_range = burst::intersect(ranges, std::greater<>{});
 
         BOOST_CHECK(intersected_range.empty());
     }
@@ -85,7 +85,7 @@ BOOST_AUTO_TEST_SUITE(intersect)
         //                ^  ^
         auto ranges = burst::make_range_vector(first, second);
 
-        auto intersected_range = burst::intersect(ranges, std::greater<>());
+        auto intersected_range = burst::intersect(ranges, std::greater<>{});
 
         auto expected_collection = {3, 2};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -114,7 +114,7 @@ BOOST_AUTO_TEST_SUITE(intersect)
         auto  third = {                  7, 8, 9};
         auto ranges = burst::make_range_vector(first, second, third);
 
-        auto intersected_range = burst::intersect(ranges, std::less<>());
+        auto intersected_range = burst::intersect(ranges, std::less<>{});
 
         BOOST_CHECK(intersected_range.empty());
     }
@@ -126,7 +126,7 @@ BOOST_AUTO_TEST_SUITE(intersect)
         auto  third = {1, 1, 1};
         auto ranges = burst::make_range_vector(first, second, third);
 
-        auto intersected_range = burst::intersect(ranges, std::less<>());
+        auto intersected_range = burst::intersect(ranges, std::less<>{});
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (

@@ -80,7 +80,7 @@ namespace burst
     template <typename RandomAccessIterator, typename Value>
     RandomAccessIterator galloping_lower_bound (RandomAccessIterator first, RandomAccessIterator last, const Value & value)
     {
-        return galloping_lower_bound(first, last, value, std::less<>());
+        return galloping_lower_bound(first, last, value, std::less<>{});
     }
 } // namespace burst
 

@@ -27,7 +27,7 @@ void generate (std::size_t range_count, std::size_t range_length, std::int64_t m
         {
             if (descending)
             {
-                std::sort(range.begin(), range.end(), std::greater<>());
+                std::sort(range.begin(), range.end(), std::greater<>{});
             }
             else
             {

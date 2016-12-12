@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_SUITE(difference)
         const auto set = burst::make_vector({3, 2, 1});
         const auto empty_set = std::vector<int>{};
 
-        const auto difference = burst::difference(set, empty_set, std::greater<>());
+        const auto difference = burst::difference(set, empty_set, std::greater<>{});
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
@@ -83,7 +83,7 @@ BOOST_AUTO_TEST_SUITE(difference)
         const auto subtrahend = burst::make_list({     'g',      'e',      'c',      'a'});
         //                                         ^         ^         ^         ^
 
-        const auto difference = burst::difference(minuend, subtrahend, std::greater<>());
+        const auto difference = burst::difference(minuend, subtrahend, std::greater<>{});
 
         BOOST_CHECK_EQUAL_COLLECTIONS
         (

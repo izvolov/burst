@@ -41,7 +41,7 @@ BOOST_AUTO_TEST_SUITE(merge)
         auto second = burst::make_list({'g', 'e', 'c', 'a'});
         auto ranges = burst::make_range_vector(first, second);
 
-        auto merged_range = burst::merge(ranges, std::greater<>());
+        auto merged_range = burst::merge(ranges, std::greater<>{});
 
         auto expected_collection = {'h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_SUITE(merge)
         auto  third = {7, 8, 9};
         auto ranges = burst::make_range_vector(first, second, third);
 
-        auto merged_range = burst::merge(ranges, std::less<>());
+        auto merged_range = burst::merge(ranges, std::less<>{});
 
         auto expected_collection = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         BOOST_CHECK_EQUAL_COLLECTIONS
@@ -75,7 +75,7 @@ BOOST_AUTO_TEST_SUITE(merge)
 
         auto ranges = burst::make_range_vector(first, second);
 
-        auto merged_range = burst::merge(ranges, std::greater<>());
+        auto merged_range = burst::merge(ranges, std::greater<>{});
         boost::for_each(merged_range, [] (int & x) { x /= 10; });
 
         BOOST_CHECK_EQUAL(first[0], 10);
