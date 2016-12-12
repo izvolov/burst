@@ -158,7 +158,7 @@ Burst
   std::vector<int> three{      3, 4};
   auto ranges = burst::make_range_vector(one, two, three);
 
-  auto range_union = burst::unite(boost::make_iterator_range(ranges));
+  auto range_union = burst::unite(ranges);
 
   assert((range_union == std::vector<int>{1, 2, 3, 4}));
   ```

@@ -3,16 +3,15 @@
 
 #include <burst/iterator/detail/front_value_compare.hpp>
 #include <burst/iterator/detail/prevent_writing.hpp>
-#include <burst/iterator/detail/range_range.hpp>
 #include <burst/iterator/end_tag.hpp>
 
-#include <boost/algorithm/cxx11/all_of.hpp>
 #include <boost/algorithm/cxx11/is_sorted.hpp>
 #include <boost/assert.hpp>
+#include <boost/iterator/iterator_concepts.hpp>
 #include <boost/iterator/iterator_facade.hpp>
-#include <boost/range/algorithm/remove_if.hpp>
-#include <boost/range/algorithm/upper_bound.hpp>
 #include <boost/range/concepts.hpp>
+#include <boost/range/reference.hpp>
+#include <boost/range/value_type.hpp>
 
 #include <algorithm>
 #include <functional>
@@ -37,9 +36,10 @@ namespace burst
         диапазонов, а значит, нельзя однозначно выбрать из них какой-то один для записи нового
         значения.
 
-        \tparam RandomAccessRange
-            Тип принимаемого на вход внешнего диапазона. Он должен быть диапазоном произвольного
-            доступа, то есть удовлетворять требованиям понятия "Random Access Range".
+        \tparam RandomAccessIterator
+            Тип итератора принимаемого на вход внешнего диапазона. Он должен быть диапазоном
+            произвольного доступа, то есть удовлетворять требованиям понятия "Random Access
+            Iterator".
         \tparam Compare
             Бинарная операция, задающая отношение строгого порядка на элементах внутренних
             диапазонов.
@@ -61,23 +61,34 @@ namespace burst
      */
     template
     <
-        typename RandomAccessRange,
+        typename RandomAccessIterator,
         typename Compare = std::less<>
     >
     class union_iterator:
         public boost::iterator_facade
         <
-            union_iterator<RandomAccessRange, Compare>,
-            detail::range_range_value_t<RandomAccessRange>,
+            union_iterator<RandomAccessIterator, Compare>,
+            typename boost::range_value
+            <
+                typename std::iterator_traits<RandomAccessIterator>::value_type
+            >
+            ::type,
             boost::single_pass_traversal_tag,
-            detail::prevent_writing_t<detail::range_range_reference_t<RandomAccessRange>>
+            detail::prevent_writing_t
+            <
+                typename boost::range_reference
+                <
+                    typename std::iterator_traits<RandomAccessIterator>::value_type
+                >
+                ::type
+            >
         >
     {
     public:
-        using outer_range_type = RandomAccessRange;
-        BOOST_CONCEPT_ASSERT((boost::RandomAccessRangeConcept<outer_range_type>));
+        using outer_range_iterator = RandomAccessIterator;
+        BOOST_CONCEPT_ASSERT((boost::RandomAccessIteratorConcept<outer_range_iterator>));
 
-        using inner_range_type = typename boost::range_value<outer_range_type>::type;
+        using inner_range_type = typename std::iterator_traits<outer_range_iterator>::value_type;
         BOOST_CONCEPT_ASSERT((boost::ForwardRangeConcept<inner_range_type>));
 
         using compare_type = Compare;
@@ -86,17 +97,22 @@ namespace burst
             boost::iterator_facade
             <
                 union_iterator,
-                detail::range_range_value_t<outer_range_type>,
+                typename boost::range_value<inner_range_type>::type,
                 boost::single_pass_traversal_tag,
-                detail::prevent_writing_t<detail::range_range_reference_t<RandomAccessRange>>
+                detail::prevent_writing_t<typename boost::range_reference<inner_range_type>::type>
             >;
 
     public:
-        explicit union_iterator (outer_range_type ranges, compare_type compare = compare_type()):
-            m_ranges(std::move(ranges)),
+        union_iterator
+            (
+                outer_range_iterator first, outer_range_iterator last,
+                compare_type compare = compare_type()
+            ):
+            m_begin(std::move(first)),
+            m_end(std::move(last)),
             m_compare(compare)
         {
-            BOOST_ASSERT(boost::algorithm::all_of(m_ranges,
+            BOOST_ASSERT(std::all_of(m_begin, m_end,
                 [this] (const auto & range)
                 {
                     return boost::algorithm::is_sorted(range, m_compare);
@@ -106,7 +122,8 @@ namespace burst
         }
 
         union_iterator (iterator::end_tag_t, const union_iterator & begin):
-            m_ranges(std::begin(begin.m_ranges), std::begin(begin.m_ranges)),
+            m_begin(begin.m_begin),
+            m_end(begin.m_begin),
             m_compare(begin.m_compare)
         {
         }
@@ -118,26 +135,19 @@ namespace burst
 
         void remove_empty_ranges ()
         {
-            m_ranges.advance_end
-            (
-                -std::distance
-                (
-                    boost::remove_if(m_ranges, [] (const auto & r) {return r.empty();}),
-                    std::end(m_ranges)
-                )
-            );
+            m_end = std::remove_if(m_begin, m_end, [] (const auto & r) {return r.empty();});
         }
 
         void maintain_invariant ()
         {
             remove_empty_ranges();
-            std::sort(m_ranges.begin(), m_ranges.end(), detail::compare_by_front_value(m_compare));
+            std::sort(m_begin, m_end, detail::compare_by_front_value(m_compare));
         }
 
         void increment ()
         {
-            auto current_union_end = boost::upper_bound(m_ranges, m_ranges.front(), detail::compare_by_front_value(m_compare));
-            std::for_each(m_ranges.begin(), current_union_end,
+            auto current_union_end = std::upper_bound(m_begin, m_end, *m_begin, detail::compare_by_front_value(m_compare));
+            std::for_each(m_begin, current_union_end,
                 [] (auto & range)
                 {
                     range.advance_begin(1);
@@ -149,16 +159,18 @@ namespace burst
     private:
         typename base_type::reference dereference () const
         {
-            return m_ranges.front().front();
+            return m_begin->front();
         }
 
         bool equal (const union_iterator & that) const
         {
-            return this->m_ranges == that.m_ranges;
+            assert(this->m_begin == that.m_begin);
+            return std::equal(this->m_begin, this->m_end, that.m_begin, that.m_end);
         }
 
     private:
-        outer_range_type m_ranges;
+        outer_range_iterator m_begin;
+        outer_range_iterator m_end;
         compare_type m_compare;
 
     };
@@ -170,10 +182,32 @@ namespace burst
             Сами диапазоны должны быть упорядочены относительно этой операции.
             Возвращает итератор на первый элемент объединения входных диапазонов.
      */
-    template <typename RandomAccessRange, typename Compare>
-    auto make_union_iterator (RandomAccessRange ranges, Compare compare)
+    template <typename RandomAccessIterator, typename Compare>
+    auto
+        make_union_iterator
+        (
+            RandomAccessIterator first, RandomAccessIterator last,
+            Compare compare
+        )
     {
-        return union_iterator<RandomAccessRange, Compare>(std::move(ranges), compare);
+        return
+            union_iterator<RandomAccessIterator, Compare>
+            (
+                std::move(first), std::move(last),
+                compare
+            );
+    }
+
+    template <typename RandomAccessRange, typename Compare>
+    auto make_union_iterator (RandomAccessRange && ranges, Compare compare)
+    {
+        return
+            make_union_iterator
+            (
+                std::begin(std::forward<RandomAccessRange>(ranges)),
+                std::end(std::forward<RandomAccessRange>(ranges)),
+                compare
+            );
     }
 
     //!     Функция для создания итератора объединения.
@@ -182,10 +216,21 @@ namespace burst
             Возвращает итератор на первый элемент объединения входных диапазонов.
             Отношение порядка для элементов диапазона выбирается по-умолчанию.
      */
-    template <typename RandomAccessRange>
-    auto make_union_iterator (RandomAccessRange ranges)
+    template <typename RandomAccessIterator>
+    auto make_union_iterator (RandomAccessIterator first, RandomAccessIterator last)
     {
-        return union_iterator<RandomAccessRange>(std::move(ranges));
+        return union_iterator<RandomAccessIterator>(std::move(first), std::move(last));
+    }
+
+    template <typename RandomAccessRange>
+    auto make_union_iterator (RandomAccessRange && ranges)
+    {
+        return
+            make_union_iterator
+            (
+                std::begin(std::forward<RandomAccessRange>(ranges)),
+                std::end(std::forward<RandomAccessRange>(ranges))
+            );
     }
 
     //!     Функция для создания итератора на конец объединения с предикатом.
@@ -194,15 +239,15 @@ namespace burst
             Возвращает итератор-конец, который, если до него дойти, покажет, что элементы
         объединения закончились.
      */
-    template <typename RandomAccessRange, typename Compare>
+    template <typename RandomAccessIterator, typename Compare>
     auto
         make_union_iterator
         (
             iterator::end_tag_t,
-            const union_iterator<RandomAccessRange, Compare> & begin
+            const union_iterator<RandomAccessIterator, Compare> & begin
         )
     {
-        return union_iterator<RandomAccessRange, Compare>(iterator::end_tag, begin);
+        return union_iterator<RandomAccessIterator, Compare>(iterator::end_tag, begin);
     }
 } // namespace burst
 
