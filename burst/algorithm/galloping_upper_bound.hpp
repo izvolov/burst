@@ -27,7 +27,7 @@ namespace burst
         \tparam Compare
             Бинарная операция, задающая отношение строгого порядка на элементах входного диапазона.
             Если пользователем явно не указана операция, то, по-умолчанию, берётся отношение
-            "меньше", задаваемое функциональным объектом "std::less<T>".
+            "меньше", задаваемое функциональным объектом "std::less<>".
         \return RandomAccessIterator
             Возвращает итератор на первый элемент в диапазоне, который больше искомого относительно
             заданного порядка, либо, если в диапазоне такого элемента нет, итератор на конец
@@ -80,7 +80,7 @@ namespace burst
     template <typename RandomAccessIterator, typename Value>
     RandomAccessIterator galloping_upper_bound (RandomAccessIterator first, RandomAccessIterator last, const Value & value)
     {
-        return galloping_upper_bound(first, last, value, std::less<Value>());
+        return galloping_upper_bound(first, last, value, std::less<>());
     }
 } // namespace burst
 

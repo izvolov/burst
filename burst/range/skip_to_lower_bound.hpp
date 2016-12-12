@@ -31,7 +31,7 @@ namespace burst
     template <typename Range, typename Value>
     void skip_to_lower_bound (Range & range, const Value & goal)
     {
-        detail::skip_to_lower_bound(range, goal, std::less<Value>());
+        detail::skip_to_lower_bound(range, goal, std::less<>());
     }
 
 }

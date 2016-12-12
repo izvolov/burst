@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_SUITE(merge)
         auto  third = {7, 8, 9};
         auto ranges = burst::make_range_vector(first, second, third);
 
-        auto merged_range = burst::merge(ranges, std::less<int>());
+        auto merged_range = burst::merge(ranges, std::less<>());
 
         auto expected_collection = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         BOOST_CHECK_EQUAL_COLLECTIONS

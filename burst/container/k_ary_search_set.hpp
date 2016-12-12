@@ -50,7 +50,7 @@ namespace burst
 
                 bool Compare (Value [const &], Value [const &])
      */
-    template<typename Value, typename Compare = std::less<Value>>
+    template<typename Value, typename Compare = std::less<>>
     class k_ary_search_set
     {
     public:
