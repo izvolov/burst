@@ -70,15 +70,15 @@ namespace burst
                он закончился, внешний диапазон переходит к следующему внутреннему.
             3. Текущим элементом считается первый элемент текущего внутреннего диапазона.
      */
-    template <typename Range>
+    template <typename Iterator>
     using join_iterator =
         detail::join_iterator_impl
         <
-            Range,
+            Iterator,
             typename boost::iterators::minimum_category
             <
-                typename pure_range_traversal<Range>::type,
-                typename pure_range_traversal<typename boost::range_value<Range>::type>::type
+                typename boost::iterators::pure_iterator_traversal<Iterator>::type,
+                typename pure_range_traversal<typename std::iterator_traits<Iterator>::value_type>::type
             >
             ::type
         >;
@@ -89,10 +89,21 @@ namespace burst
             Возвращает итератор на первый элемент склеенного списка, который является первым
         элементом первого из непустых входных диапазонов.
      */
-    template <typename Range>
-    join_iterator<Range> make_join_iterator (Range ranges)
+    template <typename Iterator>
+    auto make_join_iterator (Iterator first, Iterator last)
     {
-        return join_iterator<Range>(std::move(ranges));
+        return join_iterator<Iterator>(std::move(first), std::move(last));
+    }
+
+    template <typename Range>
+    auto make_join_iterator (Range && ranges)
+    {
+        return
+            make_join_iterator
+            (
+                std::begin(std::forward<Range>(ranges)),
+                std::end(std::forward<Range>(ranges))
+            );
     }
 
     //!     Функция для создания итератора на конец склейки.
@@ -101,10 +112,10 @@ namespace burst
         обозначающую, что нужно создать итератор на конец диапазона.
             Возвращает итератор на конец склеенного диапазона.
      */
-    template <typename Range>
-    join_iterator<Range> make_join_iterator (iterator::end_tag_t, const join_iterator<Range> & begin)
+    template <typename Iterator>
+    auto make_join_iterator (iterator::end_tag_t, const join_iterator<Iterator> & begin)
     {
-        return join_iterator<Range>(iterator::end_tag, begin);
+        return join_iterator<Iterator>(iterator::end_tag, begin);
     }
 } // namespace burst
 

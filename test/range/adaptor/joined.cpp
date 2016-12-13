@@ -2,6 +2,7 @@
 #include <burst/range/adaptor/joined.hpp>
 #include <burst/range/make_range_vector.hpp>
 
+#include <boost/range/adaptor/transformed.hpp>
 #include <boost/range/irange.hpp>
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
@@ -17,9 +18,8 @@ BOOST_AUTO_TEST_SUITE(joined)
         const auto empty2 = burst::make_forward_list<int>({});
 
         auto ranges = burst::make_range_vector(first, empty1, second, empty2);
-        const auto to_join = boost::make_iterator_range(ranges);
 
-        const auto joined = to_join | burst::joined;
+        const auto joined = ranges | burst::joined;
 
         const auto expected = {17, 19, 23, 29, 31, 37};
         BOOST_CHECK_EQUAL_COLLECTIONS

@@ -85,7 +85,7 @@ Burst
   std::string world("world");
   auto ranges = burst::make_range_vector(hello, world);
 
-  auto helloworld = burst::join(boost::make_iterator_range(ranges));
+  auto helloworld = burst::join(ranges);
 
   assert(helloworld == std::string("helloworld"));
   ```

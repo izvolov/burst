@@ -13,7 +13,10 @@
 #include <boost/range/value_type.hpp>
 
 #include <algorithm>
+#include <cassert>
+#include <cstdlib>
 #include <iterator>
+#include <utility>
 
 namespace burst
 {
@@ -24,24 +27,24 @@ namespace burst
                 Специализация итератора склейки для того случая, когда склеиваемые диапазоны не
             являются диапазонами произвольного доступа.
          */
-        template <typename InputRange, typename IteratorCategory>
+        template <typename InputIterator, typename IteratorCategory>
         class join_iterator_impl:
             public boost::iterator_facade
             <
-                join_iterator_impl<InputRange, IteratorCategory>,
-                typename boost::range_value<typename boost::range_value<InputRange>::type>::type,
+                join_iterator_impl<InputIterator, IteratorCategory>,
+                typename boost::range_value<typename std::iterator_traits<InputIterator>::value_type>::type,
                 boost::single_pass_traversal_tag,
-                typename boost::range_reference<typename boost::range_value<InputRange>::type>::type
+                typename boost::range_reference<typename std::iterator_traits<InputIterator>::value_type>::type
             >
         {
         private:
-            using outer_range_type = InputRange;
-            using inner_range_type = typename boost::range_value<outer_range_type>::type;
+            using outer_range_iterator = InputIterator;
+            using inner_range_type = typename std::iterator_traits<outer_range_iterator>::value_type;
             static_assert
             (
                 std::is_lvalue_reference
                 <
-                    typename boost::range_reference<outer_range_type>::type
+                    typename std::iterator_traits<outer_range_iterator>::reference
                 >
                 ::value,
                 ""
@@ -69,8 +72,9 @@ namespace burst
 
                 Память: O(1).
              */
-            explicit join_iterator_impl (outer_range_type ranges):
-                m_ranges(std::move(ranges))
+            explicit join_iterator_impl (outer_range_iterator first, outer_range_iterator last):
+                m_begin(std::move(first)),
+                m_end(std::move(last))
             {
                 maintain_invariant();
             }
@@ -87,7 +91,8 @@ namespace burst
                 Память: O(1).
              */
             join_iterator_impl (iterator::end_tag_t, const join_iterator_impl & begin):
-                m_ranges(std::end(begin.m_ranges), std::end(begin.m_ranges))
+                m_begin(begin.m_end),
+                m_end(begin.m_end)
             {
             }
 
@@ -111,10 +116,12 @@ namespace burst
              */
             void maintain_invariant ()
             {
-                while (not m_ranges.empty() && m_ranges.front().empty())
-                {
-                    m_ranges.advance_begin(1);
-                }
+                m_begin =
+                    std::find_if_not(m_begin, m_end,
+                        [] (const auto & r)
+                        {
+                            return r.empty();
+                        });
             }
 
             //!     Продвижение итератора на один элемент вперёд.
@@ -131,27 +138,28 @@ namespace burst
              */
             void increment ()
             {
-                m_ranges.front().advance_begin(1);
+                m_begin->advance_begin(1);
                 maintain_invariant();
             }
 
         private:
             typename base_type::reference dereference () const
             {
-                return m_ranges.front().front();
+                return m_begin->front();
             }
 
             bool equal (const join_iterator_impl & that) const
             {
                 return
-                    (this->m_ranges.empty() && that.m_ranges.empty()) ||
-                    (not this->m_ranges.empty() && not that.m_ranges.empty() &&
-                        this->m_ranges.begin() == that.m_ranges.begin() &&
-                        this->m_ranges.front().begin() == that.m_ranges.front().begin());
+                    (this->m_begin == this->m_end && that.m_begin == that.m_end) ||
+                    (this->m_begin != this->m_end && that.m_begin != that.m_end &&
+                        this->m_begin == that.m_begin &&
+                        this->m_begin->begin() == that.m_begin->begin());
             }
 
         private:
-            outer_range_type m_ranges;
+            outer_range_iterator m_begin;
+            outer_range_iterator m_end;
         };
 
         //!     Итератор склейки произвольного доступа.
@@ -162,21 +170,21 @@ namespace burst
             хранится в буфере в неизменном виде, а текущая позиция в склеенном диапазоне задаётся
             двумя индексами: индексом во внешнем и внутреннем диапазонах.
          */
-        template <typename RandomAccessRange>
-        class join_iterator_impl<RandomAccessRange, boost::random_access_traversal_tag>:
+        template <typename RandomAccessIterator>
+        class join_iterator_impl<RandomAccessIterator, boost::random_access_traversal_tag>:
             public boost::iterator_facade
             <
-                join_iterator_impl<RandomAccessRange, boost::random_access_traversal_tag>,
-                typename boost::range_value<typename boost::range_value<RandomAccessRange>::type>::type,
+                join_iterator_impl<RandomAccessIterator, boost::random_access_traversal_tag>,
+                typename boost::range_value<typename std::iterator_traits<RandomAccessIterator>::value_type>::type,
                 boost::random_access_traversal_tag,
-                typename boost::range_reference<typename boost::range_value<RandomAccessRange>::type>::type
+                typename boost::range_reference<typename std::iterator_traits<RandomAccessIterator>::value_type>::type
             >
         {
         private:
-            using outer_range_type = RandomAccessRange;
-            using inner_range_type = typename boost::range_value<outer_range_type>::type;
+            using outer_range_iterator = RandomAccessIterator;
+            using inner_range_type = typename std::iterator_traits<outer_range_iterator>::value_type;
 
-            using outer_difference = typename boost::range_difference<outer_range_type>::type;
+            using outer_difference = typename std::iterator_traits<outer_range_iterator>::difference_type;
             using inner_difference = typename boost::range_difference<inner_range_type>::type;
 
             using base_type =
@@ -200,8 +208,8 @@ namespace burst
                 Время: O(|R|).
                 Память: O(1).
              */
-            explicit join_iterator_impl (outer_range_type ranges):
-                m_ranges(std::move(ranges)),
+            explicit join_iterator_impl (outer_range_iterator first, outer_range_iterator last):
+                m_ranges(std::move(first), std::move(last)),
                 m_outer_range_index(0),
                 m_inner_range_index(0),
                 m_items_remaining(0)
@@ -388,7 +396,7 @@ namespace burst
             }
 
         private:
-            outer_range_type m_ranges;
+            boost::iterator_range<outer_range_iterator> m_ranges;
 
             outer_difference m_outer_range_index;
             inner_difference m_inner_range_index;
