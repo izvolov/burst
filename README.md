@@ -259,7 +259,8 @@ Burst
     std::vector<int> range{30, 30, 30, 20, 20, 10};
     //                                         ^
 
-    auto search_result = burst::galloping_upper_bound(range.begin(), range.end(), 20, std::greater<int>());
+    auto search_result =
+        burst::galloping_upper_bound(range.begin(), range.end(), 20, std::greater<>{});
 
     assert(search_result == range.begin() + 5);
     assert(*search_result == 10);
