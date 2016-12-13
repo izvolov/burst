@@ -3,6 +3,8 @@ Burst
 
 То, чего нет в Бусте.
 
+[![Статус сборки](https://travis-ci.org/izvolov/burst.svg?branch=master)](https://travis-ci.org/izvolov/burst)
+
 О проекте
 ---------
 
@@ -318,5 +320,3 @@ Burst
 - 1.59.0
 
 Про более древние компиляторы и версии Буста мне ничего неизвестно.
-
-[![Статус сборки](https://travis-ci.org/izvolov/burst.svg?branch=master)](https://travis-ci.org/izvolov/burst)
