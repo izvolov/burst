@@ -14,24 +14,111 @@ Burst
 Что интересного?
 ----------------
 
+1. [Алгоритмы](#algorithms)
+    1. [Целочисленные сортировки](#intsort)
+        1. [Поразрядная сортировка](#radix)
+        2. [Сортировка подсчётом](#counting)
+    2. [Скачущий поиск](#gallop)
+        1. [Поиск нижней грани](#galloping-lb)
+        2. [Поиск верхней грани](#galloping-ub)
 1. [Структуры данных](#data-structures)
     1. [Структура для быстрого поиска в больших массивах данных](#kary)
     2. [Динамический кортеж](#dynamic-tuple)
-2. [Работа с диапазонами "на лету"](#ranges)
+2. [Ленивые вычисления](#lazy-ranges)
     1. [Склейка](#join)
     2. [Слияние](#merge)
     3. [Пересечение](#intersect)
     4. [Полупересечение](#semiintersect)
     5. [Объединение](#union)
     6. [Разность](#difference)
-3. [Целочисленная сортировка](#intsort)
-    1. [Сортировка подсчётом](#counting)
-    2. [Поразрядная сортировка](#radix)
-4. [Скачущий поиск](#gallop)
-    1. [Поиск нижней грани](#galloping-lb)
-    2. [Поиск верхней грани](#galloping-ub)
 
-#### <a name="data-structures"/> Структуры данных
+### <a name="algorithms"/> Алгоритмы
+
+#### <a name="intsort"/> Целочисленные сортировки
+
+Классические алгоритмы эффективной сортировки целых чисел с линейным временем вычисления.
+
+* <a name="radix"/> Поразрядная сортировка
+
+    ```c++
+    std::vector<std::string> strings{"aaaa", "bbb", "cc", "d"};
+
+    std::vector<std::string> buffer(strings.size());
+    burst::radix_sort(strings.begin(), strings.end(), buffer.begin(),
+        [] (const std::string & string)
+        {
+            return string.size();
+        }
+    );
+    assert((strings == std::vector<std::string>{"d", "cc", "bbb", "aaaa"}));
+    ```
+
+    Находится в заголовке
+    ```c++
+    #include <burst/algorithm/sorting/radix_sort.hpp>
+    ```
+
+* <a name="counting"/> Сортировка подсчётом
+
+    ```c++
+    std::vector<std::size_t> chaos{0x0104, 0x0203, 0x0302, 0x0401};
+
+    std::vector<std::size_t> sorted_by_low_byte(chaos.size());
+    burst::counting_sort(chaos.begin(), chaos.end(), sorted_by_low_byte.begin(),
+        [] (const std::size_t & integer) -> std::uint8_t
+        {
+            return integer & 0xff;
+        });
+
+    assert((sorted_by_low_byte == std::vector<std::size_t>{0x0401, 0x0302, 0x0203, 0x0104}));
+    ```
+
+    Находится в заголовке
+    ```c++
+    #include <burst/algorithm/sorting/counting_sort.hpp>
+    ```
+
+#### <a name="gallop"/> Скачущий поиск
+
+Эффективен и обгоняет двоичный поиск в том случае, если искомый элемент находится близко к началу
+диапазона.
+
+* <a name="galloping-lb"/> Поиск нижней грани
+
+    ```c++
+    std::vector<int> range{1, 2, 2, 3, 3, 3};
+    //                              ^
+
+    auto search_result = burst::galloping_lower_bound(range.begin(), range.end(), 3);
+
+    assert(search_result == range.begin() + 3);
+    assert(*search_result == 3);
+    ```
+
+    В заголовке
+    ```c++
+    #include <burst/algorithm/galloping_lower_bound.hpp>
+    ```
+
+* <a name="galloping-ub"/> Поиск верхней грани
+
+    ```c++
+    std::vector<int> range{30, 30, 30, 20, 20, 10};
+    //                                         ^
+
+    auto search_result =
+        burst::galloping_upper_bound(range.begin(), range.end(), 20, std::greater<>{});
+
+    assert(search_result == range.begin() + 5);
+    assert(*search_result == 10);
+    ```
+
+    В заголовке
+    ```c++
+    #include <burst/algorithm/galloping_upper_bound.hpp>
+    ```
+
+### <a name="data-structures"/> Структуры данных
 
 * <a name="kary"/> Структура для быстрого поиска в больших массивах данных
 
@@ -74,7 +161,7 @@ Burst
     #include <burst/container/dynamic_tuple.hpp>
     ```
 
-#### <a name="ranges"/> Работа с диапазонами "на лету"
+### <a name="lazy-ranges"/> Ленивые вычисления
 
 Операции с диапазонами без создания дополнительного буфера для хранения их содержимого.
 
@@ -187,88 +274,6 @@ Burst
     В заголовке
     ```c++
     #include <burst/range/difference.hpp>
-    ```
-
-#### <a name="intsort"/> Целочисленная сортировка
-  
-* <a name="counting"/> Сортировка подсчётом
-
-    ```c++
-    std::vector<std::size_t> chaos{0x0104, 0x0203, 0x0302, 0x0401};
-
-    std::vector<std::size_t> sorted_by_low_byte(chaos.size());
-    burst::counting_sort(chaos.begin(), chaos.end(), sorted_by_low_byte.begin(),
-        [] (const std::size_t & integer) -> std::uint8_t
-        {
-            return integer & 0xff;
-        });
-      
-    assert((sorted_by_low_byte == std::vector<std::size_t>{0x0401, 0x0302, 0x0203, 0x0104}));
-    ```
-
-    Находится в заголовке
-    ```c++
-    #include <burst/algorithm/sorting/counting_sort.hpp>
-    ```
-
-* <a name="radix"/> Поразрядная сортировка
-
-    ```c++
-    std::vector<std::string> strings{"aaaa", "bbb", "cc", "d"};
-
-    std::vector<std::string> buffer(strings.size());
-    burst::radix_sort(strings.begin(), strings.end(), buffer.begin(),
-        [] (const std::string & string)
-        {
-            return string.size();
-        }
-    );
-    assert((strings == std::vector<std::string>{"d", "cc", "bbb", "aaaa"}));
-    ```
-
-    Находится в заголовке
-    ```c++
-    #include <burst/algorithm/sorting/radix_sort.hpp>
-    ```
-
-#### <a name="gallop"/> Скачущий поиск
-
-Эффективен и обгоняет двоичный поиск в том случае, если искомый элемент находится близко к началу
-диапазона.
-
-* <a name="galloping-lb"/> Поиск нижней грани
-
-    ```c++
-    std::vector<int> range{1, 2, 2, 3, 3, 3};
-    //                              ^
-
-    auto search_result = burst::galloping_lower_bound(range.begin(), range.end(), 3);
-
-    assert(search_result == range.begin() + 3);
-    assert(*search_result == 3);
-    ```
-
-    В заголовке
-    ```c++
-    #include <burst/algorithm/galloping_lower_bound.hpp>
-    ```
-
-* <a name="galloping-ub"/> Поиск верхней грани
-
-    ```c++
-    std::vector<int> range{30, 30, 30, 20, 20, 10};
-    //                                         ^
-
-    auto search_result =
-        burst::galloping_upper_bound(range.begin(), range.end(), 20, std::greater<>{});
-
-    assert(search_result == range.begin() + 5);
-    assert(*search_result == 10);
-    ```
-
-    В заголовке
-    ```c++
-    #include <burst/algorithm/galloping_upper_bound.hpp>
     ```
 
 Требования
