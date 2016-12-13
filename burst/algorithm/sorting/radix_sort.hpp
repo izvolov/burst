@@ -66,19 +66,37 @@ namespace burst
     template <typename RandomAccessRange, typename RandomAccessIterator, typename Map, typename Radix>
     void radix_sort (RandomAccessRange && range, RandomAccessIterator buffer, Map map, Radix radix)
     {
-        radix_sort(range.begin(), range.end(), buffer, map, radix);
+        radix_sort
+        (
+            std::begin(std::forward<RandomAccessRange>(range)),
+            std::end(std::forward<RandomAccessRange>(range)),
+            buffer,
+            map,
+            radix
+        );
     }
 
     template <typename RandomAccessRange, typename RandomAccessIterator, typename Map>
     void radix_sort (RandomAccessRange && range, RandomAccessIterator buffer, Map map)
     {
-        radix_sort(range.begin(), range.end(), buffer, map);
+        radix_sort
+        (
+            std::begin(std::forward<RandomAccessRange>(range)),
+            std::end(std::forward<RandomAccessRange>(range)),
+            buffer,
+            map
+        );
     }
 
     template <typename RandomAccessRange, typename RandomAccessIterator>
     void radix_sort (RandomAccessRange && range, RandomAccessIterator buffer)
     {
-        radix_sort(range.begin(), range.end(), buffer);
+        radix_sort
+        (
+            std::begin(std::forward<RandomAccessRange>(range)),
+            std::end(std::forward<RandomAccessRange>(range)),
+            buffer
+        );
     }
 } // namespace burst
 
