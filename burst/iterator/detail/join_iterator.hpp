@@ -304,14 +304,8 @@ namespace burst
                     n -= items_to_scroll_in_current_range;
 
                     m_inner_range_index += items_to_scroll_in_current_range;
-                    if (m_inner_range_index == boost::distance(m_ranges[m_outer_range_index]))
-                    {
-                        ++m_outer_range_index;
-                        m_inner_range_index = 0;
-                    }
+                    maintain_invariant();
                 }
-
-                maintain_invariant();
             }
 
             //!     Назад на n элементов.
@@ -347,12 +341,6 @@ namespace burst
             void increment ()
             {
                 ++m_inner_range_index;
-                if (m_inner_range_index == boost::distance(m_ranges[m_outer_range_index]))
-                {
-                    ++m_outer_range_index;
-                    m_inner_range_index = 0;
-                }
-
                 maintain_invariant();
                 --m_items_remaining;
             }
