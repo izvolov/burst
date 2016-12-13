@@ -75,25 +75,51 @@ namespace burst
     template <typename ForwardRange, typename RandomAccessIterator, typename Map>
     RandomAccessIterator counting_sort_copy (ForwardRange && range, RandomAccessIterator result, Map map)
     {
-        return counting_sort_copy(range.begin(), range.end(), result, map);
+        return
+            counting_sort_copy
+            (
+                std::begin(std::forward<ForwardRange>(range)),
+                std::end(std::forward<ForwardRange>(range)),
+                result,
+                map
+            );
     }
 
     template <typename ForwardRange, typename RandomAccessIterator>
     RandomAccessIterator counting_sort_copy (ForwardRange && range, RandomAccessIterator result)
     {
-        return counting_sort_copy(range.begin(), range.end(), result);
+        return
+            counting_sort_copy
+            (
+                std::begin(std::forward<ForwardRange>(range)),
+                std::end(std::forward<ForwardRange>(range)),
+                result
+            );
     }
 
     template <typename ForwardRange, typename RandomAccessIterator, typename Map>
     RandomAccessIterator counting_sort_move (ForwardRange && range, RandomAccessIterator result, Map map)
     {
-        return counting_sort_move(range.begin(), range.end(), result, map);
+        return
+            counting_sort_move
+            (
+                std::begin(std::forward<ForwardRange>(range)),
+                std::end(std::forward<ForwardRange>(range)),
+                result,
+                map
+            );
     }
 
     template <typename ForwardRange, typename RandomAccessIterator>
     RandomAccessIterator counting_sort_move (ForwardRange && range, RandomAccessIterator result)
     {
-        return counting_sort_move(range.begin(), range.end(), result);
+        return
+            counting_sort_move
+            (
+                std::begin(std::forward<ForwardRange>(range)),
+                std::end(std::forward<ForwardRange>(range)),
+                result
+            );
     }
 }
 
