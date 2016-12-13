@@ -98,8 +98,9 @@ Burst
 * <a name="merge"/> Слияние
   
     ```c++
-    std::vector<int> even{2, 4, 6};
-    std::vector<int>  odd{1, 3, 5};
+    std::vector<int> even{   2,    4,    6};
+    std::vector<int>  odd{1,    3,    5   };
+    //                    ^  ^  ^  ^  ^  ^
     auto ranges = burst::make_range_vector(even, odd);
 
     auto merged_range = burst::merge(ranges);
@@ -116,8 +117,9 @@ Burst
   
     ```c++
     std::vector<int> natural{1, 2, 3, 4, 5, 6, 7};
-    std::vector<int> prime{2, 3, 5, 7};
-    std::vector<int> odd{1, 3, 5, 7};
+    std::vector<int>   prime{   2, 3,    5,    7};
+    std::vector<int>     odd{1,    3,    5,    7};
+    //                             ^     ^     ^
     auto ranges = burst::make_range_vector(natural, prime, odd);
 
     auto intersected_range = burst::intersect(ranges);
@@ -156,6 +158,7 @@ Burst
     std::vector<int>   one{1, 2      };
     std::vector<int>   two{   2, 3   };
     std::vector<int> three{      3, 4};
+    //                     ^  ^  ^  ^
     auto ranges = burst::make_range_vector(one, two, three);
 
     auto range_union = burst::unite(ranges);
@@ -172,7 +175,8 @@ Burst
 
     ```c++
     const auto natural = burst::make_vector({1, 2, 3, 4, 5, 6});
-    const auto odd = burst::make_vector({1, 3, 5});
+    const auto     odd = burst::make_vector({1,    3,    5   });
+    //                                          ^     ^     ^
 
     const auto difference = burst::difference(natural, odd);
 
@@ -236,6 +240,7 @@ Burst
 
     ```c++
     std::vector<int> range{1, 2, 2, 3, 3, 3};
+    //                              ^
 
     auto search_result = burst::galloping_lower_bound(range.begin(), range.end(), 3);
 
@@ -252,6 +257,7 @@ Burst
 
     ```c++
     std::vector<int> range{30, 30, 30, 20, 20, 10};
+    //                                         ^
 
     auto search_result = burst::galloping_upper_bound(range.begin(), range.end(), 20, std::greater<int>());
 
