@@ -5,10 +5,9 @@
 
 #include <boost/iterator/iterator_categories.hpp>
 #include <boost/iterator/iterator_facade.hpp>
-#include <boost/range/adaptor/transformed.hpp>
+#include <boost/next_prior.hpp>
 #include <boost/range/difference_type.hpp>
 #include <boost/range/distance.hpp>
-#include <boost/range/numeric.hpp>
 #include <boost/range/reference.hpp>
 #include <boost/range/value_type.hpp>
 
@@ -16,6 +15,7 @@
 #include <cassert>
 #include <cstdlib>
 #include <iterator>
+#include <numeric>
 #include <utility>
 
 namespace burst
@@ -207,19 +207,20 @@ namespace burst
                 Память: O(1).
              */
             explicit join_iterator_impl (outer_range_iterator first, outer_range_iterator last):
-                m_ranges(std::move(first), std::move(last)),
-                m_outer{},
-                m_inner{},
+                m_begin(std::move(first)),
+                m_end(std::move(last)),
+                m_outer(m_begin != m_end ? m_begin : outer_range_iterator{}),
+                m_inner(m_outer != m_end ? m_outer->begin() : inner_range_iterator{}),
                 m_items_remaining{}
             {
-                if (not m_ranges.empty())
+                if (m_begin != m_end)
                 {
-                    m_outer = m_ranges.begin();
-                    m_inner = m_outer->begin();
-
-                    using boost::adaptors::transformed;
-                    const auto to_size = [] (const auto & r) { return r.size(); };
-                    m_items_remaining = boost::accumulate(m_ranges | transformed(to_size), 0u);
+                    m_items_remaining =
+                        std::accumulate(m_begin, m_end, 0u,
+                            [] (auto v, const auto & r)
+                            {
+                                return v + r.size();
+                            });
 
                     maintain_invariant();
                 }
@@ -239,16 +240,12 @@ namespace burst
                 Память: O(1).
              */
             join_iterator_impl (iterator::end_tag_t, const join_iterator_impl & begin):
-                m_ranges(begin.m_ranges),
-                m_outer{},
-                m_inner{},
+                m_begin(begin.m_begin),
+                m_end(begin.m_end),
+                m_outer(m_begin != m_end ? m_end : outer_range_iterator{}),
+                m_inner(m_begin != m_end ? boost::prior(m_end)->end() : inner_range_iterator{}),
                 m_items_remaining(0)
             {
-                if (not m_ranges.empty())
-                {
-                    m_outer = m_ranges.end();
-                    m_inner = m_ranges.back().end();
-                }
             }
 
             join_iterator_impl () = default;
@@ -266,7 +263,7 @@ namespace burst
             void maintain_invariant ()
             {
                 while (m_inner == m_outer->end() &&
-                    ++m_outer != m_ranges.end())
+                    ++m_outer != m_end)
                 {
                     m_inner = m_outer->begin();
                 }
@@ -281,7 +278,7 @@ namespace burst
              */
             void prepare_for_decrement ()
             {
-                if (m_outer == m_ranges.end())
+                if (m_outer == m_end)
                 {
                     --m_outer;
                 }
@@ -394,7 +391,8 @@ namespace burst
 
             bool equal (const join_iterator_impl & that) const
             {
-                assert(this->m_ranges == that.m_ranges);
+                assert(this->m_begin == that.m_begin);
+                assert(this->m_end == that.m_end);
                 return this->m_items_remaining == that.m_items_remaining;
             }
 
@@ -404,7 +402,8 @@ namespace burst
             }
 
         private:
-            boost::iterator_range<outer_range_iterator> m_ranges;
+            outer_range_iterator m_begin;
+            outer_range_iterator m_end;
 
             outer_range_iterator m_outer;
             inner_range_iterator m_inner;
