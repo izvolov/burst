@@ -167,8 +167,8 @@ namespace burst
                 Специализация итератора склейки для того случая, когда склеиваемые диапазоны
             являются диапазонами произвольного доступа.
                 Особенностью этой специализации является то, что склеиваемый диапазон диапазонов
-            хранится в буфере в неизменном виде, а текущая позиция в склеенном диапазоне задаётся
-            двумя индексами: индексом во внешнем и внутреннем диапазонах.
+            хранится в неизменном виде, а текущая позиция в склеенном диапазоне задаётся двумя
+            итераторами: во внешнем и внутреннем диапазонах.
          */
         template <typename RandomAccessIterator>
         class join_iterator_impl<RandomAccessIterator, boost::random_access_traversal_tag>:
@@ -183,9 +183,7 @@ namespace burst
         private:
             using outer_range_iterator = RandomAccessIterator;
             using inner_range_type = typename std::iterator_traits<outer_range_iterator>::value_type;
-
-            using outer_difference = typename std::iterator_traits<outer_range_iterator>::difference_type;
-            using inner_difference = typename boost::range_difference<inner_range_type>::type;
+            using inner_range_iterator = typename boost::range_iterator<inner_range_type>::type;
 
             using base_type =
                 boost::iterator_facade
@@ -210,15 +208,21 @@ namespace burst
              */
             explicit join_iterator_impl (outer_range_iterator first, outer_range_iterator last):
                 m_ranges(std::move(first), std::move(last)),
-                m_outer_range_index(0),
-                m_inner_range_index(0),
-                m_items_remaining(0)
+                m_outer{},
+                m_inner{},
+                m_items_remaining{}
             {
-                using boost::adaptors::transformed;
-                const auto to_size = [] (const auto & r) { return r.size(); };
-                m_items_remaining = boost::accumulate(m_ranges | transformed(to_size), 0u);
+                if (not m_ranges.empty())
+                {
+                    m_outer = m_ranges.begin();
+                    m_inner = m_outer->begin();
 
-                maintain_invariant();
+                    using boost::adaptors::transformed;
+                    const auto to_size = [] (const auto & r) { return r.size(); };
+                    m_items_remaining = boost::accumulate(m_ranges | transformed(to_size), 0u);
+
+                    maintain_invariant();
+                }
             }
 
             //!     Создание итератора на конец склеенного диапазона.
@@ -236,10 +240,15 @@ namespace burst
              */
             join_iterator_impl (iterator::end_tag_t, const join_iterator_impl & begin):
                 m_ranges(begin.m_ranges),
-                m_outer_range_index(boost::distance(m_ranges)),
-                m_inner_range_index(0),
+                m_outer{},
+                m_inner{},
                 m_items_remaining(0)
             {
+                if (not m_ranges.empty())
+                {
+                    m_outer = m_ranges.end();
+                    m_inner = m_ranges.back().end();
+                }
             }
 
             join_iterator_impl () = default;
@@ -249,16 +258,37 @@ namespace burst
 
             //!     Поддержать инвариант.
             /*!
-                    Индексы всегда установлены либо на первый элемент непустого диапазона, либо за
-                последним элементом последнего диапазона.
+                    Итераторы всегда установлены либо на некоторый элемент непустого диапазона,
+                либо за последним элементом последнего диапазона, а именно: внешний итератор
+                указывает на конец внешних диапазонов, а внутренний итератор — на конец последнего
+                из внешних диапазонов.
              */
             void maintain_invariant ()
             {
-                while (m_outer_range_index < boost::distance(m_ranges) &&
-                    m_inner_range_index == boost::distance(m_ranges[m_outer_range_index]))
+                while (m_inner == m_outer->end() &&
+                    ++m_outer != m_ranges.end())
                 {
-                    ++m_outer_range_index;
-                    m_inner_range_index = 0;
+                    m_inner = m_outer->begin();
+                }
+            }
+
+            //!     Подготовить итераторы к сдвигу назад
+            /*!
+                    Нужно произвести операцию, в некотором смысле обратную к `maintain_invariant`:
+                    Если итераторы указывают на конец, то внешний итератор нужно сдвинуть на одну
+                позицию влево. Далее нужно привести итераторы в такое положение, что будет доступен
+                сдвиг хотя бы на один элемент влево (с точки зрения всего итератора склейки).
+             */
+            void prepare_for_decrement ()
+            {
+                if (m_outer == m_ranges.end())
+                {
+                    --m_outer;
+                }
+                while (m_inner == m_outer->begin())
+                {
+                    --m_outer;
+                    m_inner = m_outer->end();
                 }
             }
 
@@ -298,12 +328,11 @@ namespace burst
             {
                 while (n > 0)
                 {
-                    auto items_remaining_in_current_range =
-                        boost::distance(m_ranges[m_outer_range_index]) - m_inner_range_index;
+                    auto items_remaining_in_current_range = std::distance(m_inner, m_outer->end());
                     auto items_to_scroll_in_current_range = std::min(n, items_remaining_in_current_range);
                     n -= items_to_scroll_in_current_range;
+                    m_inner += items_to_scroll_in_current_range;
 
-                    m_inner_range_index += items_to_scroll_in_current_range;
                     maintain_invariant();
                 }
             }
@@ -313,16 +342,12 @@ namespace burst
             {
                 while (n > 0)
                 {
-                    if (m_inner_range_index == 0)
-                    {
-                        --m_outer_range_index;
-                        m_inner_range_index = boost::distance(m_ranges[m_outer_range_index]);
-                    }
+                    prepare_for_decrement();
 
-                    auto items_remaining_in_current_range = m_inner_range_index;
+                    auto items_remaining_in_current_range = std::distance(m_outer->begin(), m_inner);
                     auto items_to_scroll_in_current_range = std::min(n, items_remaining_in_current_range);
                     n -= items_to_scroll_in_current_range;
-                    m_inner_range_index -= items_to_scroll_in_current_range;
+                    m_inner -= items_to_scroll_in_current_range;
                 }
             }
 
@@ -340,7 +365,7 @@ namespace burst
              */
             void increment ()
             {
-                ++m_inner_range_index;
+                ++m_inner;
                 maintain_invariant();
                 --m_items_remaining;
             }
@@ -356,20 +381,15 @@ namespace burst
              */
             void decrement ()
             {
-                while (m_inner_range_index == 0)
-                {
-                    --m_outer_range_index;
-                    m_inner_range_index = boost::distance(m_ranges[m_outer_range_index]);
-                }
-
-                --m_inner_range_index;
+                prepare_for_decrement();
+                --m_inner;
                 ++m_items_remaining;
             }
 
         private:
             typename base_type::reference dereference () const
             {
-                return m_ranges[m_outer_range_index][m_inner_range_index];
+                return *m_inner;
             }
 
             bool equal (const join_iterator_impl & that) const
@@ -386,8 +406,8 @@ namespace burst
         private:
             boost::iterator_range<outer_range_iterator> m_ranges;
 
-            outer_difference m_outer_range_index;
-            inner_difference m_inner_range_index;
+            outer_range_iterator m_outer;
+            inner_range_iterator m_inner;
 
             typename base_type::difference_type m_items_remaining;
         };

@@ -28,6 +28,15 @@ BOOST_AUTO_TEST_SUITE(join)
         BOOST_CHECK(joint_range.empty());
     }
 
+    BOOST_AUTO_TEST_CASE(joining_empty_range_of_ranges_results_empty_range)
+    {
+        auto empty = std::vector<boost::iterator_range<std::vector<int>::iterator>>{};
+
+        auto joint_range = burst::join(empty);
+
+        BOOST_CHECK(joint_range.empty());
+    }
+
     BOOST_AUTO_TEST_CASE(joining_one_range_results_the_same_range)
     {
         int array[] = {1, 2, 3, 4};
