@@ -50,7 +50,13 @@ namespace burst
         Память: O(1).
      */
     template <typename RandomAccessIterator, typename Value, typename Compare>
-    RandomAccessIterator galloping_lower_bound (RandomAccessIterator first, RandomAccessIterator last, const Value & value, Compare compare)
+    RandomAccessIterator
+        galloping_lower_bound
+        (
+            RandomAccessIterator first, RandomAccessIterator last,
+            const Value & value,
+            Compare compare
+        )
     {
         BOOST_ASSERT(std::is_sorted(first, last, compare));
 
@@ -78,7 +84,12 @@ namespace burst
     }
 
     template <typename RandomAccessIterator, typename Value>
-    RandomAccessIterator galloping_lower_bound (RandomAccessIterator first, RandomAccessIterator last, const Value & value)
+    RandomAccessIterator
+        galloping_lower_bound
+        (
+            RandomAccessIterator first, RandomAccessIterator last,
+            const Value & value
+        )
     {
         return galloping_lower_bound(first, last, value, std::less<>{});
     }
