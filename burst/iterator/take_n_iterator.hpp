@@ -23,11 +23,11 @@ namespace burst
 
             Категория этого итератора — минимум из однонаправленной и категории входного итератора.
      */
-    template <typename Iterator>
+    template <typename Iterator, typename Integer>
     class take_n_iterator:
         public boost::iterator_facade
         <
-            take_n_iterator<Iterator>,
+            take_n_iterator<Iterator, Integer>,
             typename std::iterator_traits<Iterator>::value_type,
             typename std::common_type
             <
@@ -55,7 +55,7 @@ namespace burst
         >;
 
     public:
-        take_n_iterator (Iterator iterator, typename base_type::difference_type items_to_take):
+        take_n_iterator (Iterator iterator, Integer items_to_take):
             m_iterator(iterator),
             m_remaining(items_to_take)
         {
@@ -88,7 +88,7 @@ namespace burst
 
     private:
         Iterator m_iterator;
-        typename base_type::difference_type m_remaining;
+        Integer m_remaining;
     };
 
     //!     Функция для создания начала откусанного диапазона.
@@ -98,15 +98,10 @@ namespace burst
 
             Асимптотика: O(1) по времени и памяти.
      */
-    template <typename Iterator>
-    take_n_iterator<Iterator>
-        make_take_n_iterator
-        (
-            Iterator iterator,
-            typename std::iterator_traits<Iterator>::difference_type n
-        )
+    template <typename Iterator, typename Integer>
+    auto make_take_n_iterator (Iterator iterator, Integer n)
     {
-        return take_n_iterator<Iterator>(iterator, n);
+        return take_n_iterator<Iterator, Integer>(iterator, n);
     }
 
     //!     Функция для создания конца откусанного диапазона.
@@ -118,15 +113,10 @@ namespace burst
 
             Асимптотика: O(1) по времени и памяти.
      */
-    template <typename Iterator>
-    take_n_iterator<Iterator>
-        make_take_n_iterator
-        (
-            iterator::end_tag_t,
-            const take_n_iterator<Iterator> &
-        )
+    template <typename Iterator, typename Integer>
+    auto make_take_n_iterator (iterator::end_tag_t, const take_n_iterator<Iterator, Integer> &)
     {
-        return take_n_iterator<Iterator>{};
+        return take_n_iterator<Iterator, Integer>{};
     }
 } // namespace burst
 

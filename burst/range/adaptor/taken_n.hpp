@@ -17,13 +17,8 @@ namespace burst
             Integer value;
         };
 
-        template <typename Range>
-        auto
-            operator |
-            (
-                Range && range,
-                detail::item_count_forwarder<typename boost::range_difference<Range>::type> n
-            )
+        template <typename Range, typename Integer>
+        auto operator | (Range && range, detail::item_count_forwarder<Integer> n)
         {
             return take_n(std::forward<Range>(range), n.value);
         }

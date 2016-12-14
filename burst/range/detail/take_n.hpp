@@ -18,14 +18,8 @@ namespace burst
         /*!
                 Возвращает диапазон из двух итераторов типа `take_n_iterator`.
          */
-        template <typename Range, typename Category>
-        auto
-            take_n_impl
-            (
-                Range && range,
-                typename boost::range_difference<Range>::type n,
-                Category
-            )
+        template <typename Range, typename Integer, typename Category>
+        auto take_n_impl (Range && range, Integer n, Category)
         {
             auto begin = burst::make_take_n_iterator(std::begin(std::forward<Range>(range)), n);
             auto end = burst::make_take_n_iterator(iterator::end_tag, begin);
@@ -37,14 +31,8 @@ namespace burst
         /*!
                 Возвращает диапазон из тех же итераторов, которые были во входном диапазоне.
          */
-        template <typename Range>
-        auto
-            take_n_impl
-            (
-                Range && range,
-                typename boost::range_difference<Range>::type n,
-                boost::random_access_traversal_tag
-            )
+        template <typename Range, typename Integer>
+        auto take_n_impl (Range && range, Integer n, boost::random_access_traversal_tag)
         {
             return boost::make_iterator_range(std::begin(range), std::begin(range) + n);
         }

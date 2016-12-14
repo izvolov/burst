@@ -18,8 +18,8 @@ namespace burst
         входного диапазона не отслеживается. Ответственность за случай `n > range.size()` лежит на
         пользователе.
      */
-    template <typename Range>
-    auto take_n (Range && range, typename boost::range_difference<Range>::type n)
+    template <typename Range, typename Integer>
+    auto take_n (Range && range, Integer n)
     {
         using range_iterator = typename boost::range_iterator<Range>::type;
         using category =
