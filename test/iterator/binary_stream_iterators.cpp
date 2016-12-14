@@ -17,7 +17,7 @@ BOOST_AUTO_TEST_SUITE(binary_stream_iterators)
 
         std::stringstream stream;
 
-        boost::copy(initial, burst::make_binary_ostream_iterator<int>(stream));
+        boost::copy(initial, burst::make_binary_ostream_iterator(stream));
 
         std::vector<int> result;
         boost::copy(burst::make_binary_istream_range<int>(stream), std::back_inserter(result));
@@ -63,7 +63,7 @@ BOOST_AUTO_TEST_SUITE(binary_stream_iterators)
         };
 
         std::stringstream stream;
-        boost::copy(names, burst::make_binary_ostream_iterator<std::string>(stream, write_string));
+        boost::copy(names, burst::make_binary_ostream_iterator(stream, write_string));
 
         std::vector<std::string> result;
         boost::copy(burst::make_binary_istream_range<std::string>(stream, read_string), std::back_inserter(result));
