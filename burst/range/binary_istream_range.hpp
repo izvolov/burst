@@ -10,7 +10,7 @@
 
 namespace burst
 {
-    template <typename Value, typename Read = detail::trivial_read_t>
+    template <typename Value, typename Read = trivial_read_fn>
     auto make_binary_istream_range (std::istream & stream, Read read = Read{})
     {
         auto begin = make_binary_istream_iterator<Value>(stream, read);

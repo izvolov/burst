@@ -1,7 +1,7 @@
 #ifndef BURST_ITERATOR_BINARY_ISTREAM_ITERATOR_HPP
 #define BURST_ITERATOR_BINARY_ISTREAM_ITERATOR_HPP
 
-#include <burst/iterator/detail/trivial_read.hpp>
+#include <burst/functional/trivial_read.hpp>
 #include <burst/iterator/end_tag.hpp>
 
 #include <boost/iterator/iterator_facade.hpp>
@@ -92,7 +92,7 @@ namespace burst
         bool m_ok;
     };
 
-    template <typename Value, typename Read = detail::trivial_read_t>
+    template <typename Value, typename Read = trivial_read_fn>
     auto make_binary_istream_iterator (std::istream & stream, Read read = Read{})
     {
         return binary_istream_iterator<Value, Read>(stream, std::move(read));

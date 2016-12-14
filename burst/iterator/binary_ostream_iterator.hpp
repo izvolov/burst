@@ -1,7 +1,7 @@
 #ifndef BURST_ITERATOR_BINARY_OSTREAM_ITERATOR_HPP
 #define BURST_ITERATOR_BINARY_OSTREAM_ITERATOR_HPP
 
-#include <burst/iterator/detail/trivial_write.hpp>
+#include <burst/functional/trivial_write.hpp>
 
 #include <boost/function_output_iterator.hpp>
 
@@ -22,7 +22,7 @@ namespace burst
         Write write;
     };
 
-    template <typename Write = detail::trivial_write_t>
+    template <typename Write = trivial_write_fn>
     auto make_binary_ostream_iterator (std::ostream & stream, Write write = Write{})
     {
         return
