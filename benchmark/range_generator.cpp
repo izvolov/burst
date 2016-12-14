@@ -35,8 +35,7 @@ void generate (std::size_t range_count, std::size_t range_length, std::int64_t m
             }
         }
 
-        write(std::cout, range);
-        std::cout << "\n";
+        write(std::cout, range) << "\n";
     }
 }
 

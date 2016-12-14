@@ -8,22 +8,25 @@
 #include <string>
 
 template <typename Container>
-void write (std::ostream & stream, const Container & values)
+std::ostream & write (std::ostream & stream, const Container & values)
 {
     boost::for_each(values, [& stream] (std::int64_t value) { stream << value << ' '; });
+    return stream;
 }
 
 template <typename Container>
-void read (std::istream & stream, Container & values)
+std::istream & read (std::istream & stream, Container & values)
 {
     for (std::int64_t n; stream >> n; /* пусто */)
     {
         values.push_back(static_cast<typename Container::value_type>(n));
     }
+
+    return stream;
 }
 
 template <typename Container>
-void read_many (std::istream & stream, Container & containers)
+std::istream & read_many (std::istream & stream, Container & containers)
 {
     for (std::string line; std::getline(stream, line); /* пусто */)
     {
@@ -32,6 +35,8 @@ void read_many (std::istream & stream, Container & containers)
         std::stringstream line_stream(line);
         read(line_stream, containers.back());
     }
+
+    return stream;
 }
 
 #endif // BURST_BENCHMARK_IO_HPP
