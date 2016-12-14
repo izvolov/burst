@@ -76,11 +76,6 @@ namespace burst
             --m_remaining;
         }
 
-        typename base_type::difference_type distance_to (const take_n_iterator & that) const
-        {
-            return this->m_remaining - that.m_remaining;
-        }
-
         typename base_type::reference dereference () const
         {
             return *m_iterator;
