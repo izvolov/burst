@@ -42,7 +42,12 @@ namespace burst
     auto make_vector (InputRange && values)
     {
         using value_type = typename boost::range_value<InputRange>::type;
-        return std::vector<value_type>(std::begin(values), std::end(values));
+        return
+            std::vector<value_type>
+            (
+                std::begin(std::forward<InputRange>(values)),
+                std::end(std::forward<InputRange>(values))
+            );
     }
 
     //!     Создать std::vector из двух аргументов
@@ -83,7 +88,12 @@ namespace burst
     template <typename Value, typename InputRange>
     auto make_vector (InputRange && values)
     {
-        return std::vector<Value>(std::begin(values), std::end(values));
+        return
+            std::vector<Value>
+            (
+                std::begin(std::forward<InputRange>(values)),
+                std::end(std::forward<InputRange>(values))
+            );
     }
 
     //!     Создать std::vector из диапазона с аллокатором и явным указанием типа его значений
@@ -96,7 +106,13 @@ namespace burst
     template <typename Value, typename InputRange, typename Allocator>
     auto make_vector (InputRange && values, const Allocator & allocator)
     {
-        return std::vector<Value, Allocator>(std::begin(values), std::end(values), allocator);
+        return
+            std::vector<Value, Allocator>
+            (
+                std::begin(std::forward<InputRange>(values)),
+                std::end(std::forward<InputRange>(values)),
+                allocator
+            );
     }
 } // namespace burst
 

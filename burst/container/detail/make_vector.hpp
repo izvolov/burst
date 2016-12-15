@@ -18,7 +18,8 @@ namespace burst
             return
                 std::vector<value_type, Allocator>
                 (
-                    std::begin(values), std::end(values),
+                    std::begin(std::forward<InputRange>(values)),
+                    std::end(std::forward<InputRange>(values)),
                     allocator
                 );
         }
