@@ -45,9 +45,52 @@ BOOST_AUTO_TEST_SUITE(make_vector)
         BOOST_CHECK_EQUAL(v, (std::vector<int>{5, 4, 3, 2}));
     }
 
+    BOOST_AUTO_TEST_CASE(overloaded_for_initializer_list)
+    {
+        const auto v = burst::make_vector({1, 2, 3});
+        BOOST_CHECK_EQUAL(v, (std::vector<int>{1, 2, 3}));
+    }
+
+    BOOST_AUTO_TEST_CASE(overloaded_for_initializer_list_with_allocator)
+    {
+        const auto v = burst::make_vector({4, 5, 6}, std::allocator<int>{});
+        BOOST_CHECK_EQUAL(v, (std::vector<int>{4, 5, 6}));
+    }
+
+    BOOST_AUTO_TEST_CASE(overloaded_for_range_with_allocator)
+    {
+        const auto v =
+            burst::make_vector
+            (
+                boost::irange<std::uint32_t>(0, 6),
+                std::allocator<std::uint32_t>{}
+            );
+
+        BOOST_CHECK_EQUAL(v, (std::vector<std::uint32_t>{0, 1, 2, 3, 4, 5}));
+    }
+
     BOOST_AUTO_TEST_CASE(value_type_may_be_specified_explicitly_when_constructed_from_range)
     {
         const auto v = burst::make_vector<std::size_t>(boost::irange<int>(0, 4));
+        BOOST_CHECK
+        ((
+            std::is_same
+            <
+                decltype(v)::value_type,
+                std::size_t
+            >
+            ::value
+        ));
+    }
+
+    BOOST_AUTO_TEST_CASE(value_type_may_be_specified_explicitly_when_constructed_from_range_with_allocator)
+    {
+        const auto v =
+            burst::make_vector<std::size_t>
+            (
+                boost::irange<int>(0, 4),
+                std::allocator<std::size_t>{}
+            );
         BOOST_CHECK
         ((
             std::is_same
