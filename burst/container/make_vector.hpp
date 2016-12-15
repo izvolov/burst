@@ -1,8 +1,6 @@
 #ifndef BURST_CONTAINER_MAKE_VECTOR_HPP
 #define BURST_CONTAINER_MAKE_VECTOR_HPP
 
-#include <burst/concept/check.hpp>
-#include <burst/concept/integer.hpp>
 #include <burst/container/detail/make_vector.hpp>
 
 #include <boost/range/value_type.hpp>
@@ -95,8 +93,7 @@ namespace burst
 
             `make_vector<std::uint32_t>(range)`
      */
-    template <typename Value, typename InputRange, typename Allocator,
-        typename = Not<Integer, std::decay_t<InputRange>>>
+    template <typename Value, typename InputRange, typename Allocator>
     auto make_vector (InputRange && values, const Allocator & allocator)
     {
         return std::vector<Value, Allocator>(std::begin(values), std::end(values), allocator);
