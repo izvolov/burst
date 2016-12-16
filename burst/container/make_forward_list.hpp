@@ -1,30 +1,44 @@
 #ifndef BURST_CONTAINER_MAKE_FORWARD_LIST_HPP
 #define BURST_CONTAINER_MAKE_FORWARD_LIST_HPP
 
+#include <burst/container/make_sequence_container.hpp>
+
 #include <forward_list>
 #include <initializer_list>
 
 namespace burst
 {
-    //!     Создать std::forward_list без явного указания типа его значений.
+    //!     Создать std::forward_list из списка инициализации
     /*!
-            Принимает std::initializer_list, из типа его значений выводит тип нужного списка,
-        создаёт этот список и возвращает его.
+            Принимает std::initializer_list и дополнительные параметры (например, аллокатор),
+        выводит тип нужного списка, создаёт этот список и возвращает его.
+            Подробнее см. `make_sequence_container`.
      */
-    template <typename Value>
-    auto make_forward_list (std::initializer_list<Value> values)
+    template <typename Value, typename ... Xs>
+    auto make_forward_list (std::initializer_list<Value> values, Xs && ... xs)
     {
-        return std::forward_list<Value>(values);
+        return make_sequence_container<std::forward_list>(values, std::forward<Xs>(xs)...);
     }
 
-    //!     Создание односвязного списка с пользовательским аллокатором.
+    //!     Конструктор списка без явного указания типа
     /*!
-            Отличается наличием аллокатора, передаваемого в качестве аргумента функции.
+            Принимает произвольные аргументы, выводит тип значения и конструирует список.
+            Подробнее см. `make_sequence_container`.
      */
-    template <typename Value, typename Allocator>
-    auto make_forward_list (std::initializer_list<Value> values, const Allocator & allocator)
+    template <typename ... Xs>
+    auto make_forward_list (Xs && ... xs)
     {
-        return std::forward_list<Value, Allocator>(values, allocator);
+        return make_sequence_container<std::forward_list>(std::forward<Xs>(xs)...);
+    }
+
+    //!     Конструктор списка с явным указанием типа
+    /*!
+            Подробнее см. `make_sequence_container`.
+     */
+    template <typename Value, typename ... Xs>
+    auto make_forward_list (Xs && ... xs)
+    {
+        return make_sequence_container<std::forward_list, Value>(std::forward<Xs>(xs)...);
     }
 } // namespace burst
 
