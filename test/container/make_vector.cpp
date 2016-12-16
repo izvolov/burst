@@ -110,4 +110,48 @@ BOOST_AUTO_TEST_SUITE(make_vector)
         BOOST_CHECK((std::is_same<decltype(v)::value_type, std::string>::value));
         BOOST_CHECK(boost::algorithm::all_of(v, [] (const auto & s) {return s.empty();}));
     }
+
+    BOOST_AUTO_TEST_CASE(overloaded_for_two_iterators)
+    {
+        const auto l = {1, 2, 3};
+        const auto v = burst::make_vector(l.begin(), l.end());
+        BOOST_CHECK_EQUAL(v, (std::vector<int>{1, 2, 3}));
+    }
+
+    BOOST_AUTO_TEST_CASE(overloaded_for_two_iterators_with_explicit_value_type)
+    {
+        const auto l = {1, 2, 3};
+        const auto v = burst::make_vector<short>(l.begin(), l.end());
+        BOOST_CHECK
+        ((
+            std::is_same
+            <
+                decltype(v)::value_type,
+                short
+            >
+            ::value
+        ));
+    }
+
+    BOOST_AUTO_TEST_CASE(overloaded_for_two_iterators_with_allocator)
+    {
+        const auto l = {1, 2, 3};
+        const auto v = burst::make_vector(l.begin(), l.end(), std::allocator<int>{});
+        BOOST_CHECK_EQUAL(v, (std::vector<int>{1, 2, 3}));
+    }
+
+    BOOST_AUTO_TEST_CASE(overloaded_for_two_iterators_with_allocator_and_explicit_value_type)
+    {
+        const auto l = {1, 2, 3};
+        const auto v = burst::make_vector<double>(l.begin(), l.end(), std::allocator<double>{});
+        BOOST_CHECK
+        ((
+            std::is_same
+            <
+                decltype(v)::value_type,
+                double
+            >
+            ::value
+        ));
+    }
 BOOST_AUTO_TEST_SUITE_END()

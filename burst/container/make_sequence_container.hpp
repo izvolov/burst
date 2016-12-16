@@ -127,6 +127,67 @@ namespace burst
                 allocator
             );
     }
+
+    //!     Создать последовательный контейнер из диапазона, заданного двумя итераторами
+    /*!
+            Тип элементов контейнера выводится из типа значений итератора.
+     */
+    template <template <typename ...> class SequenceContainer, typename InputIterator>
+    auto make_sequence_container (InputIterator first, InputIterator last)
+    {
+        using value_type = typename std::iterator_traits<InputIterator>::value_type;
+        return SequenceContainer<value_type>(first, last);
+    }
+
+    //!     Создать последовательный контейнер из диапазона, заданного двумя итераторами, с аллокатором
+    /*!
+            Тип элементов контейнера выводится из типа значений итератора.
+            Отличается наличием аллокатора, передаваемого в качестве аргумента функции.
+     */
+    template
+    <
+        template <typename ...> class SequenceContainer,
+        typename InputIterator,
+        typename Allocator
+    >
+    auto make_sequence_container (InputIterator first, InputIterator last, const Allocator & allocator)
+    {
+        using value_type = typename std::iterator_traits<InputIterator>::value_type;
+        return SequenceContainer<value_type, Allocator>(first, last, allocator);
+    }
+
+    //!     Создать последовательный контейнер из двух итераторов с явным указанием типа значений
+    /*!
+            Отличается тем, что тип значений контейнера не выводится из типа значений итератора, а
+        указывается пользователем явно.
+     */
+    template
+    <
+        template <typename ...> class SequenceContainer,
+        typename Value,
+        typename InputIterator
+    >
+    auto make_sequence_container (InputIterator first, InputIterator last)
+    {
+        return SequenceContainer<Value>(first, last);
+    }
+
+    //!     Создать последовательный контейнер из двух итераторов и аллокатора с явным указанием типа значений
+    /*!
+            Отличается наличием аллокатора и явным заданием типа значений результирующего
+        контейнера.
+     */
+    template
+    <
+        template <typename ...> class SequenceContainer,
+        typename Value,
+        typename InputIterator,
+        typename Allocator
+    >
+    auto make_sequence_container (InputIterator first, InputIterator last, const Allocator & allocator)
+    {
+        return SequenceContainer<Value, Allocator>(first, last, allocator);
+    }
 } // namespace burst
 
 #endif // BURST_CONTAINER_MAKE_SEQUENCE_CONTAINER_HPP
