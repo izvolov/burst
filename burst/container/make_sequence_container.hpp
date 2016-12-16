@@ -1,7 +1,8 @@
 #ifndef BURST_CONTAINER_MAKE_SEQUENCE_CONTAINER_HPP
 #define BURST_CONTAINER_MAKE_SEQUENCE_CONTAINER_HPP
 
-#include <burst/container/detail/make_sequence_container.hpp>
+#include <burst/concept/check.hpp>
+#include <burst/concept/integer.hpp>
 
 #include <boost/range/value_type.hpp>
 
@@ -50,33 +51,38 @@ namespace burst
             );
     }
 
-    //!     Создать последовательний контейнер из двух аргументов
+    //!     Создать последовательний контейнер из диапазона и аллокатора
     /*!
-            Включает в себя два случая:
+            Отличается наличием аллокатора, передаваемого в качестве аргумента функции.
 
-            1. Аргументы — диапазон и аллокатор.
-
-                Тип элементов контейнера выводится из значений диапазона и вызывается конструктор
-                от диапазона и аллокатора:
-
-                `SequenceContainer<range_value<R>>(begin(range), end(range), allocator)`
-
-            2. Аргументы — целое число и произвольное значение.
-
-                Тип элементов контейнера выводится из типа второго аргумента и вызывается
-                конструктор:
-
-                `SequenceContainer<V>(size, value)`
+            `make_sequence_container(range, allocator)`
      */
-    template <template <typename ...> class SequenceContainer, typename First, typename Second>
-    auto make_sequence_container (First && first, Second && second)
+    template <template <typename ...> class SequenceContainer, typename InputRange, typename Allocator,
+        typename = Not<Integer, std::decay_t<InputRange>>>
+    auto make_sequence_container (InputRange && values, const Allocator & allocator)
     {
+        using value_type = typename boost::range_value<InputRange>::type;
         return
-            detail::make_sequence_container_impl<SequenceContainer>
+            SequenceContainer<value_type, Allocator>
             (
-                std::forward<First>(first), std::forward<Second>(second),
-                std::is_integral<std::decay_t<First>>{}
+                std::begin(std::forward<InputRange>(values)),
+                std::end(std::forward<InputRange>(values)),
+                allocator
             );
+    }
+
+    //!     Создать последовательний контейнер нужного размера, заполнив копиями значения
+    /*!
+            Принимает размер контейнера, а также произвольное значение, тип которого и будет
+        являться типом элементов контейнера. Создаёт контейнер заданного размера, каждый элемент
+        которого будет копией заданного элемента.
+
+            `make_sequence_container(5, value)`
+     */
+    template <template <typename ...> class SequenceContainer, typename I, typename Value>
+    auto make_sequence_container (Integer<I> size, const Value & value)
+    {
+        return SequenceContainer<Value>(size, value);
     }
 
     //!     Создать последовательний контейнер из диапазона с явным указанием типа его значений
