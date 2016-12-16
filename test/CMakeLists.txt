@@ -14,8 +14,8 @@ set(UNIT_TEST_SOURCES test_main.cpp
     container/access/front.cpp
     container/dynamic_tuple.cpp
     container/k_ary_search_set.cpp
+    container/make_sequence_container.cpp
     container/make_set.cpp
-    container/make_vector.cpp
     functional/compose.cpp
     functional/each.cpp
     functional/low_byte.cpp

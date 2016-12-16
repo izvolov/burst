@@ -2,9 +2,11 @@
 #define BURST_TEST_OUTPUT_HPP
 
 #include <algorithm>
+#include <deque>
 #include <forward_list>
 #include <iostream>
 #include <iterator>
+#include <list>
 #include <set>
 #include <utility>
 #include <vector>
@@ -66,6 +68,18 @@ namespace std
     std::ostream & operator << (std::ostream & stream, const std::vector<T> & vector)
     {
         return ::test_detail::print_range(stream, vector);
+    }
+
+    template <typename T>
+    std::ostream & operator << (std::ostream & stream, const std::list<T> & list)
+    {
+        return ::test_detail::print_range(stream, list);
+    }
+
+    template <typename T>
+    std::ostream & operator << (std::ostream & stream, const std::deque<T> & deque)
+    {
+        return ::test_detail::print_range(stream, deque);
     }
 
     template <typename T>
