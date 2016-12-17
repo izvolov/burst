@@ -205,7 +205,8 @@ Burst
 
     auto merged_range = burst::merge(ranges);
 
-    assert((merged_range == std::vector<int>{1, 2, 3, 4, 5, 6}));
+    auto expected_collection = {1, 2, 3, 4, 5, 6};
+    assert(merged_range == expected_collection);
     ```
 
     В заголовке
@@ -229,7 +230,8 @@ Burst
 
     auto intersected_range = burst::intersect(ranges);
 
-    assert((intersected_range == std::vector<int>{3, 5, 7}));
+    auto expected_collection = {3, 5, 7};
+    assert(intersected_range == expected_collection);
     ```
 
     В заголовке
@@ -280,7 +282,8 @@ Burst
 
     auto range_union = burst::unite(ranges);
 
-    assert((range_union == std::vector<int>{1, 2, 3, 4}));
+    auto expected_collection = {1, 2, 3, 4};
+    assert(range_union == expected_collection);
     ```
 
     В заголовке
@@ -300,7 +303,7 @@ Burst
 
     const auto difference = burst::difference(natural, odd);
 
-    const auto even = burst::make_vector({2, 4, 6});
+    auto even = {2, 4, 6};
     assert(difference == even);
     ```
 
