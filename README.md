@@ -33,6 +33,8 @@ Burst
     4. [Полупересечение](#semiintersect)
     5. [Объединение](#union)
     6. [Разность](#difference)
+4. [Рабочие инструменты](#utilities)
+    1. [Конструирование контейнеров с выводом типа](#inferring-constructors)
 
 ### <a name="algorithms"/> Алгоритмы
 
@@ -306,6 +308,58 @@ Burst
     ```c++
     #include <burst/range/difference.hpp>
     ```
+
+### <a name="utilities"/> Рабочие инструменты
+
+#### <a name="inferring-constructors"/> Конструирование контейнеров с выводом типа
+
+Часто бывает так, что нужно сохранить данные в контейнер, но при этом тип этих данных либо заранее неизвестен, либо его сложно описать, либо он просто не важен.
+
+В этом случае полезно иметь функцию, выполняющую конструирование этого контейнера так, что тип контейнера выведется автоматически из входных аргументов функции, и пользователю не придётся задавать этот тип вручную.
+
+1. Конструирование из списка инициализации
+
+    ```c++
+    auto v = burst::make_vector({1, 2, 3, 4});
+    ```
+
+2. Конструирование при помощи двух итераторов
+
+    ```c++
+    auto v = burst::make_vector(collection.begin() + 3, collection.end());
+    ```
+
+3. Конструирование из диапазона
+
+    ```c++
+    auto v = burst::make_vector(collection);
+    ```
+
+4. Заполняющее конструирование
+
+    ```c++
+    auto v = burst::make_vector(5, x);
+    ```
+
+Доступны практически все варианты конструкторов, а также варианты с конструированием из диапазона для стандартных последовательных контейнеров (```std::vector```, ```std::deque```, ```std::list```, ```std::forward_list```).
+
+В заголовках
+```c++
+#include <burst/container/make_deque.hpp>
+#include <burst/container/make_forward_list.hpp>
+#include <burst/container/make_list.hpp>
+#include <burst/container/make_vector.hpp>
+```
+
+Кроме того, поддерживается любой совместимый сторониий контейнер при помощи функции ```make_sequence_container```:
+```c++
+auto c = burst::make_sequence_container<boost::container::vector>(...);
+```
+
+В заголовке
+```c++
+#include <burst/container/make_sequence_container.hpp>
+```
 
 Требования
 ----------
