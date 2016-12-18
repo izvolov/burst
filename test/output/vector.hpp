@@ -1,7 +1,7 @@
 #ifndef BURST_TEST_OUTPUT_VECTOR_HPP
 #define BURST_TEST_OUTPUT_VECTOR_HPP
 
-#include <test/output_range.hpp>
+#include <test/output/range.hpp>
 
 #include <ostream>
 #include <vector>

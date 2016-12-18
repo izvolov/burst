@@ -1,6 +1,5 @@
 #include <burst/container/dynamic_tuple.hpp>
-#include <iostream>
-#include <test/output_vector.hpp>
+#include <test/output/vector.hpp>
 
 #include <boost/test/unit_test.hpp>
 

@@ -1,8 +1,8 @@
 #include <burst/container/make_vector.hpp>
-#include <test/output_deque.hpp>
-#include <test/output_forward_list.hpp>
-#include <test/output_list.hpp>
-#include <test/output_vector.hpp>
+#include <test/output/deque.hpp>
+#include <test/output/forward_list.hpp>
+#include <test/output/list.hpp>
+#include <test/output/vector.hpp>
 
 #include <boost/algorithm/cxx11/all_of.hpp>
 #include <boost/mpl/push_back.hpp>

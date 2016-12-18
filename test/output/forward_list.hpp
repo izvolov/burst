@@ -1,7 +1,7 @@
 #ifndef BURST_TEST_OUTPUT_FORWARD_LIST_HPP
 #define BURST_TEST_OUTPUT_FORWARD_LIST_HPP
 
-#include <test/output_range.hpp>
+#include <test/output/range.hpp>
 
 #include <forward_list>
 #include <ostream>

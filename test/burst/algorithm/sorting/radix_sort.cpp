@@ -1,5 +1,5 @@
 #include <burst/algorithm/sorting/radix_sort.hpp>
-#include <test/output_pair.hpp>
+#include <test/output/pair.hpp>
 
 #include <boost/iterator/indirect_iterator.hpp>
 #include <boost/range/begin.hpp>
