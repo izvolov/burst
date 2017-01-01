@@ -70,6 +70,25 @@ namespace burst
     {
         return galloping_upper_bound(first, last, value, std::less<>{});
     }
+
+    template <typename RandomAccessRange, typename Value, typename Compare>
+    auto galloping_upper_bound (RandomAccessRange && range, const Value & value, Compare compare)
+    {
+        return
+            galloping_upper_bound
+            (
+                std::begin(std::forward<RandomAccessRange>(range)),
+                std::end(std::forward<RandomAccessRange>(range)),
+                value,
+                std::move(compare)
+            );
+    }
+
+    template <typename RandomAccessRange, typename Value>
+    auto galloping_upper_bound (RandomAccessRange && range, const Value & value)
+    {
+        return galloping_upper_bound(std::forward<RandomAccessRange>(range), value, std::less<>{});
+    }
 } // namespace burst
 
 #endif // BURST_ALGORITHM_GALLOPING_UPPER_BOUND_HPP

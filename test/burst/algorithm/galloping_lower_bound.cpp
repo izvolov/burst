@@ -91,4 +91,14 @@ BOOST_AUTO_TEST_SUITE(galloping_lower_bound)
         BOOST_CHECK(search_result == range.begin() + 3);
         BOOST_CHECK_EQUAL(*search_result, 4);
     }
+
+    BOOST_AUTO_TEST_CASE(works_with_ranges)
+    {
+        const auto range = {1, 2, 3, 4, 5};
+
+        const auto search_result = burst::galloping_lower_bound(range, 3);
+
+        BOOST_CHECK(search_result == range.begin() + 2);
+        BOOST_CHECK_EQUAL(*search_result, 3);
+    }
 BOOST_AUTO_TEST_SUITE_END()
