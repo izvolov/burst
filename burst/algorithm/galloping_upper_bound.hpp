@@ -1,11 +1,13 @@
 #ifndef BURST_ALGORITHM_GALLOPING_UPPER_BOUND_HPP
 #define BURST_ALGORITHM_GALLOPING_UPPER_BOUND_HPP
 
+#include <burst/algorithm/detail/galloping_search.hpp>
+#include <burst/functional/non_strict.hpp>
+
 #include <boost/assert.hpp>
 
 #include <algorithm>
 #include <functional>
-#include <iterator>
 
 namespace burst
 {
@@ -59,28 +61,7 @@ namespace burst
         )
     {
         BOOST_ASSERT(std::is_sorted(first, last, compare));
-
-        const auto distance = std::distance(first, last);
-
-        auto position = static_cast<decltype(distance)>(0);
-        auto step = static_cast<decltype(distance)>(1);
-
-        while (position + step < distance)
-        {
-            const auto current = std::next(first, step);
-            if (not compare(value, *current))
-            {
-                first = std::next(current);
-                position += step + 1;
-                step *= 2;
-            }
-            else
-            {
-                return std::upper_bound(first, current, value, compare);
-            }
-        }
-
-        return std::upper_bound(first, last, value, compare);
+        return detail::galloping_search(first, last, value, non_strict(compare));
     }
 
     template <typename RandomAccessIterator, typename Value>
