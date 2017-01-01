@@ -74,4 +74,21 @@ BOOST_AUTO_TEST_SUITE(galloping_upper_bound)
         BOOST_CHECK(search_result == range.begin() + 3);
         BOOST_CHECK_EQUAL(*search_result, 20);
     }
+
+    BOOST_AUTO_TEST_CASE(elements_must_be_partitioned_with_respect_to_searched_element)
+    {
+        auto range = {3, 2, 1, 4, 7, 6, 5};
+        //                        |
+        //                        |  |
+        //                        |  |  |
+        //                     |  |  |  |
+        //            |        |  |  |  |
+        //            |  |     |  |  |  |
+        //            |  |  |  |  |  |  |
+        //                        ^
+
+        auto search_result = burst::galloping_upper_bound(range.begin(), range.end(), 4);
+        BOOST_CHECK(search_result == range.begin() + 4);
+        BOOST_CHECK_EQUAL(*search_result, 7);
+    }
 BOOST_AUTO_TEST_SUITE_END()

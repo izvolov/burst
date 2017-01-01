@@ -2,6 +2,7 @@
 #define BURST_ALGORITHM_DETAIL_GALLOPING_SEARCH_HPP
 
 #include <algorithm>
+#include <cassert>
 #include <iterator>
 
 namespace burst
@@ -17,6 +18,9 @@ namespace burst
                 Compare compare
             )
         {
+            assert(std::is_partitioned(first, last,
+                [& value, & compare] (const auto & e) {return compare(e, value);}));
+
             const auto distance = std::distance(first, last);
 
             auto position = static_cast<decltype(distance)>(0);

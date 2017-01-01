@@ -3,9 +3,6 @@
 
 #include <burst/algorithm/detail/galloping_search.hpp>
 
-#include <boost/assert.hpp>
-
-#include <algorithm>
 #include <functional>
 
 namespace burst
@@ -59,7 +56,6 @@ namespace burst
             Compare compare
         )
     {
-        BOOST_ASSERT(std::is_sorted(first, last, compare));
         return detail::galloping_search(first, last, value, compare);
     }
 
