@@ -49,7 +49,7 @@ namespace burst
     public:
         bitap_iterator (searcher_type bitap, const text_range_type & text):
             m_bitap(std::move(bitap)),
-            m_hint(0x00),
+            m_hint(0b0),
             m_match(m_bitap.find_first(text.begin(), text.end(), m_hint)),
             m_text_end(text.end())
         {
@@ -57,7 +57,7 @@ namespace burst
 
         bitap_iterator (iterator::end_tag_t, const bitap_iterator & begin):
             m_bitap(begin.m_bitap),
-            m_hint(0x00),
+            m_hint(0b0),
             m_match(begin.m_text_end, begin.m_text_end),
             m_text_end(begin.m_text_end)
         {

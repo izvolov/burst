@@ -55,6 +55,6 @@ BOOST_AUTO_TEST_SUITE(element_position_bitmask_table)
             disjunction |= pattern_masks[element];
         }
 
-        BOOST_CHECK_EQUAL(disjunction, (0x01 << pattern.length()) - 1);
+        BOOST_CHECK_EQUAL(disjunction, (0b1 << pattern.length()) - 1);
     }
 BOOST_AUTO_TEST_SUITE_END()

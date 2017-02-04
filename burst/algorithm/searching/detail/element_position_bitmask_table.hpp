@@ -58,7 +58,7 @@ namespace burst
 
                     auto elements_count = std::size_t{0};
 
-                    auto position_indicator = bitmask_type{0x01};
+                    auto position_indicator = bitmask_type{0b1};
                     while (first != last)
                     {
                         m_bitmasks[*first] |= position_indicator;
@@ -92,7 +92,7 @@ namespace burst
                     auto search_result = m_bitmasks.find(element);
                     if (search_result == m_bitmasks.end())
                     {
-                        return 0x00;
+                        return 0b0;
                     }
                     else
                     {
@@ -163,7 +163,7 @@ namespace burst
 
                     auto elements_count = std::size_t{0};
 
-                    auto position_indicator = bitmask_type{0x01};
+                    auto position_indicator = bitmask_type{0b1};
                     while (first != last)
                     {
                         m_bitmasks[static_cast<unsigned char>(*first)] |= position_indicator;
