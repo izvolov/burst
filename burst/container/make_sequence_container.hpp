@@ -43,11 +43,13 @@ namespace burst
     auto make_sequence_container (InputRange && values)
     {
         using value_type = typename boost::range_value<InputRange>::type;
+        using std::begin;
+        using std::end;
         return
             SequenceContainer<value_type>
             (
-                std::begin(std::forward<InputRange>(values)),
-                std::end(std::forward<InputRange>(values))
+                begin(std::forward<InputRange>(values)),
+                end(std::forward<InputRange>(values))
             );
     }
 
@@ -62,11 +64,13 @@ namespace burst
     auto make_sequence_container (InputRange && values, const Allocator & allocator)
     {
         using value_type = typename boost::range_value<InputRange>::type;
+        using std::begin;
+        using std::end;
         return
             SequenceContainer<value_type, Allocator>
             (
-                std::begin(std::forward<InputRange>(values)),
-                std::end(std::forward<InputRange>(values)),
+                begin(std::forward<InputRange>(values)),
+                end(std::forward<InputRange>(values)),
                 allocator
             );
     }
@@ -95,11 +99,13 @@ namespace burst
     template <template <typename ...> class SequenceContainer, typename Value, typename InputRange>
     auto make_sequence_container (InputRange && values)
     {
+        using std::begin;
+        using std::end;
         return
             SequenceContainer<Value>
             (
-                std::begin(std::forward<InputRange>(values)),
-                std::end(std::forward<InputRange>(values))
+                begin(std::forward<InputRange>(values)),
+                end(std::forward<InputRange>(values))
             );
     }
 
@@ -119,11 +125,13 @@ namespace burst
     >
     auto make_sequence_container (InputRange && values, const Allocator & allocator)
     {
+        using std::begin;
+        using std::end;
         return
             SequenceContainer<Value, Allocator>
             (
-                std::begin(std::forward<InputRange>(values)),
-                std::end(std::forward<InputRange>(values)),
+                begin(std::forward<InputRange>(values)),
+                end(std::forward<InputRange>(values)),
                 allocator
             );
     }
