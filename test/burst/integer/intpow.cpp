@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_SUITE(intpow)
 
     BOOST_AUTO_TEST_CASE(power_must_be_non_negative)
     {
-        BOOST_CHECK_THROW(burst::intpow(2, -1), std::logic_error);
+        BOOST_CHECK_THROW(burst::intpow(2, -1), std::domain_error);
     }
 
     BOOST_AUTO_TEST_CASE(base_may_be_negative)

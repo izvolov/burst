@@ -47,7 +47,7 @@ namespace burst
 
         return exponent >= 0
             ? detail::intpow_impl(base, exponent)
-            : throw std::logic_error("Отрицательная степень целого числа не может быть представлена целым числом");
+            : throw std::domain_error("Отрицательная степень целого числа не может быть представлена целым числом");
     }
 } // namespace burst
 

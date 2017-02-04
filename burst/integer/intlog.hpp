@@ -53,9 +53,9 @@ namespace burst
                                 static_cast<common_type>(number),
                                 static_cast<common_type>(base)
                             ))
-                        : throw std::logic_error("Логарифм не определён на неположительных числах.")
-                    : throw std::logic_error("Логарифм по основанию 1 не определён.")
-                : throw std::logic_error("Логарифм по неположительному основанию не определён.");
+                        : throw std::domain_error("Логарифм не определён на неположительных числах.")
+                    : throw std::domain_error("Логарифм по основанию 1 не определён.")
+                : throw std::domain_error("Логарифм по неположительному основанию не определён.");
     }
 }
 

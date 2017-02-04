@@ -7,7 +7,7 @@
 BOOST_AUTO_TEST_SUITE(intlog2)
     BOOST_AUTO_TEST_CASE(throws_beyond_the_domain)
     {
-        BOOST_CHECK_THROW(burst::intlog2(0ul), std::logic_error);
+        BOOST_CHECK_THROW(burst::intlog2(0ul), std::domain_error);
     }
 
     BOOST_AUTO_TEST_CASE(intlog2_of_one_is_zero)

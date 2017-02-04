@@ -34,7 +34,7 @@ namespace burst
 
         return integer > 0
             ? detail::intlog2_impl(integer)
-            : throw std::logic_error("Двоичный логарифм не определён на неположительных числах.");
+            : throw std::domain_error("Двоичный логарифм не определён на неположительных числах.");
     }
 }
 
