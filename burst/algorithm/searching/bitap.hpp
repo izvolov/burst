@@ -76,7 +76,8 @@ namespace burst
             ForwardIterator operator () (ForwardIterator corpus_begin, ForwardIterator corpus_end) const
             {
                 using iterated_type = typename std::iterator_traits<ForwardIterator>::value_type;
-                static_assert(std::is_same<iterated_type, value_type>::value, "Тип элементов обыскиваемой последовательности должен совпадать с типом элементов образца.");
+                static_assert(std::is_same<iterated_type, value_type>::value,
+                    "Тип элементов обыскиваемой последовательности должен совпадать с типом элементов образца.");
 
                 return do_search(corpus_begin, corpus_end);
             }
@@ -88,7 +89,8 @@ namespace burst
                 поиска с конца предыдущего вхождения.
              */
             template <typename ForwardIterator>
-            boost::iterator_range<ForwardIterator> find_first
+            boost::iterator_range<ForwardIterator>
+                find_first
                 (
                     ForwardIterator corpus_begin,
                     ForwardIterator corpus_end,
@@ -107,7 +109,8 @@ namespace burst
                 предыдущего совпадения.
              */
             template <typename ForwardIterator>
-            boost::iterator_range<ForwardIterator> find_next
+            boost::iterator_range<ForwardIterator>
+                find_next
                 (
                     ForwardIterator previous_match_begin,
                     ForwardIterator previous_match_end,
@@ -148,7 +151,13 @@ namespace burst
                 поиска.
              */
             template <typename ForwardIterator>
-            ForwardIterator dummy_search (ForwardIterator first, ForwardIterator last, bitmask_type & hint) const
+            ForwardIterator
+                dummy_search
+                (
+                    ForwardIterator first,
+                    ForwardIterator last,
+                    bitmask_type & hint
+                ) const
             {
                 auto dummy_iteration_count = std::size_t{0};
                 while (first != last && dummy_iteration_count < m_bitmask_table->length())
@@ -177,9 +186,17 @@ namespace burst
                 уже посчитана маска-индикатор совпадений — "подсказка" ("hint").
              */
             template <typename ForwardIterator>
-            boost::iterator_range<ForwardIterator> active_search (ForwardIterator match_candidate, ForwardIterator corpus_current, ForwardIterator corpus_end, bitmask_type & hint) const
+            boost::iterator_range<ForwardIterator>
+                active_search
+                (
+                    ForwardIterator match_candidate,
+                    ForwardIterator corpus_current,
+                    ForwardIterator corpus_end,
+                    bitmask_type & hint
+                ) const
             {
-                // Индикатор совпадения — единица на N-м месте в битовой маске, где N — количество элементов в искомом образце.
+                // Индикатор совпадения — единица на N-м месте в битовой маске,
+                // где N — количество элементов в искомом образце.
                 const auto match_indicator = left_shift(bitmask_type{0x01}, m_bitmask_table->length() - 1u);
                 auto & match_column = hint;
 

@@ -53,7 +53,8 @@ namespace burst
                 void initialize (InputIterator first, InputIterator last)
                 {
                     using iterated_type = typename std::iterator_traits<InputIterator>::value_type;
-                    static_assert(std::is_same<iterated_type, key_type>::value, "Неверно задан тип входного элемента.");
+                    static_assert(std::is_same<iterated_type, key_type>::value,
+                        "Неверно задан тип входного элемента.");
 
                     auto elements_count = std::size_t{0};
 
@@ -157,7 +158,8 @@ namespace burst
                 void initialize (InputIterator first, InputIterator last)
                 {
                     using iterated_type = typename std::iterator_traits<InputIterator>::value_type;
-                    static_assert(std::is_integral<iterated_type>::value && sizeof(iterated_type) == 1, "Входной элемент должен быть однобайтовым целым числом.");
+                    static_assert(std::is_integral<iterated_type>::value && sizeof(iterated_type) == 1,
+                        "Входной элемент должен быть однобайтовым целым числом.");
 
                     auto elements_count = std::size_t{0};
 
@@ -178,7 +180,8 @@ namespace burst
                 template <typename Integer>
                 bitmask_type operator [] (Integer element) const
                 {
-                    static_assert(std::is_integral<Integer>::value && sizeof(Integer) == 1, "Входной элемент должен быть однобайтовым целым числом.");
+                    static_assert(std::is_integral<Integer>::value && sizeof(Integer) == 1,
+                        "Входной элемент должен быть однобайтовым целым числом.");
 
                     return m_bitmasks[static_cast<unsigned char>(element)];
                 }
