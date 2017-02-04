@@ -133,8 +133,8 @@ namespace burst
             template <typename ForwardIterator>
             ForwardIterator do_search (ForwardIterator first, ForwardIterator last) const
             {
-                bitmask_type match_column = 0x00;
-                ForwardIterator match_candidate = first;
+                auto match_column = bitmask_type{0x00};
+                auto match_candidate = first;
                 first = dummy_search(first, last, match_column);
                 return active_search(match_candidate, first, last, match_column).begin();
             }
@@ -150,7 +150,7 @@ namespace burst
             template <typename ForwardIterator>
             ForwardIterator dummy_search (ForwardIterator first, ForwardIterator last, bitmask_type & hint) const
             {
-                std::size_t dummy_iteration_count = 0;
+                auto dummy_iteration_count = std::size_t{0};
                 while (first != last && dummy_iteration_count < m_bitmask_table->length())
                 {
                     hint = bit_shift(hint) & (*m_bitmask_table)[*first];
@@ -181,7 +181,7 @@ namespace burst
             {
                 // Индикатор совпадения — единица на N-м месте в битовой маске, где N — количество элементов в искомом образце.
                 const auto match_indicator = left_shift(bitmask_type{0x01}, m_bitmask_table->length() - 1u);
-                bitmask_type & match_column = hint;
+                auto & match_column = hint;
 
                 while (corpus_current != corpus_end && (match_column & match_indicator) == 0)
                 {

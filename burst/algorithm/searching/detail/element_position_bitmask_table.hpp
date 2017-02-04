@@ -1,6 +1,8 @@
 #ifndef BURST_ALGORITHM_SEARCHING_DETAIL_ELEMENT_POSITION_BITMASK_TABLE_HPP
 #define BURST_ALGORITHM_SEARCHING_DETAIL_ELEMENT_POSITION_BITMASK_TABLE_HPP
 
+#include <burst/integer/left_shift.hpp>
+
 #include <array>
 #include <cstddef>
 #include <initializer_list>
@@ -53,15 +55,15 @@ namespace burst
                     using iterated_type = typename std::iterator_traits<InputIterator>::value_type;
                     static_assert(std::is_same<iterated_type, key_type>::value, "Неверно задан тип входного элемента.");
 
-                    std::size_t elements_count = 0;
+                    auto elements_count = std::size_t{0};
 
-                    bitmask_type position_indicator = 0x01;
+                    auto position_indicator = bitmask_type{0x01};
                     while (first != last)
                     {
                         m_bitmasks[*first] |= position_indicator;
 
                         ++first;
-                        position_indicator = static_cast<bitmask_type>(position_indicator << 1);
+                        position_indicator = left_shift(position_indicator, 1u);
                         ++elements_count;
                     }
 
@@ -157,15 +159,15 @@ namespace burst
                     using iterated_type = typename std::iterator_traits<InputIterator>::value_type;
                     static_assert(std::is_integral<iterated_type>::value && sizeof(iterated_type) == 1, "Входной элемент должен быть однобайтовым целым числом.");
 
-                    std::size_t elements_count = 0;
+                    auto elements_count = std::size_t{0};
 
-                    bitmask_type position_indicator = 0x01;
+                    auto position_indicator = bitmask_type{0x01};
                     while (first != last)
                     {
                         m_bitmasks[static_cast<unsigned char>(*first)] |= position_indicator;
 
                         ++first;
-                        position_indicator = static_cast<bitmask_type>(position_indicator << 1);
+                        position_indicator = left_shift(position_indicator, 1u);
                         ++elements_count;
                     }
 
