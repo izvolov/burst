@@ -10,7 +10,7 @@ namespace burst
     namespace detail
     {
         template <typename Compare>
-        struct merge_forwarder_t
+        struct merge_order_forwarder_t
         {
             Compare value;
         };
@@ -20,12 +20,12 @@ namespace burst
             template <typename Compare>
             auto operator () (Compare compare) const
             {
-                return merge_forwarder_t<Compare>{std::move(compare)};
+                return merge_order_forwarder_t<Compare>{std::move(compare)};
             }
         };
 
         template <typename Range, typename Compare>
-        auto operator | (Range && range, merge_forwarder_t<Compare> compare)
+        auto operator | (Range && range, merge_order_forwarder_t<Compare> compare)
         {
             return merge(std::forward<Range>(range), std::move(compare.value));
         }
