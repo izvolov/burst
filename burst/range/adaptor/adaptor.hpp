@@ -1,32 +1,45 @@
 #ifndef BURST_RANGE_ADAPTOR_ADAPTOR_HPP
 #define BURST_RANGE_ADAPTOR_ADAPTOR_HPP
 
+#include <burst/tuple/apply.hpp>
+#include <burst/tuple/forward_tuple.hpp>
+
+#include <tuple>
 #include <type_traits>
 #include <utility>
 
 namespace burst
 {
-    template <typename Adaptor, typename Compare>
+    template <typename Adaptor, typename Tuple>
     struct adaptor_compare_forwarder_t
     {
         Adaptor adaptor;
-        Compare compare;
+        Tuple arguments;
     };
 
-    template <typename Adaptor, typename Compare>
-    constexpr auto make_adaptor_forwarder (Adaptor && adaptor, Compare && compare)
-        -> adaptor_compare_forwarder_t<std::decay_t<Adaptor>, std::decay_t<Compare>>
+    template <typename Adaptor, typename ... Arguments>
+    constexpr auto make_adaptor_forwarder (Adaptor && adaptor, Arguments && ... arguments)
+        ->
+            adaptor_compare_forwarder_t
+            <
+                std::decay_t<Adaptor>,
+                decltype(std::make_tuple(std::forward<Arguments>(arguments)...))
+            >
     {
-        return {std::forward<Adaptor>(adaptor), std::forward<Compare>(compare)};
+        return
+            {
+                std::forward<Adaptor>(adaptor),
+                std::make_tuple(std::forward<Arguments>(arguments)...)
+            };
     }
 
     template <typename Adaptor>
     struct adaptor_trigger_t
     {
-        template <typename Compare>
-        constexpr auto operator () (Compare && compare) const
+        template <typename ... Arguments>
+        constexpr auto operator () (Arguments && ... arguments) const
         {
-            return make_adaptor_forwarder(adaptor, std::forward<Compare>(compare));
+            return make_adaptor_forwarder(adaptor, std::forward<Arguments>(arguments)...);
         }
 
         Adaptor adaptor;
@@ -39,10 +52,19 @@ namespace burst
         return {std::forward<Adaptor>(adaptor)};
     }
 
-    template <typename Range, typename Adaptor, typename Compare>
-    auto operator | (Range && range, adaptor_compare_forwarder_t<Adaptor, Compare> forwarder)
+    template <typename Range, typename Adaptor, typename Tuple>
+    auto operator | (Range && range, adaptor_compare_forwarder_t<Adaptor, Tuple> forwarder)
     {
-        return forwarder.adaptor(std::forward<Range>(range), std::move(forwarder.compare));
+        return
+            apply
+            (
+                forwarder.adaptor,
+                std::tuple_cat
+                (
+                    std::forward_as_tuple(std::forward<Range>(range)),
+                    forward_tuple(std::move(forwarder.arguments))
+                )
+            );
     }
 
     template <typename Range, typename Adaptor>
