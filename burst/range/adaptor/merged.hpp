@@ -25,7 +25,7 @@ namespace burst
         };
 
         template <typename Range, typename Compare>
-        auto operator | (Range && range, detail::merge_forwarder_t<Compare> compare)
+        auto operator | (Range && range, merge_forwarder_t<Compare> compare)
         {
             return merge(std::forward<Range>(range), std::move(compare.value));
         }
