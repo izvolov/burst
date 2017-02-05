@@ -39,6 +39,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     burst/range/adaptor/joined.cpp
     burst/range/adaptor/merged.cpp
     burst/range/adaptor/taken_n.cpp
+    burst/range/adaptor/united.cpp
     burst/range/bitap.cpp
     burst/range/cache_one.cpp
     burst/range/difference.cpp
