@@ -3,7 +3,6 @@
 
 #include <burst/iterator/detail/subset.hpp>
 #include <burst/iterator/end_tag.hpp>
-#include <burst/range/detail/has_advance_begin.hpp>
 
 #include <boost/assert.hpp>
 #include <boost/iterator/indirect_iterator.hpp>
