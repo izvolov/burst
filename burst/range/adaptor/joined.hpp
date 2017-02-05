@@ -1,23 +1,11 @@
 #ifndef BURST_RANGE_ADAPTOR_JOINED_HPP
 #define BURST_RANGE_ADAPTOR_JOINED_HPP
 
+#include <burst/range/adaptor/adaptor.hpp>
 #include <burst/range/join.hpp>
-
-#include <utility>
 
 namespace burst
 {
-    namespace detail
-    {
-        struct join_trigger_t {};
-
-        template <typename Range>
-        auto operator | (Range && range, join_trigger_t)
-        {
-            return join(std::forward<Range>(range));
-        }
-    }
-
     //!     Инструмент для склеивания диапазонов через конвейер.
     /*!
             Вызов
@@ -28,7 +16,7 @@ namespace burst
 
                 `join(ranges)`.
      */
-    constexpr auto joined = detail::join_trigger_t{};
+    constexpr auto joined = make_adaptor_trigger(join);
 } // namespace burst
 
 #endif // BURST_RANGE_ADAPTOR_JOINED_HPP
