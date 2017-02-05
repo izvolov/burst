@@ -35,6 +35,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     burst/iterator/take_n_iterator.cpp
     burst/iterator/union_iterator.cpp
     burst/range/adaptor/cached_one.cpp
+    burst/range/adaptor/intersected.cpp
     burst/range/adaptor/joined.cpp
     burst/range/adaptor/merged.cpp
     burst/range/adaptor/taken_n.cpp
