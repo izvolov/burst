@@ -10,28 +10,28 @@ namespace burst
     namespace detail
     {
         template <typename Compare>
-        struct compare_forwarder_t
+        struct merge_forwarder_t
         {
             Compare value;
         };
 
-        struct compare_trigger_t
+        struct merge_trigger_t
         {
             template <typename Compare>
             auto operator () (Compare compare) const
             {
-                return compare_forwarder_t<Compare>{std::move(compare)};
+                return merge_forwarder_t<Compare>{std::move(compare)};
             }
         };
 
         template <typename Range, typename Compare>
-        auto operator | (Range && range, detail::compare_forwarder_t<Compare> compare)
+        auto operator | (Range && range, detail::merge_forwarder_t<Compare> compare)
         {
             return merge(std::forward<Range>(range), std::move(compare.value));
         }
 
         template <typename Range>
-        auto operator | (Range && range, const compare_trigger_t &)
+        auto operator | (Range && range, const merge_trigger_t &)
         {
             return merge(std::forward<Range>(range));
         }
@@ -49,7 +49,7 @@ namespace burst
                 `merge(range)`
                 `merge(range, std::greater<>{})`.
      */
-    constexpr auto merged = detail::compare_trigger_t{};
+    constexpr auto merged = detail::merge_trigger_t{};
 } // namespace burst
 
 #endif // BURST_RANGE_ADAPTOR_MERGED_HPP
