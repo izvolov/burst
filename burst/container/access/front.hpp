@@ -5,17 +5,22 @@
 
 namespace burst
 {
-    template <class T, std::size_t Size>
-    inline decltype(auto) front (T (& array) [Size])
+    struct front_t
     {
-        return array[0];
-    }
+        template <class T, std::size_t Size>
+        constexpr decltype(auto) operator () (T (& array) [Size]) const
+        {
+            return array[0];
+        }
 
-    template <class Container>
-    inline decltype(auto) front (Container & container)
-    {
-        return container.front();
-    }
+        template <class Container>
+        constexpr decltype(auto) operator () (Container & container) const
+        {
+            return container.front();
+        }
+    };
+
+    constexpr auto front = front_t{};
 } // namespace burst
 
 #endif // BURST_CONTAINER_ACCESS_FRONT_HPP

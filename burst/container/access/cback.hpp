@@ -5,17 +5,22 @@
 
 namespace burst
 {
-    template <class T, std::size_t Size>
-    inline decltype(auto) cback (const T (& array) [Size])
+    struct cback_t
     {
-        return array[Size - 1];
-    }
+        template <class T, std::size_t Size>
+        constexpr decltype(auto) operator () (const T (& array) [Size]) const
+        {
+            return array[Size - 1];
+        }
 
-    template <class Container>
-    inline decltype(auto) cback (const Container & container)
-    {
-        return container.back();
-    }
+        template <class Container>
+        constexpr decltype(auto) operator () (const Container & container) const
+        {
+            return container.back();
+        }
+    };
+
+    constexpr auto cback = cback_t{};
 } // namespace burst
 
 #endif // BURST_CONTAINER_ACCESS_CBACK_HPP

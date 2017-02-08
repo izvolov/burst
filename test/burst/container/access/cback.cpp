@@ -34,4 +34,12 @@ BOOST_AUTO_TEST_SUITE(cback)
         int array[] = {1, 2, 3};
         BOOST_CHECK_EQUAL(std::addressof(burst::cback(array)), array + 2);
     }
+
+    BOOST_AUTO_TEST_CASE(is_a_functional_object)
+    {
+        const auto v = burst::make_vector({1, 2, 3});
+        const auto cb = burst::cback;
+
+        BOOST_CHECK_EQUAL(cb(v), 3);
+    }
 BOOST_AUTO_TEST_SUITE_END()

@@ -45,4 +45,12 @@ BOOST_AUTO_TEST_SUITE(front)
         burst::front(array) = 'q';
         BOOST_CHECK_EQUAL(array[0], 'q');
     }
+
+    BOOST_AUTO_TEST_CASE(is_a_functional_object)
+    {
+        const auto v = burst::make_vector({1, 2, 3});
+        const auto f = burst::front;
+
+        BOOST_CHECK_EQUAL(f(v), 1);
+    }
 BOOST_AUTO_TEST_SUITE_END()
