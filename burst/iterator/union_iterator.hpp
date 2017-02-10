@@ -1,7 +1,8 @@
 #ifndef BURST_ITERATOR_UNION_ITERATOR_HPP
 #define BURST_ITERATOR_UNION_ITERATOR_HPP
 
-#include <burst/iterator/detail/front_value_compare.hpp>
+#include <burst/container/access/front.hpp>
+#include <burst/functional/each.hpp>
 #include <burst/iterator/detail/prevent_writing.hpp>
 #include <burst/iterator/end_tag.hpp>
 
@@ -141,12 +142,12 @@ namespace burst
         void maintain_invariant ()
         {
             remove_empty_ranges();
-            std::sort(m_begin, m_end, detail::compare_by_front_value(m_compare));
+            std::sort(m_begin, m_end, each(front) | m_compare);
         }
 
         void increment ()
         {
-            auto current_union_end = std::upper_bound(m_begin, m_end, *m_begin, detail::compare_by_front_value(m_compare));
+            auto current_union_end = std::upper_bound(m_begin, m_end, *m_begin, each(front) | m_compare);
             std::for_each(m_begin, current_union_end,
                 [] (auto & range)
                 {

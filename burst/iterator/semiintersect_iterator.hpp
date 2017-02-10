@@ -1,7 +1,8 @@
 #ifndef BURST_ITERATOR_SEMIINTERSECT_ITERATOR_HPP
 #define BURST_ITERATOR_SEMIINTERSECT_ITERATOR_HPP
 
-#include <burst/iterator/detail/front_value_compare.hpp>
+#include <burst/container/access/front.hpp>
+#include <burst/functional/each.hpp>
 #include <burst/iterator/detail/prevent_writing.hpp>
 #include <burst/iterator/end_tag.hpp>
 #include <burst/range/skip_to_lower_bound.hpp>
@@ -160,11 +161,7 @@ namespace burst
          */
         void maintain_invariant ()
         {
-            std::nth_element
-            (
-                m_begin, semiintersection_candidate(), m_end,
-                detail::compare_by_front_value(m_compare)
-            );
+            std::nth_element(m_begin, semiintersection_candidate(), m_end, each(front) | m_compare);
         }
 
         //!     Продвижение к следующему полупересечению.
@@ -227,11 +224,7 @@ namespace burst
                         });
 
             auto last_equal_to_candidate = candidate + boost::count(front_values, candidate->front());
-            std::nth_element
-            (
-                candidate, last_equal_to_candidate, m_end,
-                detail::compare_by_front_value(m_compare)
-            );
+            std::nth_element(candidate, last_equal_to_candidate, m_end, each(front) | m_compare);
 
             return std::next(last_equal_to_candidate);
         }

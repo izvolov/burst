@@ -1,7 +1,8 @@
 #ifndef BURST_ITERATOR_INTERSECT_ITERATOR_HPP
 #define BURST_ITERATOR_INTERSECT_ITERATOR_HPP
 
-#include <burst/iterator/detail/front_value_compare.hpp>
+#include <burst/container/access/front.hpp>
+#include <burst/functional/each.hpp>
 #include <burst/iterator/detail/prevent_writing.hpp>
 #include <burst/iterator/end_tag.hpp>
 #include <burst/range/skip_to_lower_bound.hpp>
@@ -123,7 +124,7 @@ namespace burst
 
                 m_begin = std::move(first);
                 m_end = std::move(last);
-                std::sort(m_begin, m_end, detail::compare_by_front_value(m_compare));
+                std::sort(m_begin, m_end, each(front) | m_compare);
                 settle();
             }
         }
