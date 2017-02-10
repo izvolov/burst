@@ -1,8 +1,9 @@
 #ifndef BURST_ITERATOR_MERGE_ITERATOR_HPP
 #define BURST_ITERATOR_MERGE_ITERATOR_HPP
 
-#include <burst/iterator/detail/front_value_compare.hpp>
-#include <burst/iterator/detail/invert_compare.hpp>
+#include <burst/container/access/front.hpp>
+#include <burst/functional/each.hpp>
+#include <burst/functional/invert.hpp>
 #include <burst/iterator/end_tag.hpp>
 
 #include <boost/algorithm/cxx11/is_sorted.hpp>
@@ -77,7 +78,7 @@ namespace burst
         explicit merge_iterator (outer_range_iterator first, outer_range_iterator last, Compare compare = Compare()):
             m_begin(std::move(first)),
             m_end(std::move(last)),
-            m_heap_order(compare)
+            m_compare(compare)
         {
             BOOST_ASSERT(std::all_of(m_begin, m_end,
                 [& compare] (const auto & range)
@@ -86,13 +87,13 @@ namespace burst
                 }));
 
             remove_empty_ranges();
-            std::make_heap(m_begin, m_end, m_heap_order);
+            std::make_heap(m_begin, m_end, each(front) | invert(m_compare));
         }
 
         merge_iterator (iterator::end_tag_t, const merge_iterator & begin):
             m_begin(begin.m_begin),
             m_end(begin.m_begin),
-            m_heap_order(begin.m_heap_order)
+            m_compare(begin.m_compare)
         {
         }
 
@@ -108,13 +109,13 @@ namespace burst
 
         void increment ()
         {
-            std::pop_heap(m_begin, m_end, m_heap_order);
+            std::pop_heap(m_begin, m_end, each(front) | invert(m_compare));
             auto & range = *std::prev(m_end);
 
             range.advance_begin(1);
             if (not range.empty())
             {
-                std::push_heap(m_begin, m_end, m_heap_order);
+                std::push_heap(m_begin, m_end, each(front) | invert(m_compare));
             }
             else
             {
@@ -138,10 +139,7 @@ namespace burst
         outer_range_iterator m_begin;
         outer_range_iterator m_end;
 
-        // invert_comparison устраняет путаницу с обратным порядком в пирамиде при работе с
-        // std::make(push, pop)_heap.
-        using heap_order_type = detail::front_value_comparator<detail::invert_comparison<Compare>>;
-        heap_order_type m_heap_order;
+        Compare m_compare;
     };
 
     //!     Функция для создания итератора слияния с предикатом.
