@@ -300,7 +300,7 @@ namespace burst
          */
         void drop_empty_range (outer_range_iterator empty_range)
         {
-            if (range_count() - 1 >= m_min_items)
+            if (range_count() > m_min_items)
             {
                 std::rotate(empty_range, std::next(empty_range), m_end);
                 --m_end;
