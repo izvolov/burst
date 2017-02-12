@@ -33,6 +33,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     burst/iterator/merge_iterator.cpp
     burst/iterator/semiintersect_iterator.cpp
     burst/iterator/subset_iterator.cpp
+    burst/iterator/symmetric_difference_iterator.cpp
     burst/iterator/take_n_iterator.cpp
     burst/iterator/union_iterator.cpp
     burst/range/adaptor/cached_one.cpp
@@ -52,6 +53,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     burst/range/skip_to_lower_bound.cpp
     burst/range/skip_to_upper_bound.cpp
     burst/range/subsets.cpp
+    burst/range/symmetric_difference.cpp
     burst/range/take_n.cpp
     burst/range/unite.cpp
     burst/tuple/apply.cpp
