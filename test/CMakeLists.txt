@@ -3,6 +3,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     burst/algorithm/galloping_upper_bound.cpp
     burst/algorithm/searching/bitap.cpp
     burst/algorithm/searching/element_position_bitmask_table.cpp
+    burst/algorithm/select_min.cpp
     burst/algorithm/sorting/counting_sort.cpp
     burst/algorithm/sorting/radix_sort.cpp
     burst/algorithm/sum.cpp
