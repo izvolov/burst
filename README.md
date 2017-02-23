@@ -33,6 +33,7 @@ Burst
     4. [Полупересечение](#semiintersect)
     5. [Объединение](#union)
     6. [Разность](#difference)
+    7. [Симметрическая разность](#symmetric-difference)
 4. [Рабочие инструменты](#utilities)
     1. [Конструирование контейнеров с выводом типа](#inferring-constructors)
 
@@ -310,6 +311,32 @@ Burst
     В заголовке
     ```c++
     #include <burst/range/difference.hpp>
+    ```
+
+* <a name="symmetric-difference"/> Симметрическая разность
+
+    Производит ленивую симметрическую разность двух упорядоченных множеств.
+    Создаёт упорядоченный диапазон, пробегающийся по всем элементам, которые есть в нечётном числе входных множеств.
+
+    Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`first`, `second`, `third` и `fourth`) остаются нетронутыми.
+
+    ```c++
+    const auto  first = burst::make_vector({1, 2, 3, 4      });
+    const auto second = burst::make_vector({1, 2, 3,    5, 5});
+    const auto  third = burst::make_vector({1,    3, 4, 5   });
+    const auto fourth = burst::make_vector({1, 2,    4      });
+    //                                         ^  ^  ^     ^
+    auto ranges = burst::make_range_vector(first, second, third, fourth);
+
+    const auto difference = burst::symmetric_difference(ranges);
+
+    auto result = {2, 3, 4, 5};
+    assert(difference == result);
+    ```
+
+    В заголовке
+    ```c++
+    #include <burst/range/symmetric_difference.hpp>
     ```
 
 ### <a name="utilities"/> Рабочие инструменты
