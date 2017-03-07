@@ -31,6 +31,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     burst/iterator/intersect_iterator.cpp
     burst/iterator/join_iterator.cpp
     burst/iterator/merge_iterator.cpp
+    burst/iterator/owning_iterator.cpp
     burst/iterator/semiintersect_iterator.cpp
     burst/iterator/subset_iterator.cpp
     burst/iterator/symmetric_difference_iterator.cpp
