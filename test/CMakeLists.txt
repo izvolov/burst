@@ -41,6 +41,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     burst/range/adaptor/intersected.cpp
     burst/range/adaptor/joined.cpp
     burst/range/adaptor/merged.cpp
+    burst/range/adaptor/owned_as_range.cpp
     burst/range/adaptor/semiintersected.cpp
     burst/range/adaptor/symmetric_differenced.cpp
     burst/range/adaptor/taken_n.cpp
