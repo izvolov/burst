@@ -51,6 +51,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     burst/range/intersect.cpp
     burst/range/join.cpp
     burst/range/merge.cpp
+    burst/range/own_as_range.cpp
     burst/range/semiintersect.cpp
     burst/range/skip_to_lower_bound.cpp
     burst/range/skip_to_upper_bound.cpp
