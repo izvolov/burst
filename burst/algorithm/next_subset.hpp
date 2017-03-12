@@ -27,14 +27,13 @@ namespace burst
             typename ForwardIterator2,
             typename Compare
         >
-        ForwardIterator1 fill_subset
-                (
-                    ForwardIterator1 subset_begin,
-                    ForwardIterator1 subset_end,
-                    ForwardIterator2 sequence_begin,
-                    ForwardIterator2 sequence_end,
-                    Compare compare
-                )
+        ForwardIterator1
+            fill_subset
+            (
+                ForwardIterator1 subset_begin, ForwardIterator1 subset_end,
+                ForwardIterator2 sequence_begin, ForwardIterator2 sequence_end,
+                Compare compare
+            )
         {
             while (sequence_begin != sequence_end && subset_begin != subset_end)
             {
@@ -58,14 +57,13 @@ namespace burst
             [subset_begin, subset_end).
          */
         template <typename BidirectionalIterator, typename ForwardIterator, typename Compare>
-        BidirectionalIterator next_fixed_size_subset
-                (
-                    BidirectionalIterator subset_begin,
-                    BidirectionalIterator subset_end,
-                    ForwardIterator /* sequence_begin */,
-                    ForwardIterator sequence_end,
-                    Compare compare
-                )
+        BidirectionalIterator
+            next_fixed_size_subset
+            (
+                BidirectionalIterator subset_begin, BidirectionalIterator subset_end,
+                ForwardIterator /* sequence_begin */, ForwardIterator sequence_end,
+                Compare compare
+            )
         {
             auto subset_rbegin = std::make_reverse_iterator(subset_end);
             auto subset_rend = std::make_reverse_iterator(subset_begin);
@@ -76,7 +74,8 @@ namespace burst
                 *moving = std::upper_bound(*moving, sequence_end, **moving, compare);
                 if (*moving != sequence_end)
                 {
-                    auto last_filled = fill_subset(std::prev(moving.base()), subset_end, *moving, sequence_end, compare);
+                    auto last_filled =
+                        fill_subset(std::prev(moving.base()), subset_end, *moving, sequence_end, compare);
                     if (last_filled == subset_end)
                     {
                         return subset_end;
