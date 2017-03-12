@@ -1,4 +1,5 @@
 #include <burst/iterator/subset_iterator.hpp>
+#include <test/output/vector.hpp>
 
 #include <boost/range/irange.hpp>
 #include <boost/range/iterator_range.hpp>
@@ -9,6 +10,27 @@
 #include <vector>
 
 BOOST_AUTO_TEST_SUITE(subset_iterator)
+    BOOST_AUTO_TEST_CASE(subset_iterator_end_is_created_using_special_tag)
+    {
+        const auto set = {'a', 'b', 'c'};
+
+        auto subsets_begin = burst::make_subset_iterator(set);
+        auto subsets_end = burst::make_subset_iterator(burst::iterator::end_tag, subsets_begin);
+
+        const auto expected_subsets =
+            std::vector<std::vector<char>>
+            {
+                {'a'}, {'b'}, {'c'},
+                {'a', 'b'}, {'a', 'c'}, {'b', 'c'},
+                {'a', 'b', 'c'}
+            };
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            subsets_begin, subsets_end,
+            std::begin(expected_subsets), std::end(expected_subsets)
+        );
+    }
+
     BOOST_AUTO_TEST_CASE(empty_set_has_no_subsets)
     {
         std::vector<int> set;
