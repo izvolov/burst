@@ -1,7 +1,7 @@
 #ifndef BURST_ITERATOR_SUBSET_ITERATOR_HPP
 #define BURST_ITERATOR_SUBSET_ITERATOR_HPP
 
-#include <burst/iterator/detail/subset.hpp>
+#include <burst/algorithm/next_subset.hpp>
 #include <burst/iterator/end_tag.hpp>
 
 #include <boost/assert.hpp>
@@ -109,7 +109,7 @@ namespace burst
         void increment ()
         {
             const auto new_subset_end =
-                detail::next_subset(m_begin, m_end, subset_begin(), subset_end(), m_compare);
+                next_subset(m_begin, m_end, subset_begin(), subset_end(), m_compare);
             m_subset_size = std::distance(subset_begin(), new_subset_end);
         }
 

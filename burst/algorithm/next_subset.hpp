@@ -1,5 +1,5 @@
-#ifndef BURST_ITERATOR_DETAIL_SUBSET_HPP
-#define BURST_ITERATOR_DETAIL_SUBSET_HPP
+#ifndef BURST_ALGORITHM_NEXT_SUBSET_HPP
+#define BURST_ALGORITHM_NEXT_SUBSET_HPP
 
 #include <algorithm>
 #include <functional>
@@ -88,47 +88,58 @@ namespace burst
 
             return moving.base();
         }
-
-        //!     Переход к следующему подмножеству.
-        /*!
-                Принимает последовательность, подмножества которой нужно перебрать, и подмножество
-            этой последовательности, которое нужно модифицировать, чтобы получить новое
-            подмножество.
-                Также получает отношение порядка на элементах последовательности. Сама
-            последовательность должна быть упорядочена относительно этой операции.
-                Пытается найти новое подмножество и перезаписать им исходное подмножество.
-                Если попытка удалась, то в диапазоне подмножества будет лежать новое действительное
-            подмножество, и будет возвращён итератор на конец нового подмножества, а если не
-            удалась (все подмножества уже перечислены), то возвращается итератор на начало
-            подмножества.
-
-                Важно отметить, что в результате работы функции может быть возвращён итератор после
-            изначального итератора на конец подмножества. Это значит, что в том буфере, в котором
-            лежит само подмножество, должно быть достаточно места для хранения нового подмножества.
-         */
-        template <typename ForwardIterator, typename BidirectionalIterator, typename Compare>
-        BidirectionalIterator
-            next_subset
-            (
-                ForwardIterator sequence_begin, ForwardIterator sequence_end,
-                BidirectionalIterator subset_begin, BidirectionalIterator subset_end,
-                Compare compare
-            )
-        {
-            if (subset_begin == subset_end
-                || next_fixed_size_subset(subset_begin, subset_end, sequence_begin, sequence_end, compare) != subset_end)
-            {
-                ++subset_end;
-                auto last_filled = fill_subset(subset_begin, subset_end, sequence_begin, sequence_end, compare);
-                if (last_filled != subset_end)
-                {
-                    subset_end = subset_begin;
-                }
-            }
-
-            return subset_end;
-        }
     } // namespace detail
+
+    //!     Переход к следующему подмножеству.
+    /*!
+            Принимает последовательность, подмножества которой нужно перебрать, и подмножество
+        этой последовательности, которое нужно модифицировать, чтобы получить новое
+        подмножество.
+            Также получает отношение порядка на элементах последовательности. Сама
+        последовательность должна быть упорядочена относительно этой операции.
+            Пытается найти новое подмножество и перезаписать им исходное подмножество.
+            Если попытка удалась, то в диапазоне подмножества будет лежать новое действительное
+        подмножество, и будет возвращён итератор на конец нового подмножества, а если не
+        удалась (все подмножества уже перечислены), то возвращается итератор на начало
+        подмножества.
+
+            Важно отметить, что в результате работы функции может быть возвращён итератор после
+        изначального итератора на конец подмножества. Это значит, что в том буфере, в котором
+        лежит само подмножество, должно быть достаточно места для хранения нового подмножества.
+     */
+    template <typename ForwardIterator, typename BidirectionalIterator, typename Compare>
+    BidirectionalIterator
+        next_subset
+        (
+            ForwardIterator sequence_begin, ForwardIterator sequence_end,
+            BidirectionalIterator subset_begin, BidirectionalIterator subset_end,
+            Compare compare
+        )
+    {
+        if (subset_begin == subset_end
+            || detail::next_fixed_size_subset(subset_begin, subset_end, sequence_begin, sequence_end, compare) != subset_end)
+        {
+            ++subset_end;
+            auto last_filled = detail::fill_subset(subset_begin, subset_end, sequence_begin, sequence_end, compare);
+            if (last_filled != subset_end)
+            {
+                subset_end = subset_begin;
+            }
+        }
+
+        return subset_end;
+    }
+
+    template <typename ForwardIterator, typename BidirectionalIterator>
+    BidirectionalIterator
+        next_subset
+        (
+            ForwardIterator sequence_begin, ForwardIterator sequence_end,
+            BidirectionalIterator subset_begin, BidirectionalIterator subset_end
+        )
+    {
+        return next_subset(sequence_begin, sequence_end, subset_begin, subset_end, std::less<>{});
+    }
 } // namespace burst
 
-#endif // BURST_ITERATOR_DETAIL_SUBSET_HPP
+#endif // BURST_ALGORITHM_NEXT_SUBSET_HPP
