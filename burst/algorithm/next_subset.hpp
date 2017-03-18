@@ -106,12 +106,12 @@ namespace burst
         изначального итератора на конец подмножества. Это значит, что в том буфере, в котором
         лежит само подмножество, должно быть достаточно места для хранения нового подмножества.
      */
-    template <typename ForwardIterator, typename BidirectionalIterator, typename Compare>
+    template <typename BidirectionalIterator, typename ForwardIterator, typename Compare>
     BidirectionalIterator
         next_subset
         (
-            ForwardIterator sequence_begin, ForwardIterator sequence_end,
             BidirectionalIterator subset_begin, BidirectionalIterator subset_end,
+            ForwardIterator sequence_begin, ForwardIterator sequence_end,
             Compare compare
         )
     {
@@ -129,15 +129,15 @@ namespace burst
         return subset_end;
     }
 
-    template <typename ForwardIterator, typename BidirectionalIterator>
+    template <typename BidirectionalIterator, typename ForwardIterator>
     BidirectionalIterator
         next_subset
         (
-            ForwardIterator sequence_begin, ForwardIterator sequence_end,
-            BidirectionalIterator subset_begin, BidirectionalIterator subset_end
+            BidirectionalIterator subset_begin, BidirectionalIterator subset_end,
+            ForwardIterator sequence_begin, ForwardIterator sequence_end
         )
     {
-        return next_subset(sequence_begin, sequence_end, subset_begin, subset_end, std::less<>{});
+        return next_subset(subset_begin, subset_end, sequence_begin, sequence_end, std::less<>{});
     }
 } // namespace burst
 

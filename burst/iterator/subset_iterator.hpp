@@ -109,7 +109,7 @@ namespace burst
         void increment ()
         {
             const auto new_subset_end =
-                next_subset(m_begin, m_end, subset_begin(), subset_end(), m_compare);
+                next_subset(subset_begin(), subset_end(), m_begin, m_end, m_compare);
             m_subset_size = std::distance(subset_begin(), new_subset_end);
         }
 

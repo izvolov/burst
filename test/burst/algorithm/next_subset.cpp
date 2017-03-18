@@ -17,10 +17,10 @@ BOOST_AUTO_TEST_SUITE(next_subset)
         auto new_subset_end =
             burst::next_subset
             (
-                items.begin(),
-                items.end(),
                 subset_container.begin(),
-                subset_container.begin()
+                subset_container.begin(),
+                items.begin(),
+                items.end()
             );
 
         BOOST_CHECK(new_subset_end == subset_container.begin() + 1);
@@ -36,10 +36,10 @@ BOOST_AUTO_TEST_SUITE(next_subset)
         auto new_subset_end =
             burst::next_subset
             (
-                items.begin(),
-                items.end(),
                 subset_container.begin(),
-                subset_container.begin()
+                subset_container.begin(),
+                items.begin(),
+                items.end()
             );
 
         BOOST_CHECK(new_subset_end == subset_container.begin());
@@ -53,8 +53,8 @@ BOOST_AUTO_TEST_SUITE(next_subset)
 
         burst::next_subset
         (
-            items.begin(), items.end(),
             subset_container.begin(), subset_container.begin(),
+            items.begin(), items.end(),
             std::greater<>{}
         );
 
@@ -71,7 +71,7 @@ BOOST_AUTO_TEST_SUITE(next_subset)
         auto current_subset_end =
             burst::next_subset
             (
-                items.begin(), items.end(), subset_container.begin(), subset_container.begin()
+                subset_container.begin(), subset_container.begin(), items.begin(), items.end()
             );
         while (current_subset_end != subset_container.begin())
         {
@@ -85,7 +85,7 @@ BOOST_AUTO_TEST_SUITE(next_subset)
             current_subset_end =
                 burst::next_subset
                 (
-                    items.begin(), items.end(), subset_container.begin(), current_subset_end
+                    subset_container.begin(), current_subset_end, items.begin(), items.end()
                 );
             previous_subset = current_subset;
         }
