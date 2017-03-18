@@ -44,7 +44,7 @@ namespace burst
             {
                 if (compare(*current, *min))
                 {
-                    std::swap(*first, *current);
+                    std::iter_swap(first, current);
                     min = first;
                 }
                 else if (not compare(*min, *current))
@@ -52,7 +52,7 @@ namespace burst
                     ++min;
                     if (min != current)
                     {
-                        std::swap(*min, *current);
+                        std::iter_swap(min, current);
                     }
                 }
             }
