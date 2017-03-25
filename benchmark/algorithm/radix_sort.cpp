@@ -1,4 +1,4 @@
-#include <burst/algorithm/sorting/radix_sort.hpp>
+#include <burst/algorithm/radix_sort.hpp>
 #include <io.hpp>
 
 #include <boost/program_options.hpp>

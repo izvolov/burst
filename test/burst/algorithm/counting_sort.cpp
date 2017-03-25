@@ -1,4 +1,4 @@
-#include <burst/algorithm/sorting/counting_sort.hpp>
+#include <burst/algorithm/counting_sort.hpp>
 
 #include <boost/algorithm/cxx11/all_of.hpp>
 #include <boost/iterator/indirect_iterator.hpp>

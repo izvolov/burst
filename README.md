@@ -60,7 +60,7 @@ Burst
 
     Находится в заголовке
     ```c++
-    #include <burst/algorithm/sorting/radix_sort.hpp>
+    #include <burst/algorithm/radix_sort.hpp>
     ```
 
 * <a name="counting"/> Сортировка подсчётом
@@ -80,7 +80,7 @@ Burst
 
     Находится в заголовке
     ```c++
-    #include <burst/algorithm/sorting/counting_sort.hpp>
+    #include <burst/algorithm/counting_sort.hpp>
     ```
 
 #### <a name="gallop"/> Скачущий поиск

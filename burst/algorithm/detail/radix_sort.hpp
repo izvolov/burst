@@ -1,7 +1,7 @@
-#ifndef BURST_ALGORITHM_SORTING_DETAIL_RADIX_SORT_HPP
-#define BURST_ALGORITHM_SORTING_DETAIL_RADIX_SORT_HPP
+#ifndef BURST_ALGORITHM_DETAIL_RADIX_SORT_HPP
+#define BURST_ALGORITHM_DETAIL_RADIX_SORT_HPP
 
-#include <burst/algorithm/sorting/detail/counting_sort.hpp>
+#include <burst/algorithm/detail/counting_sort.hpp>
 #include <burst/integer/intlog2.hpp>
 #include <burst/integer/right_shift.hpp>
 #include <burst/variadic.hpp>
@@ -158,4 +158,4 @@ namespace burst
     } // namespace detail
 } // namespace burst
 
-#endif // BURST_ALGORITHM_SORTING_DETAIL_RADIX_SORT_HPP
+#endif // BURST_ALGORITHM_DETAIL_RADIX_SORT_HPP

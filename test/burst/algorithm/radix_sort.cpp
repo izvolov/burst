@@ -1,4 +1,4 @@
-#include <burst/algorithm/sorting/radix_sort.hpp>
+#include <burst/algorithm/radix_sort.hpp>
 #include <test/output/pair.hpp>
 
 #include <boost/iterator/indirect_iterator.hpp>

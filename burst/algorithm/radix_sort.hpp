@@ -1,8 +1,8 @@
-#ifndef BURST_ALGORITHM_SORTING_RADIX_SORT_HPP
-#define BURST_ALGORITHM_SORTING_RADIX_SORT_HPP
+#ifndef BURST_ALGORITHM_RADIX_SORT_HPP
+#define BURST_ALGORITHM_RADIX_SORT_HPP
 
-#include <burst/algorithm/sorting/detail/radix_sort.hpp>
-#include <burst/algorithm/sorting/detail/to_unsigned.hpp>
+#include <burst/algorithm/detail/radix_sort.hpp>
+#include <burst/algorithm/detail/to_unsigned.hpp>
 #include <burst/functional/identity.hpp>
 #include <burst/functional/low_byte.hpp>
 
@@ -100,4 +100,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_ALGORITHM_SORTING_RADIX_SORT_HPP
+#endif // BURST_ALGORITHM_RADIX_SORT_HPP

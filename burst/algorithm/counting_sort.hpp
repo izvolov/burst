@@ -1,8 +1,8 @@
-#ifndef BURST_ALGORITHM_SORTING_COUNTING_SORT_HPP
-#define BURST_ALGORITHM_SORTING_COUNTING_SORT_HPP
+#ifndef BURST_ALGORITHM_COUNTING_SORT_HPP
+#define BURST_ALGORITHM_COUNTING_SORT_HPP
 
-#include <burst/algorithm/sorting/detail/counting_sort.hpp>
-#include <burst/algorithm/sorting/detail/to_unsigned.hpp>
+#include <burst/algorithm/detail/counting_sort.hpp>
+#include <burst/algorithm/detail/to_unsigned.hpp>
 #include <burst/functional/identity.hpp>
 
 namespace burst
@@ -123,4 +123,4 @@ namespace burst
     }
 }
 
-#endif // BURST_ALGORITHM_SORTING_COUNTING_SORT_HPP
+#endif // BURST_ALGORITHM_COUNTING_SORT_HPP
