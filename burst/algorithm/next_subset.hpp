@@ -37,7 +37,13 @@ namespace burst
         {
             *subset_begin++ = sequence_begin;
             sequence_begin =
-                std::upper_bound(std::next(sequence_begin), sequence_end, *sequence_begin, compare);
+                std::upper_bound
+                (
+                    std::next(sequence_begin),
+                    sequence_end,
+                    *sequence_begin,
+                    compare
+                );
         }
 
         return subset_begin;
@@ -74,7 +80,12 @@ namespace burst
             if (*moving != sequence_end)
             {
                 auto last_filled =
-                    fill_subset(std::prev(moving.base()), subset_end, *moving, sequence_end, compare);
+                    fill_subset
+                    (
+                        std::prev(moving.base()), subset_end,
+                        *moving, sequence_end,
+                        compare
+                    );
                 if (last_filled == subset_end)
                 {
                     return subset_end;
@@ -113,11 +124,17 @@ namespace burst
             Compare compare
         )
     {
-        if (subset_begin == subset_end
-            || next_fixed_size_subset(subset_begin, subset_end, sequence_begin, sequence_end, compare) != subset_end)
+        if (subset_begin == subset_end ||
+            next_fixed_size_subset
+            (
+                subset_begin, subset_end,
+                sequence_begin, sequence_end,
+                compare
+            ) != subset_end)
         {
             ++subset_end;
-            auto last_filled = fill_subset(subset_begin, subset_end, sequence_begin, sequence_end, compare);
+            auto last_filled =
+                fill_subset(subset_begin, subset_end, sequence_begin, sequence_end, compare);
             if (last_filled != subset_end)
             {
                 subset_end = subset_begin;
