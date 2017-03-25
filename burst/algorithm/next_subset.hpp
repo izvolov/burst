@@ -38,7 +38,8 @@ namespace burst
             while (sequence_begin != sequence_end && subset_begin != subset_end)
             {
                 *subset_begin++ = sequence_begin;
-                sequence_begin = std::upper_bound(sequence_begin, sequence_end, *sequence_begin, compare);
+                sequence_begin =
+                    std::upper_bound(std::next(sequence_begin), sequence_end, *sequence_begin, compare);
             }
 
             return subset_begin;
@@ -71,7 +72,7 @@ namespace burst
             auto moving = subset_rbegin;
             while (moving != subset_rend)
             {
-                *moving = std::upper_bound(*moving, sequence_end, **moving, compare);
+                *moving = std::upper_bound(std::next(*moving), sequence_end, **moving, compare);
                 if (*moving != sequence_end)
                 {
                     auto last_filled =
