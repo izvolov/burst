@@ -60,6 +60,8 @@ namespace burst
         {
         }
 
+        owning_iterator () = default;
+
         void increment ()
         {
             ++m_iterator;
