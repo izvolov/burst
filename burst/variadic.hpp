@@ -1,6 +1,8 @@
 #ifndef BURST_VARIADIC_HPP
 #define BURST_VARIADIC_HPP
 
+#include <initializer_list>
+
 namespace burst
 {
     namespace detail
