@@ -19,6 +19,13 @@ namespace burst
         UnaryFunction f;
     };
 
+    template <typename UnaryFunction>
+    constexpr auto each (UnaryFunction && f)
+        -> each_fn<std::decay_t<UnaryFunction>>
+    {
+        return {std::forward<UnaryFunction>(f)};
+    }
+
     //!     Поэлементная композиция
     /*!
             Принимает произвольный набор аргументов. К каждому аргументу применяется запомненная
@@ -51,13 +58,6 @@ namespace burst
         L l;
         R r;
     };
-
-    template <typename UnaryFunction>
-    constexpr auto each (UnaryFunction && f)
-        -> each_fn<std::decay_t<UnaryFunction>>
-    {
-        return {std::forward<UnaryFunction>(f)};
-    }
 
     //!     Композиция двух поэлементных преобразований
     /*!
