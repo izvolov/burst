@@ -60,7 +60,7 @@ namespace burst
             `make_sequence_container(range, allocator)`
      */
     template <template <typename ...> class SequenceContainer, typename InputRange, typename Allocator,
-        typename = Not<Integer, std::decay_t<InputRange>>>
+        typename = Not<Integer, InputRange>>
     auto make_sequence_container (InputRange && values, const Allocator & allocator)
     {
         using value_type = typename boost::range_value<InputRange>::type;
