@@ -2,6 +2,7 @@
 #define BURST_FUNCTIONAL_FUNC_HPP
 
 #include <burst/functional/compose.hpp>
+#include <burst/functional/invoke.hpp>
 
 #include <utility>
 
@@ -17,19 +18,19 @@ namespace burst
         template <typename ... As>
         constexpr decltype(auto) operator () (As && ... as) const &
         {
-            return f(std::forward<As>(as)...);
+            return invoke(f, std::forward<As>(as)...);
         }
 
         template <typename ... As>
         constexpr decltype(auto) operator () (As && ... as) &
         {
-            return f(std::forward<As>(as)...);
+            return invoke(f, std::forward<As>(as)...);
         }
 
         template <typename ... As>
         constexpr decltype(auto) operator () (As && ... as) &&
         {
-            return std::move(f)(std::forward<As>(as)...);
+            return invoke(std::move(f), std::forward<As>(as)...);
         }
 
         F f;
