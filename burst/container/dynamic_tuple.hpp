@@ -84,9 +84,26 @@ namespace burst
             management::copy(m_objects.begin(), m_objects.end(), that.data(), this->data());
         }
 
+        //!     Копирующее присвоение
+        /*!
+                Уничтожает старые объекты и копирует на их место объекты из входного ДК.
+                Если старой памяти не хватает для размещения новых объектов, то происходит
+            перевыделение. В противном случае перевыделения не происходит.
+
+                Сложность: O(max(this->size(), that.size())).
+         */
         dynamic_tuple & operator = (const dynamic_tuple & that)
         {
-            return *this = dynamic_tuple(that);
+            clear();
+
+            reserve(that.m_volume);
+            management::copy(that.m_objects.begin(), that.m_objects.end(), that.data(), this->data());
+
+            static_assert(std::is_nothrow_move_assignable<object_info_container_type>::value, "");
+            m_objects = that.m_objects;
+            m_volume = that.m_volume;
+
+            return *this;
         }
 
         ~dynamic_tuple ()
