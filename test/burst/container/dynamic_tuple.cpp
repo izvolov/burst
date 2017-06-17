@@ -349,6 +349,28 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
         BOOST_CHECK_EQUAL(dummy::instances_count, 0);
     }
 
+    BOOST_AUTO_TEST_CASE(inlying_objects_are_destroyed_during_copy_assignment)
+    {
+        BOOST_REQUIRE_EQUAL(dummy::instances_count, 0);
+        burst::dynamic_tuple initial(dummy{});
+        BOOST_REQUIRE_EQUAL(dummy::instances_count, 1);
+
+        burst::dynamic_tuple other(1, 3.14, true);
+        initial = other;
+        BOOST_CHECK_EQUAL(dummy::instances_count, 0);
+    }
+
+    BOOST_AUTO_TEST_CASE(inlying_objects_are_destroyed_during_move_assignment)
+    {
+        BOOST_REQUIRE_EQUAL(dummy::instances_count, 0);
+        burst::dynamic_tuple initial(dummy{});
+        BOOST_REQUIRE_EQUAL(dummy::instances_count, 1);
+
+        burst::dynamic_tuple other(1, 3.14, true);
+        initial = std::move(other);
+        BOOST_CHECK_EQUAL(dummy::instances_count, 0);
+    }
+
     BOOST_AUTO_TEST_CASE(copy_construction_is_deep)
     {
         burst::dynamic_tuple initial(std::string("cat"));
@@ -427,7 +449,6 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
             BOOST_REQUIRE_EQUAL(dummy::instances_count, 2);
 
             BOOST_REQUIRE_THROW(copy = t, std::runtime_error);
-            BOOST_CHECK_EQUAL(dummy::instances_count, 2);
         }
         BOOST_CHECK_EQUAL(dummy::instances_count, 0);
     }
@@ -443,7 +464,6 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
             BOOST_REQUIRE_EQUAL(dummy::instances_count, 2);
 
             copy = std::move(t);
-            BOOST_CHECK_EQUAL(dummy::instances_count, 2);
         }
         BOOST_CHECK_EQUAL(dummy::instances_count, 0);
     }

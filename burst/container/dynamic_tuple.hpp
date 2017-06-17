@@ -59,8 +59,18 @@ namespace burst
 
         dynamic_tuple (dynamic_tuple &&) = default;
 
+        //!     Переносящее присвоение
+        /*!
+                Заменяет старые объекты объектами из входного ДК. Старые объекты уничтожаются, но
+            память не освобождается.
+                Входной ДК переходит в пустое состоянии.
+
+                Сложность: O(max(size())).
+         */
         dynamic_tuple & operator = (dynamic_tuple && that)
         {
+            clear();
+
             this->swap(that);
             return *this;
         }
