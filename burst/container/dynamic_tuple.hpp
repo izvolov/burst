@@ -76,7 +76,7 @@ namespace burst
         }
 
         dynamic_tuple (const dynamic_tuple & that):
-            m_capacity(that.m_capacity),
+            m_capacity(that.m_volume),
             m_data(std::make_unique<std::int8_t[]>(m_capacity)),
             m_objects(that.m_objects),
             m_volume(that.m_volume)
