@@ -86,10 +86,12 @@ namespace burst
 
         void swap (dynamic_tuple & that)
         {
-            std::swap(this->m_capacity, that.m_capacity);
-            this->m_data.swap(that.m_data);
-            this->m_objects.swap(that.m_objects);
-            std::swap(this->m_volume, that.m_volume);
+            using std::swap;
+
+            swap(this->m_capacity, that.m_capacity);
+            swap(this->m_data, that.m_data);
+            swap(this->m_objects, that.m_objects);
+            swap(this->m_volume, that.m_volume);
         }
 
         //!     Обеспечить необходимую вместительность контейнера.
