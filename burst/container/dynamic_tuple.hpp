@@ -55,9 +55,31 @@ namespace burst
             }
         }
 
-        dynamic_tuple () = default;
+        //!     Конструктор по-умолчанию
+        /*!
+                Приводит ДК в пустое состояние.
 
-        dynamic_tuple (dynamic_tuple &&) = default;
+                Сложность: O(1).
+         */
+        dynamic_tuple ():
+            m_capacity(0),
+            m_data{},
+            m_objects{},
+            m_volume(0)
+        {
+        }
+
+        //!     Переносящий конструктор
+        /*!
+                Забирает данные у входного ДК и оставляет его в пустом состоянии.
+
+                Сложность: O(1).
+         */
+        dynamic_tuple (dynamic_tuple && that):
+            dynamic_tuple()
+        {
+            this->swap(that);
+        }
 
         //!     Переносящее присвоение
         /*!
