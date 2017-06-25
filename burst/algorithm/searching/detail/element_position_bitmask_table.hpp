@@ -106,12 +106,6 @@ namespace burst
                     return m_sequence_length;
                 }
 
-                //!     Количество уникальных элементов исходной последовательности.
-                std::size_t size () const
-                {
-                    return m_bitmasks.size();
-                }
-
             private:
                 map_type m_bitmasks;
                 std::size_t m_sequence_length;
@@ -190,12 +184,6 @@ namespace burst
                 std::size_t length () const
                 {
                     return m_sequence_length;
-                }
-
-                //!     Количество уникальных элементов исходной последовательности.
-                std::size_t size () const
-                {
-                    return m_bitmasks.size();
                 }
 
             private:
