@@ -34,14 +34,18 @@ namespace burst
             где `n_i = map(preimage_i)`.
          */
         template <typename ForwardIterator, typename Map, typename RandomAccessIterator>
-        void collect (ForwardIterator first, ForwardIterator last, Map map, RandomAccessIterator counters, RandomAccessIterator counters_end)
+        void collect (ForwardIterator first, ForwardIterator last, Map map, RandomAccessIterator counters)
         {
+            using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
+            using traits = counting_sort_traits<value_type, Map>;
+
             std::for_each(first, last,
                 [& counters, & map] (const auto & preimage)
                 {
                     ++counters[map(preimage)];
                 });
 
+            const auto counters_end = counters + traits::value_range;
             std::partial_sum(counters, counters_end, counters);
         }
 
@@ -77,7 +81,7 @@ namespace burst
             // Единица для дополнительного нуля в начале массива.
             difference_type counters[traits::value_range + 1] = {0};
 
-            collect(first, last, map, std::next(std::begin(counters)), std::end(counters));
+            collect(first, last, map, std::next(std::begin(counters)));
             dispose(first, last, result, map, std::begin(counters));
 
             return result + burst::cback(counters);
