@@ -53,6 +53,8 @@ namespace burst
         /*!
                 Расставляет сортируемые элементы в выходной диапазон в соответствии с известным
             массивом счётчиков.
+                Важно: в каждый момент времени счётчик `counters[i]` задаёт наименьшую позицию
+            элемента `i` в выходном диапазоне.
          */
         template <typename ForwardIterator, typename RandomAccessIterator1, typename Map, typename RandomAccessIterator2>
         void dispose (ForwardIterator first, ForwardIterator last, RandomAccessIterator1 result, Map map, RandomAccessIterator2 counters)
@@ -61,6 +63,22 @@ namespace burst
                 [& result, & counters, & map] (auto && preimage)
                 {
                     auto index = counters[map(preimage)]++;
+                    result[index] = std::forward<decltype(preimage)>(preimage);
+                });
+        }
+
+        //      Расставить по местам при проходе в обратном порядке
+        /*!
+                Отличается инвариантом счётчиков: в каждый момент времени счётчик `counters[i]`
+            задаёт следующую позицию после наибольшей позиции элемента `i` в выходном диапазоне.
+         */
+        template <typename BidirectionalIterator, typename RandomAccessIterator1, typename Map, typename RandomAccessIterator2>
+        void dispose_backward (BidirectionalIterator first, BidirectionalIterator last, RandomAccessIterator1 result, Map map, RandomAccessIterator2 counters)
+        {
+            std::for_each(std::make_reverse_iterator(last), std::make_reverse_iterator(first),
+                [& result, & counters, & map] (auto && preimage)
+                {
+                    auto index = --counters[map(preimage)];
                     result[index] = std::forward<decltype(preimage)>(preimage);
                 });
         }
