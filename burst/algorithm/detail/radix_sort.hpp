@@ -52,16 +52,19 @@ namespace burst
             };
         }
 
-        template <typename ForwardIterator, typename Map, typename Radix, typename Array, std::size_t ... Radices>
-        void collect_impl (ForwardIterator first, ForwardIterator last, Map map, Radix radix, Array & counters, std::index_sequence<Radices...>)
+        template <typename ForwardIterator, typename Map, typename Radix, typename RandomAccessIterator, std::size_t ... Radices>
+        void collect_impl (ForwardIterator first, ForwardIterator last, Map map, Radix radix, RandomAccessIterator counters, std::index_sequence<Radices...>)
         {
+            using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
+            constexpr auto radix_value_range = radix_sort_traits<value_type, Map, Radix>::radix_value_range;
+
             std::for_each(first, last,
                 [& counters, & map, & radix] (const auto & value)
                 {
                     BURST_EXPAND_VARIADIC(++counters[Radices][nth_radix(Radices, map, radix)(value)]);
                 });
 
-            BURST_EXPAND_VARIADIC(std::partial_sum(std::begin(counters[Radices]), std::end(counters[Radices]), std::begin(counters[Radices])));
+            BURST_EXPAND_VARIADIC(std::partial_sum(counters[Radices], counters[Radices] + radix_value_range, counters[Radices]));
         }
 
         //!     Собрать счётчики сразу для всех разрядов.
@@ -69,8 +72,8 @@ namespace burst
                 Для каждого сортируемого числа подсчитывает количество элементов, которые меньше
             либо равны этому числу.
          */
-        template <typename ForwardIterator, typename Map, typename Radix, typename Array>
-        void collect (ForwardIterator first, ForwardIterator last, Map map, Radix radix, Array & counters)
+        template <typename ForwardIterator, typename Map, typename Radix, typename RandomAccessIterator>
+        void collect (ForwardIterator first, ForwardIterator last, Map map, Radix radix, RandomAccessIterator counters)
         {
             using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
             constexpr auto radix_count = radix_sort_traits<value_type, Map, Radix>::radix_count;
