@@ -41,15 +41,16 @@ def parse_command_line (options):
     parser.add_argument('--begin', type=int, default=10)
     parser.add_argument('--end', type=int, default=100)
     parser.add_argument('--step', type=int, default=10)
-    parser.add_argument('--file', type=str, default='intsort')
+    parser.add_argument('--prefix', type=str, default='intsort')
     parser.add_argument('--integer', type=str, default='uint32')
     args = parser.parse_args(options[1:])
-    return args.begin, args.end, args.step, args.file, args.integer
+    return args.begin, args.end, args.step, args.prefix, args.integer
 
 max_attempts = 10000000
 
-begin, end, step, file_name, integer_type = parse_command_line(sys.argv)
+begin, end, step, prefix, integer_type = parse_command_line(sys.argv)
 lengths = range(begin, end, step)
 
 measurements = measure(lengths, max_attempts, integer_type)
+file_name = '_'.join((prefix, str(begin), str(end), str(step), integer_type))
 plot(lengths, measurements, integer_type, file_name + '.png')
