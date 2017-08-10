@@ -99,12 +99,17 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
         BOOST_CHECK_EQUAL(t.size(), 4);
     }
 
-    BOOST_AUTO_TEST_CASE(volume_of_newly_created_tuple_with_some_elements_is_equal_to_size_of_respective_struct)
+    BOOST_AUTO_TEST_CASE(volume_of_tuple_constructed_from_some_elements_is_equal_to_volume_of_tuple_with_those_elements_consequently_pushed_back)
     {
-        const auto t = burst::dynamic_tuple(42, 3.14, std::string("123"));
+        const auto constructed = burst::dynamic_tuple(42, 3.14, std::string("123"), true);
 
-        using respective = struct{int a; double b; std::string c;};
-        BOOST_CHECK_EQUAL(t.volume(), sizeof(respective));
+        auto pushed_back = burst::dynamic_tuple{};
+        pushed_back.push_back(42);
+        pushed_back.push_back(3.14);
+        pushed_back.push_back(std::string("123"));
+        pushed_back.push_back(true);
+
+        BOOST_CHECK_EQUAL(constructed.volume(), pushed_back.volume());
     }
 
     BOOST_AUTO_TEST_CASE(capacity_of_newly_created_tuple_with_some_elements_is_greater_than_or_equal_to_volume)
@@ -525,17 +530,27 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
         BOOST_CHECK_EQUAL(t.size(), 2);
     }
 
-    BOOST_AUTO_TEST_CASE(push_back_increases_volume_to_size_of_respective_struct)
+    BOOST_AUTO_TEST_CASE(push_back_increases_volume_to_alignment_of_the_inserted_element_plus_its_size)
     {
         auto t = burst::dynamic_tuple{};
 
-        t.push_back(1);
-        t.push_back(3.14);
-        t.push_back(true);
-        t.push_back(std::string("qwe"));
+        using aligned_by_4 = struct alignas(4) {char a[4];};
+        using aligned_by_8 = struct alignas(8) {char a[8];};
 
-        using respective = struct{int a; double b; bool c; std::string d;};
-        BOOST_CHECK_EQUAL(t.volume(), sizeof(respective));
+        t.push_back(aligned_by_4{});
+        BOOST_CHECK_EQUAL(t.volume(), 4);
+
+        // Вставка элемента, выравнивание которого больше размера предыдущего элемента
+        {
+            t.push_back(aligned_by_8{});
+            BOOST_CHECK_EQUAL(t.volume(), 16);
+        }
+
+        // Вставка элемента, размер которого меньше текущего выравнивания
+        {
+            t.push_back('a');
+            BOOST_CHECK_EQUAL(t.volume(), 17);
+        }
     }
 
     BOOST_AUTO_TEST_CASE(capacity_does_not_change_after_pop_back)
