@@ -1,8 +1,8 @@
 #ifndef BURST_CONTAINER_DYNAMIC_TUPLE_HPP
 #define BURST_CONTAINER_DYNAMIC_TUPLE_HPP
 
-#include <burst/algorithm/sum.hpp>
 #include <burst/container/detail/dynamic_tuple_management.hpp>
+#include <burst/type_traits/aligned_volume.hpp>
 #include <burst/variadic.hpp>
 
 #include <boost/assert.hpp>
@@ -41,7 +41,7 @@ namespace burst
     public:
         template <typename ... Types>
         explicit dynamic_tuple (Types ... objects):
-            m_capacity(sum({sizeof(Types) + alignof(Types)...})),
+            m_capacity(aligned_volume<Types...>::value),
             m_data(std::make_unique<std::int8_t[]>(m_capacity))
         {
             try
