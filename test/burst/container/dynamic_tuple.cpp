@@ -278,6 +278,26 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
         BOOST_CHECK(t.get<std::vector<char>>(1).empty());
     }
 
+    BOOST_AUTO_TEST_CASE(moved_dynamic_tuple_is_actually_moved_and_is_not_emplaced_back)
+    {
+        burst::dynamic_tuple moved(2.71, 3, false);
+        burst::dynamic_tuple constructed(std::move(moved));
+        BOOST_CHECK_EQUAL(constructed.size(), 3);
+    }
+
+    BOOST_AUTO_TEST_CASE(copied_dynamic_tuple_is_actually_copied_and_is_not_emplaced_back)
+    {
+        burst::dynamic_tuple copied(2.71, 3, false);
+        burst::dynamic_tuple constructed(copied);
+        BOOST_CHECK_EQUAL(constructed.size(), 3);
+    }
+
+    BOOST_AUTO_TEST_CASE(tuple_of_tuples_is_possible)
+    {
+        burst::dynamic_tuple t(burst::dynamic_tuple{}, burst::dynamic_tuple{});
+        BOOST_CHECK_EQUAL(t.size(), 2);
+    }
+
     BOOST_AUTO_TEST_CASE(inlying_objects_move_together_with_dynamic_tuple)
     {
         BOOST_REQUIRE_EQUAL(dummy::instances_count, 0);

@@ -39,14 +39,21 @@ namespace burst
         using size_type = typename object_info_container_type::size_type;
 
     public:
-        template <typename ... Types>
-        explicit dynamic_tuple (Types ... objects):
-            m_capacity(aligned_volume<Types...>::value),
+        template <typename Head, typename ... Tail,
+            typename =
+                std::enable_if_t
+                <
+                    sizeof...(Tail) != 0 ||
+                    not std::is_same<std::decay_t<Head>, dynamic_tuple>::value
+                >>
+        explicit dynamic_tuple (Head && head, Tail && ... tail):
+            m_capacity(aligned_volume<Head, Tail...>::value),
             m_data(std::make_unique<std::int8_t[]>(m_capacity))
         {
             try
             {
-                BURST_EXPAND_VARIADIC(push_back_no_realloc(std::move(objects)));
+                push_back_no_realloc(std::forward<Head>(head));
+                BURST_EXPAND_VARIADIC(push_back_no_realloc(std::forward<Tail>(tail)));
             }
             catch (...)
             {
