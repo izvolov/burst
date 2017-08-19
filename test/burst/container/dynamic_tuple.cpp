@@ -396,6 +396,51 @@ BOOST_AUTO_TEST_SUITE(dynamic_tuple)
         BOOST_CHECK_EQUAL(dummy::instances_count, 0);
     }
 
+    BOOST_AUTO_TEST_CASE(source_is_empty_after_move_construction)
+    {
+        burst::dynamic_tuple source(13, 3.14, true);
+        burst::dynamic_tuple destination(std::move(source));
+        BOOST_CHECK(source.empty());
+    }
+
+    BOOST_AUTO_TEST_CASE(source_is_empty_after_move_assignment)
+    {
+        burst::dynamic_tuple source(std::string("move me"));
+        burst::dynamic_tuple destination(std::string("some items here"));
+        destination = std::move(source);
+        BOOST_CHECK(source.empty());
+    }
+
+    BOOST_AUTO_TEST_CASE(source_size_is_zero_after_move_construction)
+    {
+        burst::dynamic_tuple source(13, 3.14, true);
+        burst::dynamic_tuple destination(std::move(source));
+        BOOST_CHECK_EQUAL(source.size(), 0);
+    }
+
+    BOOST_AUTO_TEST_CASE(source_size_is_zero_after_move_assignment)
+    {
+        burst::dynamic_tuple source(std::string("move me"));
+        burst::dynamic_tuple destination(std::string("some items here"));
+        destination = std::move(source);
+        BOOST_CHECK_EQUAL(source.size(), 0);
+    }
+
+    BOOST_AUTO_TEST_CASE(source_volume_is_zero_after_move_construction)
+    {
+        burst::dynamic_tuple source(13, 3.14, true);
+        burst::dynamic_tuple destination(std::move(source));
+        BOOST_CHECK_EQUAL(source.volume(), 0);
+    }
+
+    BOOST_AUTO_TEST_CASE(source_volume_is_zero_after_move_assignment)
+    {
+        burst::dynamic_tuple source(std::string("move me"));
+        burst::dynamic_tuple destination(std::string("some items here"));
+        destination = std::move(source);
+        BOOST_CHECK_EQUAL(source.volume(), 0);
+    }
+
     BOOST_AUTO_TEST_CASE(copy_construction_is_deep)
     {
         burst::dynamic_tuple initial(std::string("cat"));
