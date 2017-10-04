@@ -70,8 +70,8 @@ namespace burst
             Compare compare
         )
     {
-        auto subset_rbegin = std::make_reverse_iterator(subset_end);
-        auto subset_rend = std::make_reverse_iterator(subset_begin);
+        const auto subset_rbegin = std::make_reverse_iterator(subset_end);
+        const auto subset_rend = std::make_reverse_iterator(subset_begin);
 
         auto moving = subset_rbegin;
         while (moving != subset_rend)
@@ -79,7 +79,7 @@ namespace burst
             *moving = std::upper_bound(std::next(*moving), sequence_end, **moving, compare);
             if (*moving != sequence_end)
             {
-                auto last_filled =
+                const auto last_filled =
                     fill_subset
                     (
                         std::prev(moving.base()), subset_end,
@@ -133,7 +133,7 @@ namespace burst
             ) != subset_end)
         {
             ++subset_end;
-            auto last_filled =
+            const auto last_filled =
                 fill_subset(subset_begin, subset_end, sequence_begin, sequence_end, compare);
             if (last_filled != subset_end)
             {
