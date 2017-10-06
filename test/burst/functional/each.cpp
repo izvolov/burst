@@ -25,6 +25,14 @@ BOOST_AUTO_TEST_SUITE(each)
         BOOST_CHECK_EQUAL(r, 1 + 16 + 81);
     }
 
+    BOOST_AUTO_TEST_CASE(composition_may_be_composed_again)
+    {
+        const auto square = [] (auto x) {return x * x;};
+        auto e = burst::each(square) | burst::sum | square;
+        auto r = e(1, 2, 3);
+        BOOST_CHECK_EQUAL(r, (1 + 4 + 9) * (1 + 4 + 9));
+    }
+
     struct doubler
     {
         doubler (std::size_t & calls):

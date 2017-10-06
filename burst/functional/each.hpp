@@ -87,6 +87,12 @@ namespace burst
     {
         return compose(std::forward<R>(r), std::move(l));
     }
+
+    template <typename UnaryFunction1, typename UnaryFunction2, typename R>
+    constexpr auto operator | (each_compose_fn<UnaryFunction1, UnaryFunction2> l, R && r)
+    {
+        return compose(std::forward<R>(r), std::move(l));
+    }
 } // namespace burst
 
 #endif // BURST_FUNCTIONAL_EACH_HPP
