@@ -210,7 +210,7 @@ namespace burst
                 m_begin(std::move(first)),
                 m_end(std::move(last)),
                 m_outer(m_begin != m_end ? m_begin : outer_range_iterator{}),
-                m_inner(m_outer != m_end ? m_outer->begin() : inner_range_iterator{}),
+                m_inner(m_begin != m_end ? m_outer->begin() : inner_range_iterator{}),
                 m_items_remaining{}
             {
                 if (m_begin != m_end)
