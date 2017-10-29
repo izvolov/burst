@@ -34,6 +34,12 @@ BOOST_AUTO_TEST_SUITE(intceil)
         BOOST_CHECK_EQUAL(burst::intceil(-1, 3), 0);
     }
 
+    BOOST_AUTO_TEST_CASE(intceil_of_a_number_by_1_is_the_same_number)
+    {
+        BOOST_CHECK_EQUAL(burst::intceil(15, 1), 15);
+        BOOST_CHECK_EQUAL(burst::intceil(-3, 1), -3);
+    }
+
     BOOST_AUTO_TEST_CASE(throws_on_non_positive_factor)
     {
         BOOST_CHECK_THROW(burst::intceil(10u, 0ul), std::domain_error);
