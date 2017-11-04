@@ -5,8 +5,6 @@
 #include <burst/type_traits/aligned_volume.hpp>
 #include <burst/variadic.hpp>
 
-#include <boost/assert.hpp>
-
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -452,7 +450,7 @@ namespace burst
         std::int8_t * force_align (const T & object)
         {
             auto creation_place = try_to_align(object);
-            BOOST_ASSERT(creation_place != nullptr);
+            assert(creation_place != nullptr);
 
             return creation_place;
         }
