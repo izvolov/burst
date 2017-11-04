@@ -223,7 +223,12 @@ namespace burst
             Отношение порядка на элементах диапазона выбирается по-умолчанию.
      */
     template <typename ForwardIterator, typename Compare>
-    auto make_subset_iterator (iterator::end_tag_t, const subset_iterator<ForwardIterator, Compare> & begin)
+    auto
+        make_subset_iterator
+        (
+            iterator::end_tag_t,
+            const subset_iterator<ForwardIterator, Compare> & begin
+        )
     {
         return subset_iterator<ForwardIterator, Compare>(iterator::end_tag, begin);
     }

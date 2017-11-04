@@ -43,10 +43,15 @@ namespace burst
             template <typename Value>
             constexpr auto operator () (Value && value) const
             {
-                using integer_type = typename std::decay<typename std::result_of<Map(Value)>::type>::type;
+                using integer_type =
+                    typename std::decay<typename std::result_of<Map(Value)>::type>::type;
                 constexpr const auto min_value = std::numeric_limits<integer_type>::min();
 
-                return static_cast<typename make_unsigned_even_bool<integer_type>::type>(map(std::forward<Value>(value)) ^ min_value);
+                return
+                    static_cast<typename make_unsigned_even_bool<integer_type>::type>
+                    (
+                        map(std::forward<Value>(value)) ^ min_value
+                    );
             }
 
             Map map;

@@ -16,6 +16,9 @@
 #include <memory>
 #include <type_traits>
 
+#define ITERATED_TYPE_MUST_MATCH_SEARCHED_TYPE__ERROR_MESSAGE \
+"Тип элементов обыскиваемой последовательности должен совпадать с типом элементов образца."
+
 namespace burst
 {
     namespace algorithm
@@ -55,14 +58,20 @@ namespace burst
         public:
             template <typename InputIterator>
             bitap (InputIterator pattern_begin, InputIterator pattern_end):
-                m_bitmask_table(std::make_shared<const bitmask_table_type>(pattern_begin, pattern_end))
+                m_bitmask_table
+                (
+                    std::make_shared<const bitmask_table_type>(pattern_begin, pattern_end)
+                )
             {
                 BOOST_ASSERT(m_bitmask_table->length() <= bitmask_size);
             }
 
             template <typename ForwardRange>
             explicit bitap (const ForwardRange & pattern):
-                m_bitmask_table(std::make_shared<const bitmask_table_type>(pattern.begin(), pattern.end()))
+                m_bitmask_table
+                (
+                    std::make_shared<const bitmask_table_type>(pattern.begin(), pattern.end())
+                )
             {
                 BOOST_ASSERT(m_bitmask_table->length() <= bitmask_size);
             }
@@ -74,11 +83,15 @@ namespace burst
                 данный объект, в текст, заданный полуинтервалом [corpus_begin, corpus_end).
              */
             template <typename ForwardIterator>
-            ForwardIterator operator () (ForwardIterator corpus_begin, ForwardIterator corpus_end) const
+            ForwardIterator
+                operator () (ForwardIterator corpus_begin, ForwardIterator corpus_end) const
             {
                 using iterated_type = typename std::iterator_traits<ForwardIterator>::value_type;
-                static_assert(std::is_same<iterated_type, value_type>::value,
-                    "Тип элементов обыскиваемой последовательности должен совпадать с типом элементов образца.");
+                static_assert
+                (
+                    std::is_same<iterated_type, value_type>::value,
+                    ITERATED_TYPE_MUST_MATCH_SEARCHED_TYPE__ERROR_MESSAGE
+                );
 
                 return do_search(corpus_begin, corpus_end);
             }
@@ -98,7 +111,14 @@ namespace burst
                     bitmask_type & hint
                 ) const
             {
-                return active_search(corpus_begin, dummy_search(corpus_begin, corpus_end, hint), corpus_end, hint);
+                return
+                    active_search
+                    (
+                        corpus_begin,
+                        dummy_search(corpus_begin, corpus_end, hint),
+                        corpus_end,
+                        hint
+                    );
             }
 
             //!     Найти следующее вхождение образца в текст.
@@ -125,7 +145,8 @@ namespace burst
                     ++previous_match_begin;
                     ++previous_match_end;
 
-                    return active_search(previous_match_begin, previous_match_end, corpus_end, hint);
+                    return
+                        active_search(previous_match_begin, previous_match_end, corpus_end, hint);
                 }
                 else
                 {
@@ -198,7 +219,8 @@ namespace burst
             {
                 // Индикатор совпадения — единица на N-м месте в битовой маске,
                 // где N — количество элементов в искомом образце.
-                const auto match_indicator = left_shift(bitmask_type{0b1}, m_bitmask_table->length() - 1u);
+                const auto match_indicator =
+                    left_shift(bitmask_type{0b1}, m_bitmask_table->length() - 1u);
                 auto & match_column = hint;
 
                 while (corpus_current != corpus_end && (match_column & match_indicator) == 0)

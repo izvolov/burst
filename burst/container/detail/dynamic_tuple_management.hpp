@@ -127,7 +127,14 @@ namespace burst
         }
 
         template <typename ForwardIterator>
-        void move (ForwardIterator first, ForwardIterator last, std::int8_t * source, std::int8_t * destination)
+        void
+            move
+            (
+                ForwardIterator first,
+                ForwardIterator last,
+                std::int8_t * source,
+                std::int8_t * destination
+            )
         {
             for (auto current = first; current != last; ++current)
             {
@@ -146,7 +153,14 @@ namespace burst
         }
 
         template <typename ForwardIterator>
-        void copy (ForwardIterator first, ForwardIterator last, const std::int8_t * source, std::int8_t * destination)
+        void
+            copy
+            (
+                ForwardIterator first,
+                ForwardIterator last,
+                const std::int8_t * source,
+                std::int8_t * destination
+            )
         {
             for (auto current = first; current != last; ++current)
             {

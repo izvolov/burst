@@ -16,7 +16,11 @@ namespace burst
         template <typename Integer>
         constexpr std::uint8_t operator () (Integer integer) const
         {
-            static_assert(std::is_integral<Integer>::value, "Младший байт можно взять только от целого числа.");
+            static_assert
+            (
+                std::is_integral<Integer>::value,
+                "Младший байт можно взять только от целого числа."
+            );
 
             return static_cast<std::uint8_t>(integer & 0xff);
         }

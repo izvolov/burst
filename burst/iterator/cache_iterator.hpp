@@ -41,7 +41,11 @@ namespace burst
             >
     {
     private:
-        static_assert(not std::is_lvalue_reference<typename std::iterator_traits<Iterator>::reference>::value, "");
+        static_assert
+        (
+            not std::is_lvalue_reference<typename std::iterator_traits<Iterator>::reference>::value,
+            ""
+        );
 
         using base_type =
             boost::iterator_facade

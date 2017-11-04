@@ -43,20 +43,47 @@ namespace burst
         частности, счётчики для сортировки подсчётом вычисляются за один проход для всех разрядов,
         а не отдельным проходом на каждый разряд.
      */
-    template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map, typename Radix>
-    void radix_sort (RandomAccessIterator1 first, RandomAccessIterator1 last, RandomAccessIterator2 buffer, Map map, Radix radix)
+    template
+    <
+        typename RandomAccessIterator1,
+        typename RandomAccessIterator2,
+        typename Map,
+        typename Radix
+    >
+    void
+        radix_sort
+        (
+            RandomAccessIterator1 first,
+            RandomAccessIterator1 last,
+            RandomAccessIterator2 buffer,
+            Map map,
+            Radix radix
+        )
     {
         detail::radix_sort_impl(first, last, buffer, detail::to_unsigned(std::move(map)), radix);
     }
 
     template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map>
-    void radix_sort (RandomAccessIterator1 first, RandomAccessIterator1 last, RandomAccessIterator2 buffer, Map map)
+    void
+        radix_sort
+        (
+            RandomAccessIterator1 first,
+            RandomAccessIterator1 last,
+            RandomAccessIterator2 buffer,
+            Map map
+        )
     {
         radix_sort(first, last, buffer, map, low_byte);
     }
 
     template <typename RandomAccessIterator1, typename RandomAccessIterator2>
-    void radix_sort (RandomAccessIterator1 first, RandomAccessIterator1 last, RandomAccessIterator2 buffer)
+    void
+        radix_sort
+        (
+            RandomAccessIterator1 first,
+            RandomAccessIterator1 last,
+            RandomAccessIterator2 buffer
+        )
     {
         radix_sort(first, last, buffer, identity, low_byte);
     }
@@ -66,7 +93,13 @@ namespace burst
             Отличается только тем, что сортируемые значение задаются не парой итераторов, а
         диапазоном.
      */
-    template <typename RandomAccessRange, typename RandomAccessIterator, typename Map, typename Radix>
+    template
+    <
+        typename RandomAccessRange,
+        typename RandomAccessIterator,
+        typename Map,
+        typename Radix
+    >
     void radix_sort (RandomAccessRange && range, RandomAccessIterator buffer, Map map, Radix radix)
     {
         radix_sort

@@ -101,7 +101,12 @@ namespace burst
     }
 
     template <typename Value, typename Read>
-    auto make_binary_istream_iterator (iterator::end_tag_t, const binary_istream_iterator<Value, Read> &)
+    auto
+        make_binary_istream_iterator
+        (
+            iterator::end_tag_t,
+            const binary_istream_iterator<Value, Read> &
+        )
     {
         return binary_istream_iterator<Value, Read>{};
     }

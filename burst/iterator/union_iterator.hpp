@@ -146,7 +146,8 @@ namespace burst
 
         void increment ()
         {
-            auto current_union_end = std::upper_bound(m_begin, m_end, *m_begin, each(front) | m_compare);
+            auto current_union_end =
+                std::upper_bound(m_begin, m_end, *m_begin, each(front) | m_compare);
             std::for_each(m_begin, current_union_end,
                 [] (auto & range)
                 {

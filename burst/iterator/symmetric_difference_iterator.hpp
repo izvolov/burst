@@ -123,7 +123,11 @@ namespace burst
             settle();
         }
 
-        symmetric_difference_iterator (iterator::end_tag_t, const symmetric_difference_iterator & begin):
+        symmetric_difference_iterator
+        (
+            iterator::end_tag_t,
+            const symmetric_difference_iterator & begin
+        ):
             m_begin(begin.m_begin),
             m_end(begin.m_begin),
             m_min_end(begin.m_begin),
@@ -247,7 +251,8 @@ namespace burst
     template <typename RandomAccessIterator>
     auto make_symmetric_difference_iterator (RandomAccessIterator first, RandomAccessIterator last)
     {
-        return symmetric_difference_iterator<RandomAccessIterator>(std::move(first), std::move(last));
+        return
+            symmetric_difference_iterator<RandomAccessIterator>(std::move(first), std::move(last));
     }
 
     template <typename RandomAccessRange>
@@ -276,7 +281,8 @@ namespace burst
             const symmetric_difference_iterator<RandomAccessIterator, Compare> & begin
         )
     {
-        return symmetric_difference_iterator<RandomAccessIterator, Compare>(iterator::end_tag, begin);
+        return
+            symmetric_difference_iterator<RandomAccessIterator, Compare>(iterator::end_tag, begin);
     }
 } // namespace burst
 

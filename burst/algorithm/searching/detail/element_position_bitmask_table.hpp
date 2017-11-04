@@ -31,7 +31,11 @@ namespace burst
 
             public:
                 template <typename InputIterator>
-                element_position_bitmask_table (InputIterator sequence_begin, InputIterator sequence_end)
+                element_position_bitmask_table
+                (
+                    InputIterator sequence_begin,
+                    InputIterator sequence_end
+                )
                 {
                     initialize(sequence_begin, sequence_end);
                 }
@@ -127,7 +131,11 @@ namespace burst
 
             public:
                 template <typename InputIterator>
-                element_position_bitmask_table (InputIterator sequence_begin, InputIterator sequence_end):
+                element_position_bitmask_table
+                (
+                    InputIterator sequence_begin,
+                    InputIterator sequence_end
+                ):
                     m_bitmasks{{0}}
                 {
                     initialize(sequence_begin, sequence_end);
@@ -151,8 +159,11 @@ namespace burst
                 void initialize (InputIterator first, InputIterator last)
                 {
                     using iterated_type = typename std::iterator_traits<InputIterator>::value_type;
-                    static_assert(std::is_integral<iterated_type>::value && sizeof(iterated_type) == 1,
-                        "Входной элемент должен быть однобайтовым целым числом.");
+                    static_assert
+                    (
+                        std::is_integral<iterated_type>::value && sizeof(iterated_type) == 1,
+                        "Входной элемент должен быть однобайтовым целым числом."
+                    );
 
                     auto elements_count = std::size_t{0};
 

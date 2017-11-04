@@ -257,9 +257,16 @@ namespace burst
             while (node_index < m_values.size())
             {
                 const_iterator node_begin = begin() + static_cast<difference_type>(node_index);
-                const_iterator node_end = node_begin + std::min(static_cast<difference_type>(m_arity - 1), std::distance(node_begin, end()));
+                const_iterator node_end =
+                    node_begin +
+                    std::min
+                    (
+                        static_cast<difference_type>(m_arity - 1),
+                        std::distance(node_begin, end())
+                    );
 
-                const_iterator search_result = std::lower_bound(node_begin, node_end, value, m_compare);
+                const_iterator search_result =
+                    std::lower_bound(node_begin, node_end, value, m_compare);
                 if (search_result != node_end && not m_compare(value, *search_result))
                 {
                     return search_result;
@@ -289,7 +296,11 @@ namespace burst
             {
                 value_container_type buffer(range.begin(), range.end());
                 std::sort(buffer.begin(), buffer.end(), m_compare);
-                buffer.erase(std::unique(buffer.begin(), buffer.end(), not_fn(m_compare)), buffer.end());
+                buffer.erase
+                (
+                    std::unique(buffer.begin(), buffer.end(), not_fn(m_compare)),
+                    buffer.end()
+                );
 
                 initialize_trusted(boost::make_iterator_range(buffer));
             }
@@ -310,7 +321,10 @@ namespace burst
         template <typename RandomAccessRange>
         void initialize_trusted (const RandomAccessRange & range)
         {
-            BOOST_ASSERT(std::adjacent_find(range.begin(), range.end(), not_fn(m_compare)) == range.end());
+            BOOST_ASSERT
+            (
+                std::adjacent_find(range.begin(), range.end(), not_fn(m_compare)) == range.end()
+            );
             if (not range.empty())
             {
                 m_values.resize(range.size());
@@ -340,7 +354,12 @@ namespace burst
                         });
                     }
 
-                    for (std::size_t i = 1; i < counters.size() && (counters[i] - counters[i - 1] - 1) > 0; ++i)
+                    for
+                    (
+                        std::size_t i = 1;
+                        i < counters.size() && (counters[i] - counters[i - 1] - 1) > 0;
+                        ++i
+                    )
                     {
                         branches.push
                         ({
@@ -359,12 +378,20 @@ namespace burst
                 Для каждого элемента узла подсчитывает количество элементов в ветке (ветка включает
             рассматриваемый узел), которые строго меньше этого элемента.
          */
-        void fill_counters (const k_ary_search_set_branch & branch, std::vector<std::size_t> & counters)
+        void
+            fill_counters
+            (
+                const k_ary_search_set_branch & branch,
+                std::vector<std::size_t> & counters
+            )
         {
             const std::size_t max_subtree_height = branch.height - 1;
-            const std::size_t min_subtree_elements = perfect_tree_size(m_arity, max_subtree_height - 1);
-            const std::size_t max_subtree_elements = perfect_tree_size(m_arity, max_subtree_height);
-            const std::size_t elements_in_last_row = branch.size - perfect_tree_size(m_arity, branch.height - 1);
+            const std::size_t min_subtree_elements =
+                perfect_tree_size(m_arity, max_subtree_height - 1);
+            const std::size_t max_subtree_elements =
+                perfect_tree_size(m_arity, max_subtree_height);
+            const std::size_t elements_in_last_row =
+                branch.size - perfect_tree_size(m_arity, branch.height - 1);
 
             counters.resize(std::min(m_arity, branch.size + 1));
             for (std::size_t i = 0; i < counters.size(); ++i)
@@ -384,18 +411,33 @@ namespace burst
             нужное значение. Осталось только скопировать его.
          */
         template <typename RandomAccessRange>
-        void fill_node (const k_ary_search_set_branch & branch, const std::vector<std::size_t> & counters, const RandomAccessRange & range)
+        void
+            fill_node
+            (
+                const k_ary_search_set_branch & branch,
+                const std::vector<std::size_t> & counters,
+                const RandomAccessRange & range
+            )
         {
-            for (std::size_t element_index = 0; element_index < counters.size() - 1; ++element_index)
+            for
+            (
+                std::size_t element_index = 0;
+                element_index < counters.size() - 1;
+                ++element_index
+            )
             {
                 using difference_type = typename RandomAccessRange::difference_type;
-                const auto index_in_initial_range = static_cast<difference_type>(branch.preceding_elements + counters[element_index]);
+                const auto index_in_initial_range =
+                    static_cast<difference_type>
+                    (
+                        branch.preceding_elements + counters[element_index]
+                    );
                 m_values[branch.index + element_index] = range[index_in_initial_range];
             }
             BOOST_ASSERT(std::is_sorted
             (
-                m_values.begin() + static_cast<typename value_container_type::difference_type>(branch.index),
-                m_values.begin() + static_cast<typename value_container_type::difference_type>(branch.index + counters.size() - 1),
+                m_values.begin() + static_cast<difference_type>(branch.index),
+                m_values.begin() + static_cast<difference_type>(branch.index + counters.size() - 1),
                 m_compare
             ));
         }
@@ -411,7 +453,13 @@ namespace burst
             return intlog(size, arity) + 1;
         }
 
-        static std::size_t perfect_tree_child_index (std::size_t arity, std::size_t parent_index, std::size_t child_number)
+        static std::size_t
+            perfect_tree_child_index
+            (
+                std::size_t arity,
+                std::size_t parent_index,
+                std::size_t child_number
+            )
         {
             return parent_index * arity + (child_number + 1) * (arity - 1);
         }

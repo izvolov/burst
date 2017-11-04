@@ -48,25 +48,59 @@ namespace burst
            элементы входного диапазона на их места в отсортированном диапазоне.
      */
     template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
-    RandomAccessIterator counting_sort_copy (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
+    RandomAccessIterator
+        counting_sort_copy
+        (
+            ForwardIterator first,
+            ForwardIterator last,
+            RandomAccessIterator result,
+            Map map
+        )
     {
-        return detail::counting_sort_impl(first, last, result, detail::to_unsigned(std::move(map)));
+        return
+            detail::counting_sort_impl(first, last, result, detail::to_unsigned(std::move(map)));
     }
 
     template <typename ForwardIterator, typename RandomAccessIterator>
-    RandomAccessIterator counting_sort_copy (ForwardIterator first, ForwardIterator last, RandomAccessIterator result)
+    RandomAccessIterator
+        counting_sort_copy
+        (
+            ForwardIterator first,
+            ForwardIterator last,
+            RandomAccessIterator result
+        )
     {
         return counting_sort_copy(first, last, result, identity);
     }
 
     template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
-    RandomAccessIterator counting_sort_move (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
+    RandomAccessIterator
+        counting_sort_move
+        (
+            ForwardIterator first,
+            ForwardIterator last,
+            RandomAccessIterator result,
+            Map map
+        )
     {
-        return detail::counting_sort_impl(std::make_move_iterator(first), std::make_move_iterator(last), result, detail::to_unsigned(std::move(map)));
+        return
+            detail::counting_sort_impl
+            (
+                std::make_move_iterator(first),
+                std::make_move_iterator(last),
+                result,
+                detail::to_unsigned(std::move(map))
+            );
     }
 
     template <typename ForwardIterator, typename RandomAccessIterator>
-    RandomAccessIterator counting_sort_move (ForwardIterator first, ForwardIterator last, RandomAccessIterator result)
+    RandomAccessIterator
+        counting_sort_move
+        (
+            ForwardIterator first,
+            ForwardIterator last,
+            RandomAccessIterator result
+        )
     {
         return counting_sort_move(first, last, result, identity);
     }
@@ -76,7 +110,13 @@ namespace burst
             Отличается только тем, что вместо пары итераторов принимает диапазон.
      */
     template <typename ForwardRange, typename RandomAccessIterator, typename Map>
-    RandomAccessIterator counting_sort_copy (ForwardRange && range, RandomAccessIterator result, Map map)
+    RandomAccessIterator
+        counting_sort_copy
+        (
+            ForwardRange && range,
+            RandomAccessIterator result,
+            Map map
+        )
     {
         return
             counting_sort_copy
@@ -101,7 +141,13 @@ namespace burst
     }
 
     template <typename ForwardRange, typename RandomAccessIterator, typename Map>
-    RandomAccessIterator counting_sort_move (ForwardRange && range, RandomAccessIterator result, Map map)
+    RandomAccessIterator
+        counting_sort_move
+        (
+            ForwardRange && range,
+            RandomAccessIterator result,
+            Map map
+        )
     {
         return
             counting_sort_move

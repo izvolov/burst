@@ -29,12 +29,19 @@ namespace burst
 
         //!     Собрать счётчики.
         /*!
-                Для каждого сортируемого числа `n_i` подсчитывает количество элементов, которые меньше
-            либо равны этому числу, и записывает это число на позицию `counters[n_i]`,
+                Для каждого сортируемого числа `n_i` подсчитывает количество элементов, которые
+            меньше либо равны этому числу, и записывает это число на позицию `counters[n_i]`,
             где `n_i = map(preimage_i)`.
          */
         template <typename ForwardIterator, typename Map, typename RandomAccessIterator>
-        void collect (ForwardIterator first, ForwardIterator last, Map map, RandomAccessIterator counters)
+        void
+            collect
+            (
+                ForwardIterator first,
+                ForwardIterator last,
+                Map map,
+                RandomAccessIterator counters
+            )
         {
             using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
             using traits = counting_sort_traits<value_type, Map>;
@@ -56,8 +63,22 @@ namespace burst
                 Важно: в каждый момент времени счётчик `counters[i]` задаёт наименьшую позицию
             элемента `i` в выходном диапазоне.
          */
-        template <typename ForwardIterator, typename RandomAccessIterator1, typename Map, typename RandomAccessIterator2>
-        void dispose (ForwardIterator first, ForwardIterator last, RandomAccessIterator1 result, Map map, RandomAccessIterator2 counters)
+        template
+        <
+            typename ForwardIterator,
+            typename RandomAccessIterator1,
+            typename Map,
+            typename RandomAccessIterator2
+        >
+        void
+            dispose
+            (
+                ForwardIterator first,
+                ForwardIterator last,
+                RandomAccessIterator1 result,
+                Map map,
+                RandomAccessIterator2 counters
+            )
         {
             std::for_each(first, last,
                 [& result, & counters, & map] (auto && preimage)
@@ -72,8 +93,22 @@ namespace burst
                 Отличается инвариантом счётчиков: в каждый момент времени счётчик `counters[i]`
             задаёт следующую позицию после наибольшей позиции элемента `i` в выходном диапазоне.
          */
-        template <typename BidirectionalIterator, typename RandomAccessIterator1, typename Map, typename RandomAccessIterator2>
-        void dispose_backward (BidirectionalIterator first, BidirectionalIterator last, RandomAccessIterator1 result, Map map, RandomAccessIterator2 counters)
+        template
+        <
+            typename BidirectionalIterator,
+            typename RandomAccessIterator1,
+            typename Map,
+            typename RandomAccessIterator2
+        >
+        void
+            dispose_backward
+            (
+                BidirectionalIterator first,
+                BidirectionalIterator last,
+                RandomAccessIterator1 result,
+                Map map,
+                RandomAccessIterator2 counters
+            )
         {
             std::for_each(std::make_reverse_iterator(last), std::make_reverse_iterator(first),
                 [& result, & counters, & map] (auto && preimage)
@@ -84,12 +119,20 @@ namespace burst
         }
 
         template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
-        RandomAccessIterator counting_sort_impl (ForwardIterator first, ForwardIterator last, RandomAccessIterator result, Map map)
+        RandomAccessIterator
+            counting_sort_impl
+            (
+                ForwardIterator first,
+                ForwardIterator last,
+                RandomAccessIterator result,
+                Map map
+            )
         {
             using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
             using traits = counting_sort_traits<value_type, Map>;
 
-            using difference_type = typename std::iterator_traits<RandomAccessIterator>::difference_type;
+            using difference_type =
+                typename std::iterator_traits<RandomAccessIterator>::difference_type;
             // Единица для дополнительного нуля в начале массива.
             difference_type counters[traits::value_range + 1] = {0};
 
