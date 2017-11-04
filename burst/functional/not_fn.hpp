@@ -34,8 +34,9 @@ namespace burst
 
     template <typename Predicate>
     auto not_fn (Predicate && f)
+        -> not_fn_t<std::decay_t<Predicate>>
     {
-        return not_fn_t<std::decay_t<Predicate>>{std::forward<Predicate>(f)};
+        return {std::forward<Predicate>(f)};
     }
 }
 
