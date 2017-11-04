@@ -49,7 +49,9 @@ namespace burst
     auto make_set (InputRange && values)
     {
         using value_type = typename boost::range_value<InputRange>::type;
-        return std::set<value_type>(std::begin(values), std::end(values));
+        using std::begin;
+        using std::end;
+        return std::set<value_type>(begin(values), end(values));
     }
 
     //!     Создать std::set из диапазона с явно заданным отношением порядка
@@ -61,7 +63,9 @@ namespace burst
     auto make_set (InputRange && values, const Compare & compare)
     {
         using value_type = typename boost::range_value<InputRange>::type;
-        return std::set<value_type, Compare>(std::begin(values), std::end(values), compare);
+        using std::begin;
+        using std::end;
+        return std::set<value_type, Compare>(begin(values), end(values), compare);
     }
 
     //!     Создать std::set из диапазона с явно заданным отношением порядка и аллокатором
@@ -72,10 +76,12 @@ namespace burst
     auto make_set (InputRange && values, const Compare & compare, const Allocator & allocator)
     {
         using value_type = typename boost::range_value<InputRange>::type;
+        using std::begin;
+        using std::end;
         return
             std::set<value_type, Compare, Allocator>
             (
-                std::begin(values), std::end(values),
+                begin(values), end(values),
                 compare,
                 allocator
             );
@@ -91,7 +97,9 @@ namespace burst
     template <typename Value, typename InputRange>
     auto make_set (InputRange && values)
     {
-        return std::set<Value>(std::begin(values), std::end(values));
+        using std::begin;
+        using std::end;
+        return std::set<Value>(begin(values), end(values));
     }
 
     //!     Создать std::set из диапазона с явным указанием типов его значений и отношением порядка
@@ -104,7 +112,9 @@ namespace burst
     template <typename Value, typename InputRange, typename Compare>
     auto make_set (InputRange && values, const Compare & compare)
     {
-        return std::set<Value, Compare>(std::begin(values), std::end(values), compare);
+        using std::begin;
+        using std::end;
+        return std::set<Value, Compare>(begin(values), end(values), compare);
     }
 
     //!     Создать std::set из диапазона с явным указанием типов его значений, отношением порядка и
@@ -118,10 +128,12 @@ namespace burst
     template <typename Value, typename InputRange, typename Compare, typename Allocator>
     auto make_set (InputRange && values, const Compare & compare, const Allocator & allocator)
     {
+        using std::begin;
+        using std::end;
         return
             std::set<Value, Compare, Allocator>
             (
-                std::begin(values), std::end(values),
+                begin(values), end(values),
                 compare,
                 allocator
             );
