@@ -51,7 +51,12 @@ namespace burst
         using value_type = typename boost::range_value<InputRange>::type;
         using std::begin;
         using std::end;
-        return std::set<value_type>(begin(values), end(values));
+        return
+            std::set<value_type>
+            (
+                begin(std::forward<InputRange>(values)),
+                end(std::forward<InputRange>(values))
+            );
     }
 
     //!     Создать std::set из диапазона с явно заданным отношением порядка
@@ -65,7 +70,13 @@ namespace burst
         using value_type = typename boost::range_value<InputRange>::type;
         using std::begin;
         using std::end;
-        return std::set<value_type, Compare>(begin(values), end(values), compare);
+        return
+            std::set<value_type, Compare>
+            (
+                begin(std::forward<InputRange>(values)),
+                end(std::forward<InputRange>(values)),
+                compare
+            );
     }
 
     //!     Создать std::set из диапазона с явно заданным отношением порядка и аллокатором
@@ -81,7 +92,8 @@ namespace burst
         return
             std::set<value_type, Compare, Allocator>
             (
-                begin(values), end(values),
+                begin(std::forward<InputRange>(values)),
+                end(std::forward<InputRange>(values)),
                 compare,
                 allocator
             );
@@ -99,7 +111,12 @@ namespace burst
     {
         using std::begin;
         using std::end;
-        return std::set<Value>(begin(values), end(values));
+        return
+            std::set<Value>
+            (
+                begin(std::forward<InputRange>(values)),
+                end(std::forward<InputRange>(values))
+            );
     }
 
     //!     Создать std::set из диапазона с явным указанием типов его значений и отношением порядка
@@ -114,7 +131,13 @@ namespace burst
     {
         using std::begin;
         using std::end;
-        return std::set<Value, Compare>(begin(values), end(values), compare);
+        return
+            std::set<Value, Compare>
+            (
+                begin(std::forward<InputRange>(values)),
+                end(std::forward<InputRange>(values)),
+                compare
+            );
     }
 
     //!     Создать std::set из диапазона с явным указанием типов его значений, отношением порядка и
@@ -133,7 +156,8 @@ namespace burst
         return
             std::set<Value, Compare, Allocator>
             (
-                begin(values), end(values),
+                begin(std::forward<InputRange>(values)),
+                end(std::forward<InputRange>(values)),
                 compare,
                 allocator
             );
