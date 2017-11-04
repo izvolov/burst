@@ -1,6 +1,10 @@
 #ifndef BURST_ALGORITHM_DETAIL_TO_UNSIGNED_HPP
 #define BURST_ALGORITHM_DETAIL_TO_UNSIGNED_HPP
 
+#include <limits>
+#include <type_traits>
+#include <utility>
+
 namespace burst
 {
     namespace detail

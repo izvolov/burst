@@ -5,6 +5,8 @@
 
 #include <boost/range/iterator_range.hpp>
 
+#include <utility>
+
 namespace burst
 {
     struct unite_t

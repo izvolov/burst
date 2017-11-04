@@ -5,6 +5,9 @@
 #include <burst/algorithm/detail/to_unsigned.hpp>
 #include <burst/functional/identity.hpp>
 
+#include <iterator>
+#include <utility>
+
 namespace burst
 {
     //!     Сортировка подсчётом.

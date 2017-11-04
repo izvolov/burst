@@ -6,6 +6,9 @@
 
 #include <boost/range/iterator_range.hpp>
 
+#include <cstddef>
+#include <utility>
+
 namespace burst
 {
     struct semiintersect_t

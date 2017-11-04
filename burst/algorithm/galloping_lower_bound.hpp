@@ -4,6 +4,8 @@
 #include <burst/algorithm/detail/galloping_search.hpp>
 
 #include <functional>
+#include <iterator>
+#include <utility>
 
 namespace burst
 {

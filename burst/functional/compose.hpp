@@ -1,6 +1,7 @@
 #ifndef BURST_FUNCTIONAL_COMPOSE_HPP
 #define BURST_FUNCTIONAL_COMPOSE_HPP
 
+#include <type_traits>
 #include <utility>
 
 namespace burst

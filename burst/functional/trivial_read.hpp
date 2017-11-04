@@ -2,6 +2,7 @@
 #define BURST_FUNCTIONAL_TRIVIAL_READ_HPP
 
 #include <istream>
+#include <memory>
 #include <type_traits>
 
 namespace burst

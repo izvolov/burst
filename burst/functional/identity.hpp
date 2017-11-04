@@ -1,6 +1,8 @@
 #ifndef BURST_FUNCTIONAL_IDENTITY_HPP
 #define BURST_FUNCTIONAL_IDENTITY_HPP
 
+#include <utility>
+
 namespace burst
 {
     //!     Тождественное отображение

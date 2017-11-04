@@ -4,6 +4,7 @@
 #include <boost/range/value_type.hpp>
 
 #include <initializer_list>
+#include <iterator>
 #include <set>
 
 namespace burst

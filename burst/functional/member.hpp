@@ -3,7 +3,6 @@
 
 #include <burst/functional/func.hpp>
 
-#include <memory>
 #include <utility>
 
 #define BURST_MEMBER(m)\

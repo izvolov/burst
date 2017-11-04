@@ -6,6 +6,8 @@
 #include <boost/algorithm/cxx11/is_sorted.hpp>
 #include <boost/assert.hpp>
 
+#include <functional>
+
 namespace burst
 {
     //!     "Прокрутить" диапазон до верхней границы относительно предиката.

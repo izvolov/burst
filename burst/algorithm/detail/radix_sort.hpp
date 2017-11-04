@@ -8,11 +8,13 @@
 
 #include <algorithm>
 #include <climits>
+#include <cstddef>
+#include <cstdint>
 #include <iterator>
 #include <limits>
 #include <numeric>
 #include <type_traits>
-#include <vector>
+#include <utility>
 
 namespace burst
 {

@@ -5,7 +5,9 @@
 
 #include <boost/function_output_iterator.hpp>
 
+#include <memory>
 #include <ostream>
+#include <utility>
 
 namespace burst
 {

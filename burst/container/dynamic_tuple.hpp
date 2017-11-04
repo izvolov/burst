@@ -8,9 +8,12 @@
 #include <boost/assert.hpp>
 
 #include <algorithm>
+#include <cassert>
+#include <cstddef>
 #include <cstdint>
 #include <memory>
 #include <type_traits>
+#include <typeinfo>
 #include <utility>
 #include <vector>
 

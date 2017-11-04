@@ -5,6 +5,8 @@
 #include <burst/functional/non_strict.hpp>
 
 #include <functional>
+#include <iterator>
+#include <utility>
 
 namespace burst
 {

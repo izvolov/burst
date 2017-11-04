@@ -6,6 +6,8 @@
 
 #include <boost/range/iterator_range.hpp>
 
+#include <utility>
+
 namespace burst
 {
     struct symmetric_difference_t

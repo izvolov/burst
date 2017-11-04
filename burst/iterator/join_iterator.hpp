@@ -8,6 +8,7 @@
 #include <boost/iterator/minimum_category.hpp>
 #include <boost/range/value_type.hpp>
 
+#include <iterator>
 #include <utility>
 
 namespace burst

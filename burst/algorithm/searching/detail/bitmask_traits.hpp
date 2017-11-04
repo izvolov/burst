@@ -3,6 +3,7 @@
 
 #include <bitset>
 #include <climits>
+#include <cstddef>
 #include <type_traits>
 
 #define TYPE_IS_NOT_INTEGRAL_ERROR_MESSAGE \

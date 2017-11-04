@@ -1,6 +1,7 @@
 #ifndef BURST_FUNCTIONAL_TRIVIAL_WRITE_HPP
 #define BURST_FUNCTIONAL_TRIVIAL_WRITE_HPP
 
+#include <memory>
 #include <ostream>
 #include <type_traits>
 

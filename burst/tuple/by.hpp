@@ -6,6 +6,8 @@
 #include <burst/type_traits/make_index_range.hpp>
 
 #include <cstddef>
+#include <tuple>
+#include <type_traits>
 #include <utility>
 
 namespace burst

@@ -16,10 +16,8 @@
 #include <boost/range/value_type.hpp>
 
 #include <algorithm>
-#include <cstddef>
 #include <functional>
 #include <iterator>
-#include <type_traits>
 #include <utility>
 
 namespace burst

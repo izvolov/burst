@@ -11,7 +11,9 @@
 #include <boost/range/iterator_range.hpp>
 
 #include <algorithm>
+#include <cstddef>
 #include <functional>
+#include <initializer_list>
 #include <iterator>
 #include <stack>
 #include <utility>

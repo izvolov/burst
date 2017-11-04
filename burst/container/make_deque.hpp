@@ -5,6 +5,7 @@
 
 #include <deque>
 #include <initializer_list>
+#include <utility>
 
 namespace burst
 {

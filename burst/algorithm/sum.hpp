@@ -4,7 +4,6 @@
 #include <burst/concept/arithmetic.hpp>
 
 #include <initializer_list>
-#include <type_traits>
 
 namespace burst
 {

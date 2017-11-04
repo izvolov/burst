@@ -4,6 +4,7 @@
 #include <burst/functional/compose.hpp>
 #include <burst/functional/invoke.hpp>
 
+#include <type_traits>
 #include <utility>
 
 namespace burst

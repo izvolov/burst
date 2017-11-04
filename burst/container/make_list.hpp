@@ -5,6 +5,7 @@
 
 #include <initializer_list>
 #include <list>
+#include <utility>
 
 namespace burst
 {

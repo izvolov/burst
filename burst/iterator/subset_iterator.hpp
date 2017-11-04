@@ -9,8 +9,10 @@
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/range/iterator_range.hpp>
 
+#include <algorithm>
+#include <cstddef>
 #include <functional>
-#include <type_traits>
+#include <iterator>
 #include <utility>
 #include <vector>
 

@@ -5,7 +5,6 @@
 
 #include <boost/range/iterator_range.hpp>
 
-#include <type_traits>
 #include <utility>
 
 namespace burst

@@ -18,7 +18,6 @@
 #include <algorithm>
 #include <functional>
 #include <iterator>
-#include <type_traits>
 #include <utility>
 
 namespace burst

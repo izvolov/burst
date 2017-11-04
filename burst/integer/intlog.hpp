@@ -1,7 +1,6 @@
 #ifndef BURST_INTEGER_INTLOG_HPP
 #define BURST_INTEGER_INTLOG_HPP
 
-#include <limits>
 #include <stdexcept>
 #include <type_traits>
 

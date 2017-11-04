@@ -7,6 +7,7 @@
 #include <boost/range/iterator_range.hpp>
 
 #include <istream>
+#include <utility>
 
 namespace burst
 {

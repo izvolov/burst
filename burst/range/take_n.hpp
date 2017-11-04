@@ -8,6 +8,7 @@
 #include <boost/range/iterator.hpp>
 
 #include <type_traits>
+#include <utility>
 
 namespace burst
 {

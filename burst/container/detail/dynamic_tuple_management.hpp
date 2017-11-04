@@ -5,7 +5,9 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cstddef>
 #include <cstdint>
+#include <memory>
 #include <stdexcept>
 #include <type_traits>
 #include <typeinfo>

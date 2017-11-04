@@ -8,7 +8,7 @@
 #include <limits>
 #include <numeric>
 #include <type_traits>
-#include <vector>
+#include <utility>
 
 namespace burst
 {
