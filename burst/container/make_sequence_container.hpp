@@ -33,47 +33,6 @@ namespace burst
         return SequenceContainer<Value, Allocator>(values, allocator);
     }
 
-    //!     Создать последовательний контейнер из диапазона
-    /*!
-            Принимает произвольный диапазон, из типа его значений выводит тип элементов контейнера,
-        создаёт этот контейнер и возвращает его.
-     */
-    template <template <typename ...> class SequenceContainer, typename InputRange>
-    auto make_sequence_container (InputRange && values)
-    {
-        using value_type = typename boost::range_value<InputRange>::type;
-        using std::begin;
-        using std::end;
-        return
-            SequenceContainer<value_type>
-            (
-                begin(std::forward<InputRange>(values)),
-                end(std::forward<InputRange>(values))
-            );
-    }
-
-    //!     Создать последовательний контейнер из диапазона и аллокатора
-    /*!
-            Отличается наличием аллокатора, передаваемого в качестве аргумента функции.
-
-            `make_sequence_container(range, allocator)`
-     */
-    template <template <typename ...> class SequenceContainer, typename InputRange, typename Allocator,
-        typename = Not<Integer, InputRange>>
-    auto make_sequence_container (InputRange && values, const Allocator & allocator)
-    {
-        using value_type = typename boost::range_value<InputRange>::type;
-        using std::begin;
-        using std::end;
-        return
-            SequenceContainer<value_type, Allocator>
-            (
-                begin(std::forward<InputRange>(values)),
-                end(std::forward<InputRange>(values)),
-                allocator
-            );
-    }
-
     //!     Создать последовательний контейнер нужного размера, заполнив копиями значения
     /*!
             Принимает размер контейнера, а также произвольное значение, тип которого и будет
@@ -131,6 +90,38 @@ namespace burst
             (
                 begin(std::forward<InputRange>(values)),
                 end(std::forward<InputRange>(values)),
+                allocator
+            );
+    }
+
+    //!     Создать последовательний контейнер из диапазона
+    /*!
+            Принимает произвольный диапазон, из типа его значений выводит тип элементов контейнера,
+        создаёт этот контейнер и возвращает его.
+     */
+    template <template <typename ...> class SequenceContainer, typename InputRange>
+    auto make_sequence_container (InputRange && values)
+    {
+        using value_type = typename boost::range_value<InputRange>::type;
+        return
+            make_sequence_container<SequenceContainer, value_type>(std::forward<InputRange>(values));
+    }
+
+    //!     Создать последовательний контейнер из диапазона и аллокатора
+    /*!
+            Отличается наличием аллокатора, передаваемого в качестве аргумента функции.
+
+            `make_sequence_container(range, allocator)`
+     */
+    template <template <typename ...> class SequenceContainer, typename InputRange, typename Allocator,
+        typename = Not<Integer, InputRange>>
+    auto make_sequence_container (InputRange && values, const Allocator & allocator)
+    {
+        using value_type = typename boost::range_value<InputRange>::type;
+        return
+            make_sequence_container<SequenceContainer, value_type>
+            (
+                std::forward<InputRange>(values),
                 allocator
             );
     }
