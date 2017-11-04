@@ -105,6 +105,22 @@ BOOST_AUTO_TEST_SUITE(make_sequence_container)
         BOOST_CHECK_EQUAL(v, (make_sequence::template actual<int>({5, 4, 3, 2})));
     }
 
+    BOOST_AUTO_TEST_CASE_TEMPLATE(accepts_containers,
+        make_sequence, sequence_generators)
+    {
+        const auto initial = std::vector<int>{1, 2, 3};
+
+        const auto v = make_sequence::apply(initial);
+        BOOST_CHECK_EQUAL(v, (make_sequence::template actual<int>({1, 2, 3})));
+    }
+
+    BOOST_AUTO_TEST_CASE_TEMPLATE(accepts_rvalue_containers,
+        make_sequence, sequence_generators)
+    {
+        const auto v = make_sequence::apply(std::vector<int>{1, 2, 3});
+        BOOST_CHECK_EQUAL(v, (make_sequence::template actual<int>({1, 2, 3})));
+    }
+
     BOOST_AUTO_TEST_CASE_TEMPLATE(overloaded_for_initializer_list,
         make_sequence, sequence_generators)
     {

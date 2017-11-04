@@ -49,6 +49,32 @@ BOOST_AUTO_TEST_SUITE(make_set)
         );
     }
 
+    BOOST_AUTO_TEST_CASE(accepts_containers)
+    {
+        const auto v = std::vector<unsigned>{1u, 2u, 3u};
+
+         const auto set = burst::make_set(v);
+
+        const auto expected = {1u, 2u, 3u};
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            std::begin(set), std::end(set),
+            std::begin(expected), std::end(expected)
+        );
+    }
+
+    BOOST_AUTO_TEST_CASE(accepts_rvalue_containers)
+    {
+         const auto set = burst::make_set(std::vector<unsigned>{1u, 1u, 1u});
+
+        const auto expected = {1u};
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            std::begin(set), std::end(set),
+            std::begin(expected), std::end(expected)
+        );
+    }
+
     BOOST_AUTO_TEST_CASE(accepts_custom_compare)
     {
         const auto set = burst::make_set(boost::irange(0, 6), std::greater<>{});
