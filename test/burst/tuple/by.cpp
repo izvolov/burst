@@ -1,3 +1,4 @@
+#include <burst/functional/identity.hpp>
 #include <burst/integer/intlog2.hpp>
 #include <burst/tuple/by.hpp>
 
@@ -39,6 +40,48 @@ BOOST_AUTO_TEST_SUITE(by)
         std::get<1>(resulting) = "asd";
 
         BOOST_CHECK_EQUAL(std::get<1>(initial), "qwe");
+    }
+
+    enum struct initialization_way
+    {
+        construction,
+        copy,
+        move
+    };
+
+    struct movable
+    {
+        movable ():
+            initialized_by{initialization_way::construction}
+        {
+        }
+
+        movable (const movable &):
+            initialized_by{initialization_way::copy}
+        {
+        }
+
+        movable (movable &&):
+            initialized_by{initialization_way::move}
+        {
+        }
+
+        ~movable ()
+        {
+        }
+
+        initialization_way initialized_by;
+    };
+
+    BOOST_AUTO_TEST_CASE(elements_of_temporary_tuple_are_moved)
+    {
+        movable m;
+
+        std::tuple<movable, movable> r =
+            burst::by<0>(burst::identity, std::make_tuple(m, m));
+
+        BOOST_CHECK(std::get<0>(r).initialized_by == initialization_way::move);
+        BOOST_CHECK(std::get<1>(r).initialized_by == initialization_way::move);
     }
 
     struct dummy
