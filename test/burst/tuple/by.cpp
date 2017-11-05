@@ -27,8 +27,8 @@ BOOST_AUTO_TEST_SUITE(by)
         const auto t = std::make_tuple(5, 2.71, std::string("qwe"));
         const auto f = burst::by<1>([] (auto x) {return x * x;}, t);
 
-        BOOST_CHECK_EQUAL(std::get<0>(t), 5);
-        BOOST_CHECK_EQUAL(std::get<2>(t), "qwe");
+        BOOST_CHECK_EQUAL(std::get<0>(f), 5);
+        BOOST_CHECK_EQUAL(std::get<2>(f), "qwe");
     }
 
     BOOST_AUTO_TEST_CASE(resulting_tuple_does_not_refer_to_initial_tuple)
