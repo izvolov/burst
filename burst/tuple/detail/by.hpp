@@ -28,7 +28,12 @@ namespace burst
             )
         {
             return
-                std::make_tuple
+                std::tuple
+                <
+                    std::tuple_element_t<BeforeIndex, std::decay_t<Tuple>>...,
+                    std::result_of_t<UnaryFunction(std::tuple_element_t<Index, std::decay_t<Tuple>>)>,
+                    std::tuple_element_t<AfterIndex, std::decay_t<Tuple>>...
+                >
                 (
                     std::get<BeforeIndex>(std::forward<Tuple>(t))...,
                     std::forward<UnaryFunction>(f)(std::get<Index>(std::forward<Tuple>(t))),

@@ -84,6 +84,21 @@ BOOST_AUTO_TEST_SUITE(by)
         BOOST_CHECK(std::get<1>(r).initialized_by == initialization_way::move);
     }
 
+    BOOST_AUTO_TEST_CASE(untouched_references_are_forwarded_as_references)
+    {
+        auto x = 5;
+        auto y = 7;
+        auto initial = std::make_tuple(std::ref(x), 123, std::cref(y));
+
+        auto resulting = burst::by<1>([] (auto x) {return std::to_string(x);}, initial);
+        std::get<0>(resulting) = 555;
+
+        BOOST_CHECK_EQUAL(x, 555);
+
+        y = 777;
+        BOOST_CHECK_EQUAL(std::get<2>(resulting), 777);
+    }
+
     struct dummy
     {
         dummy ()
