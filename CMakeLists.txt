@@ -49,7 +49,7 @@ include_directories(${CMAKE_SOURCE_DIR})
 ##
 ###################################################################################################
 
-find_package (Boost 1.59.0 COMPONENTS unit_test_framework program_options REQUIRED)
+find_package(Boost 1.59.0 COMPONENTS unit_test_framework program_options REQUIRED)
 include_directories(SYSTEM ${Boost_INCLUDE_DIRS})
 
 ###################################################################################################
