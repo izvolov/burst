@@ -18,7 +18,8 @@ namespace burst
     template <typename IndexSequence, std::size_t Shift>
     using shift = typename shift_t<IndexSequence, Shift>::type;
 
-    template <std::size_t Begin, std::size_t End>
+    template <std::size_t Begin, std::size_t End,
+        typename = std::enable_if_t<(Begin <= End)>>
     using make_index_range = shift<std::make_index_sequence<End - Begin>, Begin>;
 } // namespace burst
 
