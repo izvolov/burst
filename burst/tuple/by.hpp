@@ -23,6 +23,7 @@ namespace burst
     constexpr decltype(auto) by (UnaryFunction && f, Tuple && t)
     {
         constexpr auto size = std::tuple_size<std::decay_t<Tuple>>::value;
+        static_assert(Index < size, "Попытка преобразовать несуществующий элемент кортежа");
         return
             detail::by_impl<Index>
             (
