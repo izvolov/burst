@@ -7,4 +7,5 @@ target_link_libraries(${RANGE_GENERATOR_EXECUTABLE} ${Boost_LIBRARIES})
 
 add_subdirectory(algorithm)
 add_subdirectory(container)
+add_subdirectory(integer)
 add_subdirectory(iterator)
