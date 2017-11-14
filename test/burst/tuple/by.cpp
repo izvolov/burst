@@ -99,6 +99,23 @@ BOOST_AUTO_TEST_SUITE(by)
         BOOST_CHECK_EQUAL(std::get<2>(resulting), 777);
     }
 
+    BOOST_AUTO_TEST_CASE(references_are_forwarded)
+    {
+        auto t = std::make_tuple(5, std::string("qwe"));
+        auto initial = std::make_tuple(1, 3.14, std::ref(t), true);
+
+        auto reference_to_first_tuple_element =
+            [] (auto & t)
+                -> decltype(auto)
+            {
+                return std::get<0>(t);
+            };
+        auto resulting = burst::by<2>(reference_to_first_tuple_element, initial);
+        std::get<2>(resulting) = 555;
+
+        BOOST_CHECK_EQUAL(std::get<0>(t), 555);
+    }
+
     struct dummy
     {
         dummy ()
