@@ -23,6 +23,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     burst/functional/mem_fn.cpp
     burst/functional/member.cpp
     burst/functional/part.cpp
+    burst/integer/divceil.cpp
     burst/integer/intceil.cpp
     burst/integer/intlog.cpp
     burst/integer/intlog2.cpp
