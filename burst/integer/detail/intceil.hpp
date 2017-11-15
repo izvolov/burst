@@ -10,7 +10,10 @@ namespace burst
         template <typename I, typename J>
         constexpr I intceil_impl (I n, J f)
         {
-            return static_cast<I>(detail::divceil_impl(n, f) * static_cast<I>(f));
+            // Выражение вынесено в отдельную переменную исключительно ради ГЦЦ, который
+            // почему-то никак иначе не может. Вернуть обратно, когда сможет.
+            const auto divceil = detail::divceil_impl(n, f);
+            return static_cast<I>(divceil * static_cast<I>(f));
         }
     }
 }

@@ -12,13 +12,13 @@ namespace burst
         template <typename I>
         constexpr I divceil_positive (I n, I d)
         {
-            return (n - I{1}) / d + I{1};
+            return static_cast<I>((n - I{1}) / d + I{1});
         }
 
         template <typename I>
         constexpr I divceil_negative (I n, I d)
         {
-            return n / d;
+            return static_cast<I>(n / d);
         }
 
         template <typename I, typename J>
@@ -76,7 +76,7 @@ namespace burst
                 using K = std::common_type_t<I, J>;
                 return static_cast<I>(divceil_positive(static_cast<K>(n), static_cast<K>(d)));
             }
-            else if (d <= J{std::numeric_limits<I>::max()})
+            else if (d <= static_cast<J>(std::numeric_limits<I>::max()))
             {
                 return divceil_negative(n, static_cast<I>(d));
             }

@@ -23,12 +23,14 @@ void test_divceil (const Container & values, Integer divisor, std::size_t attemp
     auto total = value_type{0};
     for (std::size_t iteration = 0; iteration < attempt_count; ++iteration)
     {
-        total +=
+        auto r =
             std::accumulate(values.begin(), values.end(), value_type{0},
                 [divisor] (auto a, auto b)
                 {
                     return a + burst::divceil(b, divisor);
                 });
+        // Убогий ГЦЦ не может осилить оператор `+=`.
+        total = static_cast<value_type>(total + r);
     }
 
     const auto total_time = steady_clock::now() - start_time;
