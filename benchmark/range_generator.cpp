@@ -11,10 +11,23 @@
 #include <random>
 #include <vector>
 
-void generate (std::size_t range_count, std::size_t range_length, std::int64_t min, std::int64_t max, bool seed, bool sort, bool descending)
+void
+    generate
+    (
+        std::size_t range_count,
+        std::size_t range_length,
+        std::int64_t min,
+        std::int64_t max,
+        bool seed,
+        bool sort,
+        bool descending
+    )
 {
     auto seed_value = seed
-        ? static_cast<std::default_random_engine::result_type>(std::chrono::system_clock::now().time_since_epoch().count())
+        ? static_cast<std::default_random_engine::result_type>
+        (
+            std::chrono::system_clock::now().time_since_epoch().count()
+        )
         : 0;
     std::default_random_engine engine(seed_value);
     std::uniform_int_distribution<std::int64_t> uniform(min, max);
@@ -46,13 +59,20 @@ int main (int argc, const char * argv[])
     bpo::options_description description("Опции");
     description.add_options()
         ("help,h", "Подсказка")
-        ("count", bpo::value<std::size_t>(), "Количество генерируемых наборов")
-        ("length", bpo::value<std::size_t>(), "Длина одного набора")
-        ("min", bpo::value<std::int64_t>()->default_value(std::numeric_limits<std::int64_t>::min()), "Минимальное значение элемента набора")
-        ("max", bpo::value<std::int64_t>()->default_value(std::numeric_limits<std::int64_t>::max()), "Максимальное значение элемента набора")
-        ("seed", bpo::value<bool>()->implicit_value(true)->default_value(false), "Выбрать произвольную точку начала последовательности псевдослучайных чисел")
-        ("sort", bpo::value<bool>()->implicit_value(true)->default_value(false), "Породить упорядоченный набор")
-        ("descending", bpo::value<bool>()->implicit_value(true)->default_value(false), "Упорядочить набор по убыванию");
+        ("count", bpo::value<std::size_t>(),
+            "Количество генерируемых наборов")
+        ("length", bpo::value<std::size_t>(),
+            "Длина одного набора")
+        ("min", bpo::value<std::int64_t>()->default_value(std::numeric_limits<std::int64_t>::min()),
+            "Минимальное значение элемента набора")
+        ("max", bpo::value<std::int64_t>()->default_value(std::numeric_limits<std::int64_t>::max()),
+            "Максимальное значение элемента набора")
+        ("seed", bpo::value<bool>()->implicit_value(true)->default_value(false),
+            "Выбрать произвольную точку начала последовательности псевдослучайных чисел")
+        ("sort", bpo::value<bool>()->implicit_value(true)->default_value(false),
+            "Породить упорядоченный набор")
+        ("descending", bpo::value<bool>()->implicit_value(true)->default_value(false),
+            "Упорядочить набор по убыванию");
 
     try
     {
