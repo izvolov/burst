@@ -30,6 +30,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     burst/integer/intpow.cpp
     burst/integer/left_shift.cpp
     burst/integer/right_shift.cpp
+    burst/integer/to_unsigned.cpp
     burst/iterator/binary_stream_iterators.cpp
     burst/iterator/bitap_iterator.cpp
     burst/iterator/cache_iterator.cpp

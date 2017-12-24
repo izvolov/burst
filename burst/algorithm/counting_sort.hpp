@@ -2,8 +2,9 @@
 #define BURST_ALGORITHM_COUNTING_SORT_HPP
 
 #include <burst/algorithm/detail/counting_sort.hpp>
-#include <burst/algorithm/detail/to_unsigned.hpp>
+#include <burst/functional/compose.hpp>
 #include <burst/functional/identity.hpp>
+#include <burst/integer/to_unsigned.hpp>
 
 #include <iterator>
 #include <utility>
@@ -58,7 +59,7 @@ namespace burst
         )
     {
         return
-            detail::counting_sort_impl(first, last, result, detail::to_unsigned(std::move(map)));
+            detail::counting_sort_impl(first, last, result, compose(to_unsigned, std::move(map)));
     }
 
     template <typename ForwardIterator, typename RandomAccessIterator>
@@ -89,7 +90,7 @@ namespace burst
                 std::make_move_iterator(first),
                 std::make_move_iterator(last),
                 result,
-                detail::to_unsigned(std::move(map))
+                compose(to_unsigned, std::move(map))
             );
     }
 

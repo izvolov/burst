@@ -2,9 +2,10 @@
 #define BURST_ALGORITHM_RADIX_SORT_HPP
 
 #include <burst/algorithm/detail/radix_sort.hpp>
-#include <burst/algorithm/detail/to_unsigned.hpp>
+#include <burst/functional/compose.hpp>
 #include <burst/functional/identity.hpp>
 #include <burst/functional/low_byte.hpp>
+#include <burst/integer/to_unsigned.hpp>
 
 #include <iterator>
 #include <utility>
@@ -60,7 +61,7 @@ namespace burst
             Radix radix
         )
     {
-        detail::radix_sort_impl(first, last, buffer, detail::to_unsigned(std::move(map)), radix);
+        detail::radix_sort_impl(first, last, buffer, compose(to_unsigned, std::move(map)), radix);
     }
 
     template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map>
