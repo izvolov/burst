@@ -22,6 +22,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     burst/functional/low_byte.cpp
     burst/functional/mem_fn.cpp
     burst/functional/member.cpp
+    burst/functional/only.cpp
     burst/functional/part.cpp
     burst/integer/divceil.cpp
     burst/integer/intceil.cpp
