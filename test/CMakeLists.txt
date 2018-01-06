@@ -70,6 +70,7 @@ set(UNIT_TEST_SOURCES test_main.cpp
     burst/range/unite.cpp
     burst/tuple/apply.cpp
     burst/tuple/by.cpp
+    burst/tuple/by_all.cpp
     burst/tuple/get.cpp
     burst/tuple/view.cpp
 )
