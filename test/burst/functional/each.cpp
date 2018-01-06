@@ -1,5 +1,6 @@
 #include <burst/algorithm/sum.hpp>
 #include <burst/functional/each.hpp>
+#include <burst/functional/only.hpp>
 #include <burst/integer/intlog2.hpp>
 #include <burst/tuple/make_tuple.hpp>
 #include <test/output/tuple.hpp>
@@ -239,5 +240,22 @@ BOOST_AUTO_TEST_SUITE(each)
         constexpr auto e = burst::each(&burst::intlog2<int>) | burst::make_tuple;
         constexpr auto t = e(1, 256, 1024);
         BOOST_CHECK_EQUAL(t, std::make_tuple(0, 8, 10));
+    }
+
+    BOOST_AUTO_TEST_CASE(is_composable_with_only)
+    {
+        const auto cube = [] (auto x) {return x * x * x;};
+        const auto stringify = [] (auto x) {return std::to_string(x);};
+        const auto twice = [] (auto x) {return x + x;};
+        const auto size = [] (const auto & s) {return s.size();};
+
+        const auto f =
+            burst::only<1>(cube) |
+            burst::each(stringify) |
+            burst::only<0>(twice) |
+            burst::each(size) |
+            burst::sum;
+
+        BOOST_CHECK_EQUAL(f(10, 20, 30), 10);
     }
 BOOST_AUTO_TEST_SUITE_END()
