@@ -45,7 +45,7 @@ Burst
 
 * <a name="radix"/> Поразрядная сортировка
 
-    ```c++
+    ```cpp
     std::vector<std::string> strings{"aaaa", "bbb", "cc", "d"};
 
     std::vector<std::string> buffer(strings.size());
@@ -59,13 +59,13 @@ Burst
     ```
 
     Находится в заголовке
-    ```c++
+    ```cpp
     #include <burst/algorithm/radix_sort.hpp>
     ```
 
 * <a name="counting"/> Сортировка подсчётом
 
-    ```c++
+    ```cpp
     std::vector<std::size_t> chaos{0x0104, 0x0203, 0x0302, 0x0401};
 
     std::vector<std::size_t> sorted_by_low_byte(chaos.size());
@@ -79,7 +79,7 @@ Burst
     ```
 
     Находится в заголовке
-    ```c++
+    ```cpp
     #include <burst/algorithm/counting_sort.hpp>
     ```
 
@@ -90,7 +90,7 @@ Burst
 
 * <a name="galloping-lb"/> Поиск нижней грани
 
-    ```c++
+    ```cpp
     std::vector<int> range{1, 2, 2, 3, 3, 3};
     //                              ^
 
@@ -101,13 +101,13 @@ Burst
     ```
 
     В заголовке
-    ```c++
+    ```cpp
     #include <burst/algorithm/galloping_lower_bound.hpp>
     ```
 
 * <a name="galloping-ub"/> Поиск верхней грани
 
-    ```c++
+    ```cpp
     std::vector<int> range{30, 30, 30, 20, 20, 10};
     //                                         ^
 
@@ -119,7 +119,7 @@ Burst
     ```
 
     В заголовке
-    ```c++
+    ```cpp
     #include <burst/algorithm/galloping_upper_bound.hpp>
     ```
 
@@ -131,14 +131,14 @@ Burst
 
     Скорость достигается за счёт удобной для процессорного кэша упаковки данных.
 
-    ```c++
+    ```cpp
     burst::k_ary_search_set<int> set{3, 4, 6, 1, 7, 8, 2};
     assert(*set.find(3) == 3);
     assert(set.find(0) == set.end());
     ```
 
     В заголовке
-    ```c++
+    ```cpp
     #include <burst/container/k_ary_search_set.hpp>
     ```
 
@@ -150,7 +150,7 @@ Burst
     2. Объекты плотно расположены в памяти. То есть они лежат в едином буфере подряд, друг за другом. Это снимает лишний уровень косвенности при обращении к ним по сравнению с тем, если бы это был, например, массив указателей на базовый класс, как это обычно делается для хранения в массиве классов из одной иерархии.
 
     Объект можно получить зная его тип и индекс в контейнере.
-    ```c++
+    ```cpp
     burst::dynamic_tuple t(std::vector<int>{1, 2, 3});
 
     t.push_back(true);
@@ -164,7 +164,7 @@ Burst
     ```
 
     В заголовке
-    ```c++
+    ```cpp
     #include <burst/container/dynamic_tuple.hpp>
     ```
 
@@ -176,7 +176,7 @@ Burst
 
     Представляет набор диапазонов таким образом, как будто это единый диапазон.
   
-    ```c++
+    ```cpp
     std::string hello("hello");
     std::string world("world");
     auto ranges = burst::make_range_vector(hello, world);
@@ -187,7 +187,7 @@ Burst
     ```
 
     В заголовке
-    ```c++
+    ```cpp
     #include <burst/range/join.hpp>
     ```
   
@@ -198,7 +198,7 @@ Burst
 
     Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`even` и `odd`) остаются нетронутыми.
   
-    ```c++
+    ```cpp
     std::vector<int> even{   2,    4,    6};
     std::vector<int>  odd{1,    3,    5   };
     //                    ^  ^  ^  ^  ^  ^
@@ -211,7 +211,7 @@ Burst
     ```
 
     В заголовке
-    ```c++
+    ```cpp
     #include <burst/range/merge.hpp>
     ```
   
@@ -222,7 +222,7 @@ Burst
 
     Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`natural`, `prime` и `odd`) остаются нетронутыми.
   
-    ```c++
+    ```cpp
     std::vector<int> natural{1, 2, 3, 4, 5, 6, 7};
     std::vector<int>   prime{   2, 3,    5,    7};
     std::vector<int>     odd{1,    3,    5,    7};
@@ -236,7 +236,7 @@ Burst
     ```
 
     В заголовке
-    ```c++
+    ```cpp
     #include <burst/range/intersect.hpp>
     ```
 
@@ -249,7 +249,7 @@ Burst
 
     Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`first`, `second` и `third`) остаются нетронутыми.
 
-    ```c++
+    ```cpp
     auto  first = {0, 0, 1,       2};
     auto second = {0,    1, 1      };
     auto  third = {      1, 1, 1, 2};
@@ -263,7 +263,7 @@ Burst
     ```
 
     В заголовке
-    ```c++
+    ```cpp
     #include <burst/range/semiintersect.hpp>
     ```
 
@@ -274,7 +274,7 @@ Burst
 
     Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`one`, `two` и `three`) остаются нетронутыми.
   
-    ```c++
+    ```cpp
     std::vector<int>   one{1, 2      };
     std::vector<int>   two{   2, 3   };
     std::vector<int> three{      3, 4};
@@ -288,7 +288,7 @@ Burst
     ```
 
     В заголовке
-    ```c++
+    ```cpp
     #include <burst/range/unite.hpp>
     ```
 
@@ -297,7 +297,7 @@ Burst
     Производит ленивую разность двух упорядоченных множеств.
     Создаёт упорядоченный диапазон, пробегающийся по всем элементам, которые есть в первом множестве, но которых нет во втором.
 
-    ```c++
+    ```cpp
     const auto natural = burst::make_vector({1, 2, 3, 4, 5, 6});
     const auto     odd = burst::make_vector({1,    3,    5   });
     //                                          ^     ^     ^
@@ -309,7 +309,7 @@ Burst
     ```
 
     В заголовке
-    ```c++
+    ```cpp
     #include <burst/range/difference.hpp>
     ```
 
@@ -320,7 +320,7 @@ Burst
 
     Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`first`, `second`, `third` и `fourth`) остаются нетронутыми.
 
-    ```c++
+    ```cpp
     const auto  first = burst::make_vector({1, 2, 3, 4      });
     const auto second = burst::make_vector({1, 2, 3,    5, 5});
     const auto  third = burst::make_vector({1,    3, 4, 5   });
@@ -335,7 +335,7 @@ Burst
     ```
 
     В заголовке
-    ```c++
+    ```cpp
     #include <burst/range/symmetric_difference.hpp>
     ```
 
@@ -349,32 +349,32 @@ Burst
 
 1. Конструирование из списка инициализации
 
-    ```c++
+    ```cpp
     auto v = burst::make_vector({1, 2, 3, 4});
     ```
 
 2. Конструирование при помощи двух итераторов
 
-    ```c++
+    ```cpp
     auto v = burst::make_vector(collection.begin() + 3, collection.end());
     ```
 
 3. Конструирование из диапазона
 
-    ```c++
+    ```cpp
     auto v = burst::make_vector(collection);
     ```
 
 4. Заполняющее конструирование
 
-    ```c++
+    ```cpp
     auto v = burst::make_vector(5, x);
     ```
 
 Доступны практически все варианты конструкторов, а также варианты с конструированием из диапазона для стандартных последовательных контейнеров (```std::vector```, ```std::deque```, ```std::list```, ```std::forward_list```).
 
 В заголовках
-```c++
+```cpp
 #include <burst/container/make_deque.hpp>
 #include <burst/container/make_forward_list.hpp>
 #include <burst/container/make_list.hpp>
@@ -382,12 +382,12 @@ Burst
 ```
 
 Кроме того, поддерживается любой совместимый сторониий контейнер при помощи функции ```make_sequence_container```:
-```c++
+```cpp
 auto c = burst::make_sequence_container<boost::container::vector>(...);
 ```
 
 В заголовке
-```c++
+```cpp
 #include <burst/container/make_sequence_container.hpp>
 ```
 
