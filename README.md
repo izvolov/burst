@@ -43,301 +43,301 @@ Burst
 
 Классические алгоритмы эффективной сортировки целых чисел с линейным временем вычисления.
 
-* <a name="radix"/> Поразрядная сортировка
+##### <a name="radix"/> Поразрядная сортировка
 
-    ```cpp
-    std::vector<std::string> strings{"aaaa", "bbb", "cc", "d"};
+```cpp
+std::vector<std::string> strings{"aaaa", "bbb", "cc", "d"};
 
-    std::vector<std::string> buffer(strings.size());
-    burst::radix_sort(strings.begin(), strings.end(), buffer.begin(),
-        [] (const std::string & string)
-        {
-            return string.size();
-        }
-    );
-    assert((strings == std::vector<std::string>{"d", "cc", "bbb", "aaaa"}));
-    ```
+std::vector<std::string> buffer(strings.size());
+burst::radix_sort(strings.begin(), strings.end(), buffer.begin(),
+    [] (const std::string & string)
+    {
+        return string.size();
+    }
+);
+assert((strings == std::vector<std::string>{"d", "cc", "bbb", "aaaa"}));
+```
 
-    Находится в заголовке
-    ```cpp
-    #include <burst/algorithm/radix_sort.hpp>
-    ```
+Находится в заголовке
+```cpp
+#include <burst/algorithm/radix_sort.hpp>
+```
 
-* <a name="counting"/> Сортировка подсчётом
+##### <a name="counting"/> Сортировка подсчётом
 
-    ```cpp
-    std::vector<std::size_t> chaos{0x0104, 0x0203, 0x0302, 0x0401};
+```cpp
+std::vector<std::size_t> chaos{0x0104, 0x0203, 0x0302, 0x0401};
 
-    std::vector<std::size_t> sorted_by_low_byte(chaos.size());
-    burst::counting_sort(chaos.begin(), chaos.end(), sorted_by_low_byte.begin(),
-        [] (const std::size_t & integer) -> std::uint8_t
-        {
-            return integer & 0xff;
-        });
+std::vector<std::size_t> sorted_by_low_byte(chaos.size());
+burst::counting_sort(chaos.begin(), chaos.end(), sorted_by_low_byte.begin(),
+    [] (const std::size_t & integer) -> std::uint8_t
+    {
+        return integer & 0xff;
+    });
 
-    assert((sorted_by_low_byte == std::vector<std::size_t>{0x0401, 0x0302, 0x0203, 0x0104}));
-    ```
+assert((sorted_by_low_byte == std::vector<std::size_t>{0x0401, 0x0302, 0x0203, 0x0104}));
+```
 
-    Находится в заголовке
-    ```cpp
-    #include <burst/algorithm/counting_sort.hpp>
-    ```
+Находится в заголовке
+```cpp
+#include <burst/algorithm/counting_sort.hpp>
+```
 
 #### <a name="gallop"/> Скачущий поиск
 
 Эффективен и обгоняет двоичный поиск в том случае, если искомый элемент находится близко к началу
 диапазона.
 
-* <a name="galloping-lb"/> Поиск нижней грани
+##### <a name="galloping-lb"/> Поиск нижней грани
 
-    ```cpp
-    std::vector<int> range{1, 2, 2, 3, 3, 3};
-    //                              ^
+```cpp
+std::vector<int> range{1, 2, 2, 3, 3, 3};
+//                              ^
 
-    auto search_result = burst::galloping_lower_bound(range.begin(), range.end(), 3);
+auto search_result = burst::galloping_lower_bound(range.begin(), range.end(), 3);
 
-    assert(search_result == range.begin() + 3);
-    assert(*search_result == 3);
-    ```
+assert(search_result == range.begin() + 3);
+assert(*search_result == 3);
+```
 
-    В заголовке
-    ```cpp
-    #include <burst/algorithm/galloping_lower_bound.hpp>
-    ```
+В заголовке
+```cpp
+#include <burst/algorithm/galloping_lower_bound.hpp>
+```
 
-* <a name="galloping-ub"/> Поиск верхней грани
+##### <a name="galloping-ub"/> Поиск верхней грани
 
-    ```cpp
-    std::vector<int> range{30, 30, 30, 20, 20, 10};
-    //                                         ^
+```cpp
+std::vector<int> range{30, 30, 30, 20, 20, 10};
+//                                         ^
 
-    auto search_result =
-        burst::galloping_upper_bound(range.begin(), range.end(), 20, std::greater<>{});
+auto search_result =
+    burst::galloping_upper_bound(range.begin(), range.end(), 20, std::greater<>{});
 
-    assert(search_result == range.begin() + 5);
-    assert(*search_result == 10);
-    ```
+assert(search_result == range.begin() + 5);
+assert(*search_result == 10);
+```
 
-    В заголовке
-    ```cpp
-    #include <burst/algorithm/galloping_upper_bound.hpp>
-    ```
+В заголовке
+```cpp
+#include <burst/algorithm/galloping_upper_bound.hpp>
+```
 
 ### <a name="data-structures"/> Структуры данных
 
-* <a name="kary"/> Плоское k-местное дерево поиска
+#### <a name="kary"/> Плоское k-местное дерево поиска
 
-    На достаточно большом количестве данных опережает по скорости поиска и ```std::set```, и ```std::unordered_set```, и ```boost::container::flat_set```.
+На достаточно большом количестве данных опережает по скорости поиска и ```std::set```, и ```std::unordered_set```, и ```boost::container::flat_set```.
 
-    Скорость достигается за счёт удобной для процессорного кэша упаковки данных.
+Скорость достигается за счёт удобной для процессорного кэша упаковки данных.
 
-    ```cpp
-    burst::k_ary_search_set<int> set{3, 4, 6, 1, 7, 8, 2};
-    assert(*set.find(3) == 3);
-    assert(set.find(0) == set.end());
-    ```
+```cpp
+burst::k_ary_search_set<int> set{3, 4, 6, 1, 7, 8, 2};
+assert(*set.find(3) == 3);
+assert(set.find(0) == set.end());
+```
 
-    В заголовке
-    ```cpp
-    #include <burst/container/k_ary_search_set.hpp>
-    ```
+В заголовке
+```cpp
+#include <burst/container/k_ary_search_set.hpp>
+```
 
-* <a name="dynamic-tuple"/> Динамический кортеж
+#### <a name="dynamic-tuple"/> Динамический кортеж
 
-    Неоднородный контейнер с плотной упаковкой.
-    Ключевые особенности:
-    1. Складываемые в контейнер типы не обязаны быть членами одной иерархии классов — это могут быть совершенно разные типы. Например, можно поместить одновременно ```bool```, ```double```, ```std::string```, ```std::vector<int>``` и т.п.
-    2. Объекты плотно расположены в памяти. То есть они лежат в едином буфере подряд, друг за другом. Это снимает лишний уровень косвенности при обращении к ним по сравнению с тем, если бы это был, например, массив указателей на базовый класс, как это обычно делается для хранения в массиве классов из одной иерархии.
+Неоднородный контейнер с плотной упаковкой.
+Ключевые особенности:
+1. Складываемые в контейнер типы не обязаны быть членами одной иерархии классов — это могут быть совершенно разные типы. Например, можно поместить одновременно ```bool```, ```double```, ```std::string```, ```std::vector<int>``` и т.п.
+2. Объекты плотно расположены в памяти. То есть они лежат в едином буфере подряд, друг за другом. Это снимает лишний уровень косвенности при обращении к ним по сравнению с тем, если бы это был, например, массив указателей на базовый класс, как это обычно делается для хранения в массиве классов из одной иерархии.
 
-    Объект можно получить зная его тип и индекс в контейнере.
-    ```cpp
-    burst::dynamic_tuple t(std::vector<int>{1, 2, 3});
+Объект можно получить зная его тип и индекс в контейнере.
+```cpp
+burst::dynamic_tuple t(std::vector<int>{1, 2, 3});
 
-    t.push_back(true);
-    t.push_back(std::string("123"));
+t.push_back(true);
+t.push_back(std::string("123"));
 
-    assert(t.size() == 3);
+assert(t.size() == 3);
 
-    assert(t.get<std::vector<int>>(0) == (std::vector<int>{1, 2, 3}));
-    assert(t.get<bool>(1) == true);
-    assert(t.get<std::string>(2) == std::string("123"));
-    ```
+assert(t.get<std::vector<int>>(0) == (std::vector<int>{1, 2, 3}));
+assert(t.get<bool>(1) == true);
+assert(t.get<std::string>(2) == std::string("123"));
+```
 
-    В заголовке
-    ```cpp
-    #include <burst/container/dynamic_tuple.hpp>
-    ```
+В заголовке
+```cpp
+#include <burst/container/dynamic_tuple.hpp>
+```
 
 ### <a name="lazy-ranges"/> Ленивые вычисления
 
 Операции с диапазонами без создания дополнительного буфера для хранения их содержимого.
 
-* <a name="join"/> Склейка
+#### <a name="join"/> Склейка
 
-    Представляет набор диапазонов таким образом, как будто это единый диапазон.
+Представляет набор диапазонов таким образом, как будто это единый диапазон.
+
+```cpp
+std::string hello("hello");
+std::string world("world");
+auto ranges = burst::make_range_vector(hello, world);
+
+auto helloworld = burst::join(ranges);
+
+assert(helloworld == std::string("helloworld"));
+```
+
+В заголовке
+```cpp
+#include <burst/range/join.hpp>
+```
   
-    ```cpp
-    std::string hello("hello");
-    std::string world("world");
-    auto ranges = burst::make_range_vector(hello, world);
+#### <a name="merge"/> Слияние
 
-    auto helloworld = burst::join(ranges);
+Производит ленивое слияние набора упорядоченных множеств.
+Создаёт упорядоченный диапазон, пробегающийся по всем элементам всех входных множеств.
 
-    assert(helloworld == std::string("helloworld"));
-    ```
+Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`even` и `odd`) остаются нетронутыми.
 
-    В заголовке
-    ```cpp
-    #include <burst/range/join.hpp>
-    ```
+```cpp
+std::vector<int> even{   2,    4,    6};
+std::vector<int>  odd{1,    3,    5   };
+//                    ^  ^  ^  ^  ^  ^
+auto ranges = burst::make_range_vector(even, odd);
+
+auto merged_range = burst::merge(ranges);
+
+auto expected_collection = {1, 2, 3, 4, 5, 6};
+assert(merged_range == expected_collection);
+```
+
+В заголовке
+```cpp
+#include <burst/range/merge.hpp>
+```
   
-* <a name="merge"/> Слияние
+#### <a name="intersect"/> Пересечение
 
-    Производит ленивое слияние набора упорядоченных множеств.
-    Создаёт упорядоченный диапазон, пробегающийся по всем элементам всех входных множеств.
+Производит ленивое пересечение набора упорядоченных множеств.
+Создаёт упорядоченный диапазон, пробегающийся по тем элементам, которые есть одновременно во всех входных множествах.
 
-    Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`even` и `odd`) остаются нетронутыми.
-  
-    ```cpp
-    std::vector<int> even{   2,    4,    6};
-    std::vector<int>  odd{1,    3,    5   };
-    //                    ^  ^  ^  ^  ^  ^
-    auto ranges = burst::make_range_vector(even, odd);
+Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`natural`, `prime` и `odd`) остаются нетронутыми.
 
-    auto merged_range = burst::merge(ranges);
+```cpp
+std::vector<int> natural{1, 2, 3, 4, 5, 6, 7};
+std::vector<int>   prime{   2, 3,    5,    7};
+std::vector<int>     odd{1,    3,    5,    7};
+//                             ^     ^     ^
+auto ranges = burst::make_range_vector(natural, prime, odd);
 
-    auto expected_collection = {1, 2, 3, 4, 5, 6};
-    assert(merged_range == expected_collection);
-    ```
+auto intersected_range = burst::intersect(ranges);
 
-    В заголовке
-    ```cpp
-    #include <burst/range/merge.hpp>
-    ```
-  
-* <a name="intersect"/> Пересечение
+auto expected_collection = {3, 5, 7};
+assert(intersected_range == expected_collection);
+```
 
-    Производит ленивое пересечение набора упорядоченных множеств.
-    Создаёт упорядоченный диапазон, пробегающийся по тем элементам, которые есть одновременно во всех входных множествах.
+В заголовке
+```cpp
+#include <burst/range/intersect.hpp>
+```
 
-    Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`natural`, `prime` и `odd`) остаются нетронутыми.
-  
-    ```cpp
-    std::vector<int> natural{1, 2, 3, 4, 5, 6, 7};
-    std::vector<int>   prime{   2, 3,    5,    7};
-    std::vector<int>     odd{1,    3,    5,    7};
-    //                             ^     ^     ^
-    auto ranges = burst::make_range_vector(natural, prime, odd);
+#### <a name="semiintersect"/> Полупересечение
 
-    auto intersected_range = burst::intersect(ranges);
+`m`-полупересечение нескольких множеств содержит те элементы, которые содержатся не менее, чем в `m` из этих множеств.
 
-    auto expected_collection = {3, 5, 7};
-    assert(intersected_range == expected_collection);
-    ```
+Производит ленивое полупересечение набора упорядоченных множеств.
+Создаёт упорядоченный диапазон, пробегающийся по всем элементам, которые есть не менее, чем в `m` входных множествах.
 
-    В заголовке
-    ```cpp
-    #include <burst/range/intersect.hpp>
-    ```
+Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`first`, `second` и `third`) остаются нетронутыми.
 
-* <a name="semiintersect"/> Полупересечение
+```cpp
+auto  first = {0, 0, 1,       2};
+auto second = {0,    1, 1      };
+auto  third = {      1, 1, 1, 2};
+//             ^     ^  ^     ^
+auto ranges = burst::make_range_vector(first, second, third);
 
-    `m`-полупересечение нескольких множеств содержит те элементы, которые содержатся не менее, чем в `m` из этих множеств.
+auto semiintersection = burst::semiintersect(ranges, 2);
 
-    Производит ленивое полупересечение набора упорядоченных множеств.
-    Создаёт упорядоченный диапазон, пробегающийся по всем элементам, которые есть не менее, чем в `m` входных множествах.
+auto expected_collection = {0, 1, 1, 2};
+assert(semiintersection == expected_collection);
+```
 
-    Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`first`, `second` и `third`) остаются нетронутыми.
+В заголовке
+```cpp
+#include <burst/range/semiintersect.hpp>
+```
 
-    ```cpp
-    auto  first = {0, 0, 1,       2};
-    auto second = {0,    1, 1      };
-    auto  third = {      1, 1, 1, 2};
-    //             ^     ^  ^     ^
-    auto ranges = burst::make_range_vector(first, second, third);
+#### <a name="union"/> Объединение
 
-    auto semiintersection = burst::semiintersect(ranges, 2);
+Производит ленивое объединение набора упорядоченных множеств.
+Создаёт упорядоченный диапазон, пробегающийся по всем элементам входных множеств без учёта повторяющихся элементов.
 
-    auto expected_collection = {0, 1, 1, 2};
-    assert(semiintersection == expected_collection);
-    ```
+Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`one`, `two` и `three`) остаются нетронутыми.
 
-    В заголовке
-    ```cpp
-    #include <burst/range/semiintersect.hpp>
-    ```
+```cpp
+std::vector<int>   one{1, 2      };
+std::vector<int>   two{   2, 3   };
+std::vector<int> three{      3, 4};
+//                     ^  ^  ^  ^
+auto ranges = burst::make_range_vector(one, two, three);
 
-* <a name="union"/> Объединение
+auto range_union = burst::unite(ranges);
 
-    Производит ленивое объединение набора упорядоченных множеств.
-    Создаёт упорядоченный диапазон, пробегающийся по всем элементам входных множеств без учёта повторяющихся элементов.
+auto expected_collection = {1, 2, 3, 4};
+assert(range_union == expected_collection);
+```
 
-    Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`one`, `two` и `three`) остаются нетронутыми.
-  
-    ```cpp
-    std::vector<int>   one{1, 2      };
-    std::vector<int>   two{   2, 3   };
-    std::vector<int> three{      3, 4};
-    //                     ^  ^  ^  ^
-    auto ranges = burst::make_range_vector(one, two, three);
+В заголовке
+```cpp
+#include <burst/range/unite.hpp>
+```
 
-    auto range_union = burst::unite(ranges);
+#### <a name="difference"/> Разность
 
-    auto expected_collection = {1, 2, 3, 4};
-    assert(range_union == expected_collection);
-    ```
+Производит ленивую разность двух упорядоченных множеств.
+Создаёт упорядоченный диапазон, пробегающийся по всем элементам, которые есть в первом множестве, но которых нет во втором.
 
-    В заголовке
-    ```cpp
-    #include <burst/range/unite.hpp>
-    ```
+```cpp
+const auto natural = burst::make_vector({1, 2, 3, 4, 5, 6});
+const auto     odd = burst::make_vector({1,    3,    5   });
+//                                          ^     ^     ^
 
-* <a name="difference"/> Разность
+const auto difference = burst::difference(natural, odd);
 
-    Производит ленивую разность двух упорядоченных множеств.
-    Создаёт упорядоченный диапазон, пробегающийся по всем элементам, которые есть в первом множестве, но которых нет во втором.
+auto even = {2, 4, 6};
+assert(difference == even);
+```
 
-    ```cpp
-    const auto natural = burst::make_vector({1, 2, 3, 4, 5, 6});
-    const auto     odd = burst::make_vector({1,    3,    5   });
-    //                                          ^     ^     ^
+В заголовке
+```cpp
+#include <burst/range/difference.hpp>
+```
 
-    const auto difference = burst::difference(natural, odd);
+#### <a name="symmetric-difference"/> Симметрическая разность
 
-    auto even = {2, 4, 6};
-    assert(difference == even);
-    ```
+Производит ленивую симметрическую разность набора упорядоченных множеств.
+Создаёт упорядоченный диапазон, пробегающийся по всем элементам, которые есть в нечётном числе входных множеств.
 
-    В заголовке
-    ```cpp
-    #include <burst/range/difference.hpp>
-    ```
+Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`first`, `second`, `third` и `fourth`) остаются нетронутыми.
 
-* <a name="symmetric-difference"/> Симметрическая разность
+```cpp
+const auto  first = burst::make_vector({1, 2, 3, 4      });
+const auto second = burst::make_vector({1, 2, 3,    5, 5});
+const auto  third = burst::make_vector({1,    3, 4, 5   });
+const auto fourth = burst::make_vector({1, 2,    4      });
+//                                         ^  ^  ^     ^
+auto ranges = burst::make_range_vector(first, second, third, fourth);
 
-    Производит ленивую симметрическую разность набора упорядоченных множеств.
-    Создаёт упорядоченный диапазон, пробегающийся по всем элементам, которые есть в нечётном числе входных множеств.
+const auto difference = burst::symmetric_difference(ranges);
 
-    Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`first`, `second`, `third` и `fourth`) остаются нетронутыми.
+auto result = {2, 3, 4, 5};
+assert(difference == result);
+```
 
-    ```cpp
-    const auto  first = burst::make_vector({1, 2, 3, 4      });
-    const auto second = burst::make_vector({1, 2, 3,    5, 5});
-    const auto  third = burst::make_vector({1,    3, 4, 5   });
-    const auto fourth = burst::make_vector({1, 2,    4      });
-    //                                         ^  ^  ^     ^
-    auto ranges = burst::make_range_vector(first, second, third, fourth);
-
-    const auto difference = burst::symmetric_difference(ranges);
-
-    auto result = {2, 3, 4, 5};
-    assert(difference == result);
-    ```
-
-    В заголовке
-    ```cpp
-    #include <burst/range/symmetric_difference.hpp>
-    ```
+В заголовке
+```cpp
+#include <burst/range/symmetric_difference.hpp>
+```
 
 ### <a name="utilities"/> Рабочие инструменты
 
@@ -347,29 +347,29 @@ Burst
 
 В этом случае полезно иметь функцию, выполняющую конструирование этого контейнера так, что тип контейнера выведется автоматически из входных аргументов функции, и пользователю не придётся задавать этот тип вручную.
 
-1. Конструирование из списка инициализации
+##### Конструирование из списка инициализации
 
-    ```cpp
-    auto v = burst::make_vector({1, 2, 3, 4});
-    ```
+```cpp
+auto v = burst::make_vector({1, 2, 3, 4});
+```
 
-2. Конструирование при помощи двух итераторов
+##### Конструирование при помощи двух итераторов
 
-    ```cpp
-    auto v = burst::make_vector(collection.begin() + 3, collection.end());
-    ```
+```cpp
+auto v = burst::make_vector(collection.begin() + 3, collection.end());
+```
 
-3. Конструирование из диапазона
+##### Конструирование из диапазона
 
-    ```cpp
-    auto v = burst::make_vector(collection);
-    ```
+```cpp
+auto v = burst::make_vector(collection);
+```
 
-4. Заполняющее конструирование
+##### Заполняющее конструирование
 
-    ```cpp
-    auto v = burst::make_vector(5, x);
-    ```
+```cpp
+auto v = burst::make_vector(5, x);
+```
 
 Доступны практически все варианты конструкторов, а также варианты с конструированием из диапазона для стандартных последовательных контейнеров (```std::vector```, ```std::deque```, ```std::list```, ```std::forward_list```).
 
