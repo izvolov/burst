@@ -37,13 +37,14 @@ Burst
 4. [Рабочие инструменты](#utilities)
     1. [Конструирование контейнеров с выводом типа](#inferring-constructors)
 
-### <a name="algorithms"/> Алгоритмы
+<a name="algorithms"/> Алгоритмы
+--------------------------------
 
-#### <a name="intsort"/> Целочисленные сортировки
+### <a name="intsort"/> Целочисленные сортировки
 
 Классические алгоритмы эффективной сортировки целых чисел с линейным временем вычисления.
 
-##### <a name="radix"/> Поразрядная сортировка
+#### <a name="radix"/> Поразрядная сортировка
 
 ```cpp
 std::vector<std::string> strings{"aaaa", "bbb", "cc", "d"};
@@ -63,7 +64,7 @@ assert((strings == std::vector<std::string>{"d", "cc", "bbb", "aaaa"}));
 #include <burst/algorithm/radix_sort.hpp>
 ```
 
-##### <a name="counting"/> Сортировка подсчётом
+#### <a name="counting"/> Сортировка подсчётом
 
 ```cpp
 std::vector<std::size_t> chaos{0x0104, 0x0203, 0x0302, 0x0401};
@@ -83,12 +84,12 @@ assert((sorted_by_low_byte == std::vector<std::size_t>{0x0401, 0x0302, 0x0203, 0
 #include <burst/algorithm/counting_sort.hpp>
 ```
 
-#### <a name="gallop"/> Скачущий поиск
+### <a name="gallop"/> Скачущий поиск
 
 Эффективен и обгоняет двоичный поиск в том случае, если искомый элемент находится близко к началу
 диапазона.
 
-##### <a name="galloping-lb"/> Поиск нижней грани
+#### <a name="galloping-lb"/> Поиск нижней грани
 
 ```cpp
 std::vector<int> range{1, 2, 2, 3, 3, 3};
@@ -105,7 +106,7 @@ assert(*search_result == 3);
 #include <burst/algorithm/galloping_lower_bound.hpp>
 ```
 
-##### <a name="galloping-ub"/> Поиск верхней грани
+#### <a name="galloping-ub"/> Поиск верхней грани
 
 ```cpp
 std::vector<int> range{30, 30, 30, 20, 20, 10};
@@ -123,9 +124,10 @@ assert(*search_result == 10);
 #include <burst/algorithm/galloping_upper_bound.hpp>
 ```
 
-### <a name="data-structures"/> Структуры данных
+<a name="data-structures"/> Структуры данных
+--------------------------------------------
 
-#### <a name="kary"/> Плоское k-местное дерево поиска
+### <a name="kary"/> Плоское k-местное дерево поиска
 
 На достаточно большом количестве данных опережает по скорости поиска и `std::set`, и `std::unordered_set`, и `boost::container::flat_set`.
 
@@ -142,7 +144,7 @@ assert(set.find(0) == set.end());
 #include <burst/container/k_ary_search_set.hpp>
 ```
 
-#### <a name="dynamic-tuple"/> Динамический кортеж
+### <a name="dynamic-tuple"/> Динамический кортеж
 
 Неоднородный контейнер с плотной упаковкой.
 Ключевые особенности:
@@ -168,11 +170,12 @@ assert(t.get<std::string>(2) == std::string("123"));
 #include <burst/container/dynamic_tuple.hpp>
 ```
 
-### <a name="lazy-ranges"/> Ленивые вычисления
+<a name="lazy-ranges"/> Ленивые вычисления
+------------------------------------------
 
 Операции с диапазонами без создания дополнительного буфера для хранения их содержимого.
 
-#### <a name="join"/> Склейка
+### <a name="join"/> Склейка
 
 Представляет набор диапазонов таким образом, как будто это единый диапазон.
 
@@ -191,7 +194,7 @@ assert(helloworld == std::string("helloworld"));
 #include <burst/range/join.hpp>
 ```
   
-#### <a name="merge"/> Слияние
+### <a name="merge"/> Слияние
 
 Производит ленивое слияние набора упорядоченных множеств.
 Создаёт упорядоченный диапазон, пробегающийся по всем элементам всех входных множеств.
@@ -215,7 +218,7 @@ assert(merged_range == expected_collection);
 #include <burst/range/merge.hpp>
 ```
   
-#### <a name="intersect"/> Пересечение
+### <a name="intersect"/> Пересечение
 
 Производит ленивое пересечение набора упорядоченных множеств.
 Создаёт упорядоченный диапазон, пробегающийся по тем элементам, которые есть одновременно во всех входных множествах.
@@ -240,7 +243,7 @@ assert(intersected_range == expected_collection);
 #include <burst/range/intersect.hpp>
 ```
 
-#### <a name="semiintersect"/> Полупересечение
+### <a name="semiintersect"/> Полупересечение
 
 `m`-полупересечение нескольких множеств содержит те элементы, которые содержатся не менее, чем в `m` из этих множеств.
 
@@ -267,7 +270,7 @@ assert(semiintersection == expected_collection);
 #include <burst/range/semiintersect.hpp>
 ```
 
-#### <a name="union"/> Объединение
+### <a name="union"/> Объединение
 
 Производит ленивое объединение набора упорядоченных множеств.
 Создаёт упорядоченный диапазон, пробегающийся по всем элементам входных множеств без учёта повторяющихся элементов.
@@ -292,7 +295,7 @@ assert(range_union == expected_collection);
 #include <burst/range/unite.hpp>
 ```
 
-#### <a name="difference"/> Разность
+### <a name="difference"/> Разность
 
 Производит ленивую разность двух упорядоченных множеств.
 Создаёт упорядоченный диапазон, пробегающийся по всем элементам, которые есть в первом множестве, но которых нет во втором.
@@ -313,7 +316,7 @@ assert(difference == even);
 #include <burst/range/difference.hpp>
 ```
 
-#### <a name="symmetric-difference"/> Симметрическая разность
+### <a name="symmetric-difference"/> Симметрическая разность
 
 Производит ленивую симметрическую разность набора упорядоченных множеств.
 Создаёт упорядоченный диапазон, пробегающийся по всем элементам, которые есть в нечётном числе входных множеств.
@@ -339,33 +342,34 @@ assert(difference == result);
 #include <burst/range/symmetric_difference.hpp>
 ```
 
-### <a name="utilities"/> Рабочие инструменты
+<a name="utilities"/> Рабочие инструменты
+-----------------------------------------
 
-#### <a name="inferring-constructors"/> Конструирование контейнеров с выводом типа
+### <a name="inferring-constructors"/> Конструирование контейнеров с выводом типа
 
 Часто бывает так, что нужно сохранить данные в контейнер, но при этом тип этих данных либо заранее неизвестен, либо его сложно описать, либо он просто не важен.
 
 В этом случае полезно иметь функцию, выполняющую конструирование этого контейнера так, что тип контейнера выведется автоматически из входных аргументов функции, и пользователю не придётся задавать этот тип вручную.
 
-##### Конструирование из списка инициализации
+#### Конструирование из списка инициализации
 
 ```cpp
 auto v = burst::make_vector({1, 2, 3, 4});
 ```
 
-##### Конструирование при помощи двух итераторов
+#### Конструирование при помощи двух итераторов
 
 ```cpp
 auto v = burst::make_vector(collection.begin() + 3, collection.end());
 ```
 
-##### Конструирование из диапазона
+#### Конструирование из диапазона
 
 ```cpp
 auto v = burst::make_vector(collection);
 ```
 
-##### Заполняющее конструирование
+#### Заполняющее конструирование
 
 ```cpp
 auto v = burst::make_vector(5, x);
