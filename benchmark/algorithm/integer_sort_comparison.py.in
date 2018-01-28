@@ -48,12 +48,20 @@ def plot (lengths, measurements, integer_type, file_name):
 
 def parse_command_line (options):
     parser = argparse.ArgumentParser(options[0])
-    parser.add_argument('--begin', type=int, default=10)
-    parser.add_argument('--end', type=int, default=100)
-    parser.add_argument('--step', type=int, default=10)
-    parser.add_argument('--prefix', type=str, default='intsort')
-    parser.add_argument('--integer', type=str, default='uint32')
-    parser.add_argument('--prepare', type=str, default='shuffle')
+    parser.add_argument('--begin', type=int, default=10,
+        help='Минимальный размер массива')
+    parser.add_argument('--end', type=int, default=100,
+        help='Максимальный размер массива')
+    parser.add_argument('--step', type=int, default=10,
+        help='Шаг размера массива')
+    parser.add_argument('--prefix', type=str, default='intsort',
+        help='Префикс выходного файла')
+    parser.add_argument('--integer', type=str, default='uint32',
+        help='Тип сортируемых чисел',
+        choices=['int8', 'int16', 'int32', 'int64', 'uint8', 'uint16', 'uint32', 'uint64'])
+    parser.add_argument('--prepare', type=str, default='shuffle',
+        help='Предобработка массива перед каждой сортировкой',
+        choices=['shuffle', 'noshuffle'])
     args = parser.parse_args(options[1:])
     return args.begin, args.end, args.step, args.prefix, args.integer, args.prepare
 
