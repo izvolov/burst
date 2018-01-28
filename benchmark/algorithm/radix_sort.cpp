@@ -48,7 +48,7 @@ void test_all (std::size_t attempts)
 }
 
 using test_call_type = void (*) (std::size_t);
-test_call_type get_call_for_integer (const std::string & integer_type)
+test_call_type dispatch_integer (const std::string & integer_type)
 {
     static const std::unordered_map<std::string, test_call_type> test_calls
     {
@@ -98,7 +98,7 @@ int main (int argc, const char * argv[])
             std::size_t attempts = vm["attempts"].as<std::size_t>();
             auto integer_type = vm["integer"].as<std::string>();
 
-            auto test = get_call_for_integer(integer_type);
+            auto test = dispatch_integer(integer_type);
             test(attempts);
         }
     }
