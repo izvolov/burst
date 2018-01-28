@@ -13,7 +13,15 @@
 #include <vector>
 
 template <typename Sort, typename Container, typename UnaryFunction>
-void test_sort (const std::string & name, Sort sort, const Container & numbers, std::size_t attempts, UnaryFunction prepare)
+void
+    test_sort
+    (
+        const std::string & name,
+        Sort sort,
+        const Container & numbers,
+        std::size_t attempts,
+        UnaryFunction prepare
+    )
 {
     using namespace std::chrono;
     auto total_time = steady_clock::duration{0};
@@ -39,13 +47,25 @@ void test_all (std::size_t attempts, UnaryFunction prepare)
 
     std::vector<Integer> buffer(numbers.size());
 
-    auto radix_sort = [& buffer] (auto && ... args) { return burst::radix_sort(std::forward<decltype(args)>(args)..., buffer.begin()); };
+    auto radix_sort =
+        [& buffer] (auto && ... args)
+        {
+            return burst::radix_sort(std::forward<decltype(args)>(args)..., buffer.begin());
+        };
     test_sort("burst::radix_sort", radix_sort, numbers, attempts, prepare);
 
-    auto std_sort = [] (auto && ... args) { return std::sort(std::forward<decltype(args)>(args)...); };
+    auto std_sort =
+        [] (auto && ... args)
+        {
+            return std::sort(std::forward<decltype(args)>(args)...);
+        };
     test_sort("std::sort", std_sort, numbers, attempts, prepare);
 
-    auto boost_int_sort = [] (auto && ... args) { return boost::sort::spreadsort::integer_sort(std::forward<decltype(args)>(args)...); };
+    auto boost_int_sort =
+        [] (auto && ... args)
+        {
+            return boost::sort::spreadsort::integer_sort(std::forward<decltype(args)>(args)...);
+        };
     test_sort("boost::integer_sort", boost_int_sort, numbers, attempts, prepare);
 }
 
@@ -67,11 +87,24 @@ struct shuffle_fn
 template <typename Integer>
 test_call_type dispatch_preparation (const std::string & prepare_type)
 {
-    static const std::unordered_map<std::string, test_call_type> test_calls
-    {
-        {"noshuffle", [] (std::size_t attempts) {return test_all<Integer>(attempts, burst::identity);}},
-        {"shuffle", [shuffle = shuffle_fn<Integer>{}] (std::size_t attempts) {return test_all<Integer>(attempts, shuffle);}}
-    };
+    static const auto test_calls =
+        std::unordered_map<std::string, test_call_type>
+        {
+            {
+                "noshuffle",
+                [] (std::size_t attempts)
+                {
+                    return test_all<Integer>(attempts, burst::identity);
+                }
+            },
+            {
+                "shuffle",
+                [shuffle = shuffle_fn<Integer>{}] (std::size_t attempts)
+                {
+                    return test_all<Integer>(attempts, shuffle);
+                }
+            }
+        };
 
     auto call = test_calls.find(prepare_type);
     if (call != test_calls.end())
@@ -88,17 +121,18 @@ using dispatch_preparation_call_type = std::function<test_call_type (const std::
 
 dispatch_preparation_call_type dispatch_integer (const std::string & integer_type)
 {
-    static const std::unordered_map<std::string, dispatch_preparation_call_type> dispatch_prepare_calls
-    {
-        {"uint8", &dispatch_preparation<std::uint8_t>},
-        {"uint16", &dispatch_preparation<std::uint16_t>},
-        {"uint32", &dispatch_preparation<std::uint32_t>},
-        {"uint64", &dispatch_preparation<std::uint64_t>},
-        {"int8", &dispatch_preparation<std::int8_t>},
-        {"int16", &dispatch_preparation<std::int16_t>},
-        {"int32", &dispatch_preparation<std::int32_t>},
-        {"int64", &dispatch_preparation<std::int64_t>}
-    };
+    static const auto dispatch_prepare_calls =
+        std::unordered_map<std::string, dispatch_preparation_call_type>
+        {
+            {"uint8", &dispatch_preparation<std::uint8_t>},
+            {"uint16", &dispatch_preparation<std::uint16_t>},
+            {"uint32", &dispatch_preparation<std::uint32_t>},
+            {"uint64", &dispatch_preparation<std::uint64_t>},
+            {"int8", &dispatch_preparation<std::int8_t>},
+            {"int16", &dispatch_preparation<std::int16_t>},
+            {"int32", &dispatch_preparation<std::int32_t>},
+            {"int64", &dispatch_preparation<std::int64_t>}
+        };
 
     auto call = dispatch_prepare_calls.find(integer_type);
     if (call != dispatch_prepare_calls.end())
@@ -107,7 +141,8 @@ dispatch_preparation_call_type dispatch_integer (const std::string & integer_typ
     }
     else
     {
-        throw boost::program_options::error(u8"Неверная разрядность сортируемых чисел: " + integer_type);
+        auto error_message = u8"Неверная разрядность сортируемых чисел: " + integer_type;
+        throw boost::program_options::error(error_message);
     }
 }
 
@@ -123,9 +158,14 @@ int main (int argc, const char * argv[])
     bpo::options_description description("Опции");
     description.add_options()
         ("help,h", "Подсказка")
-        ("attempts", bpo::value<std::size_t>()->default_value(1000), "Количество испытаний")
-        ("integer", bpo::value<std::string>()->default_value("uint32"), "Тип сортируемых чисел. Допустимые значения: uint8, uint16, uint32, uint64, int8, int16, int32, int64")
-        ("prepare", bpo::value<std::string>()->default_value("shuffle"), "Тип подготовки массива перед каждым испытанием. Допустимые значения: noshuffle, shuffle");
+        ("attempts", bpo::value<std::size_t>()->default_value(1000),
+            "Количество испытаний")
+        ("integer", bpo::value<std::string>()->default_value("uint32"),
+            "Тип сортируемых чисел.\n"
+            "Допустимые значения: uint8, uint16, uint32, uint64, int8, int16, int32, int64")
+        ("prepare", bpo::value<std::string>()->default_value("shuffle"),
+            "Тип подготовки массива перед каждым испытанием.\n"
+            "Допустимые значения: noshuffle, shuffle");
 
     try
     {
