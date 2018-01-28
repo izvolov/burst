@@ -7,11 +7,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 
-def measure (lengths, max_attempts, integer_type):
+def measure (lengths, max_attempts, integer_type, prepare):
     measurements = {}
 
     for length, attempts in [(l, max_attempts / l) for l in lengths]:
-        command = "@CMAKE_BINARY_DIR@/benchmark/rangegen --count=1 --length=" + str(length) + " | @CMAKE_BINARY_DIR@/benchmark/algorithm/radix --attempts=" + str(attempts) + " --integer=" + integer_type
+        command = "@CMAKE_BINARY_DIR@/benchmark/rangegen --count=1 --length=" + str(length) + " | @CMAKE_BINARY_DIR@/benchmark/algorithm/radix --attempts=" + str(attempts) + " --integer=" + integer_type + " --prepare=" + prepare
         sys.stderr.write(command + '\n');
         results = Popen(command, shell=True, stdin=PIPE, stdout=PIPE).stdout.read().splitlines()
 
@@ -44,14 +44,15 @@ def parse_command_line (options):
     parser.add_argument('--step', type=int, default=10)
     parser.add_argument('--prefix', type=str, default='intsort')
     parser.add_argument('--integer', type=str, default='uint32')
+    parser.add_argument('--prepare', type=str, default='shuffle')
     args = parser.parse_args(options[1:])
-    return args.begin, args.end, args.step, args.prefix, args.integer
+    return args.begin, args.end, args.step, args.prefix, args.integer, args.prepare
 
 max_attempts = 10000000
 
-begin, end, step, prefix, integer_type = parse_command_line(sys.argv)
+begin, end, step, prefix, integer_type, prepare = parse_command_line(sys.argv)
 lengths = range(begin, end, step)
 
-measurements = measure(lengths, max_attempts, integer_type)
-file_name = '_'.join((prefix, str(begin), str(end), str(step), integer_type))
+measurements = measure(lengths, max_attempts, integer_type, prepare)
+file_name = '_'.join((prefix, str(begin), str(end), str(step), integer_type, prepare))
 plot(lengths, measurements, integer_type, file_name + '.png')
