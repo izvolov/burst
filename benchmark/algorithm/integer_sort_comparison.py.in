@@ -10,8 +10,17 @@ import sys
 def measure (lengths, max_attempts, integer_type, prepare):
     measurements = {}
 
+    command_template =\
+        ("@CMAKE_BINARY_DIR@/benchmark/rangegen "
+            "--count=1 "
+            "--length={} | "
+        "@CMAKE_BINARY_DIR@/benchmark/algorithm/radix "
+            "--attempts={} "
+            "--integer={} "
+            "--prepare={}")
+
     for length, attempts in [(l, max_attempts / l) for l in lengths]:
-        command = "@CMAKE_BINARY_DIR@/benchmark/rangegen --count=1 --length={} | @CMAKE_BINARY_DIR@/benchmark/algorithm/radix --attempts={} --integer={} --prepare={}".format(length, attempts, integer_type, prepare)
+        command = command_template.format(length, attempts, integer_type, prepare)
         sys.stderr.write(command + '\n');
         results = Popen(command, shell=True, stdin=PIPE, stdout=PIPE).stdout.read().splitlines()
 
