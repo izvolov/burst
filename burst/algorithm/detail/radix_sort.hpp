@@ -2,16 +2,13 @@
 #define BURST_ALGORITHM_DETAIL_RADIX_SORT_HPP
 
 #include <burst/algorithm/detail/counting_sort.hpp>
-#include <burst/integer/intlog2.hpp>
-#include <burst/integer/right_shift.hpp>
+#include <burst/algorithm/detail/nth_radix.hpp>
+#include <burst/algorithm/detail/radix_sort_traits.hpp>
 #include <burst/variadic.hpp>
 
 #include <algorithm>
-#include <climits>
 #include <cstddef>
-#include <cstdint>
 #include <iterator>
-#include <limits>
 #include <numeric>
 #include <type_traits>
 #include <utility>
@@ -20,40 +17,6 @@ namespace burst
 {
     namespace detail
     {
-        template <typename Value, typename Map, typename Radix>
-        struct radix_sort_traits
-        {
-            using integer_type = std::decay_t<std::result_of_t<Map(Value)>>;
-            static_assert
-            (
-                std::is_integral<integer_type>::value && std::is_unsigned<integer_type>::value,
-                "Сортируемые элементы должны быть отображены в целые беззнаковые числа."
-            );
-
-            using radix_type = std::decay_t<std::result_of_t<Radix(integer_type)>>;
-            static_assert
-            (
-                std::is_integral<radix_type>::value,
-                "Тип разряда, выделяемого из целого числа, тоже должен быть целым."
-            );
-
-            constexpr static auto radix_value_range = std::numeric_limits<radix_type>::max() + 1;
-            constexpr static auto radix_size = intlog2<std::uint64_t>(radix_value_range);
-            constexpr static auto radix_count = sizeof(integer_type) * CHAR_BIT / radix_size;
-        };
-
-        template <typename Map, typename Radix>
-        auto nth_radix (std::size_t radix_number, Map map, Radix radix)
-        {
-            return [radix_number, map = std::move(map), radix = std::move(radix)] (const auto & value)
-            {
-                using value_type = std::remove_reference_t<decltype(value)>;
-                using traits = radix_sort_traits<value_type, Map, Radix>;
-
-                return radix(right_shift(map(value), traits::radix_size * radix_number));
-            };
-        }
-
         template <typename ForwardIterator, typename Map, typename Radix, typename RandomAccessIterator, std::size_t ... Radices>
         void collect_impl (ForwardIterator first, ForwardIterator last, Map map, Radix radix, RandomAccessIterator counters, std::index_sequence<Radices...>)
         {
