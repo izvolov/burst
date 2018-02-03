@@ -253,6 +253,77 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
         );
     }
 
+    template <typename Integer>
+    struct implicitly_nonmovable
+    {
+
+        implicitly_nonmovable (Integer n):
+            n(n)
+        {
+        }
+
+        implicitly_nonmovable () = default;
+
+        implicitly_nonmovable (const implicitly_nonmovable &) = default;
+        implicitly_nonmovable & operator = (const implicitly_nonmovable &) = default;
+
+        ~implicitly_nonmovable () = default;
+
+        Integer n;
+    };
+
+    BOOST_AUTO_TEST_CASE(can_sort_implicitly_nonmovable_objects)
+    {
+        using object_type = implicitly_nonmovable<std::int64_t>;
+        auto objects =
+            std::vector<object_type>
+            {
+                object_type(100500),
+                object_type(-200),
+                object_type(0)
+            };
+
+        std::vector<object_type> buffer(objects.size());
+        burst::radix_sort(objects, buffer.begin(), [] (auto && n) {return n.n;});
+    }
+
+    template <typename Integer>
+    struct explicitly_nonmovable
+    {
+
+        explicitly_nonmovable (Integer n):
+            n(n)
+        {
+        }
+
+        explicitly_nonmovable () = default;
+
+        explicitly_nonmovable (explicitly_nonmovable &&) = delete;
+        explicitly_nonmovable & operator = (explicitly_nonmovable &&) = delete;
+
+        explicitly_nonmovable (const explicitly_nonmovable &) = default;
+        explicitly_nonmovable & operator = (const explicitly_nonmovable &) = default;
+
+        ~explicitly_nonmovable () = default;
+
+        Integer n;
+    };
+
+    BOOST_AUTO_TEST_CASE(can_sort_explicitly_nonmovable_objects)
+    {
+        using object_type = explicitly_nonmovable<std::int8_t>;
+        std::vector<object_type> objects;
+        object_type x1(100);
+        objects.push_back(x1);
+        object_type x2(-20);
+        objects.push_back(x2);
+        object_type x3(0);
+        objects.push_back(x3);
+
+        std::vector<object_type> buffer(objects.size());
+        burst::radix_sort(objects, buffer.begin(), [] (auto && n) {return n.n;});
+    }
+
     BOOST_AUTO_TEST_CASE(works_with_ranges)
     {
         std::vector<std::uint32_t> numbers{100500, 42, 99999, 1000, 0};

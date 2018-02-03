@@ -2,6 +2,7 @@
 #define BURST_ALGORITHM_DETAIL_RADIX_SORT_HPP
 
 #include <burst/algorithm/detail/counting_sort.hpp>
+#include <burst/algorithm/detail/move_assign_please.hpp>
 #include <burst/algorithm/detail/nth_radix.hpp>
 #include <burst/algorithm/detail/radix_sort_traits.hpp>
 #include <burst/iterator/iterator_value.hpp>
@@ -65,13 +66,13 @@ namespace burst
         >
         ::type radix_sort_impl (RandomAccessIterator1 first, RandomAccessIterator1 last, RandomAccessIterator2 buffer, Map map, Radix radix)
         {
-            auto buffer_end = counting_sort_impl(std::make_move_iterator(first), std::make_move_iterator(last), buffer,
+            auto buffer_end = counting_sort_impl(move_assign_please(first), move_assign_please(last), buffer,
                 [& map, & radix] (const auto & value)
                 {
                     return radix(map(value));
                 });
 
-            std::move(buffer, buffer_end, first);
+            std::copy(move_assign_please(buffer), move_assign_please(buffer_end), first);
         }
 
         //!     Специализация для случая, когда количество разрядов сортируемых чисел чётно.
@@ -113,8 +114,8 @@ namespace burst
             auto buffer_end = buffer_begin + std::distance(first, last);
             for (std::size_t radix_number = 0; radix_number < traits::radix_count; radix_number += 2)
             {
-                dispose_backward(std::make_move_iterator(first), std::make_move_iterator(last), buffer_begin, nth_radix(radix_number, map, radix), std::begin(counters[radix_number]));
-                dispose_backward(std::make_move_iterator(buffer_begin), std::make_move_iterator(buffer_end), first, nth_radix(radix_number + 1, map, radix), std::begin(counters[radix_number + 1]));
+                dispose_backward(move_assign_please(first), move_assign_please(last), buffer_begin, nth_radix(radix_number, map, radix), std::begin(counters[radix_number]));
+                dispose_backward(move_assign_please(buffer_begin), move_assign_please(buffer_end), first, nth_radix(radix_number + 1, map, radix), std::begin(counters[radix_number + 1]));
             }
         }
     } // namespace detail
