@@ -110,18 +110,11 @@ namespace burst
             collect(first, last, map, radix, counters);
 
             auto buffer_end = buffer_begin + std::distance(first, last);
-
-            auto get_low_radix = [& radix, & map] (const value_type & value) { return radix(map(value)); };
-            dispose_backward(std::make_move_iterator(first), std::make_move_iterator(last), buffer_begin, get_low_radix, std::begin(counters[0]));
-
-            for (std::size_t radix_number = 1; radix_number < traits::radix_count - 1; radix_number += 2)
+            for (std::size_t radix_number = 0; radix_number < traits::radix_count; radix_number += 2)
             {
-                dispose_backward(std::make_move_iterator(buffer_begin), std::make_move_iterator(buffer_end), first, nth_radix(radix_number, map, radix), std::begin(counters[radix_number]));
-                dispose_backward(std::make_move_iterator(first), std::make_move_iterator(last), buffer_begin, nth_radix(radix_number + 1, map, radix), std::begin(counters[radix_number + 1]));
+                dispose_backward(std::make_move_iterator(first), std::make_move_iterator(last), buffer_begin, nth_radix(radix_number, map, radix), std::begin(counters[radix_number]));
+                dispose_backward(std::make_move_iterator(buffer_begin), std::make_move_iterator(buffer_end), first, nth_radix(radix_number + 1, map, radix), std::begin(counters[radix_number + 1]));
             }
-
-            auto get_high_radix = nth_radix(traits::radix_count - 1, map, radix);
-            dispose_backward(std::make_move_iterator(buffer_begin), std::make_move_iterator(buffer_end), first, get_high_radix, std::begin(counters[traits::radix_count - 1]));
         }
     } // namespace detail
 } // namespace burst
