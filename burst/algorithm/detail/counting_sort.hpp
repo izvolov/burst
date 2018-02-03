@@ -27,6 +27,29 @@ namespace burst
             constexpr static const auto value_range = std::numeric_limits<image_type>::max() + 1;
         };
 
+        //!     Подсчитать вхождения
+        /*!
+                Для каждого сортируемого числа `n_i` подсчитывает количество его вхождений в
+            диапазон, и записывает это количество на позицию `counters[n_i]`,
+            где `n_i = map(first[i])`.
+         */
+        template <typename ForwardIterator, typename Map, typename RandomAccessIterator>
+        void
+            count
+            (
+                ForwardIterator first,
+                ForwardIterator last,
+                Map map,
+                RandomAccessIterator counters
+            )
+        {
+            std::for_each(first, last,
+                [& counters, & map] (const auto & preimage)
+                {
+                    ++counters[map(preimage)];
+                });
+        }
+
         //!     Собрать счётчики.
         /*!
                 Для каждого сортируемого числа `n_i` подсчитывает количество элементов, которые
@@ -46,11 +69,7 @@ namespace burst
             using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
             using traits = counting_sort_traits<value_type, Map>;
 
-            std::for_each(first, last,
-                [& counters, & map] (const auto & preimage)
-                {
-                    ++counters[map(preimage)];
-                });
+            count(first, last, map, counters);
 
             const auto counters_end = counters + traits::value_range;
             std::partial_sum(counters, counters_end, counters);
