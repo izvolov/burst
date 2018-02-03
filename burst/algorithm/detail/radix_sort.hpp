@@ -4,6 +4,7 @@
 #include <burst/algorithm/detail/counting_sort.hpp>
 #include <burst/algorithm/detail/nth_radix.hpp>
 #include <burst/algorithm/detail/radix_sort_traits.hpp>
+#include <burst/iterator/iterator_value.hpp>
 #include <burst/variadic.hpp>
 
 #include <algorithm>
@@ -20,7 +21,7 @@ namespace burst
         template <typename ForwardIterator, typename Map, typename Radix, typename RandomAccessIterator, std::size_t ... Radices>
         void collect_impl (ForwardIterator first, ForwardIterator last, Map map, Radix radix, RandomAccessIterator counters, std::index_sequence<Radices...>)
         {
-            using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
+            using value_type = iterator_value_t<ForwardIterator>;
             constexpr auto radix_value_range = radix_sort_traits<value_type, Map, Radix>::radix_value_range;
 
             std::for_each(first, last,
@@ -40,7 +41,7 @@ namespace burst
         template <typename ForwardIterator, typename Map, typename Radix, typename RandomAccessIterator>
         void collect (ForwardIterator first, ForwardIterator last, Map map, Radix radix, RandomAccessIterator counters)
         {
-            using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
+            using value_type = iterator_value_t<ForwardIterator>;
             constexpr auto radix_count = radix_sort_traits<value_type, Map, Radix>::radix_count;
             collect_impl(first, last, map, radix, counters, std::make_index_sequence<radix_count>());
         }
@@ -55,7 +56,7 @@ namespace burst
         <
             radix_sort_traits
             <
-                typename std::iterator_traits<RandomAccessIterator1>::value_type,
+                iterator_value_t<RandomAccessIterator1>,
                 Map,
                 Radix
             >
@@ -93,7 +94,7 @@ namespace burst
         <
             radix_sort_traits
             <
-                typename std::iterator_traits<RandomAccessIterator1>::value_type,
+                iterator_value_t<RandomAccessIterator1>,
                 Map,
                 Radix
             >
@@ -102,7 +103,7 @@ namespace burst
         >
         ::type radix_sort_impl (RandomAccessIterator1 first, RandomAccessIterator1 last, RandomAccessIterator2 buffer_begin, Map map, Radix radix)
         {
-            using value_type = typename std::iterator_traits<RandomAccessIterator1>::value_type;
+            using value_type = iterator_value_t<RandomAccessIterator1>;
             using traits = radix_sort_traits<value_type, Map, Radix>;
 
             using difference_type = typename std::iterator_traits<RandomAccessIterator1>::difference_type;
