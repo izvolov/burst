@@ -41,6 +41,21 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
         );
     }
 
+    BOOST_AUTO_TEST_CASE(sorting_chaotic_single_byte_range_results_sorted_range)
+    {
+        std::vector<std::uint8_t> numbers{2, 1, 3, 0, 4};
+
+        std::vector<std::uint8_t> buffer(numbers.size());
+        burst::radix_sort(numbers.begin(), numbers.end(), buffer.begin());
+
+        auto expected = {0, 1, 2, 3, 4};
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            boost::begin(numbers), boost::end(numbers),
+            boost::begin(expected), boost::end(expected)
+        );
+    }
+
     BOOST_AUTO_TEST_CASE(sorting_descending_range_results_ascending_range)
     {
         std::vector<std::string> descending{"1000", "100", "10", "1"};
@@ -207,6 +222,30 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
             });
 
         auto expected = {-100500, 0, 5, 30, 20152016};
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            boost::make_indirect_iterator(std::begin(pointers)), boost::make_indirect_iterator(std::end(pointers)),
+            std::begin(expected), std::end(expected)
+        );
+    }
+
+    BOOST_AUTO_TEST_CASE(can_sort_noncopyable_single_byte_objects)
+    {
+        std::vector<std::unique_ptr<std::int8_t>> pointers;
+        pointers.emplace_back(std::make_unique<std::int8_t>(0x30));
+        pointers.emplace_back(std::make_unique<std::int8_t>(0x5));
+        pointers.emplace_back(std::make_unique<std::int8_t>(-0xf));
+        pointers.emplace_back(std::make_unique<std::int8_t>(0x7f));
+        pointers.emplace_back(std::make_unique<std::int8_t>(0));
+
+        std::vector<std::unique_ptr<std::int8_t>> buffer(pointers.size());
+        burst::radix_sort(pointers.begin(), pointers.end(), buffer.begin(),
+            [] (const auto & p)
+            {
+                return *p;
+            });
+
+        auto expected = {-0xf, 0, 0x5, 0x30, 0x7f};
         BOOST_CHECK_EQUAL_COLLECTIONS
         (
             boost::make_indirect_iterator(std::begin(pointers)), boost::make_indirect_iterator(std::end(pointers)),
