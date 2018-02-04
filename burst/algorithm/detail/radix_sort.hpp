@@ -5,6 +5,7 @@
 #include <burst/algorithm/detail/move_assign_please.hpp>
 #include <burst/algorithm/detail/nth_radix.hpp>
 #include <burst/algorithm/detail/radix_sort_traits.hpp>
+#include <burst/iterator/iterator_difference.hpp>
 #include <burst/iterator/iterator_value.hpp>
 #include <burst/variadic.hpp>
 
@@ -107,7 +108,7 @@ namespace burst
             using value_type = iterator_value_t<RandomAccessIterator1>;
             using traits = radix_sort_traits<value_type, Map, Radix>;
 
-            using difference_type = typename std::iterator_traits<RandomAccessIterator1>::difference_type;
+            using difference_type = iterator_difference_t<RandomAccessIterator1>;
             difference_type counters[traits::radix_count][traits::radix_value_range] = {{0}};
             collect(first, last, map, radix, counters);
 
