@@ -2,7 +2,7 @@
 #define BURST_ALGORITHM_DETAIL_COUNTING_SORT_HPP
 
 #include <burst/container/access/cback.hpp>
-#include <burst/iterator/iterator_traits.hpp>
+#include <burst/iterator/traits.hpp>
 
 #include <algorithm>
 #include <iterator>

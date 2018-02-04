@@ -5,7 +5,7 @@
 #include <burst/algorithm/detail/move_assign_please.hpp>
 #include <burst/algorithm/detail/nth_radix.hpp>
 #include <burst/algorithm/detail/radix_sort_traits.hpp>
-#include <burst/iterator/iterator_traits.hpp>
+#include <burst/iterator/traits.hpp>
 #include <burst/variadic.hpp>
 
 #include <algorithm>
