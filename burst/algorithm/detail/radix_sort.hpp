@@ -67,11 +67,12 @@ namespace burst
         >
         ::type radix_sort_impl (RandomAccessIterator1 first, RandomAccessIterator1 last, RandomAccessIterator2 buffer, Map map, Radix radix)
         {
-            auto buffer_end = counting_sort_impl(move_assign_please(first), move_assign_please(last), buffer,
-                [& map, & radix] (const auto & value)
-                {
-                    return radix(map(value));
-                });
+            auto buffer_end =
+                counting_sort_impl(move_assign_please(first), move_assign_please(last), buffer,
+                    [& map, & radix] (const auto & value)
+                    {
+                        return radix(map(value));
+                    });
 
             std::copy(move_assign_please(buffer), move_assign_please(buffer_end), first);
         }
