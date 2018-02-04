@@ -91,6 +91,25 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
         );
     }
 
+    BOOST_AUTO_TEST_CASE(can_sort_in_descending_order)
+    {
+        std::vector<std::uint32_t> numbers{100500, 42, 99999, 1000, 0};
+
+        std::vector<std::uint32_t> buffer(numbers.size());
+        burst::radix_sort(numbers.begin(), numbers.end(), buffer.begin(),
+            [] (auto x)
+            {
+                return ~x;
+            });
+
+        std::vector<std::uint32_t> expected{100500, 99999, 1000, 42, 0};
+        BOOST_CHECK_EQUAL_COLLECTIONS
+        (
+            boost::begin(numbers), boost::end(numbers),
+            boost::begin(expected), boost::end(expected)
+        );
+    }
+
     BOOST_AUTO_TEST_CASE(can_sort_bitwise)
     {
         std::vector<std::uint8_t> numbers{0, 5, 3, 7, 1, 2, 4, 6};
