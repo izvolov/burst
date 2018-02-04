@@ -1,4 +1,7 @@
-set(UNIT_TEST_SOURCES test_main.cpp
+set(UNIT_TEST_EXECUTABLE unit-tests)
+
+add_executable(${UNIT_TEST_EXECUTABLE} test_main.cpp)
+target_sources(${UNIT_TEST_EXECUTABLE} PRIVATE
     burst/algorithm/counting_sort.cpp
     burst/algorithm/galloping_lower_bound.cpp
     burst/algorithm/galloping_upper_bound.cpp
@@ -74,10 +77,6 @@ set(UNIT_TEST_SOURCES test_main.cpp
     burst/tuple/get.cpp
     burst/tuple/view.cpp
 )
-
-set(UNIT_TEST_EXECUTABLE unit-tests)
-
-add_executable(${UNIT_TEST_EXECUTABLE} ${UNIT_TEST_SOURCES})
 target_link_libraries(${UNIT_TEST_EXECUTABLE} PRIVATE Boost::unit_test_framework)
 
 add_custom_target(check ALL COMMAND ${UNIT_TEST_EXECUTABLE} --report_level=short --color_output)
