@@ -2,6 +2,7 @@
 #define BURST_ALGORITHM_DETAIL_COUNTING_SORT_HPP
 
 #include <burst/container/access/cback.hpp>
+#include <burst/iterator/iterator_traits.hpp>
 
 #include <algorithm>
 #include <iterator>
@@ -66,7 +67,7 @@ namespace burst
                 RandomAccessIterator counters
             )
         {
-            using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
+            using value_type = iterator_value_t<ForwardIterator>;
             using traits = counting_sort_traits<value_type, Map>;
 
             count(first, last, map, counters);
@@ -147,11 +148,10 @@ namespace burst
                 Map map
             )
         {
-            using value_type = typename std::iterator_traits<ForwardIterator>::value_type;
+            using value_type = iterator_value_t<ForwardIterator>;
             using traits = counting_sort_traits<value_type, Map>;
 
-            using difference_type =
-                typename std::iterator_traits<RandomAccessIterator>::difference_type;
+            using difference_type = iterator_difference_t<RandomAccessIterator>;
             // Единица для дополнительного нуля в начале массива.
             difference_type counters[traits::value_range + 1] = {0};
 
