@@ -177,6 +177,14 @@ namespace burst
             }
         }
 
+        //!     Индикатор соответствия менеджера заявленному типу
+        template <typename T>
+        bool conforms (const object_info_t & object)
+        {
+            // Адрес функции глобален, поэтому можно просто сравнить указатели.
+            return &manage<T> == object.manage;
+        }
+
         inline std::size_t size_of (const object_info_t & object)
         {
             std::size_t size;
