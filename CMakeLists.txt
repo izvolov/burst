@@ -41,7 +41,16 @@ else()
     message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 endif()
 
-include_directories(${CMAKE_SOURCE_DIR})
+###################################################################################################
+##
+##      Основная цель
+##
+###################################################################################################
+
+add_library(burst INTERFACE)
+target_include_directories(burst INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_library(Burst::burst ALIAS burst)
 
 ###################################################################################################
 ##
