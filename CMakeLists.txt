@@ -57,7 +57,7 @@ find_package(Boost 1.59.0 COMPONENTS unit_test_framework program_options REQUIRE
 ##
 ###################################################################################################
 
-install(DIRECTORY ${CMAKE_SOURCE_DIR}/burst DESTINATION ${CMAKE_INSTALL_PREFIX}/include)
+install(DIRECTORY burst DESTINATION include)
 
 ###################################################################################################
 ##

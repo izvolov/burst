@@ -1,4 +1,2 @@
-set(DIVCEIL_SOURCES divceil.cpp)
-set(DIVCEIL_EXECUTABLE divceil)
-add_executable(${DIVCEIL_EXECUTABLE} ${DIVCEIL_SOURCES})
-target_link_libraries(${DIVCEIL_EXECUTABLE} PRIVATE Boost::program_options)
+add_executable(divceil divceil.cpp)
+target_link_libraries(divceil PRIVATE Boost::program_options)

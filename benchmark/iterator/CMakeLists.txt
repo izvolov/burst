@@ -1,11 +1,5 @@
-set(MERGE_SOURCES merge_iterator.cpp)
-set(MERGE_EXECUTABLE merge)
-add_executable(${MERGE_EXECUTABLE} ${MERGE_SOURCES})
+add_executable(merge merge_iterator.cpp)
 
-set(INTERSECT_SOURCES intersect_iterator.cpp)
-set(INTERSECT_EXECUTABLE intersect)
-add_executable(${INTERSECT_EXECUTABLE} ${INTERSECT_SOURCES})
+add_executable(intersect intersect_iterator.cpp)
 
-set(SUBSET_ITERATOR_SOURCES subset_iterator.cpp)
-set(SUBSET_ITERATOR_EXECUTABLE subset)
-add_executable(${SUBSET_ITERATOR_EXECUTABLE} ${SUBSET_ITERATOR_SOURCES})
+add_executable(subset subset_iterator.cpp)

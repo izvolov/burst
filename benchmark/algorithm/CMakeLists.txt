@@ -1,11 +1,7 @@
-set(GALLOPING_LOWER_BOUND_SOURCES galloping_lower_bound.cpp)
-set(GALLOPING_LOWER_BOUND_EXECUTABLE gallopinglb)
-add_executable(${GALLOPING_LOWER_BOUND_EXECUTABLE} ${GALLOPING_LOWER_BOUND_SOURCES})
-target_link_libraries(${GALLOPING_LOWER_BOUND_EXECUTABLE} PRIVATE Boost::program_options)
+add_executable(gallopinglb galloping_lower_bound.cpp)
+target_link_libraries(gallopinglb PRIVATE Boost::program_options)
 
-set(RADIX_SORT_SOURCES radix_sort.cpp)
-set(RADIX_SORT_EXECUTABLE radix)
-add_executable(${RADIX_SORT_EXECUTABLE} ${RADIX_SORT_SOURCES})
-target_link_libraries(${RADIX_SORT_EXECUTABLE} PRIVATE Boost::program_options)
+add_executable(radix radix_sort.cpp)
+target_link_libraries(radix PRIVATE Boost::program_options)
 
-configure_file(${CMAKE_SOURCE_DIR}/benchmark/algorithm/integer_sort_comparison.py.in integer_sort_comparison.py @ONLY)
+configure_file(integer_sort_comparison.py.in integer_sort_comparison.py @ONLY)
