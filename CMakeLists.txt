@@ -49,7 +49,7 @@ endif()
 
 add_library(burst INTERFACE)
 target_include_directories(burst INTERFACE
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
 
@@ -69,7 +69,7 @@ find_package(Boost 1.59.0 COMPONENTS unit_test_framework program_options REQUIRE
 ##
 ###################################################################################################
 
-install(DIRECTORY burst DESTINATION include)
+install(DIRECTORY include/burst DESTINATION include)
 
 install(TARGETS burst EXPORT BurstConfig)
 install(EXPORT BurstConfig NAMESPACE Burst:: DESTINATION share/Burst/cmake)
