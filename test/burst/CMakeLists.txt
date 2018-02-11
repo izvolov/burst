@@ -1,0 +1,7 @@
+add_subdirectory(algorithm)
+add_subdirectory(container)
+add_subdirectory(functional)
+add_subdirectory(integer)
+add_subdirectory(iterator)
+add_subdirectory(range)
+add_subdirectory(tuple)
