@@ -1,5 +1,5 @@
 #include <burst/tuple/view.hpp>
-#include <test/output/tuple.hpp>
+#include <utility/io/tuple.hpp>
 
 #include <boost/test/unit_test.hpp>
 #include <boost/tuple/tuple.hpp>

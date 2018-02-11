@@ -3,7 +3,7 @@
 #include <burst/functional/only.hpp>
 #include <burst/integer/intlog2.hpp>
 #include <burst/tuple/make_tuple.hpp>
-#include <test/output/tuple.hpp>
+#include <utility/io/tuple.hpp>
 
 #include <boost/test/unit_test.hpp>
 

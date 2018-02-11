@@ -1,7 +1,7 @@
 #ifndef BURST_TEST_OUTPUT_DEQUE_HPP
 #define BURST_TEST_OUTPUT_DEQUE_HPP
 
-#include <test/output/range.hpp>
+#include <utility/io/range.hpp>
 
 #include <deque>
 #include <ostream>

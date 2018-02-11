@@ -1,7 +1,7 @@
 #ifndef BURST_TEST_OUTPUT_SET_HPP
 #define BURST_TEST_OUTPUT_SET_HPP
 
-#include <test/output/range.hpp>
+#include <utility/io/range.hpp>
 
 #include <ostream>
 #include <set>

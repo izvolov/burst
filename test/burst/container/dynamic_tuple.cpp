@@ -1,5 +1,5 @@
 #include <burst/container/dynamic_tuple.hpp>
-#include <test/output/vector.hpp>
+#include <utility/io/vector.hpp>
 
 #include <boost/test/unit_test.hpp>
 

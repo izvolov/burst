@@ -1,3 +1,6 @@
+add_library(testutility INTERFACE)
+target_include_directories(testutility INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+
 set(UNIT_TEST_EXECUTABLE unit-tests)
 
 add_executable(${UNIT_TEST_EXECUTABLE} test_main.cpp)
@@ -77,6 +80,11 @@ target_sources(${UNIT_TEST_EXECUTABLE} PRIVATE
     burst/tuple/get.cpp
     burst/tuple/view.cpp
 )
-target_link_libraries(${UNIT_TEST_EXECUTABLE} PRIVATE Burst::burst Boost::unit_test_framework)
+target_link_libraries(${UNIT_TEST_EXECUTABLE}
+    PRIVATE
+        testutility
+        Burst::burst
+        Boost::unit_test_framework
+)
 
 add_custom_target(check ALL COMMAND ${UNIT_TEST_EXECUTABLE} --report_level=short --color_output)

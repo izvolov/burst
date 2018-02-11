@@ -1,7 +1,7 @@
 #include <burst/container/make_forward_list.hpp>
 #include <burst/container/make_vector.hpp>
 #include <burst/range/take_n.hpp>
-#include <test/output/forward_list.hpp>
+#include <utility/io/forward_list.hpp>
 
 #include <boost/range/concepts.hpp>
 #include <boost/test/unit_test.hpp>

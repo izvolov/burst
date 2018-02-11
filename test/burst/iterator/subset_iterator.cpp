@@ -1,5 +1,5 @@
 #include <burst/iterator/subset_iterator.hpp>
-#include <test/output/vector.hpp>
+#include <utility/io/vector.hpp>
 
 #include <boost/range/irange.hpp>
 #include <boost/range/iterator_range.hpp>

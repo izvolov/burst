@@ -1,5 +1,5 @@
 #include <burst/container/make_set.hpp>
-#include <test/output/set.hpp>
+#include <utility/io/set.hpp>
 
 #include <boost/range/irange.hpp>
 #include <boost/test/unit_test.hpp>
