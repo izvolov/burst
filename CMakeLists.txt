@@ -14,7 +14,6 @@ cmake_minimum_required(VERSION 3.5.1)
 ###################################################################################################
 
 add_compile_options(
-    -std=c++14
     -Werror
 
     -Wall
@@ -35,6 +34,10 @@ add_compile_options(
     -Wsign-promo
 )
 
+if(NOT CMAKE_CXX_EXTENSIONS)
+    set(CMAKE_CXX_EXTENSIONS OFF)
+endif()
+
 if(NOT CMAKE_BUILD_TYPE)
     message(WARNING "Тип сборки не выбран (см. опцию CMAKE_BUILD_TYPE).")
 else()
@@ -52,6 +55,7 @@ target_include_directories(burst INTERFACE
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
+target_compile_features(burst INTERFACE cxx_std_14)
 
 add_library(Burst::burst ALIAS burst)
 
