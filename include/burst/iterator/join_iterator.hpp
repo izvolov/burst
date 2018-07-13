@@ -99,11 +99,13 @@ namespace burst
     template <typename Range>
     auto make_join_iterator (Range && ranges)
     {
+        using std::begin;
+        using std::end;
         return
             make_join_iterator
             (
-                std::begin(std::forward<Range>(ranges)),
-                std::end(std::forward<Range>(ranges))
+                begin(std::forward<Range>(ranges)),
+                end(std::forward<Range>(ranges))
             );
     }
 
