@@ -119,11 +119,13 @@ namespace burst
             Map map
         )
     {
+        using std::begin;
+        using std::end;
         return
             counting_sort_copy
             (
-                std::begin(std::forward<ForwardRange>(range)),
-                std::end(std::forward<ForwardRange>(range)),
+                begin(std::forward<ForwardRange>(range)),
+                end(std::forward<ForwardRange>(range)),
                 result,
                 map
             );
@@ -132,11 +134,13 @@ namespace burst
     template <typename ForwardRange, typename RandomAccessIterator>
     RandomAccessIterator counting_sort_copy (ForwardRange && range, RandomAccessIterator result)
     {
+        using std::begin;
+        using std::end;
         return
             counting_sort_copy
             (
-                std::begin(std::forward<ForwardRange>(range)),
-                std::end(std::forward<ForwardRange>(range)),
+                begin(std::forward<ForwardRange>(range)),
+                end(std::forward<ForwardRange>(range)),
                 result
             );
     }
@@ -150,11 +154,13 @@ namespace burst
             Map map
         )
     {
+        using std::begin;
+        using std::end;
         return
             counting_sort_move
             (
-                std::begin(std::forward<ForwardRange>(range)),
-                std::end(std::forward<ForwardRange>(range)),
+                begin(std::forward<ForwardRange>(range)),
+                end(std::forward<ForwardRange>(range)),
                 result,
                 map
             );
@@ -163,11 +169,13 @@ namespace burst
     template <typename ForwardRange, typename RandomAccessIterator>
     RandomAccessIterator counting_sort_move (ForwardRange && range, RandomAccessIterator result)
     {
+        using std::begin;
+        using std::end;
         return
             counting_sort_move
             (
-                std::begin(std::forward<ForwardRange>(range)),
-                std::end(std::forward<ForwardRange>(range)),
+                begin(std::forward<ForwardRange>(range)),
+                end(std::forward<ForwardRange>(range)),
                 result
             );
     }
