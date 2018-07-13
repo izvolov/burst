@@ -222,13 +222,15 @@ namespace burst
             Compare compare
         )
     {
+        using std::begin;
+        using std::end;
         return
             make_difference_iterator
             (
-                std::begin(std::forward<ForwardRange1>(minuend)),
-                std::end(std::forward<ForwardRange1>(minuend)),
-                std::begin(std::forward<ForwardRange2>(subtrahend)),
-                std::end(std::forward<ForwardRange2>(subtrahend)),
+                begin(std::forward<ForwardRange1>(minuend)),
+                end(std::forward<ForwardRange1>(minuend)),
+                begin(std::forward<ForwardRange2>(subtrahend)),
+                end(std::forward<ForwardRange2>(subtrahend)),
                 compare
             );
     }
@@ -264,13 +266,15 @@ namespace burst
         >
     auto make_difference_iterator (ForwardRange1 && minuend, ForwardRange2 && subtrahend)
     {
+        using std::begin;
+        using std::end;
         return
             make_difference_iterator
             (
-                std::begin(std::forward<ForwardRange1>(minuend)),
-                std::end(std::forward<ForwardRange1>(minuend)),
-                std::begin(std::forward<ForwardRange2>(subtrahend)),
-                std::end(std::forward<ForwardRange2>(subtrahend))
+                begin(std::forward<ForwardRange1>(minuend)),
+                end(std::forward<ForwardRange1>(minuend)),
+                begin(std::forward<ForwardRange2>(subtrahend)),
+                end(std::forward<ForwardRange2>(subtrahend))
             );
     }
 
