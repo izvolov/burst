@@ -171,7 +171,7 @@ namespace burst
                     max_range = range;
                 }
             }
-            std::swap(*max_range, *std::prev(m_end));
+            std::iter_swap(max_range, std::prev(m_end));
         }
 
         //!     Устаканить диапазоны на ближайшем пересечении.
@@ -210,7 +210,7 @@ namespace burst
                         // Возможно, тут надо продвинуть последний диапазон до нового минимума и
                         // посмотреть, нужно ли его после этого менять местами с текущим
                         // диапазоном. Возможно, это будет цикл.
-                        std::swap(*max_range, *range);
+                        std::iter_swap(max_range, range);
                         range = m_begin;
                     }
                     else
