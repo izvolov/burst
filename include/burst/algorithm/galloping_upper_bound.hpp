@@ -76,11 +76,13 @@ namespace burst
     template <typename RandomAccessRange, typename Value, typename Compare>
     auto galloping_upper_bound (RandomAccessRange && range, const Value & value, Compare compare)
     {
+        using std::begin;
+        using std::end;
         return
             galloping_upper_bound
             (
-                std::begin(std::forward<RandomAccessRange>(range)),
-                std::end(std::forward<RandomAccessRange>(range)),
+                begin(std::forward<RandomAccessRange>(range)),
+                end(std::forward<RandomAccessRange>(range)),
                 value,
                 std::move(compare)
             );
