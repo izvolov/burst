@@ -149,10 +149,12 @@ namespace burst
     >
     void radix_sort (RandomAccessRange && range, RandomAccessIterator buffer, Map map, Radix radix)
     {
+        using std::begin;
+        using std::end;
         radix_sort
         (
-            std::begin(std::forward<RandomAccessRange>(range)),
-            std::end(std::forward<RandomAccessRange>(range)),
+            begin(std::forward<RandomAccessRange>(range)),
+            end(std::forward<RandomAccessRange>(range)),
             buffer,
             map,
             radix
@@ -162,10 +164,12 @@ namespace burst
     template <typename RandomAccessRange, typename RandomAccessIterator, typename Map>
     void radix_sort (RandomAccessRange && range, RandomAccessIterator buffer, Map map)
     {
+        using std::begin;
+        using std::end;
         radix_sort
         (
-            std::begin(std::forward<RandomAccessRange>(range)),
-            std::end(std::forward<RandomAccessRange>(range)),
+            begin(std::forward<RandomAccessRange>(range)),
+            end(std::forward<RandomAccessRange>(range)),
             buffer,
             map
         );
@@ -174,10 +178,12 @@ namespace burst
     template <typename RandomAccessRange, typename RandomAccessIterator>
     void radix_sort (RandomAccessRange && range, RandomAccessIterator buffer)
     {
+        using std::begin;
+        using std::end;
         radix_sort
         (
-            std::begin(std::forward<RandomAccessRange>(range)),
-            std::end(std::forward<RandomAccessRange>(range)),
+            begin(std::forward<RandomAccessRange>(range)),
+            end(std::forward<RandomAccessRange>(range)),
             buffer
         );
     }
