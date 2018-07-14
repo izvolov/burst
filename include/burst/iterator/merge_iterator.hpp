@@ -159,11 +159,13 @@ namespace burst
     template <typename RandomAccessRange, typename Compare>
     auto make_merge_iterator (RandomAccessRange && ranges, Compare compare)
     {
+        using std::begin;
+        using std::end;
         return
             make_merge_iterator
             (
-                std::begin(std::forward<RandomAccessRange>(ranges)),
-                std::end(std::forward<RandomAccessRange>(ranges)),
+                begin(std::forward<RandomAccessRange>(ranges)),
+                end(std::forward<RandomAccessRange>(ranges)),
                 compare
             );
     }
@@ -183,11 +185,13 @@ namespace burst
     template <typename RandomAccessRange>
     auto make_merge_iterator (RandomAccessRange && ranges)
     {
+        using std::begin;
+        using std::end;
         return
             make_merge_iterator
             (
-                std::begin(std::forward<RandomAccessRange>(ranges)),
-                std::end(std::forward<RandomAccessRange>(ranges))
+                begin(std::forward<RandomAccessRange>(ranges)),
+                end(std::forward<RandomAccessRange>(ranges))
             );
     }
 
