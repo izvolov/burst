@@ -22,10 +22,11 @@ namespace burst
         template <typename Range, typename Integer, typename Category>
         auto take_n_impl (Range && range, Integer n, Category)
         {
-            auto begin = burst::make_take_n_iterator(std::begin(std::forward<Range>(range)), n);
-            auto end = burst::make_take_n_iterator(iterator::end_tag, begin);
+            using std::begin;
+            auto first = burst::make_take_n_iterator(begin(std::forward<Range>(range)), n);
+            auto last = burst::make_take_n_iterator(iterator::end_tag, first);
 
-            return boost::make_iterator_range(std::move(begin), std::move(end));
+            return boost::make_iterator_range(std::move(first), std::move(last));
         }
 
         //!     Перегрузка для случая, когда входной диапазон — произвольного доступа.
@@ -35,7 +36,8 @@ namespace burst
         template <typename Range, typename Integer>
         auto take_n_impl (Range && range, Integer n, boost::random_access_traversal_tag)
         {
-            return boost::make_iterator_range(std::begin(range), std::begin(range) + n);
+            using std::begin;
+            return boost::make_iterator_range(begin(range), begin(range) + n);
         }
     } // namespace detail
 } // namespace burst
