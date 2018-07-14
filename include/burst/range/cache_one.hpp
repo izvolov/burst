@@ -17,11 +17,13 @@ namespace burst
     template <typename Range>
     auto cache_one (const Range & range)
     {
+        using std::begin;
+        using std::end;
         return
             boost::make_iterator_range
             (
-                make_cache_iterator(std::begin(range)),
-                make_cache_iterator(std::end(range))
+                make_cache_iterator(begin(range)),
+                make_cache_iterator(end(range))
             );
     }
 } // namespace burst
