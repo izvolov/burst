@@ -182,11 +182,13 @@ namespace burst
     template <typename ForwardRange, typename Compare>
     auto make_subset_iterator (ForwardRange && range, Compare compare)
     {
+        using std::begin;
+        using std::end;
         return
             make_subset_iterator
             (
-                std::begin(std::forward<ForwardRange>(range)),
-                std::end(std::forward<ForwardRange>(range)),
+                begin(std::forward<ForwardRange>(range)),
+                end(std::forward<ForwardRange>(range)),
                 compare
             );
     }
@@ -207,11 +209,13 @@ namespace burst
     template <typename ForwardRange>
     auto make_subset_iterator (ForwardRange && range)
     {
+        using std::begin;
+        using std::end;
         return
             make_subset_iterator
             (
-                std::begin(std::forward<ForwardRange>(range)),
-                std::end(std::forward<ForwardRange>(range))
+                begin(std::forward<ForwardRange>(range)),
+                end(std::forward<ForwardRange>(range))
             );
     }
 
