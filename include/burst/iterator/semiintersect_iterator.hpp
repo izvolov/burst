@@ -398,11 +398,13 @@ namespace burst
             Compare compare
         )
     {
+        using std::begin;
+        using std::end;
         return
             make_semiintersect_iterator
             (
-                std::begin(std::forward<RandomAccessRange>(ranges)),
-                std::end(std::forward<RandomAccessRange>(ranges)),
+                begin(std::forward<RandomAccessRange>(ranges)),
+                end(std::forward<RandomAccessRange>(ranges)),
                 min_items,
                 compare
             );
@@ -434,11 +436,13 @@ namespace burst
     template <typename RandomAccessRange>
     auto make_semiintersect_iterator (RandomAccessRange && ranges, std::size_t min_items)
     {
+        using std::begin;
+        using std::end;
         return
             make_semiintersect_iterator
             (
-                std::begin(std::forward<RandomAccessRange>(ranges)),
-                std::end(std::forward<RandomAccessRange>(ranges)),
+                begin(std::forward<RandomAccessRange>(ranges)),
+                end(std::forward<RandomAccessRange>(ranges)),
                 min_items
             );
     }
