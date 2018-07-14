@@ -9,19 +9,19 @@
 
 namespace burst
 {
-    //!     Заполнение подмножества.
+    //!     Заполнение цепочки
     /*!
-            Принимает подмножество, заданное полуинтервалом [subset_begin, subset_end),
-        последовательность, заданную полуинтервалом [sequence_begin, sequence_end),  отношение
+            Принимает цепочку, заданную полуинтервалом [chain_begin, chain_end),
+        последовательность, заданную полуинтервалом [sequence_begin, sequence_end), отношение
         порядка на элементах последовательности (сама последовательность должна быть упорядочена
         относительно этой операции), а также функцию, с помощью которой будет производиться поиск
-        следующего элемента.
-            Пытается заполнить подмножество итераторами на элементы последовательности, найденные
+        следующего элемента цепочки.
+            Пытается заполнить цепочку итераторами на элементы последовательности, найденные
         последовательными вызовами поисковой функции.
-            Возвращает итератор, указывающий за последний заполненный элемент подмножества.
-        Если всё подмножество удалось заполнить, то возвращаемый результат равен subset_end.
-        Если не всё подмножество удалось заполнить, то результирующий итератор указывает
-        куда-то в полуинтервал [subset_begin, subset_end).
+            Возвращает итератор, указывающий за последний заполненный элемент цепочки.
+        Если всю цепочку удалось заполнить, то возвращаемый результат равен chain_end.
+        Если не всю цепочку удалось заполнить, то результирующий итератор указывает куда-то в
+        полуинтервал [chain_begin, chain_end).
      */
     template
     <
@@ -31,17 +31,17 @@ namespace burst
         typename SearchFunction
     >
     ForwardIterator1
-        fill_subset
+        fill_chain
         (
-            ForwardIterator1 subset_begin, ForwardIterator1 subset_end,
+            ForwardIterator1 chain_begin, ForwardIterator1 chain_end,
             ForwardIterator2 sequence_begin, ForwardIterator2 sequence_end,
             BinaryPredicate compare,
             SearchFunction find
         )
     {
-        while (sequence_begin != sequence_end && subset_begin != subset_end)
+        while (sequence_begin != sequence_end && chain_begin != chain_end)
         {
-            *subset_begin++ = sequence_begin;
+            *chain_begin++ = sequence_begin;
             sequence_begin =
                 find
                 (
@@ -52,21 +52,21 @@ namespace burst
                 );
         }
 
-        return subset_begin;
+        return chain_begin;
     }
 
-    //!     Переход к следующему подмножеству фиксированного размера.
+    //!     Переход к следующей цепочке фиксированного размера
     /*!
-            Принимает подмножество, заданное полуинтервалом [subset_begin, subset_end),
+            Принимает цепочку, заданную полуинтервалом [chain_begin, chain_end),
         последовательность, заданную полуинтервалом [sequence_begin, sequence_end), отношение
         порядка на элементах последовательности (сама последовательность должна быть упорядочена
         относительно этой операции), а также функцию, с помощью которой будет производиться поиск
-        каждого следующего элемента.
-            Пытается найти новое подмножество размера |[subset_begin, subset_end)|.
-            Возвращает итератор, указывающий за последний действительный элемент подмножества.
-        Если новое подмножество удалось найти, то возвращаемый результат равен subset_end. Если
+        каждого следующего элемента цепочки.
+            Пытается найти новую цепочку размера |[chain_begin, chain_end)|.
+            Возвращает итератор, указывающий за последний действительный элемент цепочки.
+        Если новую цепочку удалось найти, то возвращаемый результат равен chain_end. Если
         не удалось, то результирующий итератор указывает куда-то в полуинтервал
-        [subset_begin, subset_end).
+        [chain_begin, chain_end).
      */
     template
     <
@@ -76,34 +76,34 @@ namespace burst
         typename SearchFunction
     >
     BidirectionalIterator
-        next_fixed_size_subset
+        next_fixed_size_chain
         (
-            BidirectionalIterator subset_begin, BidirectionalIterator subset_end,
+            BidirectionalIterator chain_begin, BidirectionalIterator chain_end,
             ForwardIterator /* sequence_begin */, ForwardIterator sequence_end,
             BinaryPredicate compare,
             SearchFunction find
         )
     {
-        const auto subset_rbegin = std::make_reverse_iterator(subset_end);
-        const auto subset_rend = std::make_reverse_iterator(subset_begin);
+        const auto chain_rbegin = std::make_reverse_iterator(chain_end);
+        const auto chain_rend = std::make_reverse_iterator(chain_begin);
 
-        auto moving = subset_rbegin;
-        while (moving != subset_rend)
+        auto moving = chain_rbegin;
+        while (moving != chain_rend)
         {
             *moving = find(std::next(*moving), sequence_end, **moving, compare);
             if (*moving != sequence_end)
             {
                 const auto last_filled =
-                    fill_subset
+                    fill_chain
                     (
-                        std::prev(moving.base()), subset_end,
+                        std::prev(moving.base()), chain_end,
                         *moving, sequence_end,
                         compare,
                         find
                     );
-                if (last_filled == subset_end)
+                if (last_filled == chain_end)
                 {
-                    return subset_end;
+                    return chain_end;
                 }
             }
 
@@ -113,24 +113,23 @@ namespace burst
         return moving.base();
     }
 
-    //!     Переход к следующему подмножеству.
+    //!     Переход к следующей цепочке
     /*!
-            Принимает последовательность, подмножества которой нужно перебрать, и подмножество
-        этой последовательности, которое нужно модифицировать, чтобы получить новое
-        подмножество.
+            Принимает последовательность, цепочки в которой нужно перебрать, и диапазон, содержащий
+        итераторы некоторой цепочки в этой последовательности, который нужно модифицировать, чтобы
+        получить новую цепочку.
             Также получает отношение порядка на элементах последовательности. Сама
         последовательность должна быть упорядочена относительно этой операции.
             Кроме того, получает функцию, с помощью которой будет производиться поиск каждого
-        следующего элемента.
-            Пытается найти новое подмножество и перезаписать им исходное подмножество.
-            Если попытка удалась, то в диапазоне подмножества будет лежать новое действительное
-        подмножество, и будет возвращён итератор на конец нового подмножества, а если не
-        удалась (все подмножества уже перечислены), то возвращается итератор на начало
-        подмножества.
+        следующего элемента цепочки.
+            Пытается найти новую цепочку и перезаписать ей исходную цепочку.
+            Если попытка удалась, то в диапазоне цепочки будет лежать новая действительная
+        цепочка, и будет возвращён итератор на конец новой цепочки, а если не удалась (все
+        цепочки уже перечислены), то возвращается итератор на начало цепочки.
 
             Важно отметить, что в результате работы функции может быть возвращён итератор после
-        изначального итератора на конец подмножества. Это значит, что в том буфере, в котором
-        лежит само подмножество, должно быть достаточно места для хранения нового подмножества.
+        изначального итератора на конец цепочки. Это значит, что в том буфере, в котором
+        лежит сама цепочка, должно быть достаточно места для хранения новой цепочки.
      */
     template
     <
@@ -140,33 +139,33 @@ namespace burst
         typename SearchFunction
     >
     BidirectionalIterator
-        next_subset
+        next_chain
         (
-            BidirectionalIterator subset_begin, BidirectionalIterator subset_end,
+            BidirectionalIterator chain_begin, BidirectionalIterator chain_end,
             ForwardIterator sequence_begin, ForwardIterator sequence_end,
             BinaryPredicate compare,
             SearchFunction find
         )
     {
-        if (subset_begin == subset_end ||
-            next_fixed_size_subset
+        if (chain_begin == chain_end ||
+            next_fixed_size_chain
             (
-                subset_begin, subset_end,
+                chain_begin, chain_end,
                 sequence_begin, sequence_end,
                 compare,
                 find
-            ) != subset_end)
+            ) != chain_end)
         {
-            ++subset_end;
+            ++chain_end;
             const auto last_filled =
-                fill_subset(subset_begin, subset_end, sequence_begin, sequence_end, compare, find);
-            if (last_filled != subset_end)
+                fill_chain(chain_begin, chain_end, sequence_begin, sequence_end, compare, find);
+            if (last_filled != chain_end)
             {
-                subset_end = subset_begin;
+                chain_end = chain_begin;
             }
         }
 
-        return subset_end;
+        return chain_end;
     }
 
     template <typename BidirectionalIterator, typename ForwardIterator, typename BinaryPredicate>
@@ -179,7 +178,7 @@ namespace burst
         )
     {
         return
-            next_subset
+            next_chain
             (
                 subset_begin, subset_end,
                 sequence_begin, sequence_end,
