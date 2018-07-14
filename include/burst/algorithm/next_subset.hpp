@@ -23,14 +23,14 @@ namespace burst
     <
         typename ForwardIterator1,
         typename ForwardIterator2,
-        typename Compare
+        typename BinaryPredicate
     >
     ForwardIterator1
         fill_subset
         (
             ForwardIterator1 subset_begin, ForwardIterator1 subset_end,
             ForwardIterator2 sequence_begin, ForwardIterator2 sequence_end,
-            Compare compare
+            BinaryPredicate compare
         )
     {
         while (sequence_begin != sequence_end && subset_begin != subset_end)
@@ -61,13 +61,13 @@ namespace burst
         не удалось, то результирующий итератор указывает куда-то в полуинтервал
         [subset_begin, subset_end).
      */
-    template <typename BidirectionalIterator, typename ForwardIterator, typename Compare>
+    template <typename BidirectionalIterator, typename ForwardIterator, typename BinaryPredicate>
     BidirectionalIterator
         next_fixed_size_subset
         (
             BidirectionalIterator subset_begin, BidirectionalIterator subset_end,
             ForwardIterator /* sequence_begin */, ForwardIterator sequence_end,
-            Compare compare
+            BinaryPredicate compare
         )
     {
         const auto subset_rbegin = std::make_reverse_iterator(subset_end);
@@ -115,13 +115,13 @@ namespace burst
         изначального итератора на конец подмножества. Это значит, что в том буфере, в котором
         лежит само подмножество, должно быть достаточно места для хранения нового подмножества.
      */
-    template <typename BidirectionalIterator, typename ForwardIterator, typename Compare>
+    template <typename BidirectionalIterator, typename ForwardIterator, typename BinaryPredicate>
     BidirectionalIterator
         next_subset
         (
             BidirectionalIterator subset_begin, BidirectionalIterator subset_end,
             ForwardIterator sequence_begin, ForwardIterator sequence_end,
-            Compare compare
+            BinaryPredicate compare
         )
     {
         if (subset_begin == subset_end ||
