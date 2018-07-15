@@ -2,6 +2,7 @@ target_sources(${UNIT_TEST_EXECUTABLE} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/counting_sort.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/galloping_lower_bound.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/galloping_upper_bound.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/next_subsequence.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/next_subset.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/radix_sort.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/searching/bitap.cpp
