@@ -9,6 +9,7 @@ target_sources(${UNIT_TEST_EXECUTABLE} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/semiintersect.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/skip_to_lower_bound.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/skip_to_upper_bound.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/subsequences.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/subsets.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/symmetric_difference.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/take_n.cpp
