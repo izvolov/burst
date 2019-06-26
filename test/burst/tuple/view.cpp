@@ -32,6 +32,7 @@ BOOST_AUTO_TEST_SUITE(view)
 
     struct dummy
     {
+        dummy () = default;
         dummy (const dummy &) = delete;
         dummy & operator = (const dummy &) = delete;
         dummy (dummy &&) = delete;
