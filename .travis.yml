@@ -1,31 +1,75 @@
 language: cpp
 
-compiler:
-  - gcc
+.bionic-job-template: &bionic-job
+  os: linux
+  dist: bionic
+  install:
+  - sudo apt update
+  - sudo apt install --yes
+    $COMPILER_PACKAGE
+    libboost-program-options$BOOST_VERSION-dev
+    libboost-test$BOOST_VERSION-dev
+  script:
+  - mkdir Build
+  - cd Build
+  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_COMPILER=$COMPILER_NAME
+  - cmake --build . --target check
 
-before_install:
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq g++-6
-  - export CXX="g++-6" CC="gcc-6"
-  - g++-6 --version
-  - wget -O boost_1_59_0.tar.gz http://sourceforge.net/projects/boost/files/boost/1.59.0/boost_1_59_0.tar.gz/download
-  - tar xf boost_1_59_0.tar.gz
-  - cd boost_1_59_0
-  - ./bootstrap.sh
-  - sudo ./b2 --with-test --with-program_options install -d0
-  - cd ..
-  - wget --no-check-certificate https://cmake.org/files/v3.5/cmake-3.5.1.tar.gz
-  - tar xf cmake-3.5.1.tar.gz
-  - cd cmake-3.5.1
-  - ./bootstrap
-  - sudo make -j4 install
-  - cd ..
-
-before_script:
-  - mkdir Debug
-  - cd Debug
-  - cmake .. -DCMAKE_BUILD_TYPE=Debug
-
-script:
-  - make check
+matrix:
+  include:
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=clang-3.9 COMPILER_NAME=clang++-3.9 BOOST_VERSION=1.62 BUILD_TYPE=Debug
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=clang-3.9 COMPILER_NAME=clang++-3.9 BOOST_VERSION=1.62 BUILD_TYPE=Release
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=clang-3.9 COMPILER_NAME=clang++-3.9 BOOST_VERSION=1.65 BUILD_TYPE=Debug
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=clang-3.9 COMPILER_NAME=clang++-3.9 BOOST_VERSION=1.65 BUILD_TYPE=Release
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=clang-4.0 COMPILER_NAME=clang++-4.0 BOOST_VERSION=1.62 BUILD_TYPE=Debug
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=clang-4.0 COMPILER_NAME=clang++-4.0 BOOST_VERSION=1.62 BUILD_TYPE=Release
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=clang-4.0 COMPILER_NAME=clang++-4.0 BOOST_VERSION=1.65 BUILD_TYPE=Debug
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=clang-4.0 COMPILER_NAME=clang++-4.0 BOOST_VERSION=1.65 BUILD_TYPE=Release
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=clang-5.0 COMPILER_NAME=clang++-5.0 BOOST_VERSION=1.62 BUILD_TYPE=Debug
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=clang-5.0 COMPILER_NAME=clang++-5.0 BOOST_VERSION=1.62 BUILD_TYPE=Release
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=clang-5.0 COMPILER_NAME=clang++-5.0 BOOST_VERSION=1.65 BUILD_TYPE=Debug
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=clang-5.0 COMPILER_NAME=clang++-5.0 BOOST_VERSION=1.65 BUILD_TYPE=Release
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=clang-6.0 COMPILER_NAME=clang++-6.0 BOOST_VERSION=1.62 BUILD_TYPE=Debug
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=clang-6.0 COMPILER_NAME=clang++-6.0 BOOST_VERSION=1.62 BUILD_TYPE=Release
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=clang-6.0 COMPILER_NAME=clang++-6.0 BOOST_VERSION=1.65 BUILD_TYPE=Debug
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=clang-6.0 COMPILER_NAME=clang++-6.0 BOOST_VERSION=1.65 BUILD_TYPE=Release
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=g++-6 COMPILER_NAME=g++-6 BOOST_VERSION=1.62 BUILD_TYPE=Debug
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=g++-6 COMPILER_NAME=g++-6 BOOST_VERSION=1.62 BUILD_TYPE=Release
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=g++-6 COMPILER_NAME=g++-6 BOOST_VERSION=1.65 BUILD_TYPE=Debug
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=g++-6 COMPILER_NAME=g++-6 BOOST_VERSION=1.65 BUILD_TYPE=Release
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=g++-7 COMPILER_NAME=g++-7 BOOST_VERSION=1.62 BUILD_TYPE=Debug
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=g++-7 COMPILER_NAME=g++-7 BOOST_VERSION=1.62 BUILD_TYPE=Release
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=g++-7 COMPILER_NAME=g++-7 BOOST_VERSION=1.65 BUILD_TYPE=Debug
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=g++-7 COMPILER_NAME=g++-7 BOOST_VERSION=1.65 BUILD_TYPE=Release
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=g++-8 COMPILER_NAME=g++-8 BOOST_VERSION=1.62 BUILD_TYPE=Debug
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=g++-8 COMPILER_NAME=g++-8 BOOST_VERSION=1.62 BUILD_TYPE=Release
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=g++-8 COMPILER_NAME=g++-8 BOOST_VERSION=1.65 BUILD_TYPE=Debug
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=g++-8 COMPILER_NAME=g++-8 BOOST_VERSION=1.65 BUILD_TYPE=Release
