@@ -15,6 +15,18 @@ language: cpp
   - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_COMPILER=$COMPILER_NAME
   - cmake --build . --target check
 
+.coverage-job-template: &coverage-job
+  os: linux
+  dist: bionic
+  install:
+  - sudo apt update
+  - sudo apt install --yes gcovr libboost-program-options-dev libboost-test-dev
+  script:
+  - mkdir Build
+  - cd Build
+  - cmake .. -DCMAKE_BUILD_TYPE=Debug -DBURST_ENABLE_COVERAGE=YES
+  - cmake --build . --target coverage
+
 matrix:
   include:
   - <<: *bionic-job
@@ -73,3 +85,4 @@ matrix:
     env: COMPILER_PACKAGE=g++-8 COMPILER_NAME=g++-8 BOOST_VERSION=1.65 BUILD_TYPE=Debug
   - <<: *bionic-job
     env: COMPILER_PACKAGE=g++-8 COMPILER_NAME=g++-8 BOOST_VERSION=1.65 BUILD_TYPE=Release
+  - <<: *coverage-job
