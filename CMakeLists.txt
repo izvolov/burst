@@ -80,6 +80,24 @@ install(EXPORT BurstConfig NAMESPACE Burst:: DESTINATION share/Burst/cmake)
 
 ###################################################################################################
 ##
+##      Покрытие кода тестами
+##
+###################################################################################################
+
+option(BURST_ENABLE_COVERAGE "Включить измерение покрытия кода тестами" OFF)
+
+if(BURST_ENABLE_COVERAGE)
+    find_program(GCOVR_EXECUTABLE gcovr)
+    if (GCOVR_EXECUTABLE)
+        message(STATUS "Test coverage is on")
+    else()
+        set(BURST_ENABLE_COVERAGE OFF)
+        message(WARNING "Install gcovr to enable test coverage")
+    endif()
+endif()
+
+###################################################################################################
+##
 ##      Тесты
 ##
 ###################################################################################################

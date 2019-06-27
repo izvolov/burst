@@ -10,6 +10,20 @@ target_link_libraries(${UNIT_TEST_EXECUTABLE}
         Boost::unit_test_framework
 )
 
+if(BURST_ENABLE_COVERAGE)
+    target_compile_options(${UNIT_TEST_EXECUTABLE} PRIVATE --coverage)
+    target_link_libraries(${UNIT_TEST_EXECUTABLE} PRIVATE gcov)
+
+    add_custom_target(coverage
+        COMMAND
+            ${GCOVR_EXECUTABLE}
+                --root=${Burst_SOURCE_DIR}/include/
+                --object-directory=${CMAKE_CURRENT_BINARY_DIR}
+        DEPENDS
+            check
+    )
+endif()
+
 add_custom_target(check ALL COMMAND ${UNIT_TEST_EXECUTABLE} --report_level=short --color_output)
 
 add_subdirectory(burst)
