@@ -15,6 +15,20 @@ language: cpp
   - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_COMPILER=$COMPILER_NAME
   - cmake --build . --target check
 
+.macos-job-template: &macos-job
+  os: osx
+  compiler: clang
+  addons:
+    homebrew:
+      packages:
+      - cmake
+      - boost
+  script:
+  - mkdir Build
+  - cd Build
+  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+  - cmake --build . --target check
+
 .coverage-job-template: &coverage-job
   os: linux
   dist: bionic
@@ -93,4 +107,22 @@ matrix:
     env: COMPILER_PACKAGE=g++-8 COMPILER_NAME=g++-8 BOOST_VERSION=1.65 BUILD_TYPE=Debug
   - <<: *bionic-job
     env: COMPILER_PACKAGE=g++-8 COMPILER_NAME=g++-8 BOOST_VERSION=1.65 BUILD_TYPE=Release
+  - <<: *macos-job
+    osx_image: xcode8.3
+    env: BUILD_TYPE=Debug
+  - <<: *macos-job
+    osx_image: xcode8.3
+    env: BUILD_TYPE=Release
+  - <<: *macos-job
+    osx_image: xcode9.4
+    env: BUILD_TYPE=Debug
+  - <<: *macos-job
+    osx_image: xcode9.4
+    env: BUILD_TYPE=Release
+  - <<: *macos-job
+    osx_image: xcode10.2
+    env: BUILD_TYPE=Debug
+  - <<: *macos-job
+    osx_image: xcode10.2
+    env: BUILD_TYPE=Release
   - <<: *coverage-job
