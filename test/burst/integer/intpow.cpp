@@ -72,7 +72,11 @@ BOOST_AUTO_TEST_SUITE(intpow)
         const auto a = 4;
         const auto n = 3;
         const auto m = 8;
-        BOOST_CHECK_EQUAL(burst::intpow(a, n) * burst::intpow(a, m), burst::intpow(a, n + m));
+
+        // Clang7 сошёл с ума, и не даёт записать это в одну строку. Пришлось выносить один из
+        // множителей в отдельную переменную.
+        const auto y = burst::intpow(a, m);
+        BOOST_CHECK_EQUAL(burst::intpow(a, n) * y, burst::intpow(a, n + m));
     }
 
     BOOST_AUTO_TEST_CASE(some_base_in_power_of_n_to_the_power_of_m_equals_that_base_to_the_power_of_product_of_n_and_m)
