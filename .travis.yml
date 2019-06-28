@@ -62,6 +62,14 @@ matrix:
   - <<: *bionic-job
     env: COMPILER_PACKAGE=clang-6.0 COMPILER_NAME=clang++-6.0 BOOST_VERSION=1.65 BUILD_TYPE=Release
   - <<: *bionic-job
+    env: COMPILER_PACKAGE=clang-7 COMPILER_NAME=clang++-7 BOOST_VERSION=1.62 BUILD_TYPE=Debug
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=clang-7 COMPILER_NAME=clang++-7 BOOST_VERSION=1.62 BUILD_TYPE=Release
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=clang-7 COMPILER_NAME=clang++-7 BOOST_VERSION=1.65 BUILD_TYPE=Debug
+  - <<: *bionic-job
+    env: COMPILER_PACKAGE=clang-7 COMPILER_NAME=clang++-7 BOOST_VERSION=1.65 BUILD_TYPE=Release
+  - <<: *bionic-job
     env: COMPILER_PACKAGE=g++-6 COMPILER_NAME=g++-6 BOOST_VERSION=1.62 BUILD_TYPE=Debug
   - <<: *bionic-job
     env: COMPILER_PACKAGE=g++-6 COMPILER_NAME=g++-6 BOOST_VERSION=1.62 BUILD_TYPE=Release
