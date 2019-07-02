@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+import json
+import os
+
+source_directory = "@Burst_SOURCE_DIR@"
+source_files = "@BURST_HEADERS@".split(';')
+
+def prepare_includes (source_dir, source_files):
+    def get_code (path):
+        return open(os.path.join(source_dir, path)).read()
+
+    return [{"file": file, "code": get_code(file)} for file in source_files]
+
+code = """#include <burst/algorithm/radix_sort.hpp>
+
+#include <cassert>
+#include <string>
+#include <vector>
+
+int main ()
+{
+    std::vector<std::string> strings{"aaaa", "bbb", "cc", "d"};
+
+    std::vector<std::string> buffer(strings.size());
+    burst::radix_sort(strings.begin(), strings.end(), buffer.begin(),
+        [] (const std::string & string)
+        {
+            return string.size(); // Строки сортируются относительно их длины.
+        }
+    );
+    assert((strings == std::vector<std::string>{"d", "cc", "bbb", "aaaa"}));
+}"""
+
+request = json.dumps({
+    "code": code,
+    "options": "warning,c++14,boost-1.70",
+    "compiler": "gcc-7.3.0",
+    "compiler-option-raw": "-Iinclude",
+    "codes": prepare_includes(source_directory, source_files),
+    "save": True})
+
+print(request)
