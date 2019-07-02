@@ -119,7 +119,15 @@ endif()
 ##
 ###################################################################################################
 
-add_subdirectory(benchmark)
+option(BURST_DISABLE_BENCHMARKING "Отключить сборку программ для замеров производительности" OFF)
+
+if(BURST_DISABLE_BENCHMARKING)
+    message(STATUS "Benchmarking is disabled for Burst")
+elseif(IS_SUBPROJECT)
+    message(STATUS "Burst is not benchmarked being a subproject")
+else()
+    add_subdirectory(benchmark)
+endif()
 
 ###################################################################################################
 ##
