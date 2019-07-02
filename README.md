@@ -405,3 +405,54 @@ auto c = burst::make_sequence_container<boost::container::vector>(...);
 Заведомо работающие конфигурации перечислены в [интеграционном скрипте](.travis.yml).
 
 > \*) При работе с идущей в комплекте `libc++` или `libstdc++` версии 6 и выше.
+
+Установка
+---------
+
+Возможны следующие три варианта установки.
+
+### Вариант 1: Скопировать исходники
+
+Поскольку Burst — полностью заголовочная библиотека, то достаточно скопировать в нужную директорию все заголовки из папки `include` из [репозитория](https://github.com/izvolov/burst) и подключить их в свой проект.
+
+### Вариант 2: Установить с помощью CMake
+
+```shell
+cd path/to/build/directory
+cmake -DCMAKE_BUILD_TYPE=Release path/to/burst
+cmake --build . --target install
+```
+
+> При желании можно миновать этап сборки тестов и замеров производительности.
+>
+> ```shell
+> cd path/to/build/directory
+> cmake -DCMAKE_BUILD_TYPE=Release path/to/burst -DBURST_DISABLE_TESTING=YES -DBURST_DISABLE_BENCHMARKING=YES
+> cmake --build . --target install
+> ```
+
+После этого в системе сборки CMake будет доступен пакет `Burst`:
+
+```cmake
+find_package(Burst)
+```
+
+Эта команда породит интерфейсную библиотеку `Burst::burst`, которую можно использовать при подключении библиотек:
+
+```cmake
+add_executable(program program.cpp)
+target_link_libraries(program PRIVATE Burst::burst)
+```
+
+### Вариант 3: Подключить папку с проектом в CMake
+
+```cmake
+add_subdirectory("path/to/burst")
+```
+
+После этого в системе сборки CMake будет доступна цель `Burst::burst`, которую можно использовать при подключении библиотек:
+
+```cmake
+add_executable(program program.cpp)
+target_link_libraries(program PRIVATE Burst::burst)
+```
