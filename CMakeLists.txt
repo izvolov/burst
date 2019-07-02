@@ -102,7 +102,16 @@ endif()
 ##
 ###################################################################################################
 
-add_subdirectory(test)
+option(BURST_DISABLE_TESTING "Отключить модульное тестирование" OFF)
+get_directory_property(IS_SUBPROJECT PARENT_DIRECTORY)
+
+if(BURST_DISABLE_TESTING)
+    message(STATUS "Testing is disabled for Burst")
+elseif(IS_SUBPROJECT)
+    message(STATUS "Burst is not tested being a subproject")
+else()
+    add_subdirectory(test)
+endif()
 
 ###################################################################################################
 ##
