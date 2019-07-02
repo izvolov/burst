@@ -65,7 +65,7 @@ add_library(Burst::burst ALIAS burst)
 ##
 ###################################################################################################
 
-find_package(Boost 1.59.0 COMPONENTS unit_test_framework program_options REQUIRED)
+find_package(Boost 1.62.0 COMPONENTS unit_test_framework program_options REQUIRED)
 
 ###################################################################################################
 ##
