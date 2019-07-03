@@ -3,7 +3,7 @@ Burst
 
 То, чего нет в Бусте.
 
-[![Статус сборки](https://travis-ci.org/izvolov/burst.svg?branch=master)](https://travis-ci.org/izvolov/burst) [![Попробовать онлайн на Wandbox.org](https://img.shields.io/badge/try-online-blue.svg)](https://wandbox.org/permlink/qoFGYuVBbwCjZKad)
+[![Статус сборки](https://travis-ci.org/izvolov/burst.svg?branch=master)](https://travis-ci.org/izvolov/burst) [![Покрытие кода тестами](https://coveralls.io/repos/github/izvolov/burst/badge.svg?branch=master)](https://coveralls.io/github/izvolov/burst) [![Попробовать онлайн на Wandbox.org](https://img.shields.io/badge/try-online-blue.svg)](https://wandbox.org/permlink/qoFGYuVBbwCjZKad)
 
 О проекте
 ---------
