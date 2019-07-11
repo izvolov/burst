@@ -111,7 +111,7 @@ namespace burst
 
             private:
                 map_type m_bitmasks;
-                std::size_t m_sequence_length;
+                std::size_t m_sequence_length = 0;
             };
 
             //!     Позиционные маски элементов байтовой последовательности.
@@ -198,7 +198,7 @@ namespace burst
 
             private:
                 array_type m_bitmasks;
-                std::size_t m_sequence_length;
+                std::size_t m_sequence_length = 0;
             };
         } // namespace detail
     } // namespace algorithm
