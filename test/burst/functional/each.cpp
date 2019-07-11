@@ -37,7 +37,7 @@ BOOST_AUTO_TEST_SUITE(each)
 
     struct doubler
     {
-        doubler (std::size_t & calls):
+        explicit doubler (std::size_t & calls):
             calls(calls)
         {
         }

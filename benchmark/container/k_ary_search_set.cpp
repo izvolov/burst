@@ -13,7 +13,7 @@
 template <typename Container>
 struct default_constructor
 {
-    default_constructor (const std::string & name):
+    explicit default_constructor (const std::string & name):
         name(name)
     {
     }
@@ -31,7 +31,7 @@ struct default_constructor
 template <typename Value>
 struct k_ary_constructor
 {
-    k_ary_constructor (std::size_t arity):
+    explicit k_ary_constructor (std::size_t arity):
         arity(arity)
     {
     }

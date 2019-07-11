@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_SUITE(part)
 
     struct identity
     {
-        identity (std::size_t & calls): calls(calls) {}
+        explicit identity (std::size_t & calls): calls(calls) {}
 
         template <typename T>
         auto operator () (T t) const

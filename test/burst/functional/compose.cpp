@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_SUITE(compose)
 
     struct const_lvalue_sum
     {
-        const_lvalue_sum (std::size_t & calls):
+        explicit const_lvalue_sum (std::size_t & calls):
             calls(calls)
         {
         }
@@ -143,7 +143,7 @@ BOOST_AUTO_TEST_SUITE(compose)
 
     struct lvalue_sum
     {
-        lvalue_sum (std::size_t & calls):
+        explicit lvalue_sum (std::size_t & calls):
             calls(calls)
         {
         }

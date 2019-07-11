@@ -276,7 +276,7 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
     struct implicitly_nonmovable
     {
 
-        implicitly_nonmovable (Integer n):
+        explicit implicitly_nonmovable (Integer n):
             n(n)
         {
         }
@@ -310,7 +310,7 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
     struct explicitly_nonmovable
     {
 
-        explicitly_nonmovable (Integer n):
+        explicit explicitly_nonmovable (Integer n):
             n(n)
         {
         }
