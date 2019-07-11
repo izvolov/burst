@@ -2,6 +2,7 @@
 #include <burst/functional/only.hpp>
 #include <burst/integer/intlog2.hpp>
 #include <burst/tuple/make_tuple.hpp>
+#include <utility/caller_dummies.hpp>
 #include <utility/io/tuple.hpp>
 
 #include <boost/test/unit_test.hpp>
@@ -112,129 +113,39 @@ BOOST_AUTO_TEST_SUITE(only)
         BOOST_CHECK_EQUAL(dummy::instances_count, old_instances_count);
     }
 
-    struct const_lvalue_caller
-    {
-        const_lvalue_caller (std::size_t & calls):
-            calls(calls)
-        {
-        }
-
-        template <typename T>
-        auto operator () (T t) const &
-        {
-            ++calls;
-            return t;
-        }
-
-        template <typename T>
-        auto operator () (T t) & = delete;
-
-        template <typename T>
-        auto operator () (T t) && = delete;
-
-        std::size_t & calls;
-    };
-
     BOOST_AUTO_TEST_CASE(stored_function_invokes_as_const_lvalue_if_only_is_const_lvalue)
     {
         auto calls = std::size_t{0};
-        const auto only = burst::only<1>(const_lvalue_caller{calls}) | burst::make_tuple;
+        const auto only =
+            burst::only<1>(utility::const_lvalue_call_counter(calls)) | burst::make_tuple;
 
         only(1, "qwe");
 
         BOOST_CHECK_EQUAL(calls, 1);
     }
-
-    struct lvalue_caller
-    {
-        lvalue_caller (std::size_t & calls):
-            calls(calls)
-        {
-        }
-
-        template <typename T>
-        auto operator () (T t) const & = delete;
-
-        template <typename T>
-        auto operator () (T t) &
-        {
-            ++calls;
-            return t;
-        }
-
-        template <typename T>
-        auto operator () (T t) && = delete;
-
-        std::size_t & calls;
-    };
 
     BOOST_AUTO_TEST_CASE(stored_function_invokes_as_lvalue_if_only_is_lvalue)
     {
         auto calls = std::size_t{0};
-        auto only = burst::only<0>(lvalue_caller{calls}) | burst::make_tuple;
+        auto only = burst::only<0>(utility::lvalue_call_counter(calls)) | burst::make_tuple;
 
         only(1, "qwe");
 
         BOOST_CHECK_EQUAL(calls, 1);
     }
 
-    struct rvalue_caller
-    {
-        rvalue_caller (std::size_t & calls):
-            calls(calls)
-        {
-        }
-
-        template <typename T>
-        auto operator () (T t) const & = delete;
-
-        template <typename T>
-        auto operator () (T t) & = delete;
-
-        template <typename T>
-        auto operator () (T t) &&
-        {
-            ++calls;
-            return t;
-        }
-
-        std::size_t & calls;
-    };
-
     BOOST_AUTO_TEST_CASE(stored_function_invokes_as_rvalue_if_only_is_rvalue)
     {
         auto calls = std::size_t{0};
-        (burst::only<1>(rvalue_caller{calls}) | burst::make_tuple)(1, "qwe");
+        (burst::only<1>(utility::rvalue_call_counter(calls)) | burst::make_tuple)(1, "qwe");
 
         BOOST_CHECK_EQUAL(calls, 1);
     }
 
-    struct rvalue_multi_caller
-    {
-        rvalue_multi_caller (std::size_t & calls):
-            calls(calls)
-        {
-        }
-
-        template <typename Ts>
-        void operator () (Ts ...) const & = delete;
-
-        template <typename Ts>
-        void operator () (Ts ...) & = delete;
-
-        template <typename Ts>
-        void operator () (Ts ...) &&
-        {
-            ++calls;
-        }
-
-        std::size_t & calls;
-    };
-
     BOOST_AUTO_TEST_CASE(composed_function_invokes_as_rvalue_when_only_is_rvalue)
     {
         auto calls = std::size_t{0};
-        (burst::only<2>([] (auto x) {return x + x;}) | rvalue_multi_caller{calls})(1, 2, 3);
+        (burst::only<2>([] (auto x) {return x + x;}) | utility::rvalue_call_counter(calls))(1, 2, 3);
 
         BOOST_CHECK_EQUAL(calls, 1);
     }
@@ -242,7 +153,7 @@ BOOST_AUTO_TEST_SUITE(only)
     BOOST_AUTO_TEST_CASE(referenced_function_invokes_as_lvalue)
     {
         auto calls = std::size_t{0};
-        auto c = lvalue_caller{calls};
+        auto c = utility::lvalue_call_counter(calls);
         const auto only = burst::only<1>(std::ref(c)) | burst::make_tuple;
 
         only(1, "qwe");
@@ -253,7 +164,7 @@ BOOST_AUTO_TEST_SUITE(only)
     BOOST_AUTO_TEST_CASE(const_referenced_function_invokes_as_const_lvalue)
     {
         auto calls = std::size_t{0};
-        const auto c = const_lvalue_caller{calls};
+        const auto c = utility::const_lvalue_call_counter(calls);
         const auto only = burst::only<2>(std::ref(c)) | burst::make_tuple;
 
         only(1, "qwe", 3.14);

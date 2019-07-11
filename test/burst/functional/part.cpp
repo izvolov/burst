@@ -1,4 +1,5 @@
 #include <burst/functional/part.hpp>
+#include <utility/caller_dummies.hpp>
 
 #include <boost/test/unit_test.hpp>
 
@@ -123,99 +124,30 @@ BOOST_AUTO_TEST_SUITE(part)
         static_cast<void>(x);
     }
 
-    struct const_lvalue_caller
-    {
-        const_lvalue_caller (std::size_t & calls):
-            calls(calls)
-        {
-        }
-
-        template <typename T>
-        auto operator () (T t) const &
-        {
-            ++calls;
-            return t;
-        }
-
-        template <typename T>
-        auto operator () (T t) & = delete;
-
-        template <typename T>
-        auto operator () (T t) && = delete;
-
-        std::size_t & calls;
-    };
-
     BOOST_AUTO_TEST_CASE(stored_function_invokes_as_const_lvalue_if_part_is_const_lvalue)
     {
         auto calls = std::size_t{0};
-        const auto p = burst::part(const_lvalue_caller{calls});
+        const auto p = burst::part(utility::const_lvalue_call_counter(calls));
 
         p("qwe");
 
         BOOST_CHECK_EQUAL(calls, 1);
     }
 
-    struct lvalue_caller
-    {
-        lvalue_caller (std::size_t & calls):
-            calls(calls)
-        {
-        }
-
-        template <typename T>
-        auto operator () (T t) const & = delete;
-
-        template <typename T>
-        auto operator () (T t) &
-        {
-            ++calls;
-            return t;
-        }
-
-        template <typename T>
-        auto operator () (T t) && = delete;
-
-        std::size_t & calls;
-    };
-
     BOOST_AUTO_TEST_CASE(stored_function_invokes_as_lvalue_if_part_is_lvalue)
     {
         auto calls = std::size_t{0};
-        auto part = burst::part(lvalue_caller{calls});
+        auto part = burst::part(utility::lvalue_call_counter(calls));
 
         part(1);
 
         BOOST_CHECK_EQUAL(calls, 1);
     }
 
-    struct rvalue_caller
-    {
-        rvalue_caller (std::size_t & calls):
-            calls(calls)
-        {
-        }
-
-        template <typename T>
-        auto operator () (T t) const & = delete;
-
-        template <typename T>
-        auto operator () (T t) & = delete;
-
-        template <typename T>
-        auto operator () (T t) &&
-        {
-            ++calls;
-            return t;
-        }
-
-        std::size_t & calls;
-    };
-
     BOOST_AUTO_TEST_CASE(stored_function_invokes_as_rvalue_if_part_is_rvalue)
     {
         auto calls = std::size_t{0};
-        auto c = rvalue_caller{calls};
+        auto c = utility::rvalue_call_counter(calls);
 
         burst::part(c)(3.14);
 
@@ -225,7 +157,7 @@ BOOST_AUTO_TEST_SUITE(part)
     BOOST_AUTO_TEST_CASE(referenced_function_invokes_as_lvalue)
     {
         auto calls = std::size_t{0};
-        auto f = lvalue_caller{calls};
+        auto f = utility::lvalue_call_counter(calls);
 
         burst::part(std::ref(f))(true);
 
@@ -235,7 +167,7 @@ BOOST_AUTO_TEST_SUITE(part)
     BOOST_AUTO_TEST_CASE(const_referenced_function_invokes_as_const_lvalue)
     {
         auto calls = std::size_t{0};
-        const auto f = const_lvalue_caller{calls};
+        const auto f = utility::const_lvalue_call_counter(calls);
 
         burst::part(std::ref(f))('c');
 

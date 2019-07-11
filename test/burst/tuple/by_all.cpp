@@ -1,6 +1,7 @@
 #include <burst/functional/identity.hpp>
 #include <burst/integer/intlog2.hpp>
 #include <burst/tuple/by_all.hpp>
+#include <utility/caller_dummies.hpp>
 #include <utility/io/tuple.hpp>
 
 #include <boost/test/unit_test.hpp>
@@ -132,66 +133,20 @@ BOOST_AUTO_TEST_SUITE(by_all)
         BOOST_CHECK_EQUAL(dummy::instances_count, old_instances_count);
     }
 
-    struct const_lvalue_caller
-    {
-        const_lvalue_caller (std::size_t & calls):
-            calls(calls)
-        {
-        }
-
-        template <typename T>
-        auto operator () (T t) const &
-        {
-            ++calls;
-            return t;
-        }
-
-        template <typename T>
-        auto operator () (T t) & = delete;
-
-        template <typename T>
-        auto operator () (T t) && = delete;
-
-        std::size_t & calls;
-    };
-
     BOOST_AUTO_TEST_CASE(stored_function_invokes_as_const_lvalue_when_by_all_is_const_lvalue)
     {
         auto calls = std::size_t{0};
-        const auto b = burst::by_all(const_lvalue_caller{calls});
+        const auto b = burst::by_all(utility::const_lvalue_call_counter(calls));
 
         b(std::make_tuple(1, "qwe"));
 
         BOOST_CHECK_EQUAL(calls, 2);
     }
 
-    struct lvalue_caller
-    {
-        lvalue_caller (std::size_t & calls):
-            calls(calls)
-        {
-        }
-
-        template <typename T>
-        auto operator () (T t) const & = delete;
-
-        template <typename T>
-        auto operator () (T t) &
-        {
-            ++calls;
-            return t;
-        }
-
-        template <typename T>
-        auto operator () (T t) && = delete;
-
-        std::size_t & calls;
-    };
-
     BOOST_AUTO_TEST_CASE(stored_function_invokes_as_lvalue_when_by_all_is_lvalue)
     {
         auto calls = std::size_t{0};
-        auto b = burst::by_all(lvalue_caller{calls});
+        auto b = burst::by_all(utility::lvalue_call_counter(calls));
 
         b(std::make_tuple(1, "qwe"));
 
@@ -201,7 +156,7 @@ BOOST_AUTO_TEST_SUITE(by_all)
     BOOST_AUTO_TEST_CASE(stored_function_invokes_as_lvalue_when_by_all_is_rvalue)
     {
         auto calls = std::size_t{0};
-        auto l = lvalue_caller{calls};
+        auto l = utility::lvalue_call_counter(calls);
 
         burst::by_all(l)(std::make_tuple(1, "qwe"));
 
@@ -211,7 +166,7 @@ BOOST_AUTO_TEST_SUITE(by_all)
     BOOST_AUTO_TEST_CASE(referenced_function_invokes_as_lvalue)
     {
         auto calls = std::size_t{0};
-        auto f = lvalue_caller{calls};
+        auto f = utility::lvalue_call_counter(calls);
 
         burst::by_all(std::ref(f))(std::make_tuple(1, "qwe"));
 
@@ -221,7 +176,7 @@ BOOST_AUTO_TEST_SUITE(by_all)
     BOOST_AUTO_TEST_CASE(const_referenced_function_invokes_as_const_lvalue)
     {
         auto calls = std::size_t{0};
-        const auto f = const_lvalue_caller{calls};
+        const auto f = utility::const_lvalue_call_counter(calls);
 
         burst::by_all(std::ref(f))(std::make_tuple(1, "qwe"));
 
