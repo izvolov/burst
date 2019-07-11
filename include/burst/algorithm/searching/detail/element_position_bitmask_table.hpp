@@ -46,7 +46,7 @@ namespace burst
                     initialize(sequence.begin(), sequence.end());
                 }
 
-                element_position_bitmask_table (std::initializer_list<key_type> sequence)
+                explicit element_position_bitmask_table (std::initializer_list<key_type> sequence)
                 {
                     initialize(sequence.begin(), sequence.end());
                 }
@@ -148,7 +148,7 @@ namespace burst
                     initialize(sequence.begin(), sequence.end());
                 }
 
-                element_position_bitmask_table (std::initializer_list<key_type> sequence):
+                explicit element_position_bitmask_table (std::initializer_list<key_type> sequence):
                     m_bitmasks{{0}}
                 {
                     initialize(sequence.begin(), sequence.end());
