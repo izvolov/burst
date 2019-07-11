@@ -1,6 +1,7 @@
 #include <burst/functional/compose.hpp>
 #include <burst/tuple/apply.hpp>
 #include <burst/tuple/view.hpp>
+#include <utility/caller_dummies.hpp>
 
 #include <boost/test/unit_test.hpp>
 
@@ -82,175 +83,50 @@ BOOST_AUTO_TEST_SUITE(compose)
         BOOST_CHECK_EQUAL(dummy::instances_count, old_instances_count);
     }
 
-    struct const_lvalue_sum
-    {
-        explicit const_lvalue_sum (std::size_t & calls):
-            calls(calls)
-        {
-        }
-
-        template <typename T, typename U>
-        auto operator () (T t, U u) const &
-        {
-            ++calls;
-            return t + u;
-        }
-
-        template <typename T, typename U>
-        auto operator () (T t, U u) & = delete;
-
-        template <typename T, typename U>
-        auto operator () (T t, U u) && = delete;
-
-        std::size_t & calls;
-    };
-
-    struct const_lvalue_identity
-    {
-        const_lvalue_identity (std::size_t & calls):
-            calls(calls)
-        {
-        }
-
-        template <typename T>
-        auto operator () (T t) const &
-        {
-            ++calls;
-            return t;
-        }
-
-        template <typename T>
-        auto operator () (T t) & = delete;
-
-        template <typename T>
-        auto operator () (T t) && = delete;
-
-        std::size_t & calls;
-    };
-
     BOOST_AUTO_TEST_CASE(stored_functions_invoke_as_const_lvalues_when_compose_is_const_lvalue)
     {
         auto sum_calls = std::size_t{0};
         auto identity_calls = std::size_t{0};
         const auto c =
-            burst::compose(const_lvalue_identity{identity_calls}, const_lvalue_sum{sum_calls});
+            burst::compose
+            (
+                utility::const_lvalue_call_counter(identity_calls, [] (auto x) {return x;}),
+                utility::const_lvalue_call_counter(sum_calls, std::plus<>{})
+            );
 
         c(std::string("qwe"), std::string("rty"));
 
         BOOST_CHECK_EQUAL(sum_calls, 1);
         BOOST_CHECK_EQUAL(identity_calls, 1);
     }
-
-    struct lvalue_sum
-    {
-        explicit lvalue_sum (std::size_t & calls):
-            calls(calls)
-        {
-        }
-
-        template <typename T, typename U>
-        auto operator () (T t, U u) const & = delete;
-
-        template <typename T, typename U>
-        auto operator () (T t, U u) &
-        {
-            ++calls;
-            return t + u;
-        }
-
-        template <typename T, typename U>
-        auto operator () (T t, U u) && = delete;
-
-        std::size_t & calls;
-    };
-
-    struct lvalue_identity
-    {
-        lvalue_identity (std::size_t & calls):
-            calls(calls)
-        {
-        }
-
-        template <typename T>
-        auto operator () (T t) const & = delete;
-
-        template <typename T>
-        auto operator () (T t) &
-        {
-            ++calls;
-            return t;
-        }
-
-        template <typename T>
-        auto operator () (T t) && = delete;
-
-        std::size_t & calls;
-    };
 
     BOOST_AUTO_TEST_CASE(stored_functions_invoke_as_lvalues_when_compose_is_lvalue)
     {
         auto sum_calls = std::size_t{0};
         auto identity_calls = std::size_t{0};
-        auto c = burst::compose(lvalue_identity{identity_calls}, lvalue_sum{sum_calls});
+        auto c =
+            burst::compose
+            (
+                utility::lvalue_call_counter(identity_calls, [] (auto x) {return x;}),
+                utility::lvalue_call_counter(sum_calls, std::plus<>{})
+            );
 
         c(std::string("qwe"), std::string("rty"));
 
         BOOST_CHECK_EQUAL(sum_calls, 1);
         BOOST_CHECK_EQUAL(identity_calls, 1);
     }
-
-    struct rvalue_sum
-    {
-        rvalue_sum (std::size_t & calls):
-            calls(calls)
-        {
-        }
-
-        template <typename T, typename U>
-        auto operator () (T t, U u) const & = delete;
-
-        template <typename T, typename U>
-        auto operator () (T t, U u) & = delete;
-
-        template <typename T, typename U>
-        auto operator () (T t, U u) &&
-        {
-            ++calls;
-            return t + u;
-        }
-
-        std::size_t & calls;
-    };
-
-    struct rvalue_identity
-    {
-        rvalue_identity (std::size_t & calls):
-            calls(calls)
-        {
-        }
-
-        template <typename T>
-        auto operator () (T t) const & = delete;
-
-        template <typename T>
-        auto operator () (T t) & = delete;
-
-        template <typename T>
-        auto operator () (T t) &&
-        {
-            ++calls;
-            return t;
-        }
-
-        std::size_t & calls;
-    };
 
     BOOST_AUTO_TEST_CASE(stored_functions_invoke_as_rvalues_when_compose_is_rvalue)
     {
         auto sum_calls = std::size_t{0};
         auto identity_calls = std::size_t{0};
 
-        burst::compose(rvalue_identity{identity_calls}, rvalue_sum{sum_calls})
+        burst::compose
+        (
+            utility::rvalue_call_counter(identity_calls, [] (auto x) {return x;}),
+            utility::rvalue_call_counter(sum_calls, std::plus<>{})
+        )
         (
             std::string("qwe"),
             std::string("rty")
@@ -263,7 +139,7 @@ BOOST_AUTO_TEST_SUITE(compose)
     BOOST_AUTO_TEST_CASE(referenced_functions_invoke_as_lvalues)
     {
         auto identity_calls = std::size_t{0};
-        auto identity = lvalue_identity{identity_calls};
+        auto identity = utility::lvalue_call_counter(identity_calls, [] (auto x) {return x;});
 
         burst::compose(std::ref(identity), [] (auto x, auto y) {return x + y;})
         (
@@ -277,7 +153,7 @@ BOOST_AUTO_TEST_SUITE(compose)
     BOOST_AUTO_TEST_CASE(const_referenced_functions_invoke_as_const_lvalues)
     {
         auto sum_calls = std::size_t{0};
-        const auto sum = const_lvalue_sum{sum_calls};
+        const auto sum = utility::const_lvalue_call_counter(sum_calls, std::plus<>{});
 
         burst::compose([] (auto x) {return x;}, std::ref(sum))
         (
