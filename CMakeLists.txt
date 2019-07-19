@@ -78,6 +78,15 @@ install(DIRECTORY include/burst DESTINATION include)
 install(TARGETS burst EXPORT BurstConfig)
 install(EXPORT BurstConfig NAMESPACE Burst:: DESTINATION share/Burst/cmake)
 
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file("${PROJECT_BINARY_DIR}/BurstConfigVersion.cmake"
+    VERSION
+        ${PROJECT_VERSION}
+    COMPATIBILITY
+        AnyNewerVersion
+)
+install(FILES "${PROJECT_BINARY_DIR}/BurstConfigVersion.cmake" DESTINATION share/Burst/cmake)
+
 ###################################################################################################
 ##
 ##      Покрытие кода тестами
