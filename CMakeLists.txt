@@ -7,6 +7,8 @@
 cmake_minimum_required(VERSION 3.8.2)
 project(Burst VERSION 1.0)
 
+get_directory_property(IS_SUBPROJECT PARENT_DIRECTORY)
+
 ###################################################################################################
 ##
 ##      Опции проекта
@@ -118,8 +120,6 @@ endif()
 ##      Тесты
 ##
 ###################################################################################################
-
-get_directory_property(IS_SUBPROJECT PARENT_DIRECTORY)
 
 if(NOT BURST_TESTING)
     message(STATUS "Testing is disabled for Burst")
