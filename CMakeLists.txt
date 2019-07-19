@@ -101,22 +101,6 @@ install(FILES "${PROJECT_BINARY_DIR}/BurstConfigVersion.cmake" DESTINATION share
 
 ###################################################################################################
 ##
-##      Покрытие кода тестами
-##
-###################################################################################################
-
-if(BURST_COVERAGE)
-    find_program(GCOVR_EXECUTABLE gcovr)
-    if (GCOVR_EXECUTABLE)
-        message(STATUS "Test coverage is on")
-    else()
-        set(BURST_COVERAGE OFF)
-        message(WARNING "Install gcovr to enable test coverage")
-    endif()
-endif()
-
-###################################################################################################
-##
 ##      Тесты
 ##
 ###################################################################################################
