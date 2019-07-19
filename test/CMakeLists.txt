@@ -1,3 +1,5 @@
+find_package(Boost 1.62.0 COMPONENTS unit_test_framework REQUIRED)
+
 add_library(testutility INTERFACE)
 target_include_directories(testutility INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 
