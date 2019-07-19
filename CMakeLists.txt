@@ -159,4 +159,6 @@ endif()
 ##
 ###################################################################################################
 
-add_subdirectory(online)
+if(NOT IS_SUBPROJECT)
+    add_subdirectory(online)
+endif()
