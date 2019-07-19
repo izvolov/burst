@@ -427,7 +427,7 @@ cmake --build . --target install
 >
 > ```shell
 > cd path/to/build/directory
-> cmake -DCMAKE_BUILD_TYPE=Release path/to/burst -DBURST_DISABLE_TESTING=YES -DBURST_DISABLE_BENCHMARKING=YES
+> cmake -DCMAKE_BUILD_TYPE=Release path/to/burst -DBURST_TESTING=OFF -DBURST_BENCHMARKING=OFF
 > cmake --build . --target install
 > ```
 

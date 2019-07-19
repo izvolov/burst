@@ -10,7 +10,7 @@ target_link_libraries(${UNIT_TEST_EXECUTABLE}
         Boost::unit_test_framework
 )
 
-if(BURST_ENABLE_COVERAGE)
+if(BURST_COVERAGE)
     target_compile_options(${UNIT_TEST_EXECUTABLE} PRIVATE --coverage)
     target_link_libraries(${UNIT_TEST_EXECUTABLE} PRIVATE gcov)
 

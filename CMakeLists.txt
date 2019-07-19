@@ -13,9 +13,9 @@ project(Burst VERSION 1.0)
 ##
 ###################################################################################################
 
-option(BURST_ENABLE_COVERAGE "Включить измерение покрытия кода тестами" OFF)
-option(BURST_DISABLE_TESTING "Отключить модульное тестирование" OFF)
-option(BURST_DISABLE_BENCHMARKING "Отключить сборку программ для замеров производительности" OFF)
+option(BURST_COVERAGE "Включить измерение покрытия кода тестами" OFF)
+option(BURST_TESTING "Включить модульное тестирование" ON)
+option(BURST_BENCHMARKING "Включить сборку программ для замеров производительности" ON)
 
 ###################################################################################################
 ##
@@ -103,12 +103,12 @@ install(FILES "${PROJECT_BINARY_DIR}/BurstConfigVersion.cmake" DESTINATION share
 ##
 ###################################################################################################
 
-if(BURST_ENABLE_COVERAGE)
+if(BURST_COVERAGE)
     find_program(GCOVR_EXECUTABLE gcovr)
     if (GCOVR_EXECUTABLE)
         message(STATUS "Test coverage is on")
     else()
-        set(BURST_ENABLE_COVERAGE OFF)
+        set(BURST_COVERAGE OFF)
         message(WARNING "Install gcovr to enable test coverage")
     endif()
 endif()
@@ -121,7 +121,7 @@ endif()
 
 get_directory_property(IS_SUBPROJECT PARENT_DIRECTORY)
 
-if(BURST_DISABLE_TESTING)
+if(NOT BURST_TESTING)
     message(STATUS "Testing is disabled for Burst")
 elseif(IS_SUBPROJECT)
     message(STATUS "Burst is not tested being a subproject")
@@ -135,7 +135,7 @@ endif()
 ##
 ###################################################################################################
 
-if(BURST_DISABLE_BENCHMARKING)
+if(NOT BURST_BENCHMARKING)
     message(STATUS "Benchmarking is disabled for Burst")
 elseif(IS_SUBPROJECT)
     message(STATUS "Burst is not benchmarked being a subproject")

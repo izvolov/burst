@@ -39,7 +39,7 @@ language: cpp
   script:
   - mkdir Build
   - cd Build
-  - cmake .. -DCMAKE_BUILD_TYPE=Debug -DBURST_ENABLE_COVERAGE=YES
+  - cmake .. -DCMAKE_BUILD_TYPE=Debug -DBURST_COVERAGE=ON
   - cmake --build . --target coverage
   after_success:
   - coveralls --root .. --include include
