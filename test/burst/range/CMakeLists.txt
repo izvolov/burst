@@ -1,4 +1,4 @@
-target_sources(${UNIT_TEST_EXECUTABLE} PRIVATE
+target_sources(burst-unit-tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/bitap.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/cache_one.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/difference.cpp

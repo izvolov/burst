@@ -1,4 +1,4 @@
-target_sources(${UNIT_TEST_EXECUTABLE} PRIVATE
+target_sources(burst-unit-tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/counting_sort.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/galloping_lower_bound.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/galloping_upper_bound.cpp

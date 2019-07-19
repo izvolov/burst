@@ -8,4 +8,4 @@ set(WANDBOX_URL "https://wandbox.org/api/compile.json")
 add_custom_target(wandbox
     COMMAND
         python burst-example.py | curl -H "Content-type: application/json" -d @- ${WANDBOX_URL}
-    DEPENDS ${UNIT_TEST_EXECUTABLE})
+    DEPENDS burst-unit-tests)

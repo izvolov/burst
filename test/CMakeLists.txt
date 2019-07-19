@@ -3,9 +3,8 @@ find_package(Boost 1.62.0 COMPONENTS unit_test_framework REQUIRED)
 add_library(testutility INTERFACE)
 target_include_directories(testutility INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 
-set(UNIT_TEST_EXECUTABLE burst-unit-tests)
-add_executable(${UNIT_TEST_EXECUTABLE} test_main.cpp)
-target_link_libraries(${UNIT_TEST_EXECUTABLE}
+add_executable(burst-unit-tests test_main.cpp)
+target_link_libraries(burst-unit-tests
     PRIVATE
         testutility
         Burst::burst
@@ -16,8 +15,8 @@ find_program(GCOVR_EXECUTABLE gcovr)
 if(BURST_COVERAGE AND GCOVR_EXECUTABLE)
     message(STATUS "Test coverage is on")
 
-    target_compile_options(${UNIT_TEST_EXECUTABLE} PRIVATE --coverage)
-    target_link_libraries(${UNIT_TEST_EXECUTABLE} PRIVATE gcov)
+    target_compile_options(burst-unit-tests PRIVATE --coverage)
+    target_link_libraries(burst-unit-tests PRIVATE gcov)
 
     add_custom_target(coverage
         COMMAND
@@ -32,6 +31,6 @@ elseif(BURST_COVERAGE AND NOT GCOVR_EXECUTABLE)
     message(WARNING "Install gcovr to enable test coverage")
 endif()
 
-add_custom_target(check ALL COMMAND ${UNIT_TEST_EXECUTABLE} --report_level=short --color_output)
+add_custom_target(check ALL COMMAND burst-unit-tests --report_level=short --color_output)
 
 add_subdirectory(burst)
