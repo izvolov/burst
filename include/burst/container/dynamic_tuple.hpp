@@ -48,7 +48,7 @@ namespace burst
                     not std::is_same<std::decay_t<Head>, dynamic_tuple>::value
                 >>
         explicit dynamic_tuple (Head && head, Tail && ... tail):
-            m_capacity(aligned_volume<Head, Tail...>::value),
+            m_capacity(aligned_volume_v<Head, Tail...>),
             m_data(std::make_unique<std::int8_t[]>(m_capacity))
         {
             try

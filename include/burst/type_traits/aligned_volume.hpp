@@ -42,6 +42,9 @@ namespace burst
     {
         static constexpr auto value = detail::aligned_volume_impl<0, Args...>::value;
     };
+
+    template <typename ... Args>
+    constexpr auto aligned_volume_v = aligned_volume<Args...>::value;
 } // namespace burst
 
 #endif // BURST_TYPE_TRAITS_ALIGNED_VOLUME_HPP
