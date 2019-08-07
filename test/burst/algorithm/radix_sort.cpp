@@ -1,12 +1,13 @@
 #include <burst/algorithm/radix_sort.hpp>
 #include <utility/io/pair.hpp>
 
+#include <doctest/doctest.h>
+
 #include <boost/iterator/indirect_iterator.hpp>
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 #include <boost/range/rbegin.hpp>
 #include <boost/range/rend.hpp>
-#include <boost/test/unit_test.hpp>
 
 #include <limits>
 #include <memory>
@@ -14,8 +15,9 @@
 #include <utility>
 #include <vector>
 
-BOOST_AUTO_TEST_SUITE(radix_sort)
-    BOOST_AUTO_TEST_CASE(sorting_empty_range_does_nothing)
+TEST_SUITE("radix_sort")
+{
+    TEST_CASE("sorting_empty_range_does_nothing")
     {
         std::vector<std::size_t> values;
 
@@ -23,10 +25,10 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
         auto sorted_values = values;
         burst::radix_sort(sorted_values.begin(), sorted_values.end(), buffer.begin());
 
-        BOOST_CHECK(sorted_values == values);
+        CHECK(sorted_values == values);
     }
 
-    BOOST_AUTO_TEST_CASE(sorting_already_sorted_range_results_the_same_range)
+    TEST_CASE("sorting_already_sorted_range_results_the_same_range")
     {
         std::vector<std::uint8_t> initial{0, 1, 2, 3, 4};
 
@@ -34,29 +36,21 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
         auto sorted = initial;
         burst::radix_sort(sorted.begin(), sorted.end(), buffer.begin());
 
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            boost::begin(sorted), boost::end(sorted),
-            boost::begin(initial), boost::end(initial)
-        );
+        CHECK(sorted == initial);
     }
 
-    BOOST_AUTO_TEST_CASE(sorting_chaotic_single_byte_range_results_sorted_range)
+    TEST_CASE("sorting_chaotic_single_byte_range_results_sorted_range")
     {
         std::vector<std::uint8_t> numbers{2, 1, 3, 0, 4};
 
         std::vector<std::uint8_t> buffer(numbers.size());
         burst::radix_sort(numbers.begin(), numbers.end(), buffer.begin());
 
-        auto expected = {0, 1, 2, 3, 4};
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            boost::begin(numbers), boost::end(numbers),
-            boost::begin(expected), boost::end(expected)
-        );
+        auto expected = std::vector<std::uint8_t>{0, 1, 2, 3, 4};
+        CHECK(numbers == expected);
     }
 
-    BOOST_AUTO_TEST_CASE(sorting_descending_range_results_ascending_range)
+    TEST_CASE("sorting_descending_range_results_ascending_range")
     {
         std::vector<std::string> descending{"1000", "100", "10", "1"};
 
@@ -69,14 +63,10 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
             }
         );
 
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            boost::rbegin(descending), boost::rend(descending),
-            boost::begin(ascending), boost::end(ascending)
-        );
+        CHECK(std::equal(descending.rbegin(), descending.rend(), ascending.begin()));
     }
 
-    BOOST_AUTO_TEST_CASE(sorting_chaotic_range_results_sorted_range)
+    TEST_CASE("sorting_chaotic_range_results_sorted_range")
     {
         std::vector<std::uint32_t> numbers{100500, 42, 99999, 1000, 0};
 
@@ -84,14 +74,10 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
         burst::radix_sort(numbers.begin(), numbers.end(), buffer.begin());
 
         std::vector<std::uint32_t> expected{0, 42, 1000, 99999, 100500};
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            boost::begin(numbers), boost::end(numbers),
-            boost::begin(expected), boost::end(expected)
-        );
+        CHECK(numbers == expected);
     }
 
-    BOOST_AUTO_TEST_CASE(can_sort_in_descending_order)
+    TEST_CASE("can_sort_in_descending_order")
     {
         std::vector<std::uint32_t> numbers{100500, 42, 99999, 1000, 0};
 
@@ -103,14 +89,10 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
             });
 
         std::vector<std::uint32_t> expected{100500, 99999, 1000, 42, 0};
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            boost::begin(numbers), boost::end(numbers),
-            boost::begin(expected), boost::end(expected)
-        );
+        CHECK(numbers ==expected);
     }
 
-    BOOST_AUTO_TEST_CASE(can_sort_bitwise)
+    TEST_CASE("can_sort_bitwise")
     {
         std::vector<std::uint8_t> numbers{0, 5, 3, 7, 1, 2, 4, 6};
 
@@ -122,14 +104,10 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
             });
 
         std::vector<std::uint8_t> even_goes_first{0, 1, 2, 3, 4, 5, 6, 7};
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            boost::begin(numbers), boost::end(numbers),
-            boost::begin(even_goes_first), boost::end(even_goes_first)
-        );
+        CHECK(numbers == even_goes_first);
     }
 
-    BOOST_AUTO_TEST_CASE(extreme_values_are_sorted_properly)
+    TEST_CASE("extreme_values_are_sorted_properly")
     {
         std::vector<std::size_t> numbers
         {
@@ -147,14 +125,10 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
             0,
             std::numeric_limits<std::size_t>::max()
         };
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            boost::begin(numbers), boost::end(numbers),
-            boost::begin(expected), boost::end(expected)
-        );
+        CHECK(numbers == expected);
     }
 
-    BOOST_AUTO_TEST_CASE(sorting_algorithm_is_stable)
+    TEST_CASE("sorting_algorithm_is_stable")
     {
         std::vector<std::pair<std::uint16_t, std::string>> numbers
         {
@@ -180,14 +154,10 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
             {1, "два"},
             {1, "пять"}
         };
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            boost::begin(numbers), boost::end(numbers),
-            boost::begin(expected), boost::end(expected)
-        );
+        CHECK(numbers == expected);
     }
 
-    BOOST_AUTO_TEST_CASE(can_sort_signed_values)
+    TEST_CASE("can_sort_signed_values")
     {
         std::vector<std::int64_t> values
         {
@@ -217,14 +187,10 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
             100500,
             std::numeric_limits<std::int64_t>::max()
         };
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            std::begin(values), std::end(values),
-            std::begin(expected), std::end(expected)
-        );
+        CHECK(values == expected);
     }
 
-    BOOST_AUTO_TEST_CASE(can_sort_noncopyable_objects)
+    TEST_CASE("can_sort_noncopyable_objects")
     {
         std::vector<std::unique_ptr<std::int64_t>> pointers;
         pointers.emplace_back(std::make_unique<std::int64_t>(30));
@@ -241,14 +207,15 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
             });
 
         auto expected = {-100500, 0, 5, 30, 20152016};
-        BOOST_CHECK_EQUAL_COLLECTIONS
+        CHECK(std::equal
         (
-            boost::make_indirect_iterator(std::begin(pointers)), boost::make_indirect_iterator(std::end(pointers)),
-            std::begin(expected), std::end(expected)
-        );
+            boost::make_indirect_iterator(std::begin(pointers)),
+            boost::make_indirect_iterator(std::end(pointers)),
+            std::begin(expected)
+        ));
     }
 
-    BOOST_AUTO_TEST_CASE(can_sort_noncopyable_single_byte_objects)
+    TEST_CASE("can_sort_noncopyable_single_byte_objects")
     {
         std::vector<std::unique_ptr<std::int8_t>> pointers;
         pointers.emplace_back(std::make_unique<std::int8_t>(0x30));
@@ -265,11 +232,12 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
             });
 
         auto expected = {-0xf, 0, 0x5, 0x30, 0x7f};
-        BOOST_CHECK_EQUAL_COLLECTIONS
+        CHECK(std::equal
         (
-            boost::make_indirect_iterator(std::begin(pointers)), boost::make_indirect_iterator(std::end(pointers)),
-            std::begin(expected), std::end(expected)
-        );
+            boost::make_indirect_iterator(std::begin(pointers)),
+            boost::make_indirect_iterator(std::end(pointers)),
+            std::begin(expected)
+        ));
     }
 
     template <typename Integer>
@@ -291,7 +259,7 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
         Integer n;
     };
 
-    BOOST_AUTO_TEST_CASE(can_sort_implicitly_nonmovable_objects)
+    TEST_CASE("can_sort_implicitly_nonmovable_objects")
     {
         using object_type = implicitly_nonmovable<std::int64_t>;
         auto objects =
@@ -328,7 +296,7 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
         Integer n;
     };
 
-    BOOST_AUTO_TEST_CASE(can_sort_explicitly_nonmovable_objects)
+    TEST_CASE("can_sort_explicitly_nonmovable_objects")
     {
         using object_type = explicitly_nonmovable<std::int8_t>;
         std::vector<object_type> objects;
@@ -343,7 +311,7 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
         burst::radix_sort(objects, buffer.begin(), [] (auto && n) {return n.n;});
     }
 
-    BOOST_AUTO_TEST_CASE(works_with_ranges)
+    TEST_CASE("works_with_ranges")
     {
         std::vector<std::uint32_t> numbers{100500, 42, 99999, 1000, 0};
 
@@ -351,10 +319,6 @@ BOOST_AUTO_TEST_SUITE(radix_sort)
         burst::radix_sort(numbers, buffer.begin());
 
         std::vector<std::uint32_t> expected{0, 42, 1000, 99999, 100500};
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            boost::begin(numbers), boost::end(numbers),
-            boost::begin(expected), boost::end(expected)
-        );
+        CHECK(numbers == expected);
     }
-BOOST_AUTO_TEST_SUITE_END()
+}

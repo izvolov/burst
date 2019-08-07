@@ -1,16 +1,18 @@
 #include <burst/iterator/binary_ostream_iterator.hpp>
 #include <burst/range/binary_istream_range.hpp>
 
+#include <doctest/doctest.h>
+
 #include <boost/range/algorithm/copy.hpp>
-#include <boost/test/unit_test.hpp>
 
 #include <iostream>
 #include <iterator>
 #include <sstream>
 #include <vector>
 
-BOOST_AUTO_TEST_SUITE(binary_stream_iterators)
-    BOOST_AUTO_TEST_CASE(trivial_objects_are_written_and_read_by_default_io_functions)
+TEST_SUITE("binary_stream_iterators")
+{
+    TEST_CASE("trivial_objects_are_written_and_read_by_default_io_functions")
     {
         std::vector<int> initial{1, 2, 3};
         static_assert(std::is_trivial<decltype(initial)::value_type>::value, "");
@@ -22,23 +24,19 @@ BOOST_AUTO_TEST_SUITE(binary_stream_iterators)
         std::vector<int> result;
         boost::copy(burst::make_binary_istream_range<int>(stream), std::back_inserter(result));
 
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            initial.begin(), initial.end(),
-            result.begin(), result.end()
-        );
+        CHECK(result == initial);
     }
 
-    BOOST_AUTO_TEST_CASE(input_from_empty_stream_is_void)
+    TEST_CASE("input_from_empty_stream_is_void")
     {
         std::stringstream empty_stream;
         std::vector<double> result;
         boost::copy(burst::make_binary_istream_range<double>(empty_stream), std::back_inserter(result));
 
-        BOOST_CHECK(result.empty());
+        CHECK(result.empty());
     }
 
-    BOOST_AUTO_TEST_CASE(non_trivial_objects_must_provide_custom_io_functions)
+    TEST_CASE("non_trivial_objects_must_provide_custom_io_functions")
     {
         std::vector<std::string> names{"Вася Пупкин", "Доздраперма Кузьминишна"};
         static_assert(not std::is_trivial<decltype(names)::value_type>::value, "");
@@ -68,10 +66,6 @@ BOOST_AUTO_TEST_SUITE(binary_stream_iterators)
         std::vector<std::string> result;
         boost::copy(burst::make_binary_istream_range<std::string>(stream, read_string), std::back_inserter(result));
 
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            names.begin(), names.end(),
-            result.begin(), result.end()
-        );
+        CHECK(result == names);
     }
-BOOST_AUTO_TEST_SUITE_END()
+}

@@ -1,4 +1,2 @@
-#define BOOST_TEST_DYN_LINK
-#define BOOST_TEST_MODULE Burst
-
-#include <boost/test/unit_test.hpp>
+#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#include <doctest/doctest.h>

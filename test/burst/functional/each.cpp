@@ -6,35 +6,14 @@
 #include <utility/caller_dummies.hpp>
 #include <utility/io/tuple.hpp>
 
-#include <boost/test/unit_test.hpp>
+#include <doctest/doctest.h>
 
+#include <functional>
 #include <string>
 #include <tuple>
 
-BOOST_AUTO_TEST_SUITE(each)
-    BOOST_AUTO_TEST_CASE(forwards_input_arguments_mapped_by_specified_function)
-    {
-        auto e = burst::each([] (auto x) {return x + x;}) | burst::make_tuple;
-        auto t = e(4, std::string("qwe"));
-        BOOST_CHECK_EQUAL(t, std::make_tuple(8, "qweqwe"));
-    }
-
-    BOOST_AUTO_TEST_CASE(may_be_composed_with_another_each)
-    {
-        const auto square = [] (auto x) {return x * x;};
-        auto e = burst::each(square) | burst::each(square) | burst::sum;
-        auto r = e(1, 2, 3);
-        BOOST_CHECK_EQUAL(r, 1 + 16 + 81);
-    }
-
-    BOOST_AUTO_TEST_CASE(composition_may_be_composed_again)
-    {
-        const auto square = [] (auto x) {return x * x;};
-        auto e = burst::each(square) | burst::sum | square;
-        auto r = e(1, 2, 3);
-        BOOST_CHECK_EQUAL(r, (1 + 4 + 9) * (1 + 4 + 9));
-    }
-
+namespace // anonymous
+{
     struct doubler
     {
         explicit doubler (std::size_t & calls):
@@ -51,16 +30,6 @@ BOOST_AUTO_TEST_SUITE(each)
 
         std::size_t & calls;
     };
-
-    BOOST_AUTO_TEST_CASE(calls_inner_function_on_every_input_element)
-    {
-        auto calls = std::size_t{0};
-        auto e = burst::each(doubler{calls}) | burst::make_tuple;
-
-        e(4, 'a', 3.14);
-
-        BOOST_CHECK_EQUAL(calls, 3);
-    }
 
     struct dummy
     {
@@ -88,18 +57,54 @@ BOOST_AUTO_TEST_SUITE(each)
     };
 
     int dummy::instances_count = 0;
+} // namespace anonymous
 
-    BOOST_AUTO_TEST_CASE(every_passed_function_is_stored_inside)
+TEST_SUITE("each")
+{
+    TEST_CASE("forwards_input_arguments_mapped_by_specified_function")
+    {
+        auto e = burst::each([] (auto x) {return x + x;}) | burst::make_tuple;
+        auto t = e(4, std::string("qwe"));
+        CHECK(t == std::make_tuple(8, "qweqwe"));
+    }
+
+    TEST_CASE("may_be_composed_with_another_each")
+    {
+        const auto square = [] (auto x) {return x * x;};
+        auto e = burst::each(square) | burst::each(square) | burst::sum;
+        auto r = e(1, 2, 3);
+        CHECK(r == 1 + 16 + 81);
+    }
+
+    TEST_CASE("composition_may_be_composed_again")
+    {
+        const auto square = [] (auto x) {return x * x;};
+        auto e = burst::each(square) | burst::sum | square;
+        auto r = e(1, 2, 3);
+        CHECK(r == (1 + 4 + 9) * (1 + 4 + 9));
+    }
+
+    TEST_CASE("calls_inner_function_on_every_input_element")
+    {
+        auto calls = std::size_t{0};
+        auto e = burst::each(doubler{calls}) | burst::make_tuple;
+
+        e(4, 'a', 3.14);
+
+        CHECK(calls == 3);
+    }
+
+    TEST_CASE("every_passed_function_is_stored_inside")
     {
         const auto old_instances_count = dummy::instances_count;
 
         auto e = burst::each(dummy{}) | burst::each(dummy{});
         static_cast<void>(e);
 
-        BOOST_CHECK_EQUAL(dummy::instances_count, old_instances_count + 2);
+        CHECK(dummy::instances_count == old_instances_count + 2);
     }
 
-    BOOST_AUTO_TEST_CASE(function_is_not_stored_if_passed_by_ref)
+    TEST_CASE("function_is_not_stored_if_passed_by_ref")
     {
         auto d = dummy{};
         const auto old_instances_count = dummy::instances_count;
@@ -107,10 +112,10 @@ BOOST_AUTO_TEST_SUITE(each)
         auto e = burst::each(std::ref(d));
         static_cast<void>(e);
 
-        BOOST_CHECK_EQUAL(dummy::instances_count, old_instances_count);
+        CHECK(dummy::instances_count == old_instances_count);
     }
 
-    BOOST_AUTO_TEST_CASE(stored_function_invokes_as_const_lvalue_if_each_is_const_lvalue)
+    TEST_CASE("stored_function_invokes_as_const_lvalue_if_each_is_const_lvalue")
     {
         auto calls = std::size_t{0};
         const auto each =
@@ -118,36 +123,36 @@ BOOST_AUTO_TEST_SUITE(each)
 
         each(1, "qwe");
 
-        BOOST_CHECK_EQUAL(calls, 2);
+        CHECK(calls == 2);
     }
 
-    BOOST_AUTO_TEST_CASE(stored_function_invokes_as_lvalue_if_each_is_lvalue)
+    TEST_CASE("stored_function_invokes_as_lvalue_if_each_is_lvalue")
     {
         auto calls = std::size_t{0};
         auto each = burst::each(utility::lvalue_call_counter(calls)) | burst::make_tuple;
 
         each(1, "qwe");
 
-        BOOST_CHECK_EQUAL(calls, 2);
+        CHECK(calls == 2);
     }
 
-    BOOST_AUTO_TEST_CASE(composed_function_invokes_as_rvalue_when_each_is_rvalue)
+    TEST_CASE("composed_function_invokes_as_rvalue_when_each_is_rvalue")
     {
         auto calls = std::size_t{0};
         (burst::each([] (auto x) {return x + x;}) | utility::rvalue_call_counter(calls))(1, 2, 3);
 
-        BOOST_CHECK_EQUAL(calls, 1);
+        CHECK(calls == 1);
     }
 
-    BOOST_AUTO_TEST_CASE(stored_function_invokes_as_lvalue_if_each_is_rvalue)
+    TEST_CASE("stored_function_invokes_as_lvalue_if_each_is_rvalue")
     {
         auto calls = std::size_t{0};
         (burst::each(utility::lvalue_call_counter(calls)) | burst::make_tuple)(1, "qwe");
 
-        BOOST_CHECK_EQUAL(calls, 2);
+        CHECK(calls == 2);
     }
 
-    BOOST_AUTO_TEST_CASE(referenced_function_invokes_as_lvalue)
+    TEST_CASE("referenced_function_invokes_as_lvalue")
     {
         auto calls = std::size_t{0};
         auto c = utility::lvalue_call_counter(calls);
@@ -155,10 +160,10 @@ BOOST_AUTO_TEST_SUITE(each)
 
         each(1, "qwe");
 
-        BOOST_CHECK_EQUAL(calls, 2);
+        CHECK(calls == 2);
     }
 
-    BOOST_AUTO_TEST_CASE(const_referenced_function_invokes_as_const_lvalue)
+    TEST_CASE("const_referenced_function_invokes_as_const_lvalue")
     {
         auto calls = std::size_t{0};
         const auto c = utility::const_lvalue_call_counter(calls);
@@ -166,17 +171,17 @@ BOOST_AUTO_TEST_SUITE(each)
 
         each(1, "qwe");
 
-        BOOST_CHECK_EQUAL(calls, 2);
+        CHECK(calls == 2);
     }
 
-    BOOST_AUTO_TEST_CASE(is_a_constexpr_function)
+    TEST_CASE("is_a_constexpr_function")
     {
         constexpr auto e = burst::each(&burst::intlog2<int>) | burst::make_tuple;
         constexpr auto t = e(1, 256, 1024);
-        BOOST_CHECK_EQUAL(t, std::make_tuple(0, 8, 10));
+        CHECK(t == std::make_tuple(0, 8, 10));
     }
 
-    BOOST_AUTO_TEST_CASE(is_composable_with_only)
+    TEST_CASE("is_composable_with_only")
     {
         const auto cube = [] (auto x) {return x * x * x;};
         const auto stringify = [] (auto x) {return std::to_string(x);};
@@ -190,6 +195,6 @@ BOOST_AUTO_TEST_SUITE(each)
             burst::each(size) |
             burst::sum;
 
-        BOOST_CHECK_EQUAL(f(10, 20, 30), 10);
+        CHECK(f(10, 20, 30) == 10);
     }
-BOOST_AUTO_TEST_SUITE_END()
+}

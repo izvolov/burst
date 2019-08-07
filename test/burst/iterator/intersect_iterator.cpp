@@ -1,12 +1,15 @@
 #include <burst/iterator/intersect_iterator.hpp>
 #include <burst/range/make_range_vector.hpp>
 
-#include <boost/test/unit_test.hpp>
+#include <doctest/doctest.h>
+
+#include <boost/range/iterator_range.hpp>
 
 #include <iterator>
 
-BOOST_AUTO_TEST_SUITE(intersect_iterator)
-    BOOST_AUTO_TEST_CASE(intersect_iterator_end_is_created_using_special_tag)
+TEST_SUITE("intersect_iterator")
+{
+    TEST_CASE("intersect_iterator_end_is_created_using_special_tag")
     {
         auto  first = {1, 2, 3};
         auto second = {0, 2, 4};
@@ -17,11 +20,7 @@ BOOST_AUTO_TEST_SUITE(intersect_iterator)
         auto intersected_end =
             burst::make_intersect_iterator(burst::iterator::end_tag, intersected_begin);
 
-        auto expected_collection = {2};
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            intersected_begin, intersected_end,
-            std::begin(expected_collection), std::end(expected_collection)
-        );
+        auto expected = {2};
+        CHECK(boost::make_iterator_range(intersected_begin, intersected_end) == expected);
     }
-BOOST_AUTO_TEST_SUITE_END()
+}

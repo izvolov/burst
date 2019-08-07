@@ -3,14 +3,17 @@
 #include <burst/container/make_vector.hpp>
 #include <burst/iterator/take_n_iterator.hpp>
 
+#include <doctest/doctest.h>
+
 #include <boost/range/concepts.hpp>
-#include <boost/test/unit_test.hpp>
+#include <boost/range/iterator_range.hpp>
 
 #include <iterator>
 #include <sstream>
 
-BOOST_AUTO_TEST_SUITE(take_n_iterator)
-    BOOST_AUTO_TEST_CASE(iterator_category_falls_back_to_forward_iterator)
+TEST_SUITE("take_n_iterator")
+{
+    TEST_CASE("iterator_category_falls_back_to_forward_iterator")
     {
         // Входной итератор — произвольного доступа
         {
@@ -57,17 +60,17 @@ BOOST_AUTO_TEST_SUITE(take_n_iterator)
         }
     }
 
-    BOOST_AUTO_TEST_CASE(end_is_created_using_special_tag)
+    TEST_CASE("end_is_created_using_special_tag")
     {
         const auto l = burst::make_list({1, 2, 3, 4});
 
         auto first = burst::make_take_n_iterator(l.begin(), 3);
         auto last = burst::make_take_n_iterator(burst::iterator::end_tag, first);
 
-        BOOST_CHECK(std::next(first, 3) == last);
+        CHECK(std::next(first, 3) == last);
     }
 
-    BOOST_AUTO_TEST_CASE(takes_exactly_specified_number_of_elements)
+    TEST_CASE("takes_exactly_specified_number_of_elements")
     {
         const auto fl = burst::make_forward_list({1, 2, 3, 4});
 
@@ -75,10 +78,10 @@ BOOST_AUTO_TEST_SUITE(take_n_iterator)
         auto first = burst::make_take_n_iterator(fl.begin(), items_to_take);
         auto last = burst::make_take_n_iterator(burst::iterator::end_tag, first);
 
-        BOOST_CHECK_EQUAL_COLLECTIONS
+        CHECK
         (
-            fl.begin(), std::next(fl.begin(), items_to_take),
-            first, last
+            boost::make_iterator_range(fl.begin(), std::next(fl.begin(), items_to_take)) ==
+            boost::make_iterator_range(first, last)
         );
     }
-BOOST_AUTO_TEST_SUITE_END()
+}

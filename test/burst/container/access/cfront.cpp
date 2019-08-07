@@ -2,15 +2,16 @@
 #include <burst/container/make_list.hpp>
 #include <burst/container/make_vector.hpp>
 
-#include <boost/test/unit_test.hpp>
+#include <doctest/doctest.h>
 
 #include <cstddef>
 #include <memory>
 #include <string>
 #include <type_traits>
 
-BOOST_AUTO_TEST_SUITE(cfront)
-    BOOST_AUTO_TEST_CASE(always_returns_const_reference_of_container)
+TEST_SUITE("cfront")
+{
+    TEST_CASE("always_returns_const_reference_of_container")
     {
         auto integers = burst::make_vector({1, 2, 3});
         static_assert(std::is_same<decltype(burst::cfront(integers)), const int &>::value, "");
@@ -19,13 +20,13 @@ BOOST_AUTO_TEST_SUITE(cfront)
         static_assert(std::is_same<decltype(burst::cfront(characters)), const char &>::value, "");
     }
 
-    BOOST_AUTO_TEST_CASE(returns_exactly_container_front)
+    TEST_CASE("returns_exactly_container_front")
     {
         auto reals = burst::make_list({1.6, 3.14, 2.7});
-        BOOST_CHECK_EQUAL(std::addressof(burst::cfront(reals)), std::addressof(reals.front()));
+        CHECK(std::addressof(burst::cfront(reals)) == std::addressof(reals.front()));
     }
 
-    BOOST_AUTO_TEST_CASE(always_returns_const_reference_of_array)
+    TEST_CASE("always_returns_const_reference_of_array")
     {
         std::string strings[] = {"123", "456", "789"};
         static_assert(std::is_same<decltype(burst::cfront(strings)), const std::string &>::value, "");
@@ -34,17 +35,17 @@ BOOST_AUTO_TEST_SUITE(cfront)
         static_assert(std::is_same<decltype(burst::cfront(integers)), const std::size_t &>::value, "");
     }
 
-    BOOST_AUTO_TEST_CASE(returns_address_of_array)
+    TEST_CASE("returns_address_of_array")
     {
         int array[] = {1, 2, 3};
-        BOOST_CHECK_EQUAL(std::addressof(burst::cfront(array)), array);
+        CHECK(std::addressof(burst::cfront(array)) == array);
     }
 
-    BOOST_AUTO_TEST_CASE(is_a_functional_object)
+    TEST_CASE("is_a_functional_object")
     {
         const auto v = burst::make_vector({1, 2, 3});
         const auto cf = burst::cfront;
 
-        BOOST_CHECK_EQUAL(cf(v), 1);
+        CHECK(cf(v) == 1);
     }
-BOOST_AUTO_TEST_SUITE_END()
+}

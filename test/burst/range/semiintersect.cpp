@@ -1,17 +1,18 @@
 #include <burst/range/make_range_vector.hpp>
 #include <burst/range/semiintersect.hpp>
 
+#include <doctest/doctest.h>
+
 #include <boost/range/irange.hpp>
-#include <boost/test/unit_test.hpp>
 
 #include <functional>
-#include <iterator>
 #include <list>
 #include <string>
 #include <vector>
 
-BOOST_AUTO_TEST_SUITE(semiintersect)
-    BOOST_AUTO_TEST_CASE(semiintersecting_empty_ranges_results_empty_range)
+TEST_SUITE("semiintersect")
+{
+    TEST_CASE("semiintersecting_empty_ranges_results_empty_range")
     {
         std::vector<int> first;
         std::vector<int> second;
@@ -19,10 +20,10 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
 
         auto semiintersection = burst::semiintersect(ranges, 1);
 
-        BOOST_CHECK(semiintersection.empty());
+        CHECK(semiintersection.empty());
     }
 
-    BOOST_AUTO_TEST_CASE(semiintersection_of_min_items_larger_than_range_count_is_empty)
+    TEST_CASE("semiintersection_of_min_items_larger_than_range_count_is_empty")
     {
         auto  first = burst::make_vector({1, 2, 3, 4});
         auto second = burst::make_vector({1, 2, 3, 4});
@@ -30,23 +31,19 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
 
         auto semiintersection = burst::semiintersect(ranges, 10);
 
-        BOOST_CHECK(semiintersection.empty());
+        CHECK(semiintersection.empty());
     }
 
-    BOOST_AUTO_TEST_CASE(semiintersecting_one_range_results_the_same_range)
+    TEST_CASE("semiintersecting_one_range_results_the_same_range")
     {
         auto only = boost::irange(1, 5);
         auto ranges = burst::make_range_vector(only);
         auto semiintersection = burst::semiintersect(ranges, 1);
 
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            std::begin(boost::irange(1, 5)), std::end(boost::irange(1, 5)),
-            std::begin(semiintersection), std::end(semiintersection)
-        );
+        CHECK(semiintersection == boost::irange(1, 5));
     }
 
-    BOOST_AUTO_TEST_CASE(semiintersecting_several_equal_ranges_with_any_min_items_results_range_equal_to_any_of_them)
+    TEST_CASE("semiintersecting_several_equal_ranges_with_any_min_items_results_range_equal_to_any_of_them")
     {
         auto first = {4, 4, 5, 6, 6, 7};
         auto second = first;
@@ -56,37 +53,25 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
             auto ranges = burst::make_range_vector(first, second, third);
             auto semiintersection1 = burst::semiintersect(ranges, 1);
 
-            BOOST_CHECK_EQUAL_COLLECTIONS
-            (
-                std::begin(semiintersection1), std::end(semiintersection1),
-                std::begin(first), std::end(first)
-            );
+            CHECK(semiintersection1 == first);
         }
 
         {
             auto ranges = burst::make_range_vector(first, second, third);
             auto semiintersection2 = burst::semiintersect(ranges, 2);
 
-            BOOST_CHECK_EQUAL_COLLECTIONS
-            (
-                std::begin(semiintersection2), std::end(semiintersection2),
-                std::begin(second), std::end(second)
-            );
+            CHECK(semiintersection2 == second);
         }
 
         {
             auto ranges = burst::make_range_vector(first, second, third);
             auto semiintersection3 = burst::semiintersect(ranges, 3);
 
-            BOOST_CHECK_EQUAL_COLLECTIONS
-            (
-                std::begin(semiintersection3), std::end(semiintersection3),
-                std::begin(third), std::end(third)
-            );
+            CHECK(semiintersection3 == third);
         }
     }
 
-    BOOST_AUTO_TEST_CASE(semiintersecting_two_nested_ranges_with_two_min_items_results_shortest_of_them)
+    TEST_CASE("semiintersecting_two_nested_ranges_with_two_min_items_results_shortest_of_them")
     {
         std::string  long_range("abcdef");
         std::string short_range(  "cde" );
@@ -95,14 +80,10 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
 
         auto semiintersection = burst::semiintersect(ranges, 2);
 
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            std::begin(semiintersection), std::end(semiintersection),
-            std::begin(short_range), std::end(short_range)
-        );
+        CHECK(semiintersection == short_range);
     }
 
-    BOOST_AUTO_TEST_CASE(semiintersecting_two_nested_ranges_with_one_min_item_results_longest_of_them)
+    TEST_CASE("semiintersecting_two_nested_ranges_with_one_min_item_results_longest_of_them")
     {
         std::string short_range(   "cde" );
         std::string  long_range("aabcdef");
@@ -111,14 +92,10 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
 
         auto semiintersection = burst::semiintersect(ranges, 1);
 
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            std::begin(semiintersection), std::end(semiintersection),
-            std::begin(long_range), std::end(long_range)
-        );
+        CHECK(semiintersection == long_range);
     }
 
-    BOOST_AUTO_TEST_CASE(semiintersecting_saw_toothed_ranges_with_two_min_items_results_empty_range)
+    TEST_CASE("semiintersecting_saw_toothed_ranges_with_two_min_items_results_empty_range")
     {
         std::list<char>  first{'h',      'f',      'd',      'b'     };
         std::list<char> second{     'g',      'e',      'c',      'a'};
@@ -126,10 +103,10 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
 
         auto semiintersection = burst::semiintersect(ranges, 2, std::greater<>{});
 
-        BOOST_CHECK(semiintersection.empty());
+        CHECK(semiintersection.empty());
     }
 
-    BOOST_AUTO_TEST_CASE(semiintersecting_saw_toothed_ranges_with_one_min_item_results_union)
+    TEST_CASE("semiintersecting_saw_toothed_ranges_with_one_min_item_results_union")
     {
         std::list<char>  first{'h',      'f',      'd',      'b'     };
         std::list<char> second{     'g',      'e',      'c',      'a'};
@@ -138,10 +115,10 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
 
         auto semiintersection = burst::semiintersect(ranges, 1, std::greater<>{});
 
-        BOOST_CHECK_EQUAL(semiintersection, std::string("hgfedcba"));
+        CHECK(semiintersection == std::string("hgfedcba"));
     }
 
-    BOOST_AUTO_TEST_CASE(semiintersection_supports_custom_ordering)
+    TEST_CASE("semiintersection_supports_custom_ordering")
     {
         auto  first = {   3, 3, 2, 1};
         auto second = {4, 3,    2   };
@@ -151,14 +128,10 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
         auto semiintersection = burst::semiintersect(ranges, 2, std::greater<>{});
 
         auto expected_collection = {3, 2};
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            std::begin(semiintersection), std::end(semiintersection),
-            std::begin(expected_collection), std::end(expected_collection)
-        );
+        CHECK(semiintersection == expected_collection);
     }
 
-    BOOST_AUTO_TEST_CASE(semiintersecting_overlaying_ranges_with_one_min_item_results_whole_range)
+    TEST_CASE("semiintersecting_overlaying_ranges_with_one_min_item_results_whole_range")
     {
         auto  first = {1, 2         };
         auto second = {   2, 3, 3   };
@@ -169,14 +142,10 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
         auto semiintersection = burst::semiintersect(ranges, 1);
 
         auto expected = {1, 2, 3, 3, 4};
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            std::begin(semiintersection), std::end(semiintersection),
-            std::begin(expected), std::end(expected)
-        );
+        CHECK(semiintersection == expected);
     }
 
-    BOOST_AUTO_TEST_CASE(semiintersecting_overlaying_ranges_with_greater_than_one_min_item_results_overlaying_part)
+    TEST_CASE("semiintersecting_overlaying_ranges_with_greater_than_one_min_item_results_overlaying_part")
     {
         auto  first = {1, 2      };
         auto second = {   2, 3   };
@@ -187,14 +156,10 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
         auto semiintersection = burst::semiintersect(ranges, 2);
 
         auto expected = {2, 3};
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            std::begin(semiintersection), std::end(semiintersection),
-            std::begin(expected), std::end(expected)
-        );
+        CHECK(semiintersection == expected);
     }
 
-    BOOST_AUTO_TEST_CASE(semiintersection_of_several_consecutive_sorted_ranges_with_several_min_items_is_empty)
+    TEST_CASE("semiintersection_of_several_consecutive_sorted_ranges_with_several_min_items_is_empty")
     {
         auto  first = {1, 2, 3                  };
         auto second = {         4, 5, 6         };
@@ -203,10 +168,10 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
 
         auto semiintersection = burst::semiintersect(ranges, 2, std::less<>{});
 
-        BOOST_CHECK(semiintersection.empty());
+        CHECK(semiintersection.empty());
     }
 
-    BOOST_AUTO_TEST_CASE(semiintersection_of_several_consecutive_sorted_ranges_with_one_min_item_is_consecutive_range)
+    TEST_CASE("semiintersection_of_several_consecutive_sorted_ranges_with_one_min_item_is_consecutive_range")
     {
         auto  first = {1, 2, 3                  };
         auto second = {         4, 5, 6         };
@@ -217,14 +182,10 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
         auto semiintersection = burst::semiintersect(ranges, 1, std::less<>{});
 
         auto expected = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            std::begin(semiintersection), std::end(semiintersection),
-            std::begin(expected), std::end(expected)
-        );
+        CHECK(semiintersection == expected);
     }
 
-    BOOST_AUTO_TEST_CASE(repeating_elements_do_not_produce_excess_matches)
+    TEST_CASE("repeating_elements_do_not_produce_excess_matches")
     {
         auto  first = {1, 1, 1};
         auto second = {1, 1, 1};
@@ -235,14 +196,10 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
         auto semiintersection =
             burst::semiintersect(ranges, 2, std::less<>{});
 
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            std::begin(semiintersection), std::end(semiintersection),
-            std::begin(first), std::end(first)
-        );
+        CHECK(semiintersection == first);
     }
 
-    BOOST_AUTO_TEST_CASE(ranges_are_considered_multisets)
+    TEST_CASE("ranges_are_considered_multisets")
     {
         auto  first = {0, 0, 1,       2};
         auto second = {0,    1, 1      };
@@ -253,10 +210,6 @@ BOOST_AUTO_TEST_SUITE(semiintersect)
         auto semiintersection = burst::semiintersect(ranges, 2);
 
         auto expected_collection = {0, 1, 1, 2};
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            std::begin(semiintersection), std::end(semiintersection),
-            std::begin(expected_collection), std::end(expected_collection)
-        );
+        CHECK(semiintersection == expected_collection);
     }
-BOOST_AUTO_TEST_SUITE_END()
+}

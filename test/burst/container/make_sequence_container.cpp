@@ -4,16 +4,18 @@
 #include <utility/io/list.hpp>
 #include <utility/io/vector.hpp>
 
+#include <doctest/doctest.h>
+
 #include <boost/algorithm/cxx11/all_of.hpp>
 #include <boost/mpl/push_back.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/range/irange.hpp>
-#include <boost/test/unit_test.hpp>
 
 #include <deque>
 #include <forward_list>
 #include <initializer_list>
 #include <list>
+#include <sstream>
 #include <string>
 #include <type_traits>
 #include <utility>
@@ -50,29 +52,23 @@ namespace
     };
 }
 
-using sized_sequence_generators =
-    boost::mpl::vector
-    <
-        make_sequence_t<std::deque>,
-        make_sequence_t<std::list>,
-        make_sequence_t<std::vector>
-    >;
+#define SIZED_SEQUENCE_GENERATORS\
+    make_sequence_t<std::deque>,\
+    make_sequence_t<std::list>,\
+    make_sequence_t<std::vector>
 
-using sequence_generators =
-    typename boost::mpl::push_back
-    <
-        sized_sequence_generators,
-        make_sequence_t<std::forward_list>
-    >
-    ::type;
+#define SEQUENCE_GENERATORS\
+    SIZED_SEQUENCE_GENERATORS,\
+    make_sequence_t<std::forward_list>
 
-BOOST_AUTO_TEST_SUITE(make_sequence_container)
-    BOOST_AUTO_TEST_CASE_TEMPLATE(value_type_of_created_sequence_is_taken_from_value_type_of_incoming_range,
-        make_sequence, sequence_generators)
+TEST_SUITE("make_sequence_container")
+{
+    TEST_CASE_TEMPLATE("value_type_of_created_sequence_is_taken_from_value_type_of_incoming_range",
+        make_sequence, SEQUENCE_GENERATORS)
     {
         const auto range = boost::irange(0, 4);
         const auto v = make_sequence::apply(range);
-        BOOST_CHECK
+        CHECK
         ((
             std::is_same
             <
@@ -83,15 +79,15 @@ BOOST_AUTO_TEST_SUITE(make_sequence_container)
         ));
     }
 
-    BOOST_AUTO_TEST_CASE_TEMPLATE(accepts_range_by_rvalue,
-        make_sequence, sequence_generators)
+    TEST_CASE_TEMPLATE("accepts_range_by_rvalue",
+        make_sequence, SEQUENCE_GENERATORS)
     {
         const auto v = make_sequence::apply(boost::irange<std::uint32_t>(0, 6));
-        BOOST_CHECK_EQUAL(v, (make_sequence::template actual<std::uint32_t>({0, 1, 2, 3, 4, 5})));
+        CHECK(v == make_sequence::template actual<std::uint32_t>({0, 1, 2, 3, 4, 5}));
     }
 
-    BOOST_AUTO_TEST_CASE_TEMPLATE(accepts_range_by_lvalue,
-        make_sequence, sequence_generators)
+    TEST_CASE_TEMPLATE("accepts_range_by_lvalue",
+        make_sequence, SEQUENCE_GENERATORS)
     {
         std::stringstream stream("5 4 3 2");
         const auto range =
@@ -102,41 +98,41 @@ BOOST_AUTO_TEST_SUITE(make_sequence_container)
             );
 
         const auto v = make_sequence::apply(range);
-        BOOST_CHECK_EQUAL(v, (make_sequence::template actual<int>({5, 4, 3, 2})));
+        CHECK(v == make_sequence::template actual<int>({5, 4, 3, 2}));
     }
 
-    BOOST_AUTO_TEST_CASE_TEMPLATE(accepts_containers,
-        make_sequence, sequence_generators)
+    TEST_CASE_TEMPLATE("accepts_containers",
+        make_sequence, SEQUENCE_GENERATORS)
     {
         const auto initial = std::vector<int>{1, 2, 3};
 
         const auto v = make_sequence::apply(initial);
-        BOOST_CHECK_EQUAL(v, (make_sequence::template actual<int>({1, 2, 3})));
+        CHECK(v == make_sequence::template actual<int>({1, 2, 3}));
     }
 
-    BOOST_AUTO_TEST_CASE_TEMPLATE(accepts_rvalue_containers,
-        make_sequence, sequence_generators)
+    TEST_CASE_TEMPLATE("accepts_rvalue_containers",
+        make_sequence, SEQUENCE_GENERATORS)
     {
         const auto v = make_sequence::apply(std::vector<int>{1, 2, 3});
-        BOOST_CHECK_EQUAL(v, (make_sequence::template actual<int>({1, 2, 3})));
+        CHECK(v == make_sequence::template actual<int>({1, 2, 3}));
     }
 
-    BOOST_AUTO_TEST_CASE_TEMPLATE(overloaded_for_initializer_list,
-        make_sequence, sequence_generators)
+    TEST_CASE_TEMPLATE("overloaded_for_initializer_list",
+        make_sequence, SEQUENCE_GENERATORS)
     {
         const auto v = make_sequence::apply({1, 2, 3});
-        BOOST_CHECK_EQUAL(v, (make_sequence::template actual<int>({1, 2, 3})));
+        CHECK(v == make_sequence::template actual<int>({1, 2, 3}));
     }
 
-    BOOST_AUTO_TEST_CASE_TEMPLATE(overloaded_for_initializer_list_with_allocator,
-        make_sequence, sequence_generators)
+    TEST_CASE_TEMPLATE("overloaded_for_initializer_list_with_allocator",
+        make_sequence, SEQUENCE_GENERATORS)
     {
         const auto v = make_sequence::apply({4, 5, 6}, std::allocator<int>{});
-        BOOST_CHECK_EQUAL(v, (make_sequence::template actual<int>({4, 5, 6})));
+        CHECK(v == make_sequence::template actual<int>({4, 5, 6}));
     }
 
-    BOOST_AUTO_TEST_CASE_TEMPLATE(overloaded_for_range_with_allocator,
-        make_sequence, sequence_generators)
+    TEST_CASE_TEMPLATE("overloaded_for_range_with_allocator",
+        make_sequence, SEQUENCE_GENERATORS)
     {
         const auto v =
             make_sequence::apply
@@ -145,14 +141,14 @@ BOOST_AUTO_TEST_SUITE(make_sequence_container)
                 std::allocator<std::uint32_t>{}
             );
 
-        BOOST_CHECK_EQUAL(v, (make_sequence::template actual<std::uint32_t>({0, 1, 2, 3, 4, 5})));
+        CHECK(v == make_sequence::template actual<std::uint32_t>({0, 1, 2, 3, 4, 5}));
     }
 
-    BOOST_AUTO_TEST_CASE_TEMPLATE(value_type_may_be_specified_explicitly_when_constructed_from_range,
-        make_sequence, sequence_generators)
+    TEST_CASE_TEMPLATE("value_type_may_be_specified_explicitly_when_constructed_from_range",
+        make_sequence, SEQUENCE_GENERATORS)
     {
         const auto v = make_sequence::template apply<std::size_t>(boost::irange<int>(0, 4));
-        BOOST_CHECK
+        CHECK
         ((
             std::is_same
             <
@@ -163,8 +159,8 @@ BOOST_AUTO_TEST_SUITE(make_sequence_container)
         ));
     }
 
-    BOOST_AUTO_TEST_CASE_TEMPLATE(value_type_may_be_specified_explicitly_when_constructed_from_range_with_allocator,
-        make_sequence, sequence_generators)
+    TEST_CASE_TEMPLATE("value_type_may_be_specified_explicitly_when_constructed_from_range_with_allocator",
+        make_sequence, SEQUENCE_GENERATORS)
     {
         const auto v =
             make_sequence::template apply<std::size_t>
@@ -172,7 +168,7 @@ BOOST_AUTO_TEST_SUITE(make_sequence_container)
                 boost::irange<int>(0, 4),
                 std::allocator<std::size_t>{}
             );
-        BOOST_CHECK
+        CHECK
         ((
             std::is_same
             <
@@ -183,39 +179,39 @@ BOOST_AUTO_TEST_SUITE(make_sequence_container)
         ));
     }
 
-    BOOST_AUTO_TEST_CASE_TEMPLATE(constructs_with_n_copies_of_a_given_value,
-        make_sequence, sized_sequence_generators)
+    TEST_CASE_TEMPLATE("constructs_with_n_copies_of_a_given_value",
+        make_sequence, SIZED_SEQUENCE_GENERATORS)
     {
         const auto v = make_sequence::apply(5u, std::string{});
 
-        BOOST_CHECK_EQUAL(v.size(), 5);
-        BOOST_CHECK((std::is_same<typename decltype(v)::value_type, std::string>::value));
-        BOOST_CHECK(boost::algorithm::all_of(v, [] (const auto & s) {return s.empty();}));
+        CHECK(v.size() == 5);
+        CHECK((std::is_same<typename decltype(v)::value_type, std::string>::value));
+        CHECK(boost::algorithm::all_of(v, [] (const auto & s) {return s.empty();}));
     }
 
-    BOOST_AUTO_TEST_CASE(constructs_forward_list_with_n_copies_of_a_given_value)
+    TEST_CASE("constructs_forward_list_with_n_copies_of_a_given_value")
     {
         const auto v = burst::make_sequence_container<std::forward_list>(5u, std::string{});
 
-        BOOST_CHECK_EQUAL(std::distance(v.begin(), v.end()), 5);
-        BOOST_CHECK((std::is_same<decltype(v)::value_type, std::string>::value));
-        BOOST_CHECK(boost::algorithm::all_of(v, [] (const auto & s) {return s.empty();}));
+        CHECK(std::distance(v.begin(), v.end()) == 5);
+        CHECK((std::is_same<decltype(v)::value_type, std::string>::value));
+        CHECK(boost::algorithm::all_of(v, [] (const auto & s) {return s.empty();}));
     }
 
-    BOOST_AUTO_TEST_CASE_TEMPLATE(overloaded_for_two_iterators,
-        make_sequence, sequence_generators)
+    TEST_CASE_TEMPLATE("overloaded_for_two_iterators",
+        make_sequence, SEQUENCE_GENERATORS)
     {
         const auto l = {1, 2, 3};
         const auto v = make_sequence::apply(l.begin(), l.end());
-        BOOST_CHECK_EQUAL(v, (make_sequence::template actual<int>({1, 2, 3})));
+        CHECK(v == make_sequence::template actual<int>({1, 2, 3}));
     }
 
-    BOOST_AUTO_TEST_CASE_TEMPLATE(overloaded_for_two_iterators_with_explicit_value_type,
-        make_sequence, sequence_generators)
+    TEST_CASE_TEMPLATE("overloaded_for_two_iterators_with_explicit_value_type",
+        make_sequence, SEQUENCE_GENERATORS)
     {
         const auto l = {1, 2, 3};
         const auto v = make_sequence::template apply<short>(l.begin(), l.end());
-        BOOST_CHECK
+        CHECK
         ((
             std::is_same
             <
@@ -226,20 +222,20 @@ BOOST_AUTO_TEST_SUITE(make_sequence_container)
         ));
     }
 
-    BOOST_AUTO_TEST_CASE_TEMPLATE(overloaded_for_two_iterators_with_allocator,
-        make_sequence, sequence_generators)
+    TEST_CASE_TEMPLATE("overloaded_for_two_iterators_with_allocator",
+        make_sequence, SEQUENCE_GENERATORS)
     {
         const auto l = {1, 2, 3};
         const auto v = make_sequence::apply(l.begin(), l.end(), std::allocator<int>{});
-        BOOST_CHECK_EQUAL(v, (make_sequence::template actual<int>({1, 2, 3})));
+        CHECK(v == make_sequence::template actual<int>({1, 2, 3}));
     }
 
-    BOOST_AUTO_TEST_CASE_TEMPLATE(overloaded_for_two_iterators_with_allocator_and_explicit_value_type,
-        make_sequence, sequence_generators)
+    TEST_CASE_TEMPLATE("overloaded_for_two_iterators_with_allocator_and_explicit_value_type",
+        make_sequence, SEQUENCE_GENERATORS)
     {
         const auto l = {1, 2, 3};
         const auto v = make_sequence::template apply<double>(l.begin(), l.end(), std::allocator<double>{});
-        BOOST_CHECK
+        CHECK
         ((
             std::is_same
             <
@@ -249,4 +245,4 @@ BOOST_AUTO_TEST_SUITE(make_sequence_container)
             ::value
         ));
     }
-BOOST_AUTO_TEST_SUITE_END()
+}

@@ -1,16 +1,16 @@
 #include <burst/container/make_forward_list.hpp>
 #include <burst/range/adaptor/joined.hpp>
 #include <burst/range/make_range_vector.hpp>
+#include <utility/io/initializer_list.hpp>
+
+#include <doctest/doctest.h>
 
 #include <boost/range/adaptor/transformed.hpp>
 #include <boost/range/irange.hpp>
-#include <boost/range/iterator_range.hpp>
-#include <boost/test/unit_test.hpp>
 
-#include <iterator>
-
-BOOST_AUTO_TEST_SUITE(joined)
-    BOOST_AUTO_TEST_CASE(acts_just_like_join_function)
+TEST_SUITE("joined")
+{
+    TEST_CASE("acts_just_like_join_function")
     {
         const auto first = burst::make_forward_list({17, 19, 23});
         const auto empty1 = burst::make_forward_list<int>({});
@@ -22,14 +22,10 @@ BOOST_AUTO_TEST_SUITE(joined)
         const auto joined = ranges | burst::joined;
 
         const auto expected = {17, 19, 23, 29, 31, 37};
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            std::begin(joined), std::end(joined),
-            std::begin(expected), std::end(expected)
-        );
+        CHECK(joined == expected);
     }
 
-    BOOST_AUTO_TEST_CASE(accepts_a_range_by_rvalue)
+    TEST_CASE("accepts_a_range_by_rvalue")
     {
         const auto joined =
             boost::irange(0, 10)
@@ -37,10 +33,6 @@ BOOST_AUTO_TEST_SUITE(joined)
                 | burst::joined;
 
         const auto expected = boost::irange(0, 20);
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            std::begin(joined), std::end(joined),
-            std::begin(expected), std::end(expected)
-        );
+        CHECK(joined == expected);
     }
-BOOST_AUTO_TEST_SUITE_END()
+}

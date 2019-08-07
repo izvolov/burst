@@ -11,9 +11,13 @@ language: cpp
   - sudo apt install --yes
     $COMPILER_PACKAGE
     libboost-program-options$BOOST_VERSION-dev
-    libboost-test$BOOST_VERSION-dev
+    git
     cmake
 
+  - git clone https://github.com/onqtam/doctest.git third_party/doctest
+  - git -C third_party/doctest checkout 2.3.3
+  - /usr/bin/cmake -S third_party/doctest -B Build/third_party/doctest -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=$COMPILER_NAME
+  - sudo /usr/bin/cmake --build Build/third_party/doctest --target install/fast
   script:
   - /usr/bin/cmake -S . -B Build/burst -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_COMPILER=$COMPILER_NAME
   - /usr/bin/cmake --build Build/burst --target check
@@ -43,8 +47,13 @@ language: cpp
   - sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
 
   - sudo apt update
-  - sudo apt install --yes gcovr libboost-program-options-dev libboost-test-dev cmake
+  - sudo apt install --yes gcovr libboost-program-options-dev cmake git
   - pip install --user cpp-coveralls
+
+  - git clone https://github.com/onqtam/doctest.git third_party/doctest
+  - git -C third_party/doctest checkout 2.3.3
+  - /usr/bin/cmake -S third_party/doctest -B Build/third_party/doctest -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=$COMPILER_NAME
+  - sudo /usr/bin/cmake --build Build/third_party/doctest --target install/fast
   script:
   - /usr/bin/cmake -S . -B Build/burst -DCMAKE_BUILD_TYPE=Debug -DBURST_COVERAGE=ON
   - /usr/bin/cmake --build Build/burst --target coverage

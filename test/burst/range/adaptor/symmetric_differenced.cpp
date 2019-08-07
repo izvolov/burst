@@ -2,15 +2,18 @@
 #include <burst/container/make_vector.hpp>
 #include <burst/range/adaptor/symmetric_differenced.hpp>
 #include <burst/range/make_range_vector.hpp>
+#include <utility/io/initializer_list.hpp>
+
+#include <doctest/doctest.h>
 
 #include <boost/range/irange.hpp>
 #include <boost/range/iterator_range.hpp>
-#include <boost/test/unit_test.hpp>
 
 #include <functional>
 
-BOOST_AUTO_TEST_SUITE(symmetric_differenced)
-    BOOST_AUTO_TEST_CASE(accepts_a_range_by_rvalue)
+TEST_SUITE("symmetric_differenced")
+{
+    TEST_CASE("accepts_a_range_by_rvalue")
     {
         const auto natural = burst::make_vector({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
         const auto     odd = burst::make_vector({1,    3,    5,    7,    9,     11    });
@@ -21,14 +24,10 @@ BOOST_AUTO_TEST_SUITE(symmetric_differenced)
         const auto symmetric_differenced = boost::make_iterator_range(ranges) | burst::symmetric_differenced;
 
         const auto expected = {3, 4, 5, 6, 7, 8, 10, 11, 12};
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            std::begin(symmetric_differenced), std::end(symmetric_differenced),
-            std::begin(expected), std::end(expected)
-        );
+        CHECK(symmetric_differenced == expected);
     }
 
-    BOOST_AUTO_TEST_CASE(accepts_a_range_by_lvalue)
+    TEST_CASE("accepts_a_range_by_lvalue")
     {
         auto range_vector =
             burst::make_vector
@@ -43,14 +42,10 @@ BOOST_AUTO_TEST_SUITE(symmetric_differenced)
         const auto symmetric_differenced = ranges | burst::symmetric_differenced;
 
         const auto expected = {1, 3, 5};
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            std::begin(symmetric_differenced), std::end(symmetric_differenced),
-            std::begin(expected), std::end(expected)
-        );
+        CHECK(symmetric_differenced == expected);
     }
 
-    BOOST_AUTO_TEST_CASE(accepts_custom_comparator)
+    TEST_CASE("accepts_custom_comparator")
     {
         const auto  first = burst::make_forward_list({      4, 3, 2, 1});
         const auto second = burst::make_forward_list({5, 5,    3, 2, 1});
@@ -64,10 +59,6 @@ BOOST_AUTO_TEST_SUITE(symmetric_differenced)
                 | burst::symmetric_differenced(std::greater<>{});
 
         const auto expected = {5, 4, 3, 2};
-        BOOST_CHECK_EQUAL_COLLECTIONS
-        (
-            std::begin(symmetric_differenced), std::end(symmetric_differenced),
-            std::begin(expected), std::end(expected)
-        );
+        CHECK(symmetric_differenced == expected);
     }
-BOOST_AUTO_TEST_SUITE_END()
+}

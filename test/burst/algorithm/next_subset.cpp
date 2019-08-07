@@ -1,14 +1,16 @@
 #include <burst/algorithm/next_subset.hpp>
 #include <burst/container/make_vector.hpp>
 
+#include <doctest/doctest.h>
+
 #include <boost/iterator/indirect_iterator.hpp>
-#include <boost/test/unit_test.hpp>
 
 #include <functional>
 #include <vector>
 
-BOOST_AUTO_TEST_SUITE(next_subset)
-    BOOST_AUTO_TEST_CASE(accepts_iterators_of_a_set_and_iterators_of_a_valid_subset)
+TEST_SUITE("next_subset")
+{
+    TEST_CASE("accepts_iterators_of_a_set_and_iterators_of_a_valid_subset")
     {
         using vector_type = std::vector<int>;
         auto items = vector_type{17};
@@ -23,11 +25,11 @@ BOOST_AUTO_TEST_SUITE(next_subset)
                 items.end()
             );
 
-        BOOST_CHECK(new_subset_end == subset_container.begin() + 1);
-        BOOST_CHECK_EQUAL(**subset_container.begin(), 17);
+        CHECK((new_subset_end == subset_container.begin() + 1));
+        CHECK(**subset_container.begin() == 17);
     }
 
-    BOOST_AUTO_TEST_CASE(empty_set_has_no_subsets)
+    TEST_CASE("empty_set_has_no_subsets")
     {
         using vector_type = std::vector<int>;
         auto items = vector_type{};
@@ -42,10 +44,10 @@ BOOST_AUTO_TEST_SUITE(next_subset)
                 items.end()
             );
 
-        BOOST_CHECK(new_subset_end == subset_container.begin());
+        CHECK((new_subset_end == subset_container.begin()));
     }
 
-    BOOST_AUTO_TEST_CASE(allows_custom_ordering)
+    TEST_CASE("allows_custom_ordering")
     {
         using vector_type = std::vector<int>;
         auto items = vector_type{3, 2, 1};
@@ -58,10 +60,10 @@ BOOST_AUTO_TEST_SUITE(next_subset)
             std::greater<>{}
         );
 
-        BOOST_CHECK_EQUAL(**subset_container.begin(), 3);
+        CHECK(**subset_container.begin() == 3);
     }
 
-    BOOST_AUTO_TEST_CASE(subsets_are_listed_in_a_natural_order)
+    TEST_CASE("subsets_are_listed_in_a_natural_order")
     {
         using vector_type = std::vector<int>;
         auto items = vector_type{1, 2, 3};
@@ -81,7 +83,7 @@ BOOST_AUTO_TEST_SUITE(next_subset)
                     boost::make_indirect_iterator(subset_container.begin()),
                     boost::make_indirect_iterator(current_subset_end)
                 );
-            BOOST_CHECK(previous_subset.size() < current_subset.size() || previous_subset < current_subset);
+            CHECK((previous_subset.size() < current_subset.size() || previous_subset < current_subset));
             current_subset_end =
                 burst::next_subset
                 (
@@ -90,4 +92,4 @@ BOOST_AUTO_TEST_SUITE(next_subset)
             previous_subset = current_subset;
         }
     }
-BOOST_AUTO_TEST_SUITE_END()
+}
