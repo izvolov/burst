@@ -12,10 +12,13 @@ namespace test_detail
     {
         stream << "[";
 
-        if (not range.empty())
+        using std::begin;
+        using std::end;
+
+        if (begin(range) != end(range))
         {
-            stream << *std::begin(range);
-            std::for_each(std::next(range.begin()), range.end(),
+            stream << *begin(range);
+            std::for_each(std::next(begin(range)), end(range),
                 [& stream] (const auto & value)
                 {
                     stream << ", " << value;
