@@ -10,6 +10,7 @@
 #include <forward_list>
 #include <iterator>
 #include <list>
+#include <type_traits>
 #include <vector>
 
 BOOST_AUTO_TEST_SUITE(owning_iterator)

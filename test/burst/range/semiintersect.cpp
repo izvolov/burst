@@ -2,7 +2,6 @@
 #include <burst/range/semiintersect.hpp>
 
 #include <boost/range/irange.hpp>
-#include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
 #include <functional>

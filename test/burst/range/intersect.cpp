@@ -8,7 +8,6 @@
 #include <boost/test/unit_test.hpp>
 
 #include <functional>
-#include <iterator>
 #include <string>
 #include <vector>
 

@@ -5,7 +5,6 @@
 #include <boost/test/unit_test.hpp>
 
 #include <iterator>
-#include <vector>
 
 BOOST_AUTO_TEST_SUITE(join_iterator)
     BOOST_AUTO_TEST_CASE(join_iterator_end_is_created_from_begin_using_special_tag)

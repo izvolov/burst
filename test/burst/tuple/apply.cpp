@@ -5,7 +5,6 @@
 
 #include <cstddef>
 #include <functional>
-#include <string>
 #include <tuple>
 
 BOOST_AUTO_TEST_SUITE(apply)

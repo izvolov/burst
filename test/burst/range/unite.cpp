@@ -3,12 +3,10 @@
 #include <burst/range/unite.hpp>
 
 #include <boost/range/irange.hpp>
-#include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
 #include <functional>
 #include <iterator>
-#include <list>
 #include <string>
 #include <vector>
 

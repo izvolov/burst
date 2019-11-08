@@ -3,6 +3,10 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <memory>
+#include <string>
+#include <type_traits>
+
 BOOST_AUTO_TEST_SUITE(back)
     BOOST_AUTO_TEST_CASE(returns_a_mutable_reference_of_a_mutable_container)
     {

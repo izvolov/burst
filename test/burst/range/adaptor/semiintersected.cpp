@@ -7,7 +7,7 @@
 #include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
-#include <iterator>
+#include <functional>
 
 BOOST_AUTO_TEST_SUITE(semiintersected)
     BOOST_AUTO_TEST_CASE(accepts_a_range_by_rvalue)

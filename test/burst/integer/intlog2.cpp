@@ -2,7 +2,7 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <limits>
+#include <stdexcept>
 
 BOOST_AUTO_TEST_SUITE(intlog2)
     BOOST_AUTO_TEST_CASE(throws_beyond_the_domain)

@@ -5,7 +5,6 @@
 #include <boost/test/unit_test.hpp>
 
 #include <algorithm>
-#include <iterator>
 
 BOOST_AUTO_TEST_SUITE(own_as_range)
     BOOST_AUTO_TEST_CASE(iterates_over_the_owned_container)

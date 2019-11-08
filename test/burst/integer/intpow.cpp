@@ -2,6 +2,7 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <cstdint>
 #include <stdexcept>
 #include <type_traits>
 

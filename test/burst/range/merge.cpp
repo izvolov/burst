@@ -4,7 +4,6 @@
 #include <burst/range/merge.hpp>
 
 #include <boost/range/algorithm/for_each.hpp>
-#include <boost/range/iterator_range.hpp>
 #include <boost/test/unit_test.hpp>
 
 #include <functional>

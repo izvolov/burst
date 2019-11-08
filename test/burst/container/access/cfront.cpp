@@ -4,6 +4,11 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <cstddef>
+#include <memory>
+#include <string>
+#include <type_traits>
+
 BOOST_AUTO_TEST_SUITE(cfront)
     BOOST_AUTO_TEST_CASE(always_returns_const_reference_of_container)
     {

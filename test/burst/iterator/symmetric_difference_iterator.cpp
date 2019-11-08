@@ -3,7 +3,6 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <iostream>
 #include <iterator>
 
 BOOST_AUTO_TEST_SUITE(symmetric_difference_iterator)
