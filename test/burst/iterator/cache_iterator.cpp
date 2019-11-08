@@ -11,7 +11,8 @@
 
 TEST_SUITE("cache_iterator")
 {
-    TEST_CASE("iterator_returning_an_lvalue_reference_is_forwarded")
+    TEST_CASE("Итератор, возвращающий ссылку на lvalue, не нуждается в кэшировании, а потому "
+        "пробрасывается без изменения")
     {
         const auto items = burst::make_vector({1, 2, 3});
 
@@ -25,7 +26,7 @@ TEST_SUITE("cache_iterator")
         CHECK(std::is_same<decltype(lvalue_cached_iterator), decltype(items.begin())>::value);
     }
 
-    TEST_CASE("raw_pointer_is_forwarded")
+    TEST_CASE("Голый указатель пробрасывается")
     {
         int items[] = {1, 2, 3};
 
@@ -34,7 +35,7 @@ TEST_SUITE("cache_iterator")
         CHECK(std::is_same<decltype(cached_iterator), decltype(std::begin(items))>::value);
     }
 
-    TEST_CASE("is_created_when_wrapped_iterator_returns_by_value")
+    TEST_CASE("Создаётся только тогда, когда исходный итератор возвращает по значению")
     {
         const auto items = burst::make_vector({1, 2, 3});
         auto transformed_iterator = boost::make_transform_iterator(items.begin(), [] (auto x) { return x; });
@@ -44,7 +45,7 @@ TEST_SUITE("cache_iterator")
         CHECK(not std::is_same<decltype(cached_iterator), decltype(items.begin())>::value);
     }
 
-    TEST_CASE("returns_lvalue_reference_to_const_when_dereferenced")
+    TEST_CASE("При разыменовании возвращает lvalue-ссылку на константу")
     {
         const auto items = burst::make_vector({1, 2, 3});
         auto transformed_iterator = boost::make_transform_iterator(items.begin(), [] (auto x) { return x; });
@@ -62,7 +63,7 @@ TEST_SUITE("cache_iterator")
         );
     }
 
-    TEST_CASE("does_not_store_value_on_initialization")
+    TEST_CASE("Не разыменовывает исходный итератор при инициализации")
     {
         const auto items = burst::make_vector({1, 2, 3});
 
@@ -81,7 +82,7 @@ TEST_SUITE("cache_iterator")
         CHECK(call_count == 0);
     }
 
-    TEST_CASE("stores_value_on_first_dereferencing")
+    TEST_CASE("Кэширует значение при первом явном разыменовании")
     {
         const auto items = burst::make_vector({1, 2, 3});
 
@@ -101,7 +102,7 @@ TEST_SUITE("cache_iterator")
         CHECK(call_count == 1);
     }
 
-    TEST_CASE("does_not_recalculate_stored_value_on_repeating_dereferencing")
+    TEST_CASE("Не пересчитывает закэшированное значение при повторном разыменовании")
     {
         const auto items = burst::make_vector({1.1, 2.2, 3.3});
 
@@ -123,7 +124,7 @@ TEST_SUITE("cache_iterator")
         CHECK(call_count == 1);
     }
 
-    TEST_CASE("drops_stored_value_when_incremented")
+    TEST_CASE("Сбрасывает закэшированное значение при инкрементном продвижении")
     {
         const auto items = burst::make_forward_list({1.1, 2.2, 3.3});
 
@@ -146,7 +147,7 @@ TEST_SUITE("cache_iterator")
         CHECK(call_count == 2);
     }
 
-    TEST_CASE("drops_stored_value_when_advanced")
+    TEST_CASE("Сбрасывает закэшированное значение при продвижении")
     {
         const auto items = burst::make_vector({1.1, 2.2, 3.3});
 
@@ -169,7 +170,7 @@ TEST_SUITE("cache_iterator")
         CHECK(call_count == 2);
     }
 
-    TEST_CASE("preserves_wrapped_iterator_category")
+    TEST_CASE("Наследует категорию обёрнутого итератора")
     {
         const auto items = burst::make_forward_list({1.1, 2.2, 3.3});
 

@@ -63,8 +63,8 @@ namespace
 
 TEST_SUITE("make_sequence_container")
 {
-    TEST_CASE_TEMPLATE("value_type_of_created_sequence_is_taken_from_value_type_of_incoming_range",
-        make_sequence, SEQUENCE_GENERATORS)
+    TEST_CASE_TEMPLATE("Тип элементов создаваемого контейнера выводится из типа элементов входного "
+        "диапазона", make_sequence, SEQUENCE_GENERATORS)
     {
         const auto range = boost::irange(0, 4);
         const auto v = make_sequence::apply(range);
@@ -79,14 +79,14 @@ TEST_SUITE("make_sequence_container")
         ));
     }
 
-    TEST_CASE_TEMPLATE("accepts_range_by_rvalue",
+    TEST_CASE_TEMPLATE("Принимает диапазон по rvalue",
         make_sequence, SEQUENCE_GENERATORS)
     {
         const auto v = make_sequence::apply(boost::irange<std::uint32_t>(0, 6));
         CHECK(v == make_sequence::template actual<std::uint32_t>({0, 1, 2, 3, 4, 5}));
     }
 
-    TEST_CASE_TEMPLATE("accepts_range_by_lvalue",
+    TEST_CASE_TEMPLATE("Принимает диапазон по lvalue",
         make_sequence, SEQUENCE_GENERATORS)
     {
         std::stringstream stream("5 4 3 2");
@@ -101,7 +101,7 @@ TEST_SUITE("make_sequence_container")
         CHECK(v == make_sequence::template actual<int>({5, 4, 3, 2}));
     }
 
-    TEST_CASE_TEMPLATE("accepts_containers",
+    TEST_CASE_TEMPLATE("Принимает контейнеры",
         make_sequence, SEQUENCE_GENERATORS)
     {
         const auto initial = std::vector<int>{1, 2, 3};
@@ -110,28 +110,28 @@ TEST_SUITE("make_sequence_container")
         CHECK(v == make_sequence::template actual<int>({1, 2, 3}));
     }
 
-    TEST_CASE_TEMPLATE("accepts_rvalue_containers",
+    TEST_CASE_TEMPLATE("Принимает контейнеры по rvalue",
         make_sequence, SEQUENCE_GENERATORS)
     {
         const auto v = make_sequence::apply(std::vector<int>{1, 2, 3});
         CHECK(v == make_sequence::template actual<int>({1, 2, 3}));
     }
 
-    TEST_CASE_TEMPLATE("overloaded_for_initializer_list",
+    TEST_CASE_TEMPLATE("Есть перегрузка для списка инициализации",
         make_sequence, SEQUENCE_GENERATORS)
     {
         const auto v = make_sequence::apply({1, 2, 3});
         CHECK(v == make_sequence::template actual<int>({1, 2, 3}));
     }
 
-    TEST_CASE_TEMPLATE("overloaded_for_initializer_list_with_allocator",
+    TEST_CASE_TEMPLATE("Есть перегрузка для списка инициализации с аллокатором",
         make_sequence, SEQUENCE_GENERATORS)
     {
         const auto v = make_sequence::apply({4, 5, 6}, std::allocator<int>{});
         CHECK(v == make_sequence::template actual<int>({4, 5, 6}));
     }
 
-    TEST_CASE_TEMPLATE("overloaded_for_range_with_allocator",
+    TEST_CASE_TEMPLATE("Есть перегрузка для диапазона с аллокатором",
         make_sequence, SEQUENCE_GENERATORS)
     {
         const auto v =
@@ -144,7 +144,7 @@ TEST_SUITE("make_sequence_container")
         CHECK(v == make_sequence::template actual<std::uint32_t>({0, 1, 2, 3, 4, 5}));
     }
 
-    TEST_CASE_TEMPLATE("value_type_may_be_specified_explicitly_when_constructed_from_range",
+    TEST_CASE_TEMPLATE("Тип элементов может быть указан явно при конструировании из диапазона",
         make_sequence, SEQUENCE_GENERATORS)
     {
         const auto v = make_sequence::template apply<std::size_t>(boost::irange<int>(0, 4));
@@ -159,8 +159,8 @@ TEST_SUITE("make_sequence_container")
         ));
     }
 
-    TEST_CASE_TEMPLATE("value_type_may_be_specified_explicitly_when_constructed_from_range_with_allocator",
-        make_sequence, SEQUENCE_GENERATORS)
+    TEST_CASE_TEMPLATE("Тип элементов может быть указан явно при конструировании из диапазона с "
+        "аллокатором", make_sequence, SEQUENCE_GENERATORS)
     {
         const auto v =
             make_sequence::template apply<std::size_t>
@@ -179,7 +179,7 @@ TEST_SUITE("make_sequence_container")
         ));
     }
 
-    TEST_CASE_TEMPLATE("constructs_with_n_copies_of_a_given_value",
+    TEST_CASE_TEMPLATE("Умеет инициализироваться N копиями заданного значения",
         make_sequence, SIZED_SEQUENCE_GENERATORS)
     {
         const auto v = make_sequence::apply(5u, std::string{});
@@ -189,7 +189,7 @@ TEST_SUITE("make_sequence_container")
         CHECK(boost::algorithm::all_of(v, [] (const auto & s) {return s.empty();}));
     }
 
-    TEST_CASE("constructs_forward_list_with_n_copies_of_a_given_value")
+    TEST_CASE("Умеет инициализировать std::forward_list N копиями заданного значения")
     {
         const auto v = burst::make_sequence_container<std::forward_list>(5u, std::string{});
 
@@ -198,7 +198,7 @@ TEST_SUITE("make_sequence_container")
         CHECK(boost::algorithm::all_of(v, [] (const auto & s) {return s.empty();}));
     }
 
-    TEST_CASE_TEMPLATE("overloaded_for_two_iterators",
+    TEST_CASE_TEMPLATE("Есть перегрузка для двух итераторов",
         make_sequence, SEQUENCE_GENERATORS)
     {
         const auto l = {1, 2, 3};
@@ -206,7 +206,7 @@ TEST_SUITE("make_sequence_container")
         CHECK(v == make_sequence::template actual<int>({1, 2, 3}));
     }
 
-    TEST_CASE_TEMPLATE("overloaded_for_two_iterators_with_explicit_value_type",
+    TEST_CASE_TEMPLATE("Есть перегрузка для двух итераторов с явно заданным типом значений",
         make_sequence, SEQUENCE_GENERATORS)
     {
         const auto l = {1, 2, 3};
@@ -222,7 +222,7 @@ TEST_SUITE("make_sequence_container")
         ));
     }
 
-    TEST_CASE_TEMPLATE("overloaded_for_two_iterators_with_allocator",
+    TEST_CASE_TEMPLATE("Есть перегрузка для двух итераторов с аллокатором",
         make_sequence, SEQUENCE_GENERATORS)
     {
         const auto l = {1, 2, 3};
@@ -230,8 +230,8 @@ TEST_SUITE("make_sequence_container")
         CHECK(v == make_sequence::template actual<int>({1, 2, 3}));
     }
 
-    TEST_CASE_TEMPLATE("overloaded_for_two_iterators_with_allocator_and_explicit_value_type",
-        make_sequence, SEQUENCE_GENERATORS)
+    TEST_CASE_TEMPLATE("Есть перегрузка для двух итераторов с аллокатором и явно заданным типом "
+        "значений", make_sequence, SEQUENCE_GENERATORS)
     {
         const auto l = {1, 2, 3};
         const auto v = make_sequence::template apply<double>(l.begin(), l.end(), std::allocator<double>{});

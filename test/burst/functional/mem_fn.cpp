@@ -29,20 +29,21 @@ namespace // anonymous
 
 TEST_SUITE("mem_fn_macro")
 {
-    TEST_CASE("generates_a_function_object_calling_member_function_of_a_class")
+    TEST_CASE("Создаёт функциональный объект, вызывающий функцию-член с заданным именем "
+        "от экземпляра произвольного класса")
     {
         auto call_mem_fn = BURST_MEM_FN(member_function);
         CHECK(call_mem_fn(dummy{17}) == 17);
     }
 
-    TEST_CASE("is_composable")
+    TEST_CASE("Компонуема")
     {
         const auto square_of_mem_fn = BURST_MEM_FN(member_function) | [] (auto x) {return x * x;};
         const auto d = dummy{5};
         CHECK(square_of_mem_fn(d) == 25);
     }
 
-    TEST_CASE("returns_a_const_reference_if_object_is_const")
+    TEST_CASE("Возвращает ссылку на константу, если объект константный")
     {
         const auto mem_fn_of = BURST_MEM_FN(member_function);
         const auto d = dummy{42};
@@ -52,7 +53,7 @@ TEST_SUITE("mem_fn_macro")
         CHECK(std::is_same<decltype(m), const int &>::value);
     }
 
-    TEST_CASE("returns_a_non_const_reference_if_object_is_non_const")
+    TEST_CASE("Возвращает ссылку на изменяемое значение, если объект неконстантный")
     {
         const auto mem_fn_of = BURST_MEM_FN(member_function);
         auto d = dummy{42};
@@ -62,7 +63,7 @@ TEST_SUITE("mem_fn_macro")
         CHECK(d.member_function() == 17);
     }
 
-    TEST_CASE("allows_overloads")
+    TEST_CASE("Допускает перегрузки")
     {
         const auto mem_fn_of = BURST_MEM_FN(member_function);
         const auto d = dummy{3};

@@ -13,7 +13,8 @@
 
 TEST_SUITE("difference")
 {
-    TEST_CASE("difference_of_two_ranges_is_set_of_elements_in_first_range_but_not_in_second_range")
+    TEST_CASE("Разность двух диапазонов – это элементы первого диапазона, "
+        "которые отсутствуют во втором диапазоне")
     {
         const auto natural = burst::make_vector({1, 2, 3, 4, 5, 6});
         const auto     odd = burst::make_vector({1,    3,    5   });
@@ -25,7 +26,7 @@ TEST_SUITE("difference")
         CHECK(difference == even);
     }
 
-    TEST_CASE("accepts_multisets")
+    TEST_CASE("Допускает мультимножества")
     {
         const auto    minuend = burst::make_vector({1, 1, 1, 2, 2, 3});
         const auto subtrahend = burst::make_vector({1, 1,    2      });
@@ -37,7 +38,7 @@ TEST_SUITE("difference")
         CHECK(difference == expected);
     }
 
-    TEST_CASE("set_minus_itself_is_empty_set")
+    TEST_CASE("Разность диапазона с самим собой — пустой диапазон")
     {
         const auto set = burst::make_vector({'a', 'b', 'c'});
 
@@ -46,7 +47,7 @@ TEST_SUITE("difference")
         CHECK(difference.empty());
     }
 
-    TEST_CASE("a_set_minus_empty_set_is_initial_set")
+    TEST_CASE("Разность диапазона с пустым диапазоном – это тот же диапазон")
     {
         const auto set = burst::make_vector({3, 2, 1});
         const auto empty_set = std::vector<int>{};
@@ -56,7 +57,7 @@ TEST_SUITE("difference")
         CHECK(difference == set);
     }
 
-    TEST_CASE("empty_set_minus_any_set_is_empty_set")
+    TEST_CASE("Разность пустого диапазона с любым непустым диапазоном — пустой диапазон")
     {
         const auto empty_set = std::vector<int>{};
         const auto set = burst::make_set({1, 2, 3});
@@ -66,7 +67,7 @@ TEST_SUITE("difference")
         CHECK(difference.empty());
     }
 
-    TEST_CASE("difference_of_saw_toothed_ranges_results_minuend")
+    TEST_CASE("Разность пилообразно дополняющих друг друга диапазонов равна уменьшаемому")
     {
         const auto    minuend = burst::make_list({'h',      'f',      'd',      'b'     });
         const auto subtrahend = burst::make_list({     'g',      'e',      'c',      'a'});
@@ -77,7 +78,7 @@ TEST_SUITE("difference")
         CHECK(difference == minuend);
     }
 
-    TEST_CASE("difference_equals_minuend_if_subtrahend_surrounds_minuend")
+    TEST_CASE("Если вычитаемый диапазон окружает уменьшаемый, то их разность равна уменьшаемому")
     {
         const auto    minuend =   burst::make_list({       4, 6, 8       });
         const auto subtrahend = burst::make_vector({-1, 2,         10, 11});
@@ -88,7 +89,7 @@ TEST_SUITE("difference")
         CHECK(difference == minuend);
     }
 
-    TEST_CASE("accepts_ranges_of_different_types")
+    TEST_CASE("Допускает диапазоны разных типов")
     {
         const auto    minuend =   burst::make_list({0,    4,    6,    7, 9, 10    });
         const auto subtrahend = burst::make_vector({0, 2,    5, 6, 6,       10, 11});
@@ -100,7 +101,7 @@ TEST_SUITE("difference")
         CHECK(difference == expected);
     }
 
-    TEST_CASE("resulting_range_is_writable")
+    TEST_CASE("Результирующий диапазон изменяем")
     {
         auto    minuend = burst::make_vector({1,    3,    5, 7, 9});
         auto subtrahend = burst::make_vector({   2, 3, 4, 5      });

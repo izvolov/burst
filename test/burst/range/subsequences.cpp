@@ -7,7 +7,7 @@
 
 TEST_SUITE("subsequences")
 {
-    TEST_CASE("the_order_of_the_elements_does_not_matter")
+    TEST_CASE("Элементы не обязаны быть упорядоченными")
     {
         const auto sequence = {3, 4, 1, -5};
 

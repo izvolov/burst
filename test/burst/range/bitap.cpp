@@ -12,7 +12,7 @@
 
 TEST_SUITE("bitap")
 {
-    TEST_CASE("pattern_is_found_when_equal_to_whole_text")
+    TEST_CASE("Находит в тесте образец, равный всему тексту")
     {
         const std::string pattern("Привет!");
         const std::string text(pattern);
@@ -24,7 +24,7 @@ TEST_SUITE("bitap")
         CHECK(match == text);
     }
 
-    TEST_CASE("pattern_is_found_at_the_first_match_in_a_text_having_several_matches")
+    TEST_CASE("Возвращает первое вхождение образца в случае, если в тексте их несколько")
     {
         const std::string pattern("абырвалг");
         const std::string text(pattern + "абырвалгович");
@@ -36,7 +36,7 @@ TEST_SUITE("bitap")
         CHECK(match == text.substr(0, pattern.size()));
     }
 
-    TEST_CASE("pattern_is_found_at_the_end_of_a_text")
+    TEST_CASE("Находит образец, если текст заканчивается им")
     {
         const std::string pattern("ойойой");
         const std::string text("FFUUU" + pattern);
@@ -50,7 +50,7 @@ TEST_SUITE("bitap")
         CHECK(match == text.substr(match_offset));
     }
 
-    TEST_CASE("pattern_is_not_found_in_a_text_with_no_matches")
+    TEST_CASE("Возвращает пустой диапазон, если в тексте отсутствуют совпадения")
     {
         const std::string pattern("123");
         const std::string text("12131415");
@@ -60,7 +60,7 @@ TEST_SUITE("bitap")
         CHECK(matches.empty());
     }
 
-    TEST_CASE("all_overlapping_patterns_are_found")
+    TEST_CASE("Находит все вхождения образцов, даже если они накладываются друг на друга в тексте")
     {
         const std::string pattern("шалаш");
         const std::string text("   шалашалаш   ");
@@ -76,7 +76,8 @@ TEST_SUITE("bitap")
             });
     }
 
-    TEST_CASE("matches_iterate_exactly_over_searched_text")
+    TEST_CASE("Каждое совпадение является диапазоном итераторы которого задают позиции в "
+        "исходном тексте-диапазоне")
     {
         const std::string pattern("шалаш");
         const std::string text("   шалашалаш   ");
@@ -100,7 +101,7 @@ TEST_SUITE("bitap")
         CHECK(second_match.end() == text.begin() + second_match_end_position);
     }
 
-    TEST_CASE("forward_iterator_is_enough_for_searching")
+    TEST_CASE("Для поиска достаточно однонаправленного итератора")
     {
         const auto pattern = burst::make_forward_list({1, 2, 3});
         const auto text = burst::make_forward_list({0, 1, 2, 3, 4});
@@ -113,7 +114,7 @@ TEST_SUITE("bitap")
         CHECK(match == pattern);
     }
 
-    TEST_CASE("bitmask_map_can_be_set_explicitly")
+    TEST_CASE("Допускает пользовательское отображение элементов в битовые маски")
     {
         const auto pattern = burst::make_forward_list({1, 2, 3});
         const auto text = burst::make_forward_list({0, 1, 2, 3, 4});

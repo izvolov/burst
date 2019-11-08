@@ -84,7 +84,7 @@ namespace // anonymous
 
 TEST_SUITE("dynamic_tuple")
 {
-    TEST_CASE("dynamic_tuple_can_be_created_from_an_arbitrary_set_of_types")
+    TEST_CASE("ДК может быть создан из произвольного набора объектов")
     {
         burst::dynamic_tuple t(std::string("123"), 42, true, X{17, std::vector<int>{1, 2, 3}});
         CHECK(t.size() == 4);
@@ -95,43 +95,45 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.get<X>(3).b == std::vector<int>{1, 2, 3});
     }
 
-    TEST_CASE("newly_created_tuple_with_no_elements_is_empty")
+    TEST_CASE("ДК, созданный из пустого множества элементов, пуст")
     {
         const auto t = burst::dynamic_tuple{};
         CHECK(t.empty());
     }
 
-    TEST_CASE("size_of_newly_created_tuple_with_no_elements_is_zero")
+    TEST_CASE("Размер ДК, созданного из пустого множества элементов, равен нулю")
     {
         const auto t = burst::dynamic_tuple{};
         CHECK(t.size() == 0);
     }
 
-    TEST_CASE("volume_of_newly_created_tuple_with_no_elements_is_zero")
+    TEST_CASE("Объём ДК, созданного из пустого множества элементов, равен нулю")
     {
         const auto t = burst::dynamic_tuple{};
         CHECK(t.volume() == 0);
     }
 
-    TEST_CASE("capacity_of_newly_created_tuple_with_no_elements_is_zero")
+    TEST_CASE("Вместимость ДК, созданного из пустого множества элементов, равна нулю")
     {
         const auto t = burst::dynamic_tuple{};
         CHECK(t.capacity() == 0);
     }
 
-    TEST_CASE("newly_created_tuple_with_some_elements_is_not_empty")
+    TEST_CASE("ДК, созданный из непустого множества элементов, непуст")
     {
         const auto t = burst::dynamic_tuple(42, 3.14);
         CHECK(not t.empty());
     }
 
-    TEST_CASE("size_of_newly_created_tuple_with_some_elements_is_amount_of_those_elements")
+    TEST_CASE("Размер ДК, созданного из непустого множества элементов, равен количеству этих "
+        "элементов")
     {
         const auto t = burst::dynamic_tuple(std::string("123"), 42, 2.71, false);
         CHECK(t.size() == 4);
     }
 
-    TEST_CASE("volume_of_tuple_constructed_from_some_elements_is_equal_to_volume_of_tuple_with_those_elements_consequently_pushed_back")
+    TEST_CASE("Объём ДК, созданного из некоторого множества элементов, равен объёму ДК, созданного "
+        "последовательной вставкой тех же элементов в конец пустого ДК")
     {
         const auto constructed = burst::dynamic_tuple(42, 3.14, std::string("123"), true);
 
@@ -144,13 +146,14 @@ TEST_SUITE("dynamic_tuple")
         CHECK(constructed.volume() == pushed_back.volume());
     }
 
-    TEST_CASE("capacity_of_newly_created_tuple_with_some_elements_is_greater_than_or_equal_to_volume")
+    TEST_CASE("Вместимость ДК, созданного из некоторого множества элементов, больше или равен "
+        "объёму этого ДК")
     {
         const auto t = burst::dynamic_tuple(std::vector<std::size_t>{}, 42, X{}, 3.14);
         CHECK(t.capacity() >= t.volume());
     }
 
-    TEST_CASE("reserving_less_space_than_already_present_does_nothing")
+    TEST_CASE("Резервирование меньшей вместимости, чем уже есть, не изменяет вместимость ДК")
     {
         auto t = burst::dynamic_tuple(true, 42, std::string("qwe"));
         auto old_capacity = t.capacity();
@@ -160,7 +163,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.capacity() == old_capacity);
     }
 
-    TEST_CASE("reserving_space_equal_to_current_capacity_does_nothing")
+    TEST_CASE("Резервирование вместимости, равной текущей, не изменяет вместимость ДК")
     {
         auto t = burst::dynamic_tuple(true, 42, std::string("qwe"));
         auto old_capacity = t.capacity();
@@ -170,7 +173,8 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.capacity() == old_capacity);
     }
 
-    TEST_CASE("new_capacity_of_empty_tuple_is_greater_or_equal_to_value_of_reserved_space")
+    TEST_CASE("Резервирование вместимости для пустого ДК делает его вместимость не меньше, "
+        "чем было запрошено при вызове")
     {
         auto t = burst::dynamic_tuple{};
 
@@ -179,7 +183,8 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.capacity() >= 10);
     }
 
-    TEST_CASE("new_capacity_of_non_empty_tuple_is_greater_or_equal_to_value_of_reserved_space")
+    TEST_CASE("Запрос на резервирование большей вместимости для непустого ДК делает его "
+        "вместимость не меньше, чем было запрошено при вызове")
     {
         auto t = burst::dynamic_tuple(false, 3.14, 42);
 
@@ -189,7 +194,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.capacity() >= desired_capacity);
     }
 
-    TEST_CASE("size_of_dynamic_tuple_is_equal_to_count_of_inlying_objects")
+    TEST_CASE("Размер ДК равен количеству содержащихся в нём элементов")
     {
         const auto some_vector = std::vector<std::size_t>{};
         const auto some_integer = 42;
@@ -200,7 +205,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.size() == 4);
     }
 
-    TEST_CASE("arbitrary_objects_can_be_pushed_back")
+    TEST_CASE("В конец ДК могут быть вставлены произвольные объекты")
     {
         burst::dynamic_tuple t;
 
@@ -215,7 +220,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.get<std::string>(2) == std::string("123"));
     }
 
-    TEST_CASE("clear_method_destructs_inlying_objects")
+    TEST_CASE("Метод clear() уничтожает хранящиеся в ДК объекты")
     {
         burst::dynamic_tuple t;
         t.push_back(dummy{});
@@ -226,7 +231,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(dummy::instances_count == 0);
     }
 
-    TEST_CASE("volume_is_zero_after_clear")
+    TEST_CASE("Объём ДК равен нулю после вызова метода clear()")
     {
         burst::dynamic_tuple t(1, 3.14, true, std::string("qwe"));
 
@@ -235,7 +240,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.volume() == 0);
     }
 
-    TEST_CASE("size_is_zero_after_clear")
+    TEST_CASE("Размер ДК равен нулю после вызова метода clear()")
     {
         burst::dynamic_tuple t(1, 3.14, true, std::string("qwe"));
 
@@ -244,7 +249,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.size() == 0);
     }
 
-    TEST_CASE("dynamic_tuple_is_empty_after_clear")
+    TEST_CASE("ДК пуст после вызова метода clear()")
     {
         burst::dynamic_tuple t(1, 3.14, true, std::string("qwe"));
 
@@ -253,7 +258,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.empty());
     }
 
-    TEST_CASE("capacity_does_not_change_after_clear")
+    TEST_CASE("Вместимость ДК не изменяется после вызова метода clear()")
     {
         burst::dynamic_tuple t(1, 3.14, true, std::string("qwe"));
         const auto capacity = t.capacity();
@@ -263,13 +268,13 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.capacity() == capacity);
     }
 
-    TEST_CASE("does_not_leak_when_inserted_element_throws")
+    TEST_CASE("Исключение, брошенное вставляемым объектом, не приводит к утечкам")
     {
         REQUIRE_THROWS_AS(burst::dynamic_tuple(kamikaze{}, kamikaze{}, kamikaze{}), std::runtime_error);
         CHECK(kamikaze::instances_count == 0);
     }
 
-    TEST_CASE("underlying_items_can_be_mutated")
+    TEST_CASE("Хрянящиеся в ДК объекты могут быть изменены извне")
     {
         burst::dynamic_tuple t(true, std::vector<char>{'a', 'b' ,'c'}, 10);
 
@@ -282,27 +287,29 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.get<std::vector<char>>(1).empty());
     }
 
-    TEST_CASE("moved_dynamic_tuple_is_actually_moved_and_is_not_emplaced_back")
+    TEST_CASE("Конструктор переноса ДК переносит элементы одного ДК в другой, а не вставляет "
+        "один ДК внутрь другого ДК")
     {
         burst::dynamic_tuple moved(2.71, 3, false);
         burst::dynamic_tuple constructed(std::move(moved));
         CHECK(constructed.size() == 3);
     }
 
-    TEST_CASE("copied_dynamic_tuple_is_actually_copied_and_is_not_emplaced_back")
+    TEST_CASE("Конструктор копирования ДК копирует элементы одного ДК в другой, а не вставляет "
+        "один ДК внутрь другого ДК")
     {
         burst::dynamic_tuple copied(2.71, 3, false);
         burst::dynamic_tuple constructed(copied);
         CHECK(constructed.size() == 3);
     }
 
-    TEST_CASE("tuple_of_tuples_is_possible")
+    TEST_CASE("ДК может содержать в себе ДК")
     {
         burst::dynamic_tuple t(burst::dynamic_tuple{}, burst::dynamic_tuple{});
         CHECK(t.size() == 2);
     }
 
-    TEST_CASE("inlying_objects_move_together_with_dynamic_tuple")
+    TEST_CASE("Хранящиеся в ДК объекты переносятся при переносе ДК")
     {
         REQUIRE(dummy::instances_count == 0);
         burst::dynamic_tuple one(dummy{});
@@ -328,7 +335,7 @@ TEST_SUITE("dynamic_tuple")
         ~throw_on_move () = default;
     };
 
-    TEST_CASE("does_not_leak_when_inlying_element_throws_being_moved")
+    TEST_CASE("Исключение при переносе внутренних объектов не приводит к утечкам")
     {
         const throw_on_move thrower{};
 
@@ -345,7 +352,8 @@ TEST_SUITE("dynamic_tuple")
         CHECK(dummy::instances_count == 0);
     }
 
-    TEST_CASE("proper_ctor_dtor_calls_of_inlying_objects_in_dyntuple_copy_constructor")
+    TEST_CASE("Конструктор копирования ДК создаёт новые экземпляры хранящихся в копируемом ДК "
+        "объектов и разрушает их при разрушении созданной копии ДК")
     {
         REQUIRE(dummy::instances_count == 0);
         {
@@ -361,7 +369,8 @@ TEST_SUITE("dynamic_tuple")
         CHECK(dummy::instances_count == 0);
     }
 
-    TEST_CASE("proper_ctor_dtor_calls_of_inlying_objects_in_dyntuple_copy_assignment")
+    TEST_CASE("Оператор копирующего присвоения ДК создаёт новые экземпляры хранящихся в копируемом "
+        "ДК объектов и разрушает их при разрушении этой копии ДК")
     {
         REQUIRE(dummy::instances_count == 0);
         {
@@ -378,7 +387,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(dummy::instances_count == 0);
     }
 
-    TEST_CASE("inlying_objects_are_destroyed_during_copy_assignment")
+    TEST_CASE("Объекты, хранящиеся в ДК, уничтожаются при копирующем присвоении")
     {
         REQUIRE(dummy::instances_count == 0);
         burst::dynamic_tuple initial(dummy{});
@@ -389,7 +398,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(dummy::instances_count == 0);
     }
 
-    TEST_CASE("inlying_objects_are_destroyed_during_move_assignment")
+    TEST_CASE("Объекты, хранящиеся в ДК, уничтожаются при переносящем присвоении")
     {
         REQUIRE(dummy::instances_count == 0);
         burst::dynamic_tuple initial(dummy{});
@@ -400,14 +409,14 @@ TEST_SUITE("dynamic_tuple")
         CHECK(dummy::instances_count == 0);
     }
 
-    TEST_CASE("source_is_empty_after_move_construction")
+    TEST_CASE("Конструктор переноса оставляет переносимый экземпляр ДК пустым")
     {
         burst::dynamic_tuple source(13, 3.14, true);
         burst::dynamic_tuple destination(std::move(source));
         CHECK(source.empty());
     }
 
-    TEST_CASE("source_is_empty_after_move_assignment")
+    TEST_CASE("Оператор перенящего присвоения оставляет переносимый экземпляр ДК пустым")
     {
         burst::dynamic_tuple source(std::string("move me"));
         burst::dynamic_tuple destination(std::string("some items here"));
@@ -415,14 +424,14 @@ TEST_SUITE("dynamic_tuple")
         CHECK(source.empty());
     }
 
-    TEST_CASE("source_size_is_zero_after_move_construction")
+    TEST_CASE("Размер ДК-источника после переноса равен нулю")
     {
         burst::dynamic_tuple source(13, 3.14, true);
         burst::dynamic_tuple destination(std::move(source));
         CHECK(source.size() == 0);
     }
 
-    TEST_CASE("source_size_is_zero_after_move_assignment")
+    TEST_CASE("Размер ДК-источника после переносящего присвоения равен нулю")
     {
         burst::dynamic_tuple source(std::string("move me"));
         burst::dynamic_tuple destination(std::string("some items here"));
@@ -430,14 +439,14 @@ TEST_SUITE("dynamic_tuple")
         CHECK(source.size() == 0);
     }
 
-    TEST_CASE("source_volume_is_zero_after_move_construction")
+    TEST_CASE("Объём ДК-источника после переноса равен нулю")
     {
         burst::dynamic_tuple source(13, 3.14, true);
         burst::dynamic_tuple destination(std::move(source));
         CHECK(source.volume() == 0);
     }
 
-    TEST_CASE("source_volume_is_zero_after_move_assignment")
+    TEST_CASE("Объём ДК-источника после переносящего присвоения равен нулю")
     {
         burst::dynamic_tuple source(std::string("move me"));
         burst::dynamic_tuple destination(std::string("some items here"));
@@ -445,7 +454,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(source.volume() == 0);
     }
 
-    TEST_CASE("copy_construction_is_deep")
+    TEST_CASE("Копирование ДК приводит к созданию настоящих копий хранящихся в нём объектов")
     {
         burst::dynamic_tuple initial(std::string("cat"));
 
@@ -456,7 +465,8 @@ TEST_SUITE("dynamic_tuple")
         CHECK(copy.get<std::string>(0) == "cat");
     }
 
-    TEST_CASE("copy_assignment_is_deep")
+    TEST_CASE("Копирующее присвоение ДК приводит к созданию настоящих копий хранящихся в нём "
+        "объектов")
     {
         burst::dynamic_tuple initial(std::vector<std::string>(1, "dog"));
 
@@ -468,7 +478,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(copy.get<std::vector<std::string>>(0) == std::vector<std::string>(1, "dog"));
     }
 
-    TEST_CASE("volume_is_equal_after_copy_assignment")
+    TEST_CASE("В результате копирующего присвоения объём копии равен объёму оригинала")
     {
         burst::dynamic_tuple initial(std::string("cat"), 5, 3.14, std::vector<int>{1, 2});
 
@@ -477,7 +487,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(initial.volume() == copy.volume());
     }
 
-    TEST_CASE("sizes_are_equal_after_copy_assignment")
+    TEST_CASE("В результате копирующего присвоения размер копии равен размеру оригинала")
     {
         burst::dynamic_tuple initial(std::string("cat"), 5, 3.14, std::vector<int>{1, 2});
 
@@ -486,7 +496,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(initial.size() == copy.size());
     }
 
-    TEST_CASE("copy_assignment_of_empty_tuple_results_empty_tuple")
+    TEST_CASE("Результат копирующего присвоения пустого ДК — пустой ДК")
     {
         burst::dynamic_tuple initial;
 
@@ -495,13 +505,13 @@ TEST_SUITE("dynamic_tuple")
         CHECK(copy.empty());
     }
 
-    TEST_CASE("throws_on_attempt_to_copy_noncopyable_object")
+    TEST_CASE("Порождает исключение при попытке скопировать некопируемый объект")
     {
         burst::dynamic_tuple initial(std::make_unique<int>(5));
         CHECK_THROWS_AS(burst::dynamic_tuple copy(initial), std::runtime_error);
     }
 
-    TEST_CASE("does_not_leak_when_inlying_element_throws_being_copy_constructed")
+    TEST_CASE("Исключение при копировании хранящихся в ДК объектов не приводит к утечкам")
     {
         REQUIRE(dummy::instances_count == 0);
         {
@@ -514,7 +524,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(dummy::instances_count == 0);
     }
 
-    TEST_CASE("does_not_leak_when_inlying_element_throws_being_copy_assigned")
+    TEST_CASE("Исключение при копирующем присвоении хранящихся в ДК объектов не приводит к утечкам")
     {
         REQUIRE(dummy::instances_count == 0);
         {
@@ -527,7 +537,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(dummy::instances_count == 0);
     }
 
-    TEST_CASE("does_not_leak_being_move_assigned")
+    TEST_CASE("Переносящее присвоение ДК не приводит к утечкам")
     {
         REQUIRE(dummy::instances_count == 0);
         {
@@ -542,14 +552,14 @@ TEST_SUITE("dynamic_tuple")
         CHECK(dummy::instances_count == 0);
     }
 
-    TEST_CASE("can_give_const_element_by_offset")
+    TEST_CASE("Умеет отдавать ссылки на неизменяемые значения по их отступу в ДК")
     {
         const burst::dynamic_tuple t(std::string("123"), 42, true);
         auto int_offset = t.offset(1);
         CHECK(t.get_by_offset<int>(int_offset) == 42);
     }
 
-    TEST_CASE("can_give_mutable_element_by_offset")
+    TEST_CASE("Умеет отдавать ссылки на изменяемые значения по их отступу в ДК")
     {
         auto old_value = 42;
         auto new_value = 99;
@@ -563,7 +573,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.get<int>(1) == new_value);
     }
 
-    TEST_CASE("pop_back_decrements_tuple_size")
+    TEST_CASE("Метод pop_back() уменьшает размер ДК на единицу")
     {
         auto t = burst::dynamic_tuple(true, 3.14, 42);
 
@@ -571,7 +581,8 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.size() == 2);
     }
 
-    TEST_CASE("volume_after_pop_back_is_equal_to_volume_of_tuple_without_last_element")
+    TEST_CASE("Объём ДК после вызова метода pop_back() равен объёму ДК, созданного из тех же "
+        "самых объектов, что и исходный ДК, кроме последнего")
     {
         auto t = burst::dynamic_tuple(true, 42);
         t.pop_back();
@@ -579,7 +590,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.volume() == burst::dynamic_tuple(true).volume());
     }
 
-    TEST_CASE("popped_element_is_destructed")
+    TEST_CASE("У выброшенного методом pop_back() элемента вызывается деструктор")
     {
         auto t = burst::dynamic_tuple(std::string("qwerty"), 42, dummy{});
         REQUIRE(dummy::instances_count == 1);
@@ -588,7 +599,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(dummy::instances_count == 0);
     }
 
-    TEST_CASE("push_back_increases_size_by_one")
+    TEST_CASE("Метод push_back() увеличивает размер ДК на единицу")
     {
         auto t = burst::dynamic_tuple{};
 
@@ -599,7 +610,8 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.size() == 2);
     }
 
-    TEST_CASE("push_back_increases_volume_to_alignment_of_the_inserted_element_plus_its_size")
+    TEST_CASE("Метод push_back() увеличивает объём ДК на размер вставляемого объекта с учётом его "
+        "выравнивания")
     {
         auto t = burst::dynamic_tuple{};
 
@@ -622,7 +634,7 @@ TEST_SUITE("dynamic_tuple")
         }
     }
 
-    TEST_CASE("capacity_does_not_change_after_pop_back")
+    TEST_CASE("Метод pop_back() не изменяет вместимость ДК")
     {
         burst::dynamic_tuple t;
         for (auto i = 0; i < 100; ++i)
@@ -639,13 +651,13 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.capacity() == old_capacity);
     }
 
-    TEST_CASE("can_give_type_info_by_index")
+    TEST_CASE("Умеет отдавать std::type_info хранящегося внутри объекта по его индексу")
     {
         const auto t = burst::dynamic_tuple(std::string("123"));
         CHECK(t.type(0) == typeid(std::string));
     }
 
-    TEST_CASE("shrink_to_fit_reduces_capacity_to_volume")
+    TEST_CASE("Метод shrink_to_fit() уменьшает вместимость до объёма")
     {
         auto t = burst::dynamic_tuple(std::string("123"), 2.71, true);
 
@@ -655,7 +667,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.capacity() == t.volume());
     }
 
-    TEST_CASE("empty_tuple_shrink_to_fit_reduces_capacity_to_zero")
+    TEST_CASE("Метод shrink_to_fit() для пустого ДК уменьшает вместимость до нуля")
     {
         auto t = burst::dynamic_tuple{};
 
@@ -665,7 +677,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.capacity() == 0);
     }
 
-    TEST_CASE("shrinked_to_fit_empty_tuple_remains_empty")
+    TEST_CASE("Метод shrink_to_fit() оставляет пустой ДК пустым")
     {
         auto t = burst::dynamic_tuple{};
 
@@ -675,7 +687,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.empty());
     }
 
-    TEST_CASE("shrinked_to_fit_non_empty_tuple_remains_non_empty")
+    TEST_CASE("Метод shrink_to_fit() оставляет непустой ДК непустым")
     {
         auto t = burst::dynamic_tuple{1, false};
 
@@ -685,7 +697,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(not t.empty());
     }
 
-    TEST_CASE("shrink_to_fit_does_not_affect_empty_tuple_size")
+    TEST_CASE("Метод shrink_to_fit() не влияет на размер пустого ДК")
     {
         auto t = burst::dynamic_tuple{};
 
@@ -695,7 +707,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.size() == 0);
     }
 
-    TEST_CASE("shrink_to_fit_does_not_affect_non_empty_tuple_size")
+    TEST_CASE("Метод shrink_to_fit() не влияет на размер непустого ДК")
     {
         auto t = burst::dynamic_tuple(1, true, 3.14);
 
@@ -705,7 +717,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.size() == 3);
     }
 
-    TEST_CASE("shrink_to_fit_does_not_affect_empty_tuple_volume")
+    TEST_CASE("Метод shrink_to_fit() не влияет на объём пустого ДК")
     {
         auto t = burst::dynamic_tuple{};
 
@@ -715,7 +727,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.volume() == 0);
     }
 
-    TEST_CASE("shrink_to_fit_does_not_affect_non_empty_tuple_volume")
+    TEST_CASE("Метод shrink_to_fit() не влияет на объём непустого ДК")
     {
         auto t = burst::dynamic_tuple(1, true, 3.14);
         auto old_volume = t.volume();
@@ -726,7 +738,7 @@ TEST_SUITE("dynamic_tuple")
         CHECK(t.volume() == old_volume);
     }
 
-    TEST_CASE("has_free_swap_function")
+    TEST_CASE("Для ДК определена свободная функция swap()")
     {
         auto t = burst::dynamic_tuple(1, 3.14);
         auto u = burst::dynamic_tuple(std::string("qwe"), true);

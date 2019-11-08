@@ -8,7 +8,8 @@
 
 TEST_SUITE("bitap")
 {
-    TEST_CASE("pattern_is_found_at_the_next_match_when_search_started_in_the_middle_of_the_first_match")
+    TEST_CASE("Если поиск начинается где-то в середине совпадения, то образец будет найден в "
+        "следующем совпадении")
     {
         std::string pattern("asdf");
         std::string text(pattern + pattern);

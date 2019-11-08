@@ -10,7 +10,8 @@
 
 TEST_SUITE("join_iterator")
 {
-    TEST_CASE("join_iterator_end_is_created_from_begin_using_special_tag")
+    TEST_CASE("Конец итератора склейки создаётся из его начала с помощью специальной "
+        "метки-индикатора")
     {
         auto  first = {500, 100};
         auto second = {600, 200};
@@ -23,7 +24,8 @@ TEST_SUITE("join_iterator")
         CHECK(boost::make_iterator_range(joined_begin, joined_end) == expected_collection);
     }
 
-    TEST_CASE("join_iterator_created_from_random_access_ranges_is_random_access_iterator")
+    TEST_CASE("Итератор склейки, созданный из диапазонов произвольного доступа — "
+        "итератор произвольного доступа")
     {
         auto  first = {3, 2};
         auto second = {1, 0};
@@ -36,7 +38,7 @@ TEST_SUITE("join_iterator")
         BOOST_CONCEPT_ASSERT((boost::RandomAccessIterator<decltype(joined_end)>));
     }
 
-    TEST_CASE("decrementing_random_access_join_iterator_end_is_legal")
+    TEST_CASE("Уменьшение итератора склейки произвольного доступа допустимо")
     {
         auto  first = {3, 2};
         auto second = {1, 0};
@@ -49,7 +51,7 @@ TEST_SUITE("join_iterator")
         CHECK(*joined_end == 0);
     }
 
-    TEST_CASE("modifying_a_copy_of_join_iterator_does_not_affect_the_original_iterator")
+    TEST_CASE("Изменение копии итератора склейки не изменяет оригинал")
     {
         auto first = burst::make_vector({100, 50});
         auto second = burst::make_vector({70, 30});
@@ -64,7 +66,7 @@ TEST_SUITE("join_iterator")
         CHECK(*join_iterator == 100);
     }
 
-    TEST_CASE("random_accessing_near_range_bounds_is_correct")
+    TEST_CASE("Произвольный доступ между границами склейки происходит бесшовно")
     {
         auto  first = {3, 2};
         auto second = {1, 0};

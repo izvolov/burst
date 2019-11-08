@@ -12,7 +12,7 @@
 
 TEST_SUITE("symmetric_difference")
 {
-    TEST_CASE("consists_of_elements_occured_in_odd_number_of_input_ranges")
+    TEST_CASE("Состоит из элементов, встречающихся в нечётном количестве входных диапазонов")
     {
         const auto natural = burst::make_vector({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
         const auto     odd = burst::make_vector({1,    3,    5,    7,    9,     11    });
@@ -26,7 +26,7 @@ TEST_SUITE("symmetric_difference")
         CHECK(symmetric_difference == expected);
     }
 
-    TEST_CASE("symmetric_difference_of_empty_ranges_results_empty_range")
+    TEST_CASE("Симметрическая разность пустых диапазонов — пустой диапазон")
     {
         const auto first = std::vector<int>{};
         const auto second = std::vector<int>{};
@@ -37,7 +37,7 @@ TEST_SUITE("symmetric_difference")
         CHECK(symmetric_difference.empty());
     }
 
-    TEST_CASE("symmetric_difference_of_one_range_results_the_same_range")
+    TEST_CASE("Симметрическая разность одного диапазона — сам этот диапазон")
     {
         const auto only = boost::irange(1, 5);
         auto ranges = burst::make_range_vector(only);
@@ -47,7 +47,8 @@ TEST_SUITE("symmetric_difference")
         CHECK(symmetric_difference == boost::irange(1, 5));
     }
 
-    TEST_CASE("symmetric_difference_of_odd_number_of_equal_ranges_equals_to_any_of_those_ranges")
+    TEST_CASE("Симметрическая разность нечётного количества равных диапазонов равна "
+        "каждому из этих диапазонов")
     {
         const auto first = {4, 4, 5, 6, 6, 7};
         const auto second = first;
@@ -59,7 +60,7 @@ TEST_SUITE("symmetric_difference")
         CHECK(symmetric_difference == first);
     }
 
-    TEST_CASE("symmetric_difference_of_even_number_of_equal_ranges_is_empty")
+    TEST_CASE("Симметрическая разность чётного количества равных диапазонов пуста")
     {
         const auto first = {4, 4, 5, 6, 6, 7};
         const auto second = first;
@@ -72,7 +73,7 @@ TEST_SUITE("symmetric_difference")
         CHECK(symmetric_difference.empty());
     }
 
-    TEST_CASE("symmetric_difference_of_disjoint_ranges_results_their_union")
+    TEST_CASE("Симметрическая разность непересекающихся диапазонов эквивалентна из объединению")
     {
         const auto  first = burst::make_list({'a',           'd',           'g'     });
         const auto second = burst::make_list({     'b',           'e',           'h'});
@@ -85,7 +86,7 @@ TEST_SUITE("symmetric_difference")
         CHECK(symmetric_difference == expected);
     }
 
-    TEST_CASE("symmetric_difference_supports_custom_ordering")
+    TEST_CASE("Допускает пользовательскую функцию для сравнения элементов")
     {
         const auto  first = {   3, 3, 2, 1};
         const auto second = {4, 3,    2   };
@@ -98,7 +99,7 @@ TEST_SUITE("symmetric_difference")
         CHECK(symmetric_difference == expected);
     }
 
-    TEST_CASE("symmetric_difference_of_several_consecutive_sorted_ranges_results_their_union")
+    TEST_CASE("Симметрическая разность последовательных диапазонов эквивалентна из объединению")
     {
         const auto  first = {1, 2, 3                  };
         const auto second = {         4, 5, 6         };
@@ -112,7 +113,7 @@ TEST_SUITE("symmetric_difference")
         CHECK(symmetric_difference == expected);
     }
 
-    TEST_CASE("repeating_elements_do_not_produce_excess_matches")
+    TEST_CASE("Повторяющиеся элементы не порождают избыточных совпадений")
     {
         const auto  first = {1, 1, 1};
         const auto second = {1, 1, 1};
@@ -125,7 +126,7 @@ TEST_SUITE("symmetric_difference")
         CHECK(symmetric_difference == first);
     }
 
-    TEST_CASE("ranges_are_considered_multisets")
+    TEST_CASE("Работает с диапазонами как с мультимножествами")
     {
         const auto  first = {0, 0, 1,       2};
         const auto second = {0,    1, 1      };

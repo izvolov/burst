@@ -10,7 +10,7 @@
 
 TEST_SUITE("joined")
 {
-    TEST_CASE("acts_just_like_join_function")
+    TEST_CASE("Делает ровно то же самое, что функция burst::join")
     {
         const auto first = burst::make_forward_list({17, 19, 23});
         const auto empty1 = burst::make_forward_list<int>({});
@@ -25,7 +25,7 @@ TEST_SUITE("joined")
         CHECK(joined == expected);
     }
 
-    TEST_CASE("accepts_a_range_by_rvalue")
+    TEST_CASE("Может работать с rvalue-диапазоном")
     {
         const auto joined =
             boost::irange(0, 10)

@@ -7,7 +7,8 @@
 
 TEST_SUITE("left_shift")
 {
-    TEST_CASE("return_value_type_is_same_to_the_type_of_the_shifted_value")
+    TEST_CASE("Тип возвращаемого значения равен типу первого аргумента, "
+        "то есть сдвигаемого значения")
     {
         {
             using result_type = decltype(burst::left_shift(std::int8_t{2}, std::int64_t{5}));
@@ -19,7 +20,7 @@ TEST_SUITE("left_shift")
         }
     }
 
-    TEST_CASE("is_constexpr_function")
+    TEST_CASE("Может быть вычислена на этапе компиляции")
     {
         constexpr auto value = burst::left_shift(0b101, 1);
         CHECK(value == 0b1010);

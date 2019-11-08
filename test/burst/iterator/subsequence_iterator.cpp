@@ -12,7 +12,8 @@
 
 TEST_SUITE("subsequence_iterator")
 {
-    TEST_CASE("subsequence_iterator_end_is_created_using_special_tag")
+    TEST_CASE("Конец итератора подпоследовательностей создаётся из его начала с помощью "
+        "специальной метки-индикатора")
     {
         const auto sequence = {'a', 'b', 'c'};
 
@@ -31,7 +32,7 @@ TEST_SUITE("subsequence_iterator")
         CHECK(subsequences == expected_subsequences);
     }
 
-    TEST_CASE("empty_sequence_has_no_subsequences")
+    TEST_CASE("Пустая подпоследовательность не содержит подпоследовательностей")
     {
         const auto sequence = std::vector<int>{};
 
@@ -42,7 +43,8 @@ TEST_SUITE("subsequence_iterator")
         CHECK(subsequences_begin == subsequences_end);
     }
 
-    TEST_CASE("singleton_sequence_has_one_subsequence_equal_to_whole_sequence")
+    TEST_CASE("Одноэлементная последовательность содержит ровно одну подпоследовательность, равную "
+        "всей последовательности")
     {
         const auto sequence = std::list<int>{3};
 
@@ -55,7 +57,7 @@ TEST_SUITE("subsequence_iterator")
         CHECK(std::distance(subsequence, subsequences_end) == 1);
     }
 
-    TEST_CASE("the_subsequence_count_is_2_in_the_power_of_sequence_length_minus_one")
+    TEST_CASE("Количество подпоследовательностей равно 2 ^ N - 1, где N — длина последовательности")
     // Пустая подпоследовательность считается концом, а потому не входит в число "действительных"
     // подпоследовательностей.
     {

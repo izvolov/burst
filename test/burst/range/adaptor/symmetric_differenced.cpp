@@ -13,7 +13,7 @@
 
 TEST_SUITE("symmetric_differenced")
 {
-    TEST_CASE("accepts_a_range_by_rvalue")
+    TEST_CASE("Может работать с rvalue-диапазоном")
     {
         const auto natural = burst::make_vector({1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
         const auto     odd = burst::make_vector({1,    3,    5,    7,    9,     11    });
@@ -27,7 +27,7 @@ TEST_SUITE("symmetric_differenced")
         CHECK(symmetric_differenced == expected);
     }
 
-    TEST_CASE("accepts_a_range_by_lvalue")
+    TEST_CASE("Может работать с lvalue-диапазоном")
     {
         auto range_vector =
             burst::make_vector
@@ -45,7 +45,7 @@ TEST_SUITE("symmetric_differenced")
         CHECK(symmetric_differenced == expected);
     }
 
-    TEST_CASE("accepts_custom_comparator")
+    TEST_CASE("Допускает пользовательскую функцию для сравнения элементов")
     {
         const auto  first = burst::make_forward_list({      4, 3, 2, 1});
         const auto second = burst::make_forward_list({5, 5,    3, 2, 1});

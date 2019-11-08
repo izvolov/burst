@@ -6,7 +6,8 @@
 
 TEST_SUITE("next_subsequence")
 {
-    TEST_CASE("accepts_iterators_of_a_sequence_and_iterators_of_a_valid_subsequence")
+    TEST_CASE("Принимает итераторы корректной подпоследовательности и итераторы исходной "
+        "последовательности")
     {
         using vector_type = std::vector<int>;
         const auto items = vector_type{17};
@@ -25,7 +26,7 @@ TEST_SUITE("next_subsequence")
         CHECK(**subsequence_container.begin() == 17);
     }
 
-    TEST_CASE("an_empty_sequence_has_no_subsequences")
+    TEST_CASE("У пустой последовательности нет подпоследовательностей")
     {
         using vector_type = std::vector<int>;
         auto items = vector_type{};

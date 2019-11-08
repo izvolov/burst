@@ -17,7 +17,7 @@
 
 TEST_SUITE("radix_sort")
 {
-    TEST_CASE("sorting_empty_range_does_nothing")
+    TEST_CASE("Сортировка пустого контейнера ничего не делает")
     {
         std::vector<std::size_t> values;
 
@@ -28,7 +28,7 @@ TEST_SUITE("radix_sort")
         CHECK(sorted_values == values);
     }
 
-    TEST_CASE("sorting_already_sorted_range_results_the_same_range")
+    TEST_CASE("Сортировка отсортированного диапазона не изменяет его")
     {
         std::vector<std::uint8_t> initial{0, 1, 2, 3, 4};
 
@@ -39,7 +39,7 @@ TEST_SUITE("radix_sort")
         CHECK(sorted == initial);
     }
 
-    TEST_CASE("sorting_chaotic_single_byte_range_results_sorted_range")
+    TEST_CASE("Сортировка неупорядоченного одноразрядного диапазона упорядочивает его")
     {
         std::vector<std::uint8_t> numbers{2, 1, 3, 0, 4};
 
@@ -50,7 +50,7 @@ TEST_SUITE("radix_sort")
         CHECK(numbers == expected);
     }
 
-    TEST_CASE("sorting_descending_range_results_ascending_range")
+    TEST_CASE("Сортировка убывающего диапазона делает его возрастающим")
     {
         std::vector<std::string> descending{"1000", "100", "10", "1"};
 
@@ -66,7 +66,7 @@ TEST_SUITE("radix_sort")
         CHECK(std::equal(descending.rbegin(), descending.rend(), ascending.begin()));
     }
 
-    TEST_CASE("sorting_chaotic_range_results_sorted_range")
+    TEST_CASE("Сортировка неупорядоченного диапазона упорядочивает его")
     {
         std::vector<std::uint32_t> numbers{100500, 42, 99999, 1000, 0};
 
@@ -77,7 +77,7 @@ TEST_SUITE("radix_sort")
         CHECK(numbers == expected);
     }
 
-    TEST_CASE("can_sort_in_descending_order")
+    TEST_CASE("Возможна сортировка по убыванию")
     {
         std::vector<std::uint32_t> numbers{100500, 42, 99999, 1000, 0};
 
@@ -92,7 +92,7 @@ TEST_SUITE("radix_sort")
         CHECK(numbers ==expected);
     }
 
-    TEST_CASE("can_sort_bitwise")
+    TEST_CASE("Возможна побитовая сортировка")
     {
         std::vector<std::uint8_t> numbers{0, 5, 3, 7, 1, 2, 4, 6};
 
@@ -107,7 +107,7 @@ TEST_SUITE("radix_sort")
         CHECK(numbers == even_goes_first);
     }
 
-    TEST_CASE("extreme_values_are_sorted_properly")
+    TEST_CASE("Экстремальные значения сортируются правильно")
     {
         std::vector<std::size_t> numbers
         {
@@ -128,7 +128,7 @@ TEST_SUITE("radix_sort")
         CHECK(numbers == expected);
     }
 
-    TEST_CASE("sorting_algorithm_is_stable")
+    TEST_CASE("Алгоритм сортировки устойчив")
     {
         std::vector<std::pair<std::uint16_t, std::string>> numbers
         {
@@ -157,7 +157,7 @@ TEST_SUITE("radix_sort")
         CHECK(numbers == expected);
     }
 
-    TEST_CASE("can_sort_signed_values")
+    TEST_CASE("Умеет сортировать знаковые числа")
     {
         std::vector<std::int64_t> values
         {
@@ -190,7 +190,7 @@ TEST_SUITE("radix_sort")
         CHECK(values == expected);
     }
 
-    TEST_CASE("can_sort_noncopyable_objects")
+    TEST_CASE("Возможно сортировать некопируемые объекты")
     {
         std::vector<std::unique_ptr<std::int64_t>> pointers;
         pointers.emplace_back(std::make_unique<std::int64_t>(30));
@@ -215,7 +215,7 @@ TEST_SUITE("radix_sort")
         ));
     }
 
-    TEST_CASE("can_sort_noncopyable_single_byte_objects")
+    TEST_CASE("Возможно сортировать некопируемые одноразрядные объекты")
     {
         std::vector<std::unique_ptr<std::int8_t>> pointers;
         pointers.emplace_back(std::make_unique<std::int8_t>(0x30));
@@ -259,7 +259,7 @@ TEST_SUITE("radix_sort")
         Integer n;
     };
 
-    TEST_CASE("can_sort_implicitly_nonmovable_objects")
+    TEST_CASE("Может сортировать объекты с неявно удалённым операциями переноса")
     {
         using object_type = implicitly_nonmovable<std::int64_t>;
         auto objects =
@@ -296,7 +296,7 @@ TEST_SUITE("radix_sort")
         Integer n;
     };
 
-    TEST_CASE("can_sort_explicitly_nonmovable_objects")
+    TEST_CASE("Может сортировать объекты с явно удалённым операциями переноса")
     {
         using object_type = explicitly_nonmovable<std::int8_t>;
         std::vector<object_type> objects;
@@ -311,7 +311,7 @@ TEST_SUITE("radix_sort")
         burst::radix_sort(objects, buffer.begin(), [] (auto && n) {return n.n;});
     }
 
-    TEST_CASE("works_with_ranges")
+    TEST_CASE("Допускает на вход диапазоны")
     {
         std::vector<std::uint32_t> numbers{100500, 42, 99999, 1000, 0};
 

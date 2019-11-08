@@ -13,7 +13,7 @@
 
 TEST_SUITE("take_n_iterator")
 {
-    TEST_CASE("iterator_category_falls_back_to_forward_iterator")
+    TEST_CASE("Категория откусывающего итератора не сильнее однонаправленной")
     {
         // Входной итератор — произвольного доступа
         {
@@ -60,7 +60,8 @@ TEST_SUITE("take_n_iterator")
         }
     }
 
-    TEST_CASE("end_is_created_using_special_tag")
+    TEST_CASE("Конец откусывающего итератора создаётся из его начала с помощью специальной "
+        "метки-индикатора")
     {
         const auto l = burst::make_list({1, 2, 3, 4});
 
@@ -70,7 +71,7 @@ TEST_SUITE("take_n_iterator")
         CHECK(std::next(first, 3) == last);
     }
 
-    TEST_CASE("takes_exactly_specified_number_of_elements")
+    TEST_CASE("Откусывает ровно заданное количество элементов")
     {
         const auto fl = burst::make_forward_list({1, 2, 3, 4});
 

@@ -17,7 +17,8 @@
 
 TEST_SUITE("owning_iterator")
 {
-    TEST_CASE("owning_iterator_end_is_created_using_special_tag")
+    TEST_CASE("Конец владеющего итератора создаётся из его начала с помощью специальной "
+        "метки-индикатора")
     {
         const auto owned_begin = burst::make_owning_iterator(burst::make_vector({1, 2, 3}));
         const auto owned_end = burst::make_owning_iterator(burst::iterator::end_tag, owned_begin);
@@ -34,7 +35,7 @@ TEST_SUITE("owning_iterator")
             std::vector<int>
         >;
 
-    TEST_CASE_TEMPLATE("preserves_container_iterator_category", container,
+    TEST_CASE_TEMPLATE("Наследует категорию итераторов контейнера", container,
         std::forward_list<int>, std::list<int>, std::vector<int>)
     {
         using container_iterator_category =
@@ -54,7 +55,7 @@ TEST_SUITE("owning_iterator")
         CHECK(std::is_same<container_iterator_category, owning_iterator_category>::value);
     }
 
-    TEST_CASE("preserves_container_iterator_concept")
+    TEST_CASE("Наследует модель итератора контейнера")
     {
         // Однонаправленный итератор
         {
@@ -73,7 +74,7 @@ TEST_SUITE("owning_iterator")
         }
     }
 
-    TEST_CASE("every_copy_of_the_owning_iterator_iterates_exactly_the_same_container_as_the_original_one")
+    TEST_CASE("Каждая копия владеющего итератора ссылается на один и тот же экземпляр контейнера")
     {
         auto original = burst::make_owning_iterator(burst::make_vector({1, 2, 3}));
         auto copy = original;

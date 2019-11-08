@@ -7,7 +7,7 @@
 
 TEST_SUITE("subsets")
 {
-    TEST_CASE("repeating_elements_are_not_considered")
+    TEST_CASE("Повторяющиеся элементы не учитываются")
     {
         auto sequence = {3, 3, 3, 2, 2, 2, 1, 1, 1};
         std::set<int, std::greater<>> set(sequence.begin(), sequence.end());

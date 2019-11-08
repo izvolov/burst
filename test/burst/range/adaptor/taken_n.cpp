@@ -10,7 +10,7 @@
 
 TEST_SUITE("taken_n")
 {
-    TEST_CASE("takes_exactly_specified_number_of_elements")
+    TEST_CASE("Создаёт диапазон из префикса ровно заданной длины исходного диапазона")
     {
         const auto items = burst::make_forward_list({1, 2, 3, 4});
 
@@ -24,7 +24,7 @@ TEST_SUITE("taken_n")
         CHECK(taken == expected);
     }
 
-    TEST_CASE("accepts_a_range_by_rvalue")
+    TEST_CASE("Может работать с rvalue-диапазоном")
     {
         const auto taken = boost::irange(0, 100500) | burst::taken_n(5l);
 

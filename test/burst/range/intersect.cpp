@@ -13,7 +13,7 @@
 
 TEST_SUITE("intersect")
 {
-    TEST_CASE("intersecting_empty_ranges_results_empty_range")
+    TEST_CASE("Пересечение пустых диапазонов — пустой диапазон")
     {
         std::vector<int> first;
         std::vector<int> second;
@@ -24,7 +24,7 @@ TEST_SUITE("intersect")
         CHECK(intersected_range.empty());
     }
 
-    TEST_CASE("intersecting_one_range_results_the_same_range")
+    TEST_CASE("Пересечение одного диапазона — сам этот диапазон")
     {
         auto only = boost::irange(1, 5);
         auto ranges = burst::make_range_vector(only);
@@ -33,7 +33,7 @@ TEST_SUITE("intersect")
         CHECK(intersected_range == boost::irange(1, 5));
     }
 
-    TEST_CASE("intersecting_equal_ranges_results_range_equal_to_both_of_them")
+    TEST_CASE("Пересечение одинаковых диапазонов — диапазон, равный всем исходным")
     {
         auto first = {4, 5, 6, 7};
         auto second = first;
@@ -44,7 +44,7 @@ TEST_SUITE("intersect")
         CHECK(intersected_range == first);
     }
 
-    TEST_CASE("intersecting_nested_ranges_results_shortest_of_them")
+    TEST_CASE("Пересечение вложенных диапазонов равно наименьшему из них")
     {
         std::string  long_range("abcdef");
         std::string short_range("cde");
@@ -55,7 +55,7 @@ TEST_SUITE("intersect")
         CHECK(intersected_range == short_range);
     }
 
-    TEST_CASE("intersecting_saw_toothed_ranges_results_empty_range")
+    TEST_CASE("Пересечение пилообразно дополняющих друг друга диапазонов пусто")
     {
         auto  first = burst::make_list({'h',      'f',      'd',      'b'     });
         auto second = burst::make_list({     'g',      'e',      'c',      'a'});
@@ -66,7 +66,8 @@ TEST_SUITE("intersect")
         CHECK(intersected_range.empty());
     }
 
-    TEST_CASE("intersecting_two_overlaying_ranges_results_overlayed_part")
+    TEST_CASE("Пересечение накладывающихся друг на друга диапазонов состоит из элементов "
+        "этого наложения")
     {
         auto  first = {   3, 2, 1};
         auto second = {4, 3, 2   };
@@ -79,7 +80,7 @@ TEST_SUITE("intersect")
         CHECK(intersected_range == expected_collection);
     }
 
-    TEST_CASE("intersecting_pairwise_overlaying_but_mutual_disjoint_ranges_results_empty_range")
+    TEST_CASE("Пересечение диапазонов, накладывающихся попарно, но не совместно — пустой диапазон")
     {
         auto  first = {1, 2      };
         auto second = {   2, 3   };
@@ -91,7 +92,8 @@ TEST_SUITE("intersect")
         CHECK(intersected_range.empty());
     }
 
-    TEST_CASE("intersecting_several_consecutive_sorted_ranges_results_empty_range")
+    TEST_CASE("Пересечение нескольких последовательно дополняющих друг друга диапазонов — "
+        "пустой диапазон")
     {
         auto  first = {1, 2, 3                  };
         auto second = {         4, 5, 6         };
@@ -103,7 +105,7 @@ TEST_SUITE("intersect")
         CHECK(intersected_range.empty());
     }
 
-    TEST_CASE("repeating_elements_do_not_produce_excess_matches")
+    TEST_CASE("Работает с диапазонами как с мультимножествами")
     {
         auto  first = {1, 1, 1};
         auto second = {1, 1, 1};
@@ -115,7 +117,7 @@ TEST_SUITE("intersect")
         CHECK(intersected_range == first);
     }
 
-    TEST_CASE("no_element_considered_twice")
+    TEST_CASE("Элементы не попадают в пересечение дважды")
     {
         auto  first = {0, 0, 1};
         auto second = {0, 1, 1};

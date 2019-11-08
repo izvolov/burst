@@ -13,7 +13,7 @@
 
 TEST_SUITE("semiintersected")
 {
-    TEST_CASE("accepts_a_range_by_rvalue")
+    TEST_CASE("Может работать с rvalue-диапазоном")
     {
         const auto  primes = burst::make_vector({   2, 3,    5, 7, 11});
         const auto natural = burst::make_vector({1, 2, 3, 4, 5       });
@@ -26,7 +26,7 @@ TEST_SUITE("semiintersected")
         CHECK(semiintersected == expected);
     }
 
-    TEST_CASE("accepts_a_range_by_lvalue")
+    TEST_CASE("Может работать с lvalue-диапазоном")
     {
         auto range_vector =
             burst::make_vector
@@ -44,7 +44,7 @@ TEST_SUITE("semiintersected")
         CHECK(semiintersected == expected);
     }
 
-    TEST_CASE("accepts_custom_comparator")
+    TEST_CASE("Допускает пользовательскую функцию для сравнения элементов")
     {
         const auto  first = burst::make_forward_list({   4, 3, 2, 1});
         const auto second = burst::make_forward_list({5,    3,    1});

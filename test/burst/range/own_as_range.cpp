@@ -8,7 +8,7 @@
 
 TEST_SUITE("own_as_range")
 {
-    TEST_CASE("iterates_over_the_owned_container")
+    TEST_CASE("Итерирует контейнер, над которым установлено владение")
     {
         const auto owned = burst::own_as_range(burst::make_vector({1, 2, 3, 4}));
 
@@ -16,7 +16,7 @@ TEST_SUITE("own_as_range")
         CHECK(owned == expected);
     }
 
-    TEST_CASE("owned_range_is_mutable")
+    TEST_CASE("Диапазон владеющих итераторов изменяем")
     {
         auto owned = burst::own_as_range(burst::make_forward_list({1, 2, 3, 4}));
         std::transform(owned.begin(), owned.end(), owned.begin(), [] (auto x) {return x * 10;});

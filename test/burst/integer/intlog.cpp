@@ -9,48 +9,48 @@
 
 TEST_SUITE("intlog")
 {
-    TEST_CASE("throws_beyond_the_domain")
+    TEST_CASE("Порождает исключение, если логарифмируемое число находится вне области определения")
     {
         CHECK_THROWS_AS(burst::intlog(0ul, 10ul), std::domain_error);
     }
 
-    TEST_CASE("throws_on_non_positive_base")
+    TEST_CASE("Порождает исключение при неположительном основании")
     {
         CHECK_THROWS_AS(burst::intlog(10ul, 0ul), std::domain_error);
     }
 
-    TEST_CASE("throws_on_base_equal_to_one")
+    TEST_CASE("Порождает исключение при основании равном единице")
     {
         CHECK_THROWS_AS(burst::intlog(10ul, 1ul), std::domain_error);
     }
 
-    TEST_CASE("any_base_intlog_of_one_is_zero")
+    TEST_CASE("Логарифм единицы по любому основанию равен нулю")
     {
         CHECK(burst::intlog(1u, 100500u) == 0);
     }
 
-    TEST_CASE("intlog_of_power_of_its_base_is_exactly_that_power")
+    TEST_CASE("Логарифм степени основания в точности равен этой степени")
     {
         CHECK(burst::intlog(100ul, 10ul) == 2);
     }
 
-    TEST_CASE("intlog_of_non_power_of_its_base_is_integer_part_of_logarithm")
+    TEST_CASE("Возвращает целую часть логарифма числа по заданному основанию")
     {
         CHECK(burst::intlog(30ul, 3ul) == 3);
     }
 
-    TEST_CASE("intlog_is_a_constexpr_function")
+    TEST_CASE("Может быть вычислена на этапе компиляции")
     {
         constexpr auto x = burst::intlog(20ul, 2ul);
         CHECK(x == 4);
     }
 
-    TEST_CASE("accepts_signed_values")
+    TEST_CASE("Допускает знаковые значения")
     {
         CHECK(burst::intlog(13, 3) == 2);
     }
 
-    TEST_CASE("accepts_different_argument_types")
+    TEST_CASE("Допускает разные типы первого и второго аргументов")
     {
         constexpr auto int32_max = std::numeric_limits<std::int32_t>::max();
         CHECK(burst::intlog(std::int32_t{14}, std::uint64_t{int32_max} + 1) == 0);
@@ -59,7 +59,7 @@ TEST_SUITE("intlog")
         CHECK(burst::intlog(std::uint32_t{int8_max} + 1, std::int8_t{5}) == 3);
     }
 
-    TEST_CASE("return_value_type_is_type_of_first_argument")
+    TEST_CASE("Тип возвращаемого значения равен типу первого аргумента")
     {
         using first_argument_type = std::uint32_t;
         using second_argument_type = std::int64_t;

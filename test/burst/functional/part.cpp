@@ -75,19 +75,19 @@ namespace // anonymous
 
 TEST_SUITE("part")
 {
-    TEST_CASE("enables_partial_application_of_arbitrary_function_object")
+    TEST_CASE("Производит частичное применение произвольного функционального объекта")
     {
         const auto p = burst::part(std::plus<>{});
         CHECK(p(1, 2) == 3);
     }
 
-    TEST_CASE("partial_application_is_associative")
+    TEST_CASE("Частичное применение ассоциативно")
     {
         const auto l = [] (auto x, auto y, auto z) {return x * y * z;};
         CHECK(burst::part(l, 4, 5)(6) == burst::part(l, 4)(5, 6));
     }
 
-    TEST_CASE("call_for_part_function_does_not_invoke_passed_functional_object")
+    TEST_CASE("Частичное применение не вызывает переданный функциональный объект")
     {
         std::size_t calls = 0;
         burst::part(identity{calls}, 17);
@@ -95,7 +95,7 @@ TEST_SUITE("part")
         CHECK(calls == 0);
     }
 
-    TEST_CASE("for_repetitive_partial_application_one_should_call_part_function_again")
+    TEST_CASE("Для дополнительного частичного применения нужно снова явно вызывать burst::part")
     {
         const auto l = [] (auto x, auto y, auto z) {return x * y * z;};
         const auto one_argument_captured = burst::part(l, 1);
@@ -103,7 +103,7 @@ TEST_SUITE("part")
         CHECK(two_arguments_captured(3) == 6);
     }
 
-    TEST_CASE("partially_applied_objects_are_stored_inside")
+    TEST_CASE("Частично применённые параметры хранятся в созданном функциональном объекте")
     {
         const auto old_instances_count = dummy::instances_count;
 
@@ -113,7 +113,7 @@ TEST_SUITE("part")
         CHECK(dummy::instances_count == old_instances_count + 1);
     }
 
-    TEST_CASE("object_passed_by_reference_wrapper_is_not_stored_inside")
+    TEST_CASE("Объекты, переданные с помощью std::ref, не хранятся внутри")
     {
         auto d = dummy{};
         const auto old_instances_count = dummy::instances_count;
@@ -124,21 +124,23 @@ TEST_SUITE("part")
         CHECK(dummy::instances_count == old_instances_count);
     }
 
-    TEST_CASE("object_passed_by_reference_wrapped_is_neither_moved_nor_copied")
+    TEST_CASE("Объекты, переданные с помощью std::ref, не копируются и не переносятся")
     {
         single s{};
         auto c = burst::part([] (auto &&) {return 1;}, std::cref(s));
         static_cast<void>(c);
     }
 
-    TEST_CASE("passed_object_is_neither_moved_nor_copied_on_invoking")
+    TEST_CASE("Аргументы, переданные созданному функциональному объекту в момент его вызова, "
+        "не копируются и не переносятся")
     {
         auto c = burst::part([] (auto &&, auto &&) {return 1;});
         auto x = c(single{}, single{});
         static_cast<void>(x);
     }
 
-    TEST_CASE("stored_function_invokes_as_const_lvalue_if_part_is_const_lvalue")
+    TEST_CASE("Если созданный функциональный объект вызывается как const lvalue, то хранимый "
+        "функциональный объект вызывается так же")
     {
         auto calls = std::size_t{0};
         const auto p = burst::part(utility::const_lvalue_call_counter(calls));
@@ -148,7 +150,8 @@ TEST_SUITE("part")
         CHECK(calls == 1);
     }
 
-    TEST_CASE("stored_function_invokes_as_lvalue_if_part_is_lvalue")
+    TEST_CASE("Если созданный функциональный объект вызывается как lvalue, то хранимый "
+        "функциональный объект вызывается так же")
     {
         auto calls = std::size_t{0};
         auto part = burst::part(utility::lvalue_call_counter(calls));
@@ -158,7 +161,8 @@ TEST_SUITE("part")
         CHECK(calls == 1);
     }
 
-    TEST_CASE("stored_function_invokes_as_rvalue_if_part_is_rvalue")
+    TEST_CASE("Если созданный функциональный объект вызывается как rvalue, то хранимый "
+        "функциональный объект вызывается так же")
     {
         auto calls = std::size_t{0};
         auto c = utility::rvalue_call_counter(calls);
@@ -168,7 +172,7 @@ TEST_SUITE("part")
         CHECK(calls == 1);
     }
 
-    TEST_CASE("referenced_function_invokes_as_lvalue")
+    TEST_CASE("Функции, переданные с помощью std::ref, вызываются как lvalue")
     {
         auto calls = std::size_t{0};
         auto f = utility::lvalue_call_counter(calls);
@@ -178,7 +182,7 @@ TEST_SUITE("part")
         CHECK(calls == 1);
     }
 
-    TEST_CASE("const_referenced_function_invokes_as_const_lvalue")
+    TEST_CASE("Неизменяемые функции, переданные с помощью std::ref, вызываются как const lvalue")
     {
         auto calls = std::size_t{0};
         const auto f = utility::const_lvalue_call_counter(calls);
@@ -188,13 +192,13 @@ TEST_SUITE("part")
         CHECK(calls == 1);
     }
 
-    TEST_CASE("stored_object_is_never_copied_on_invoking")
+    TEST_CASE("Хранимый функциональный объект никогда не копируется при вызове")
     {
         auto c = burst::part([] (auto &&, auto &&) {return true;}, noncopyable{});
         CHECK(c(noncopyable{}));
     }
 
-    TEST_CASE("is_a_constexpr_function")
+    TEST_CASE("Может быть выполнен на этапе компиляции")
     {
         constexpr auto c = burst::part(std::multiplies<>{}, 4);
         constexpr auto r = c(5);

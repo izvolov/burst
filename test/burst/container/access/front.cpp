@@ -9,19 +9,19 @@
 
 TEST_SUITE("front")
 {
-    TEST_CASE("returns_a_mutable_reference_of_a_mutable_container")
+    TEST_CASE("Возвращает ссылку на элемент контейнера")
     {
         auto v = burst::make_vector({1, 2, 3});
         static_assert(std::is_same<decltype(burst::front(v)), int &>::value, "");
     }
 
-    TEST_CASE("returns_a_const_reference_of_a_const_container")
+    TEST_CASE("Возвращает неизменяемую ссылку на элемент неизменяемого контейнера")
     {
         const auto v = burst::make_vector({1, 2, 3});
         static_assert(std::is_same<decltype(burst::front(v)), const int &>::value, "");
     }
 
-    TEST_CASE("returns_exactly_container_front")
+    TEST_CASE("Возвращает ни что иное, как первый элемент контейнера")
     {
         auto v = burst::make_vector({1, 2, 3});
         CHECK(std::addressof(burst::front(v)) == std::addressof(v.front()));
@@ -30,19 +30,19 @@ TEST_SUITE("front")
         CHECK(v.front() == 7);
     }
 
-    TEST_CASE("returns_a_mutable_reference_of_a_mutable_array")
+    TEST_CASE("Возвращает ссылку на элемент массива")
     {
         std::string strings[] = {"123", "456", "789"};
         static_assert(std::is_same<decltype(burst::front(strings)), std::string &>::value, "");
     }
 
-    TEST_CASE("returns_a_const_reference_of_a_const_array")
+    TEST_CASE("Возвращает неизменяемую ссылку на элемент неизменяемого массива")
     {
         const std::string strings[] = {"123", "456", "789"};
         static_assert(std::is_same<decltype(burst::front(strings)), const std::string &>::value, "");
     }
 
-    TEST_CASE("returns_exactly_first_array_element")
+    TEST_CASE("Адресует ни что иное, как первый элемент массива")
     {
         char array[] = {'a', 'b', 'c'};
         CHECK(std::addressof(burst::front(array)) == array);
@@ -51,7 +51,7 @@ TEST_SUITE("front")
         CHECK(array[0] == 'q');
     }
 
-    TEST_CASE("is_a_functional_object")
+    TEST_CASE("Является функциональным объектом")
     {
         const auto v = burst::make_vector({1, 2, 3});
         const auto f = burst::front;

@@ -6,7 +6,7 @@
 
 TEST_SUITE("owned_as_range")
 {
-    TEST_CASE("acts_just_like_own_as_range_function")
+    TEST_CASE("Делает ровно то же самое, что и функция burst::own_as_range")
     {
         const auto owned_as_range = burst::make_forward_list({'a', 'b', 'c'}) | burst::owned_as_range;
 

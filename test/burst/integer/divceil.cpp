@@ -9,13 +9,13 @@
 
 TEST_SUITE("divceil")
 {
-    TEST_CASE("returns_ceiled_integral_part_of_division")
+    TEST_CASE("Возвращает результат деления, округлённый вверх до ближайшего целого")
     {
         CHECK(burst::divceil(13, 5) == 3);
         CHECK(burst::divceil(12u, 5u) == 3u);
     }
 
-    TEST_CASE("negative_numbers_rounds_toward_zero")
+    TEST_CASE("Отрицательные числа округляются в сторону нуля")
     {
         CHECK(burst::divceil(-4, 3) == -1);
         CHECK(burst::divceil(-3, 3) == -1);
@@ -23,48 +23,49 @@ TEST_SUITE("divceil")
         CHECK(burst::divceil(-1, 3) == 0);
     }
 
-    TEST_CASE("divceil_of_a_multiple_is_equal_to_the_result_of_an_integral_division")
+    TEST_CASE("Функция burst::divceil для кратных чисел эквивалентна целочисленному делению")
     {
         CHECK(burst::divceil(36u, 6) == 6);
         CHECK(burst::divceil(25, 5) == 5);
         CHECK(burst::divceil(-16, 4u) == -4);
     }
 
-    TEST_CASE("divceil_of_0_is_always_0")
+    TEST_CASE("Результат деления нуля — ноль")
     {
         CHECK(burst::divceil(0, 1) == 0);
         CHECK(burst::divceil(0u, 100500) == 0);
     }
 
-    TEST_CASE("undefined_on_non_positive_divisor")
+    TEST_CASE("Неопределена при неположительном делителе")
     {
         CHECK_THROWS_AS(burst::divceil(10u, 0ul), std::domain_error);
         CHECK_THROWS_AS(burst::divceil(10ul, -1), std::domain_error);
     }
 
-    TEST_CASE("divceil_of_a_number_by_1_is_the_same_number")
+    TEST_CASE("Деление на единицу равно исходному делимому")
     {
         CHECK(burst::divceil(15, 1) == 15);
         CHECK(burst::divceil(-3, 1) == -3);
     }
 
-    TEST_CASE("division_by_greater_in_magnitude_divisor_is_one_for_positive_dividend")
+    TEST_CASE("Если делимое положительно, а делитель превышает делимое, то разультат равен единице")
     {
         CHECK(burst::divceil(5, 6) == 1);
     }
 
-    TEST_CASE("division_by_greater_in_magnitude_divisor_is_zero_for_non_positive_dividend")
+    TEST_CASE("Если делимое отрицательно, а делитель превышает делимое по модулю, то результат "
+        "равен нулю")
     {
         CHECK(burst::divceil(-5, 6) == 0);
     }
 
-    TEST_CASE("is_a_constexpr_function")
+    TEST_CASE("Может быть вычислена на этапе компиляции")
     {
         constexpr auto x = burst::divceil(21ul, 2ul);
         CHECK(x == 11);
     }
 
-    TEST_CASE("does_not_overflow")
+    TEST_CASE("Никогда не переполняется")
     {
         constexpr auto int32_max = std::numeric_limits<std::int32_t>::max();
         constexpr auto int32_min = std::numeric_limits<std::int32_t>::min();
@@ -81,7 +82,7 @@ TEST_SUITE("divceil")
         CHECK(burst::divceil(int32_min, uint32_max) == 0);
     }
 
-    TEST_CASE("accepts_different_argument_types")
+    TEST_CASE("Допускает разные типы делимого и делителя")
     {
         constexpr auto int32_max = std::numeric_limits<std::int32_t>::max();
         CHECK(burst::divceil(int32_max - 1, std::uint64_t{int32_max}) == 1);
@@ -98,7 +99,7 @@ TEST_SUITE("divceil")
         CHECK(burst::divceil(std::uint16_t{5}, std::int16_t{25}) == 1);
     }
 
-    TEST_CASE("return_value_type_is_type_of_first_argument")
+    TEST_CASE("Тип возвращаемого значения равен типу первого аргумента, то есть делимого")
     {
         using first_result_type = decltype(burst::divceil(std::uint32_t{2}, std::int64_t{5}));
         CHECK(std::is_same<first_result_type, std::uint32_t>::value);

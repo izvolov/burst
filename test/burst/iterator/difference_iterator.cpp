@@ -10,7 +10,8 @@
 
 TEST_SUITE("difference_iterator")
 {
-    TEST_CASE("difference_iterator_end_is_created_using_special_tag")
+    TEST_CASE("Конец итератора разности создаётся из его начала с помощью специальной "
+        "метки-индикатора")
     {
         const auto minuend = {1, 2, 2, 3};
         const auto subtrahend = {0, 2, 2, 4};
@@ -22,7 +23,7 @@ TEST_SUITE("difference_iterator")
         CHECK(boost::make_iterator_range(difference_begin, difference_end) == expected_collection);
     }
 
-    TEST_CASE("difference_iterator_accepts_forward_iterator")
+    TEST_CASE("Допускает однонаправленный итератор")
     {
         const auto minuend = burst::make_forward_list({3, 5, 7});
         const auto subtrahend = burst::make_forward_list({1, 2, 3});
@@ -34,7 +35,7 @@ TEST_SUITE("difference_iterator")
         CHECK(boost::make_iterator_range(difference_begin, difference_end) == expected_collection);
     }
 
-    TEST_CASE("accepts_ranges_by_rvalue")
+    TEST_CASE("Может принимать диапазоны по rvalue")
     {
         const auto minuend = burst::make_forward_list({3, 5, 7});
         const auto subtrahend = burst::make_forward_list({1, 2, 3});

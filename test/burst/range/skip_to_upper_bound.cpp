@@ -10,7 +10,7 @@
 
 TEST_SUITE("skip_to_upper_bound")
 {
-    TEST_CASE("skipping_by_value_in_empty_range_results_empty_range")
+    TEST_CASE("Пропуск в пустом диапазоне оставляет диапазон пустым")
     {
         std::vector<int> empty_container;
         auto empty_range = boost::make_iterator_range(empty_container);
@@ -20,7 +20,8 @@ TEST_SUITE("skip_to_upper_bound")
         CHECK(empty_range.empty());
     }
 
-    TEST_CASE("skipping_by_existing_value_makes_range_begin_after_last_occurence_of_the_value")
+    TEST_CASE("Пропуск до значения в упорядоченном диапазоне, содержащем это значение, продвигает "
+        "начало диапазона на следующую позицию после последнего вхождения заданного значения")
     {
         auto values = burst::make_vector({1, 5, 5, 7});
         auto sorted_range = boost::make_iterator_range(values);
@@ -30,7 +31,7 @@ TEST_SUITE("skip_to_upper_bound")
         CHECK(sorted_range == boost::make_iterator_range(values).advance_begin(3));
     }
 
-    TEST_CASE("skipping_by_value_greater_than_all_values_in_range_makes_range_empty")
+    TEST_CASE("Пропуск до значения, превышающего все элементы диапазона, оставляет диапазон пустым")
     {
         auto values = {1, 2, 3};
         auto sorted_range = boost::make_iterator_range(values);
@@ -40,7 +41,7 @@ TEST_SUITE("skip_to_upper_bound")
         CHECK(sorted_range.empty());
     }
 
-    TEST_CASE("skipping_by_value_less_than_all_elements_in_range_does_not_modify_range")
+    TEST_CASE("Пропуск до значения, меньшего чем все элементы диапазона, не изменяет диапазон")
     {
         auto values = {3, 2, 1};
         auto sorted_range = boost::make_iterator_range(values);
@@ -51,7 +52,8 @@ TEST_SUITE("skip_to_upper_bound")
         CHECK(sorted_range == sorted_range_copy);
     }
 
-    TEST_CASE("skipping_by_value_absent_in_sorted_range_makes_range_begin_at_first_value_greater_than_desired")
+    TEST_CASE("Пропуск до значения, отсутствующего в диапазоне, продвигает начало диапазона на "
+        "первый из его элементов, который строго больше заданного значения")
     {
         std::vector<double> values{3.14, 2.71, 1.6};
         auto sorted_range = boost::make_iterator_range(values);

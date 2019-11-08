@@ -24,31 +24,34 @@ namespace burst
 
 TEST_SUITE("k_ary_search")
 {
-    TEST_CASE("k_ary_search_set_initialized_with_default_constructor_is_empty")
+    TEST_CASE("k-местное дерево, проинициализированное конструктором по умолчанию, пусто")
     {
         burst::k_ary_search_set<std::string> set;
         CHECK(set.empty());
     }
 
-    TEST_CASE("size_of_k_ary_search_set_initialized_with_default_constructor_is_zero")
+    TEST_CASE("Размер k-местного дерева, проинициализированного конструктором по умолчанию, "
+        "равен нулю")
     {
         burst::k_ary_search_set<std::string> set;
         CHECK(set.size() == 0);
     }
 
-    TEST_CASE("begin_of_k_ary_search_set_initialized_with_default_constructor_is_equal_to_end")
+    TEST_CASE("Начало k-местного дерева, проинициализированного конструктором по умолчанию, "
+        "равно его началу")
     {
         burst::k_ary_search_set<std::string> set;
         CHECK(set.begin() == set.end());
     }
 
-    TEST_CASE("nothing_to_find_in_k_ary_search_set_initialized_with_default_constructor")
+    TEST_CASE("В k-местном дереве, проинициализированном конструктором по умолчанию, "
+        "ничего нельзя найти")
     {
         burst::k_ary_search_set<std::string> set;
         CHECK(set.find("qwerty") == set.end());
     }
 
-    TEST_CASE("k_ary_search_set_is_empty_when_initialized_from_empty_range")
+    TEST_CASE("k-местное дерево, проинициализированное пустым диапазоном, пусто")
     {
         std::vector<int> nothing;
 
@@ -57,7 +60,7 @@ TEST_SUITE("k_ary_search")
         CHECK(set.empty());
     }
 
-    TEST_CASE("size_of_k_ary_search_set_initialized_from_empty_range_is_zero")
+    TEST_CASE("Размер k-местного дерева, проинициализированного пустым диапазоном, равен нулю")
     {
         std::vector<int> nothing;
 
@@ -66,7 +69,9 @@ TEST_SUITE("k_ary_search")
         CHECK(set.size() == 0);
     }
 
-    TEST_CASE("k_ary_search_set_size_is_equal_to_size_of_range_it_is_initialized_from")
+    TEST_CASE("Размер k-местного дерева равен количеству элементов диапазона, из которых оно "
+        "проиницилизировано, в случае, если известно, что в этом диапазоне нет повторяющихся "
+        "элементов")
     {
         auto something = burst::make_vector({1, 2, 3, 4});
 
@@ -75,7 +80,9 @@ TEST_SUITE("k_ary_search")
         CHECK(set.size() == something.size());
     }
 
-    TEST_CASE("k_ary_search_set_is_initialized_properly_when_it_is_perfect_ternary_tree")
+    TEST_CASE("k-местное дерево поиска представляет собой совершенное дерево при количестве "
+        "элементов, равном `(k - 1) * sum_{i = 1}^{n}(k ^ (i - 1))`, где `n` — глубина "
+        "дерева")
     {
         auto numbers = burst::make_vector({0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12});
 
@@ -85,7 +92,8 @@ TEST_SUITE("k_ary_search")
         CHECK(set == expected);
     }
 
-    TEST_CASE("k_ary_search_set_is_initialized_properly_when_it_is_complete_ternary_tree")
+    TEST_CASE("k-местное дерево поиска представляет собой завершённое (complete) дерево в случае, "
+        "если элементов недостаточно для того, чтобы оно было совершенным")
     {
         burst::k_ary_search_set<int> set(burst::container::unique_ordered_tag, {0, 1, 2, 3, 4, 5, 6, 7}, 3);
 
@@ -93,7 +101,7 @@ TEST_SUITE("k_ary_search")
         CHECK(set == expected);
     }
 
-    TEST_CASE("k_ary_search_set_is_initialized_properly_when_arity_is_greater_than_its_size")
+    TEST_CASE("Местность дерева может быть больше его размера")
     {
         auto numbers = burst::make_vector({0, 1, 2, 3, 4, 5, 6, 7});
 
@@ -102,7 +110,7 @@ TEST_SUITE("k_ary_search")
         CHECK(set == numbers);
     }
 
-    TEST_CASE("nothing_is_found_when_searching_empty_range")
+    TEST_CASE("В k-местном дереве, проинициализированном пустым диапазоном, нельзя ничего найти")
     {
         std::vector<int> nothing;
 
@@ -111,14 +119,14 @@ TEST_SUITE("k_ary_search")
         CHECK(set.find(26) == set.end());
     }
 
-    TEST_CASE("searching_absent_value_results_end_iterator")
+    TEST_CASE("Поиск заведомо несуществующего элемента возвращает итератор на конец")
     {
         burst::k_ary_search_set<int> set({3, 4, 6, 1, 7, 8, 2}, 2);
 
         CHECK(set.find(26) == set.end());
     }
 
-    TEST_CASE("searching_existing_value_results_non_end_iterator")
+    TEST_CASE("Поиск заведомо существующего значения возвращает итератор не на конец")
     {
         auto numbers = burst::make_vector({3, 4, 6, 1, 7, 8, 2});
 
@@ -127,7 +135,7 @@ TEST_SUITE("k_ary_search")
         CHECK(set.find(8) != set.end());
     }
 
-    TEST_CASE("searching_existing_value_results_iterator_pointing_to_that_value")
+    TEST_CASE("Поиск заведомо существующего значения возвращает итератор на искомое значение")
     {
         auto numbers = burst::make_vector({3, 4, 6, 1, 7, 8, 2});
 
@@ -136,7 +144,7 @@ TEST_SUITE("k_ary_search")
         CHECK(*set.find(3) == 3);
     }
 
-    TEST_CASE("no_logarithm_rounding_error")
+    TEST_CASE("Нет ошибки округления при логарифмировании")
     {
         std::vector<int> numbers(1000);
         std::iota(numbers.rbegin(), numbers.rend(), 0);
@@ -146,13 +154,13 @@ TEST_SUITE("k_ary_search")
         CHECK(*set.find(50) == 50);
     }
 
-    TEST_CASE("const_find_method_exists")
+    TEST_CASE("У метода find() есть константный вариант")
     {
         const burst::k_ary_search_set<int> set;
         CHECK(set.find(8) == set.end());
     }
 
-    TEST_CASE("mutable_find_method_exists")
+    TEST_CASE("У метода find() есть неконстантный вариант")
     {
         burst::k_ary_search_set<int> set;
         burst::k_ary_search_set<int> & set_ref = set;

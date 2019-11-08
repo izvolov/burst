@@ -14,7 +14,7 @@
 
 TEST_SUITE("counting_sort")
 {
-    TEST_CASE("sorting_already_sorted_range_results_the_same_range")
+    TEST_CASE("Сортировка отсортированного диапазона не изменяет его")
     {
         std::vector<std::uint8_t> values{0, 1, 2, 3, 4};
 
@@ -24,7 +24,7 @@ TEST_SUITE("counting_sort")
         CHECK(std::is_sorted(sorted_values.begin(), sorted_values.end()));
     }
 
-    TEST_CASE("sorting_descending_range_results_ascending_range")
+    TEST_CASE("Результат сортировки убывающего диапазона — возрастающий диапазон")
     {
         std::vector<std::size_t> values{0x0104, 0x0203, 0x0302, 0x0401};
 
@@ -39,7 +39,7 @@ TEST_SUITE("counting_sort")
         CHECK(sorted_values == expected);
     }
 
-    TEST_CASE("can_sort_bitwise")
+    TEST_CASE("Умеет сортировать побитово")
     {
         std::vector<std::uint8_t> numbers{0, 5, 3, 7, 1, 2, 4, 6};
 
@@ -55,7 +55,7 @@ TEST_SUITE("counting_sort")
         CHECK(sorted_numbers == even_goes_first);
     }
 
-    TEST_CASE("sorting_chaotic_range_results_sorted_range")
+    TEST_CASE("Сортировка хаоса приводит к порядку")
     {
         std::vector<std::uint8_t> values{0x12, 0xfd, 0x00, 0x15, 0x66};
 
@@ -66,7 +66,7 @@ TEST_SUITE("counting_sort")
         CHECK(sorted_values == expected);
     }
 
-    TEST_CASE("negative_values_are_sorted_correctly")
+    TEST_CASE("Отрицательные значения предшествуют неотрицательным в результате сортировки")
     {
         std::vector<std::int8_t> values{0, -1, 1, -2, 2};
 
@@ -77,7 +77,7 @@ TEST_SUITE("counting_sort")
         CHECK(sorted_values == expected);
     }
 
-    TEST_CASE("extreme_values_are_sorted_properly")
+    TEST_CASE("Экстремальные значения элементов сортируются корректно")
     {
         std::vector<std::int8_t> values
         {
@@ -98,7 +98,7 @@ TEST_SUITE("counting_sort")
         CHECK(sorted_values == expected);
     }
 
-    TEST_CASE("sorting_algorithm_is_stable")
+    TEST_CASE("Алгоритм сортировки устойчив")
     {
         std::vector<std::uint32_t> values
         {
@@ -129,7 +129,8 @@ TEST_SUITE("counting_sort")
         CHECK(sorted_values == expected);
     }
 
-    TEST_CASE("returns_iterator_past_the_end_of_the_sorted_range")
+    TEST_CASE("Возвращает итератор после последнего отсортированного элемента в результирующем "
+        "диапазоне")
     {
         std::vector<std::uint8_t> initial{5, 4, 3, 2, 1};
 
@@ -139,7 +140,7 @@ TEST_SUITE("counting_sort")
         CHECK(sorted_end == sorted.begin() + std::distance(initial.begin(), initial.end()));
     }
 
-    TEST_CASE("initial_range_does_not_change")
+    TEST_CASE("Исходный диапазон не изменяется")
     {
         std::vector<std::uint8_t> numbers{5, 4, 3, 2, 1};
         const auto numbers_copy = numbers;
@@ -150,7 +151,7 @@ TEST_SUITE("counting_sort")
         CHECK(numbers == numbers_copy);
     }
 
-    TEST_CASE("can_sort_noncopyable_objects")
+    TEST_CASE("Может сортировать некопируемые элементы")
     {
         std::vector<std::unique_ptr<std::int8_t>> unsorted;
         unsorted.emplace_back(std::make_unique<std::int8_t>(3));
@@ -176,7 +177,7 @@ TEST_SUITE("counting_sort")
         );
     }
 
-    TEST_CASE("forward_iterator_is_enough")
+    TEST_CASE("Для сортировки достаточно однонаправленного итератора")
     {
         auto unsorted = std::vector<std::int8_t>{4, 3, 2, 1};
         auto forward_list = std::forward_list<std::int8_t>(unsorted.begin(), unsorted.end());
@@ -188,7 +189,7 @@ TEST_SUITE("counting_sort")
         CHECK(sorted == expected);
     }
 
-    TEST_CASE("works_with_ranges")
+    TEST_CASE("Допускает диапазоны на вход")
     {
         std::vector<std::uint8_t> values{5, 4, 3, 2, 1};
 

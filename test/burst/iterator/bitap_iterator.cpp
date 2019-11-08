@@ -8,7 +8,7 @@
 
 TEST_SUITE("bitap_iterator")
 {
-    TEST_CASE("copied_iterator_is_independent")
+    TEST_CASE("Копия итератора — самостоятельный итератор, и не зависит от оригинала")
     {
         const std::string pattern("два");
         const std::string text("дваждыдвачетыре");

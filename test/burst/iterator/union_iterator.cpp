@@ -10,7 +10,8 @@
 
 TEST_SUITE("union_iterator")
 {
-    TEST_CASE("union_iterator_end_is_created_using_special_tag")
+    TEST_CASE("Конец итератора объединения создаётся из его начала с помощью специальной "
+        "метки-индикатора")
     {
         auto  first = {1, 2, 2, 3};
         auto second = {0, 2, 2, 4};
@@ -23,7 +24,7 @@ TEST_SUITE("union_iterator")
         CHECK(boost::make_iterator_range(union_begin, union_end) == expected_collection);
     }
 
-    TEST_CASE("union_iterator_accepts_forward_iterator")
+    TEST_CASE("Допускает однонаправленные диапазоны")
     {
         std::forward_list<double> forward_range{1.6, 2.71, 3.14};
         auto ranges = burst::make_range_vector(forward_range);

@@ -12,7 +12,7 @@
 
 TEST_SUITE("binary_stream_iterators")
 {
-    TEST_CASE("trivial_objects_are_written_and_read_by_default_io_functions")
+    TEST_CASE("Тривиальные объекты записываются и читаются функциями ввода-вывода по умолчанию")
     {
         std::vector<int> initial{1, 2, 3};
         static_assert(std::is_trivial<decltype(initial)::value_type>::value, "");
@@ -27,7 +27,7 @@ TEST_SUITE("binary_stream_iterators")
         CHECK(result == initial);
     }
 
-    TEST_CASE("input_from_empty_stream_is_void")
+    TEST_CASE("Чтение из пустого потока — пустота")
     {
         std::stringstream empty_stream;
         std::vector<double> result;
@@ -36,7 +36,7 @@ TEST_SUITE("binary_stream_iterators")
         CHECK(result.empty());
     }
 
-    TEST_CASE("non_trivial_objects_must_provide_custom_io_functions")
+    TEST_CASE("К нетривиальным объектам должны быть предоставлены свои функции ввода-вывода")
     {
         std::vector<std::string> names{"Вася Пупкин", "Доздраперма Кузьминишна"};
         static_assert(not std::is_trivial<decltype(names)::value_type>::value, "");

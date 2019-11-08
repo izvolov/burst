@@ -12,7 +12,7 @@
 
 TEST_SUITE("semiintersect")
 {
-    TEST_CASE("semiintersecting_empty_ranges_results_empty_range")
+    TEST_CASE("Полупересечение пустых диапазонов — пустой диапазон")
     {
         std::vector<int> first;
         std::vector<int> second;
@@ -23,7 +23,8 @@ TEST_SUITE("semiintersect")
         CHECK(semiintersection.empty());
     }
 
-    TEST_CASE("semiintersection_of_min_items_larger_than_range_count_is_empty")
+    TEST_CASE("Полупересечение с параметром, большим чем количество входных диапазонов — "
+        "пустой диапазон")
     {
         auto  first = burst::make_vector({1, 2, 3, 4});
         auto second = burst::make_vector({1, 2, 3, 4});
@@ -34,7 +35,7 @@ TEST_SUITE("semiintersect")
         CHECK(semiintersection.empty());
     }
 
-    TEST_CASE("semiintersecting_one_range_results_the_same_range")
+    TEST_CASE("Полупересечение одного диапазона - сам этот диапазон")
     {
         auto only = boost::irange(1, 5);
         auto ranges = burst::make_range_vector(only);
@@ -43,7 +44,8 @@ TEST_SUITE("semiintersect")
         CHECK(semiintersection == boost::irange(1, 5));
     }
 
-    TEST_CASE("semiintersecting_several_equal_ranges_with_any_min_items_results_range_equal_to_any_of_them")
+    TEST_CASE("Полупересечение нескольких одинаковых диапазонов с параметром от единицы до "
+        "количества входных диапазонов равно каждому из этих входных диапазонов")
     {
         auto first = {4, 4, 5, 6, 6, 7};
         auto second = first;
@@ -71,7 +73,7 @@ TEST_SUITE("semiintersect")
         }
     }
 
-    TEST_CASE("semiintersecting_two_nested_ranges_with_two_min_items_results_shortest_of_them")
+    TEST_CASE("Полупересечение двух вложенных диапазонов с параметром 2 равно кратчайшему из них")
     {
         std::string  long_range("abcdef");
         std::string short_range(  "cde" );
@@ -83,7 +85,7 @@ TEST_SUITE("semiintersect")
         CHECK(semiintersection == short_range);
     }
 
-    TEST_CASE("semiintersecting_two_nested_ranges_with_one_min_item_results_longest_of_them")
+    TEST_CASE("Полупересечение двух вложенных диапазонов с параметром 1 равно длиннейшему из них")
     {
         std::string short_range(   "cde" );
         std::string  long_range("aabcdef");
@@ -95,7 +97,7 @@ TEST_SUITE("semiintersect")
         CHECK(semiintersection == long_range);
     }
 
-    TEST_CASE("semiintersecting_saw_toothed_ranges_with_two_min_items_results_empty_range")
+    TEST_CASE("Полупересечение пилообразно дополняющих друг друга диапазонов с параметром 2 пусто")
     {
         std::list<char>  first{'h',      'f',      'd',      'b'     };
         std::list<char> second{     'g',      'e',      'c',      'a'};
@@ -106,7 +108,8 @@ TEST_SUITE("semiintersect")
         CHECK(semiintersection.empty());
     }
 
-    TEST_CASE("semiintersecting_saw_toothed_ranges_with_one_min_item_results_union")
+    TEST_CASE("Полупересечение пилообразно дополняющих друг друга диапазонов с параметром 1 "
+        "эквивалентно их объединению")
     {
         std::list<char>  first{'h',      'f',      'd',      'b'     };
         std::list<char> second{     'g',      'e',      'c',      'a'};
@@ -118,7 +121,7 @@ TEST_SUITE("semiintersect")
         CHECK(semiintersection == std::string("hgfedcba"));
     }
 
-    TEST_CASE("semiintersection_supports_custom_ordering")
+    TEST_CASE("Допускает пользовательскую функцию для сравнения элементов")
     {
         auto  first = {   3, 3, 2, 1};
         auto second = {4, 3,    2   };
@@ -131,7 +134,8 @@ TEST_SUITE("semiintersect")
         CHECK(semiintersection == expected_collection);
     }
 
-    TEST_CASE("semiintersecting_overlaying_ranges_with_one_min_item_results_whole_range")
+    TEST_CASE("Полупересечение накладывающихся диапазонов с параметром 1 эквивалентно их "
+        "объединению")
     {
         auto  first = {1, 2         };
         auto second = {   2, 3, 3   };
@@ -145,7 +149,8 @@ TEST_SUITE("semiintersect")
         CHECK(semiintersection == expected);
     }
 
-    TEST_CASE("semiintersecting_overlaying_ranges_with_greater_than_one_min_item_results_overlaying_part")
+    TEST_CASE("Полупересечение накладывающихся диапазонов с параметром 2 состоит из элементов, "
+        "попадающих в наложение")
     {
         auto  first = {1, 2      };
         auto second = {   2, 3   };
@@ -159,7 +164,8 @@ TEST_SUITE("semiintersect")
         CHECK(semiintersection == expected);
     }
 
-    TEST_CASE("semiintersection_of_several_consecutive_sorted_ranges_with_several_min_items_is_empty")
+    TEST_CASE("Полупересечение нескольких последовательных диапазонов с параметром больше единицы "
+        "пусто")
     {
         auto  first = {1, 2, 3                  };
         auto second = {         4, 5, 6         };
@@ -171,7 +177,8 @@ TEST_SUITE("semiintersect")
         CHECK(semiintersection.empty());
     }
 
-    TEST_CASE("semiintersection_of_several_consecutive_sorted_ranges_with_one_min_item_is_consecutive_range")
+    TEST_CASE("Полупересечение нескольких последовательных диапазонов с параметром, равным "
+        "единице, эквивалентно их слиянию")
     {
         auto  first = {1, 2, 3                  };
         auto second = {         4, 5, 6         };
@@ -185,7 +192,7 @@ TEST_SUITE("semiintersect")
         CHECK(semiintersection == expected);
     }
 
-    TEST_CASE("repeating_elements_do_not_produce_excess_matches")
+    TEST_CASE("Повторяющиеся элементы не порождают излишних совпадений")
     {
         auto  first = {1, 1, 1};
         auto second = {1, 1, 1};
@@ -199,7 +206,7 @@ TEST_SUITE("semiintersect")
         CHECK(semiintersection == first);
     }
 
-    TEST_CASE("ranges_are_considered_multisets")
+    TEST_CASE("Работает с диапазонами как с мультимножествами")
     {
         auto  first = {0, 0, 1,       2};
         auto second = {0,    1, 1      };

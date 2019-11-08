@@ -12,7 +12,7 @@
 
 TEST_SUITE("take_n")
 {
-    TEST_CASE("takes_exactly_specified_number_of_elements")
+    TEST_CASE("Откусывает ровно заданное количество элементов")
     {
         const auto items = burst::make_forward_list({1, 2, 3, 4});
 
@@ -25,7 +25,7 @@ TEST_SUITE("take_n")
         CHECK(taken == expected);
     }
 
-    TEST_CASE("pokerface_taking_too_many_elements")
+    TEST_CASE("Не отслеживает выход за пределы исходного диапазона")
     {
         const auto items = burst::make_vector({'a', 'b', 'c', 'd'});
 
@@ -35,7 +35,8 @@ TEST_SUITE("take_n")
         CHECK(std::distance(taken.begin(), taken.end()) == items_to_take);
     }
 
-    TEST_CASE("taken_elements_of_mutable_range_can_be_modified")
+    TEST_CASE("Результирующий диапазон ссылается на исходные диапазоны, так что изменение "
+        "элементов результирующего диапазона влечёт изменение соответствующих элементов исходного")
     {
         auto items = burst::make_forward_list({1, 2, 3, 4});
 
@@ -50,7 +51,8 @@ TEST_SUITE("take_n")
         CHECK(items == burst::make_forward_list({10, 20, 30, 4}));
     }
 
-    TEST_CASE("taking_random_access_range_produces_random_access_range")
+    TEST_CASE("Откусывание от диапазона произвольного доступа порождает диапазон произвольного "
+        "доступа")
     {
         const int items[] = {1, 2, 3};
 

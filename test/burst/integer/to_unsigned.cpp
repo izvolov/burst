@@ -9,7 +9,8 @@
 
 TEST_SUITE("to_unsigned")
 {
-    TEST_CASE_TEMPLATE("shifts_domain_of_a_signed_integral_to_unsigned", signed_integer_type,
+    TEST_CASE_TEMPLATE("Сдвигает область знакового целого так, чтобы она совпадала с областью "
+        "равного по размеру беззнакового целого", signed_integer_type,
         char, signed char, short, int, long, long long)
     {
         using unsigned_integer_type = std::make_unsigned_t<signed_integer_type>;
@@ -30,7 +31,7 @@ TEST_SUITE("to_unsigned")
         );
     }
 
-    TEST_CASE_TEMPLATE("unsigned_values_remain_untouched", unsigned_integer_type,
+    TEST_CASE_TEMPLATE("Беззнаковые целые оставляются без изменений", unsigned_integer_type,
         unsigned char, unsigned short, unsigned, unsigned long, unsigned long long)
     {
         CHECK
@@ -55,7 +56,7 @@ TEST_SUITE("to_unsigned")
         );
     }
 
-    TEST_CASE("is_a_constexpr_function")
+    TEST_CASE("Может быть вычислена на этапе компиляции")
     {
         constexpr auto r = burst::to_unsigned(-1);
         static_assert(r == std::numeric_limits<unsigned>::max () / 2, "");

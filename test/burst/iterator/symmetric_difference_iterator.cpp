@@ -9,7 +9,8 @@
 
 TEST_SUITE("symmetric_difference_iterator")
 {
-    TEST_CASE("symmetric_difference_iterator_end_is_created_using_special_tag")
+    TEST_CASE("Конец итератора симметрической разности создаётся из его начала с помощью "
+        "специальной метки-индикатора")
     {
         const auto  first = {   1, 2, 3   };
         const auto second = {0,    2,    4};
@@ -28,7 +29,7 @@ TEST_SUITE("symmetric_difference_iterator")
         CHECK(symmetric_difference == expected_collection);
     }
 
-    TEST_CASE("symmetric_difference_is_destructive_to_inner_ranges")
+    TEST_CASE("Симметрическая разность деструктивна по отношению к внутренним диапазонам")
     {
         const auto  first = {1, 2, 3, 4         };
         const auto second = {      3, 4, 5, 6   };

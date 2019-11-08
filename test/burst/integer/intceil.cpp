@@ -9,25 +9,26 @@
 
 TEST_SUITE("intceil")
 {
-    TEST_CASE("returns_first_number_not_less_than_initial_which_is_a_multiple_of_factor")
+    TEST_CASE("Возвращает наименьшее число, которое не меньше первого аргумента, "
+        "и при этом кратно второму аргументу")
     {
         CHECK(burst::intceil(13, 5) == 15);
         CHECK(burst::intceil(12u, 5u) == 15u);
     }
 
-    TEST_CASE("intceil_of_number_which_is_already_a_multiple_of_factor_is_itself")
+    TEST_CASE("Возвращает само число, если оно изначально кратно второму аргументу")
     {
         CHECK(burst::intceil(36u, 6) == 36);
         CHECK(burst::intceil(25, 5) == 25);
     }
 
-    TEST_CASE("intceil_of_0_is_always_0")
+    TEST_CASE("burst::intceil от нуля — ноль")
     {
         CHECK(burst::intceil(0, 1) == 0);
         CHECK(burst::intceil(0, 100500) == 0);
     }
 
-    TEST_CASE("negative_numbers_rounds_toward_zero")
+    TEST_CASE("Отрицательные числа округляются в сторону нуля")
     {
         CHECK(burst::intceil(-4, 3) == -3);
         CHECK(burst::intceil(-3, 3) == -3);
@@ -35,31 +36,31 @@ TEST_SUITE("intceil")
         CHECK(burst::intceil(-1, 3) == 0);
     }
 
-    TEST_CASE("intceil_of_a_number_by_1_is_the_same_number")
+    TEST_CASE("burst::intceil числа по показателю 1 — само это число")
     {
         CHECK(burst::intceil(15, 1) == 15);
         CHECK(burst::intceil(-3, 1) == -3);
     }
 
-    TEST_CASE("throws_on_non_positive_factor")
+    TEST_CASE("Порождает исключение на неположительном показателе")
     {
         CHECK_THROWS_AS(burst::intceil(10u, 0ul), std::domain_error);
         CHECK_THROWS_AS(burst::intceil(10ul, -1), std::domain_error);
     }
 
-    TEST_CASE("is_a_constexpr_function")
+    TEST_CASE("Может быть вычислена на этапе компиляции")
     {
         constexpr auto x = burst::intceil(21ul, 2ul);
         CHECK(x == 22);
     }
 
-    TEST_CASE("accepts_different_argument_types")
+    TEST_CASE("Допускает разные типы первого и второго аргументов")
     {
         constexpr auto int32_max = std::numeric_limits<std::int32_t>::max();
         CHECK(burst::intceil(int32_max - 1, std::uint64_t{int32_max}) == int32_max);
     }
 
-    TEST_CASE("return_value_type_is_type_of_first_argument")
+    TEST_CASE("Тип возвращаемого значения равен типу первого аргумента")
     {
         using first_argument_type = std::uint32_t;
         using second_argument_type = std::int64_t;

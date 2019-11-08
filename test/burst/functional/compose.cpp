@@ -42,21 +42,21 @@ namespace // anonymous
 
 TEST_SUITE("compose")
 {
-    TEST_CASE("creates_a_composition_of_two_functions")
+    TEST_CASE("Создаёт композицию двух функций")
     {
         auto c = burst::compose(burst::apply(std::plus<>{}), burst::view<0, 1>);
         auto r = c(std::make_tuple(1, 2));
         CHECK(r == 3);
     }
 
-    TEST_CASE("has_a_pipe_alias")
+    TEST_CASE("Имеет псевдоним в виде оператора конвейера (вертикальная палка)")
     {
         auto c = burst::view<0, 1> | burst::apply(std::plus<>{});
         auto r = c(std::make_tuple(1, 2));
         CHECK(r == 3);
     }
 
-    TEST_CASE("passed_left_function_is_stored_inside")
+    TEST_CASE("Переданная левая функция хранится в созданном функциональном объекте")
     {
         const auto old_instances_count = dummy::instances_count;
 
@@ -66,7 +66,7 @@ TEST_SUITE("compose")
         CHECK(dummy::instances_count == old_instances_count + 1);
     }
 
-    TEST_CASE("passed_right_function_is_stored_inside")
+    TEST_CASE("Переданная правая функция хранится в созданном функциональном объекте")
     {
         const auto old_instances_count = dummy::instances_count;
 
@@ -76,7 +76,7 @@ TEST_SUITE("compose")
         CHECK(dummy::instances_count == old_instances_count + 1);
     }
 
-    TEST_CASE("functions_are_not_stored_if_passed_by_ref")
+    TEST_CASE("Функции, переданные с помощью std::ref, не хранятся внутри")
     {
         auto d = dummy{};
         const auto old_instances_count = dummy::instances_count;
@@ -87,7 +87,8 @@ TEST_SUITE("compose")
         CHECK(dummy::instances_count == old_instances_count);
     }
 
-    TEST_CASE("stored_functions_invoke_as_const_lvalues_when_compose_is_const_lvalue")
+    TEST_CASE("Если созданный функциональный объект вызывается как const lvalue, то хранимые "
+        "функциональные объекты вызываются так же")
     {
         auto sum_calls = std::size_t{0};
         auto identity_calls = std::size_t{0};
@@ -104,7 +105,8 @@ TEST_SUITE("compose")
         CHECK(identity_calls == 1);
     }
 
-    TEST_CASE("stored_functions_invoke_as_lvalues_when_compose_is_lvalue")
+    TEST_CASE("Если созданный функциональный объект вызывается как lvalue, то хранимые "
+        "функциональные объекты вызываются так же")
     {
         auto sum_calls = std::size_t{0};
         auto identity_calls = std::size_t{0};
@@ -121,7 +123,8 @@ TEST_SUITE("compose")
         CHECK(identity_calls == 1);
     }
 
-    TEST_CASE("stored_functions_invoke_as_rvalues_when_compose_is_rvalue")
+    TEST_CASE("Если созданный функциональный объект вызывается как rvalue, то хранимые "
+        "функциональные объекты вызываются так же")
     {
         auto sum_calls = std::size_t{0};
         auto identity_calls = std::size_t{0};
@@ -140,7 +143,7 @@ TEST_SUITE("compose")
         CHECK(identity_calls == 1);
     }
 
-    TEST_CASE("referenced_functions_invoke_as_lvalues")
+    TEST_CASE("Функции, переданные с помощью std::ref, всегда вызываются как lvalue")
     {
         auto identity_calls = std::size_t{0};
         auto identity = utility::lvalue_call_counter(identity_calls, [] (auto x) {return x;});
@@ -154,7 +157,8 @@ TEST_SUITE("compose")
         CHECK(identity_calls == 1);
     }
 
-    TEST_CASE("const_referenced_functions_invoke_as_const_lvalues")
+    TEST_CASE("Неизменяемые функции, переданные с помощью std::ref, всегда вызываются как "
+        "const lvalue")
     {
         auto sum_calls = std::size_t{0};
         const auto sum = utility::const_lvalue_call_counter(sum_calls, std::plus<>{});

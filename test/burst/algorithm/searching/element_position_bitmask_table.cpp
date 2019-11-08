@@ -17,19 +17,19 @@ using integral_masks = burst::algorithm::detail::element_position_bitmask_table<
 
 TEST_SUITE("element_position_bitmask_table")
 {
-    TEST_CASE("length_of_bitmask_table_created_from_empty_pattern_is_zero")
+    TEST_CASE("Размер таблицы масок для пустого образца равен нулю")
     {
         const auto pattern_masks = char_masks(std::string(""));
         CHECK(pattern_masks.length() == 0ul);
     }
 
-    TEST_CASE("length_of_bitmask_table_created_from_non_empty_pattern_is_equal_to_length_of_the_pattern")
+    TEST_CASE("Размер таблицы масок для непустого образца равен длине образца")
     {
         const auto pattern_masks = char_masks(std::string("abcabc"));
         CHECK(pattern_masks.length() == 6);
     }
 
-    TEST_CASE("bits_in_all_positions_of_an_element_are_set_up")
+    TEST_CASE("Биты взведены на тех позициях, на которых элемент встречается в образце")
     {
         const auto pattern_masks = integral_masks{1, 2, 1, 3};
         CHECK(pattern_masks[1] == 0b0101);
@@ -37,7 +37,7 @@ TEST_SUITE("element_position_bitmask_table")
         CHECK(pattern_masks[3] == 0b1000);
     }
 
-    TEST_CASE("all_bits_higher_than_length_of_the_pattern_are_not_set")
+    TEST_CASE("Биты, более старшие, чем длина образца, не взведены")
     {
         const auto pattern = std::string("abc");
         const auto pattern_masks = char_masks(pattern);
@@ -51,7 +51,7 @@ TEST_SUITE("element_position_bitmask_table")
         }
     }
 
-    TEST_CASE("bitmask_for_nonexistent_element_is_zero")
+    TEST_CASE("Маска несуществующего в образце элемента — нулевая")
     {
         const auto pattern_masks = char_masks(std::string("qwertyqwerty"));
 
@@ -59,7 +59,8 @@ TEST_SUITE("element_position_bitmask_table")
         CHECK(pattern_masks['b'] == 0b0);
     }
 
-    TEST_CASE("disjunction_of_masks_for_every_pattern_element_has_all_pattern_bits_set_to_1")
+    TEST_CASE("Объединение масок для всех элементов образца даёт маску, у которой взведены "
+        "все биты, соответствующие образцу")
     {
         const auto pattern = std::string("abac");
         const auto pattern_masks = char_masks(pattern);

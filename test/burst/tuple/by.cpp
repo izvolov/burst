@@ -74,21 +74,22 @@ namespace // anonymous
 
 TEST_SUITE("by")
 {
-    TEST_CASE("transforms_specified_element_of_a_tuple")
+    TEST_CASE("Преобразует заданный элемент кортежа")
     {
         const auto t =
             burst::by<0>([] (auto x) {return x * x;}, std::make_tuple(5, 6));
         CHECK(std::get<0>(t) == 25);
     }
 
-    TEST_CASE("lifts_function_to_transform_specified_element_of_a_tuple")
+    TEST_CASE("Принимая только функцию создаёт функциональный объект, который уже может быть "
+        "применён непосредственно к кортежу (см. лифт)")
     {
         const auto f = burst::by<0>([] (auto x) {return x * x;});
         const auto t = f(std::make_tuple(5, 2.71));
         CHECK(std::get<0>(t) == 25);
     }
 
-    TEST_CASE("elements_other_than_specified_are_not_modified")
+    TEST_CASE("Никакие элементы, кроме заданного, не изменяются")
     {
         const auto t = std::make_tuple(5, 2.71, std::string("qwe"));
         const auto f = burst::by<1>([] (auto x) {return x * x;}, t);
@@ -97,7 +98,7 @@ TEST_SUITE("by")
         CHECK(std::get<2>(f) == "qwe");
     }
 
-    TEST_CASE("resulting_tuple_does_not_refer_to_initial_tuple")
+    TEST_CASE("Результирующий кортеж никак не связан с исходным")
     {
         auto initial = std::make_tuple(42, std::string("qwe"), 3.14);
 
@@ -107,7 +108,7 @@ TEST_SUITE("by")
         CHECK(std::get<1>(initial) == "qwe");
     }
 
-    TEST_CASE("elements_of_temporary_tuple_are_moved")
+    TEST_CASE("Элементы временного исходного кортежа переносятся в результирующий")
     {
         movable m;
 
@@ -118,7 +119,7 @@ TEST_SUITE("by")
         CHECK(std::get<1>(r).initialized_by == initialization_way::move);
     }
 
-    TEST_CASE("untouched_references_are_forwarded_as_references")
+    TEST_CASE("Нетронутые ссылки остаются ссылками и в результирующем кортеже")
     {
         auto x = 5;
         auto y = 7;
@@ -133,7 +134,7 @@ TEST_SUITE("by")
         CHECK(std::get<2>(resulting) == 777);
     }
 
-    TEST_CASE("references_are_forwarded")
+    TEST_CASE("Ссылки пробрасываются")
     {
         auto t = std::make_tuple(5, std::string("qwe"));
         auto initial = std::make_tuple(1, 3.14, std::ref(t), true);
@@ -150,7 +151,7 @@ TEST_SUITE("by")
         CHECK(std::get<0>(t) == 555);
     }
 
-    TEST_CASE("passed_function_is_stored_inside")
+    TEST_CASE("Переданная функция хранится внутри созданного функционального объекта")
     {
         const auto old_instances_count = dummy::instances_count;
 
@@ -160,7 +161,7 @@ TEST_SUITE("by")
         CHECK(dummy::instances_count == old_instances_count + 1);
     }
 
-    TEST_CASE("function_is_not_stored_if_passed_by_ref")
+    TEST_CASE("Переданная функция не хранится внутри, если она передана с помощью std::ref")
     {
         auto d = dummy{};
         const auto old_instances_count = dummy::instances_count;
@@ -171,7 +172,8 @@ TEST_SUITE("by")
         CHECK(dummy::instances_count == old_instances_count);
     }
 
-    TEST_CASE("stored_function_invokes_as_const_lvalue_when_by_is_const_lvalue")
+    TEST_CASE("Если созданный функциональный объект вызывается как const lvalue, то хранимый "
+        "функциональный объект вызывается так же")
     {
         auto calls = std::size_t{0};
         const auto by = burst::by<0>(utility::const_lvalue_call_counter(calls));
@@ -181,7 +183,8 @@ TEST_SUITE("by")
         CHECK(calls == 1);
     }
 
-    TEST_CASE("stored_function_invokes_as_lvalue_when_by_is_lvalue")
+    TEST_CASE("Если созданный функциональный объект вызывается как lvalue, то хранимый "
+        "функциональный объект вызывается так же")
     {
         auto calls = std::size_t{0};
         auto by = burst::by<0>(utility::lvalue_call_counter(calls));
@@ -191,7 +194,8 @@ TEST_SUITE("by")
         CHECK(calls == 1);
     }
 
-    TEST_CASE("stored_function_invokes_as_rvalue_when_by_is_rvalue")
+    TEST_CASE("Если созданный функциональный объект вызывается как rvalue, то хранимый "
+        "функциональный объект вызывается так же")
     {
         auto calls = std::size_t{0};
         auto c = utility::rvalue_call_counter(calls);
@@ -201,7 +205,7 @@ TEST_SUITE("by")
         CHECK(calls == 1);
     }
 
-    TEST_CASE("referenced_function_invokes_as_lvalue")
+    TEST_CASE("Функция, переданная с помощью std::ref, всегда вызывается как lvalue")
     {
         auto calls = std::size_t{0};
         auto f = utility::lvalue_call_counter(calls);
@@ -211,7 +215,8 @@ TEST_SUITE("by")
         CHECK(calls == 1);
     }
 
-    TEST_CASE("const_referenced_function_invokes_as_const_lvalue")
+    TEST_CASE("Неизменяемая функция, переданная с помощью std::ref, всегда вызывается как "
+        "const lvalue")
     {
         auto calls = std::size_t{0};
         const auto f = utility::const_lvalue_call_counter(calls);
@@ -221,7 +226,7 @@ TEST_SUITE("by")
         CHECK(calls == 1);
     }
 
-    TEST_CASE("is_a_constexpr_function")
+    TEST_CASE("Может быть вычислен на этапе компиляции")
     {
         constexpr auto t = std::make_tuple(0, 256, 1024);
         constexpr auto l = burst::by<1>(&burst::intlog2<int>);

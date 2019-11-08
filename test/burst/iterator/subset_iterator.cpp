@@ -12,7 +12,8 @@
 
 TEST_SUITE("subset_iterator")
 {
-    TEST_CASE("subset_iterator_end_is_created_using_special_tag")
+    TEST_CASE("Конец итератора пожмножеств создаётся из его начала с помощью специальной "
+        "метки-индикатора")
     {
         const auto set = {'a', 'b', 'c'};
 
@@ -29,7 +30,7 @@ TEST_SUITE("subset_iterator")
         CHECK(boost::make_iterator_range(subsets_begin, subsets_end) == expected_subsets);
     }
 
-    TEST_CASE("empty_set_has_no_subsets")
+    TEST_CASE("Пустое множество не содержит подмножеств")
     {
         std::vector<int> set;
 
@@ -39,7 +40,7 @@ TEST_SUITE("subset_iterator")
         CHECK(subsets_begin == subsets_end);
     }
 
-    TEST_CASE("singleton_set_has_one_subset_equal_to_whole_set")
+    TEST_CASE("Одноэлементное множество содержит ровно одно подмножество, равное всему множеству")
     {
         std::list<int> set{3};
 
@@ -51,7 +52,7 @@ TEST_SUITE("subset_iterator")
         CHECK(std::distance(subset, subsets_end) == 1);
     }
 
-    TEST_CASE("set_of_three_unique_elements_has_seven_non_empty_subsets")
+    TEST_CASE("Множество из трёх различных элементов порождает семь непустых подмножеств")
     {
         auto subsets_begin = burst::make_subset_iterator(boost::irange(1, 4));
         auto   subsets_end = burst::make_subset_iterator(burst::iterator::end_tag, subsets_begin);
@@ -67,7 +68,8 @@ TEST_SUITE("subset_iterator")
         CHECK(boost::make_iterator_range(subsets_begin, subsets_end) == expected_subsets);
     }
 
-    TEST_CASE("sequence_of_several_identical_elements_has_only_one_singleton_subset")
+    TEST_CASE("Множество из нескольких одинаковых элементов порождает только одно одноэлементное "
+        "подмножество")
     {
         auto sequence = {1, 1, 1, 1, 1};
 

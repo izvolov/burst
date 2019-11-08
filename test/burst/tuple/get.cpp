@@ -9,18 +9,18 @@
 
 TEST_SUITE("get")
 {
-    TEST_CASE("gets_nth_element_of_a_tuple")
+    TEST_CASE("Возвращает заданный элемент кортежа")
     {
         CHECK(burst::get<0>(std::make_tuple('a', 'b', 'c')) == 'a');
     }
 
-    TEST_CASE("is_a_function_object")
+    TEST_CASE("Является функциональным объектом")
     {
         auto g = burst::get<0>;
         CHECK(g(std::make_tuple('a', 'b', 'c')) == 'a');
     }
 
-    TEST_CASE("element_of_lvalue_tuple_is_lvalue")
+    TEST_CASE("Элемент lvalue-кортежа возвращается как lvalue")
     {
         auto t = std::make_tuple(42, "qwe", 3.14);
 
@@ -29,7 +29,7 @@ TEST_SUITE("get")
         CHECK(std::get<0>(t) == 17);
     }
 
-    TEST_CASE("element_of_const_lvalue_tuple_is_const_lvalue")
+    TEST_CASE("Элемент const lvalue-кортежа возвращается как const lvalue")
     {
         const auto t = std::make_tuple(42, "qwe", 3.14);
 
@@ -39,7 +39,7 @@ TEST_SUITE("get")
         CHECK((std::is_same<result_type, const element_type &>::value));
     }
 
-    TEST_CASE("element_of_rvalue_tuple_is_rvalue_reference")
+    TEST_CASE("Элемент rvalue-кортежа возвращается как ссылка на rvalue")
     {
         CHECK
         (
@@ -51,19 +51,19 @@ TEST_SUITE("get")
         );
     }
 
-    TEST_CASE("is_a_constexpr_function")
+    TEST_CASE("Может быть вычислен на этапе компиляции")
     {
         constexpr auto r = burst::get<1>(std::make_tuple(0, 11, 222));
         CHECK(r == 11);
     }
 
-    TEST_CASE("is_compatible_with_pair")
+    TEST_CASE("Совместим с std::pair")
     {
         const auto p = std::make_pair('c', 3.14);
         CHECK(burst::get<0>(p) == 'c');
     }
 
-    TEST_CASE("is_compatible_with_boost_tuple")
+    TEST_CASE("Совместим с boost::tuple")
     {
         const auto t = boost::make_tuple(42, 3.14, true);
         CHECK(burst::get<2>(t) == true);

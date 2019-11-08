@@ -9,7 +9,8 @@
 
 TEST_SUITE("semiintersect_iterator")
 {
-    TEST_CASE("semiintersect_iterator_end_is_created_using_special_tag")
+    TEST_CASE("Конец итератора полупересечения создаётся из его начала с помощью специальной "
+        "метки-индикатора")
     {
         auto  first = {1, 2, 3};
         auto second = {0, 2, 4};

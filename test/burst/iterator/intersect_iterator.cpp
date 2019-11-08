@@ -9,7 +9,8 @@
 
 TEST_SUITE("intersect_iterator")
 {
-    TEST_CASE("intersect_iterator_end_is_created_using_special_tag")
+    TEST_CASE("Конец итератора пересечения создаётся из его начала с помощью специальной "
+        "метки-индикатора")
     {
         auto  first = {1, 2, 3};
         auto second = {0, 2, 4};

@@ -11,7 +11,7 @@
 
 TEST_SUITE("cfront")
 {
-    TEST_CASE("always_returns_const_reference_of_container")
+    TEST_CASE("Всегда возвращает ссылку на неизменяемый элемент контейнера")
     {
         auto integers = burst::make_vector({1, 2, 3});
         static_assert(std::is_same<decltype(burst::cfront(integers)), const int &>::value, "");
@@ -20,13 +20,13 @@ TEST_SUITE("cfront")
         static_assert(std::is_same<decltype(burst::cfront(characters)), const char &>::value, "");
     }
 
-    TEST_CASE("returns_exactly_container_front")
+    TEST_CASE("Возвращает ни что иное, как первый элемент контейнера")
     {
         auto reals = burst::make_list({1.6, 3.14, 2.7});
         CHECK(std::addressof(burst::cfront(reals)) == std::addressof(reals.front()));
     }
 
-    TEST_CASE("always_returns_const_reference_of_array")
+    TEST_CASE("Всегда возвращает ссылку на неизменяемый элемент массива")
     {
         std::string strings[] = {"123", "456", "789"};
         static_assert(std::is_same<decltype(burst::cfront(strings)), const std::string &>::value, "");
@@ -35,13 +35,13 @@ TEST_SUITE("cfront")
         static_assert(std::is_same<decltype(burst::cfront(integers)), const std::size_t &>::value, "");
     }
 
-    TEST_CASE("returns_address_of_array")
+    TEST_CASE("Адресует ни что иное, как первый элемент массива")
     {
         int array[] = {1, 2, 3};
         CHECK(std::addressof(burst::cfront(array)) == array);
     }
 
-    TEST_CASE("is_a_functional_object")
+    TEST_CASE("Является функциональным объектом")
     {
         const auto v = burst::make_vector({1, 2, 3});
         const auto cf = burst::cfront;

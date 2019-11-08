@@ -21,7 +21,7 @@ namespace std
 
 TEST_SUITE("make_set")
 {
-    TEST_CASE("value_type_of_created_set_is_taken_from_value_type_of_incoming_range")
+    TEST_CASE("Тип элементов создаваемого множества выводится из типа элементов входного диапазона")
     {
         const auto range = boost::irange(0, 4);
         const auto set = burst::make_set(range);
@@ -36,13 +36,13 @@ TEST_SUITE("make_set")
         );
     }
 
-    TEST_CASE("accepts_range_by_rvalue")
+    TEST_CASE("Принимает диапазон представленный временным объектом (rvalue)")
     {
         const auto set = burst::make_set(boost::irange<std::uint32_t>(0, 6));
         CHECK(set == std::set<std::uint32_t>{0, 1, 2, 3, 4, 5});
     }
 
-    TEST_CASE("accepts_range_by_lvalue")
+    TEST_CASE("Принимает диапазон по lvalue")
     {
         std::stringstream stream("5 4 3 2");
         const auto range =
@@ -58,7 +58,7 @@ TEST_SUITE("make_set")
         CHECK(set == expected);
     }
 
-    TEST_CASE("accepts_containers")
+    TEST_CASE("Принимает контейнеры")
     {
         const auto v = std::vector<unsigned>{1u, 2u, 3u};
 
@@ -68,7 +68,7 @@ TEST_SUITE("make_set")
         CHECK(set == expected);
     }
 
-    TEST_CASE("accepts_rvalue_containers")
+    TEST_CASE("Принимает контейнеры по rvalue")
     {
          const auto set = burst::make_set(std::vector<unsigned>{1u, 1u, 1u});
 
@@ -76,7 +76,7 @@ TEST_SUITE("make_set")
         CHECK(set == expected);
     }
 
-    TEST_CASE("accepts_custom_compare")
+    TEST_CASE("Допускает пользовательскую функцию для сравнения элементов")
     {
         const auto set = burst::make_set(boost::irange(0, 6), std::greater<>{});
 
@@ -84,7 +84,7 @@ TEST_SUITE("make_set")
         CHECK(set == expected);
     }
 
-    TEST_CASE("accepts_initializer_list")
+    TEST_CASE("Принимает список инициализации")
     {
         const auto set = burst::make_set({'3', '2', '0', '4', '1'});
 
@@ -92,7 +92,7 @@ TEST_SUITE("make_set")
         CHECK(set == expected);
     }
 
-    TEST_CASE("value_type_may_be_specified_explicitly_when_constructed_from_range")
+    TEST_CASE("Тип элементов может быть указан явно при конструировании из диапазона")
     {
         const auto set = burst::make_set<std::size_t>(boost::irange<int>(0, 4));
         CHECK

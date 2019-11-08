@@ -8,7 +8,7 @@
 
 TEST_SUITE("intpow")
 {
-    TEST_CASE("any_power_of_zero_is_zero")
+    TEST_CASE("Любая ненулевая степень нуля — ноль")
     {
         CHECK(burst::intpow(0, 1) == 0);
         CHECK(burst::intpow(0, 2) == 0);
@@ -16,12 +16,12 @@ TEST_SUITE("intpow")
         CHECK(burst::intpow(0, 100500) == 0);
     }
 
-    TEST_CASE("zero_power_of_zero_is_one")
+    TEST_CASE("Нулевая степень нуля — единица")
     {
         CHECK(burst::intpow(0, 0) == 1);
     }
 
-    TEST_CASE("any_power_of_one_is_one")
+    TEST_CASE("Любая степень единицы — единица")
     {
         CHECK(burst::intpow(1, 0) == 1);
         CHECK(burst::intpow(1, 1) == 1);
@@ -30,18 +30,18 @@ TEST_SUITE("intpow")
         CHECK(burst::intpow(1, 100500) == 1);
     }
 
-    TEST_CASE("power_must_be_non_negative")
+    TEST_CASE("Порождает исключение при отрицательной степени")
     {
         CHECK_THROWS_AS(burst::intpow(2, -1), std::domain_error);
     }
 
-    TEST_CASE("base_may_be_negative")
+    TEST_CASE("Основание может быть отрицательным")
     {
         CHECK(burst::intpow(-1, 2) == 1);
         CHECK(burst::intpow(-3, 3) == -27);
     }
 
-    TEST_CASE("any_base_to_the_power_of_zero_is_one")
+    TEST_CASE("Любое ненулевое основание в нулевой степени — единица")
     {
         CHECK(burst::intpow(2, 0) == 1);
         CHECK(burst::intpow(-2, 0) == 1);
@@ -49,7 +49,7 @@ TEST_SUITE("intpow")
         CHECK(burst::intpow(-100500, 0) == 1);
     }
 
-    TEST_CASE("return_type_deferred_as_base_type")
+    TEST_CASE("Тип возвращаемого значения равен типу первого аргумента, то есть основания")
     {
         CHECK(std::is_same<decltype(burst::intpow(1, 10)), decltype(1)>::value);
         CHECK(std::is_same<decltype(burst::intpow(1l, 10)), decltype(1l)>::value);
@@ -59,7 +59,7 @@ TEST_SUITE("intpow")
         CHECK(std::is_same<decltype(burst::intpow(1ull, 10)), decltype(1ull)>::value);
     }
 
-    TEST_CASE("power_of_product_is_product_of_powers")
+    TEST_CASE("Степень произведения равна произведению степеней")
     {
         // (ab) ^ n = (a ^ n)(b ^ n)
         const auto a = 10;
@@ -68,9 +68,8 @@ TEST_SUITE("intpow")
         CHECK(burst::intpow(a * b, n) == burst::intpow(a, n) * burst::intpow(b, n));
     }
 
-    TEST_CASE("product_of_powers_with_same_base_equals_that_base_to_the_power_of_sum_of_those_powers")
+    TEST_CASE("(a ^ n)(a ^ m) = a ^ (n + m)")
     {
-        // (a ^ n)(a ^ m) = a ^ (n + m)
         const auto a = 4;
         const auto n = 3;
         const auto m = 8;
@@ -81,22 +80,21 @@ TEST_SUITE("intpow")
         CHECK(burst::intpow(a, n) * y == burst::intpow(a, n + m));
     }
 
-    TEST_CASE("some_base_in_power_of_n_to_the_power_of_m_equals_that_base_to_the_power_of_product_of_n_and_m")
+    TEST_CASE("(a ^ n) ^ m = a ^ (nm)")
     {
-        // (a ^ n) ^ m = a ^ (nm)
         const auto a = 7;
         const auto n = 10;
         const auto m = 2;
         CHECK(burst::intpow(burst::intpow(a, n), m) == burst::intpow(a, n * m));
     }
 
-    TEST_CASE("intpow_is_a_constexpr_function")
+    TEST_CASE("Может быть вычислена на этапе компиляции")
     {
         constexpr auto power = burst::intpow(3, 4);
         CHECK(power == 81);
     }
 
-    TEST_CASE("return_value_type_is_type_of_first_argument")
+    TEST_CASE("Допускает разные типы первого и второго аргументов")
     {
         using first_argument_type = std::uint32_t;
         using second_argument_type = std::int64_t;

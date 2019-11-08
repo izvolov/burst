@@ -11,7 +11,7 @@
 
 TEST_SUITE("merged")
 {
-    TEST_CASE("accepts_a_range_by_rvalue")
+    TEST_CASE("Может работать с rvalue-диапазоном")
     {
         const auto first = burst::make_vector({1, 2, 3});
         const auto second = burst::make_vector({3, 4, 5});
@@ -23,7 +23,7 @@ TEST_SUITE("merged")
         CHECK(merged == expected);
     }
 
-    TEST_CASE("accepts_a_range_by_lvalue")
+    TEST_CASE("Может работать с lvalue-диапазоном")
     {
         auto range_vector = burst::make_vector({boost::irange(1, 3), boost::irange(2, 4)});
         auto ranges = boost::make_iterator_range(range_vector);
@@ -34,7 +34,7 @@ TEST_SUITE("merged")
         CHECK(merged == expected);
     }
 
-    TEST_CASE("accepts_custom_comparator")
+    TEST_CASE("Допускает пользовательскую функцию для сравнения элементов")
     {
         const auto first = burst::make_forward_list({3, 2, 1});
         const auto second = burst::make_forward_list({5, 3, 1});

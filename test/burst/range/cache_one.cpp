@@ -7,7 +7,7 @@
 
 TEST_SUITE("cache_one")
 {
-    TEST_CASE("caches_each_dereferenced_value_of_a_range")
+    TEST_CASE("Кэширует последний разыменованный элемент диапазона")
     {
         const auto items = burst::make_forward_list({1.1, 2.2, 3.3});
 

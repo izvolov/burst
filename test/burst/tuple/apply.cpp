@@ -39,14 +39,14 @@ namespace // anonymous
 
 TEST_SUITE("apply")
 {
-    TEST_CASE("applies_function_to_elements_of_unwrapped_tuple")
+    TEST_CASE("Применяет функцию к элементам развёрнутого кортежа")
     {
         auto a = burst::apply(std::plus<>{});
         auto r = a(std::make_tuple(1, 2));
         CHECK(r == 3);
     }
 
-    TEST_CASE("passed_function_is_stored_inside")
+    TEST_CASE("Переданная функция хранится внутри созданного функционального объекта")
     {
         const auto old_instances_count = dummy::instances_count;
 
@@ -56,7 +56,7 @@ TEST_SUITE("apply")
         CHECK(dummy::instances_count == old_instances_count + 1);
     }
 
-    TEST_CASE("function_is_not_stored_if_passed_by_ref")
+    TEST_CASE("Переданная функция не хранится внутри, если она передана с помощью std::ref")
     {
         auto d = dummy{};
         const auto old_instances_count = dummy::instances_count;
@@ -67,7 +67,8 @@ TEST_SUITE("apply")
         CHECK(dummy::instances_count == old_instances_count);
     }
 
-    TEST_CASE("stored_function_invokes_as_const_lvalue_when_apply_is_const_lvalue")
+    TEST_CASE("Если созданный функциональный объект вызывается как const lvalue, то хранимый "
+        "функциональный объект вызывается так же")
     {
         auto calls = std::size_t{0};
         const auto a = burst::apply(utility::const_lvalue_call_counter(calls));
@@ -77,7 +78,8 @@ TEST_SUITE("apply")
         CHECK(calls == 1);
     }
 
-    TEST_CASE("stored_function_invokes_as_lvalue_when_apply_is_lvalue")
+    TEST_CASE("Если созданный функциональный объект вызывается как lvalue, то хранимый "
+        "функциональный объект вызывается так же")
     {
         auto calls = std::size_t{0};
         auto a = burst::apply(utility::lvalue_call_counter(calls));
@@ -87,7 +89,8 @@ TEST_SUITE("apply")
         CHECK(calls == 1);
     }
 
-    TEST_CASE("stored_function_invokes_as_rvalue_when_apply_is_rvalue")
+    TEST_CASE("Если созданный функциональный объект вызывается как rvalue, то хранимый "
+        "функциональный объект вызывается так же")
     {
         auto calls = std::size_t{0};
         auto c = utility::rvalue_call_counter(calls);
@@ -97,7 +100,7 @@ TEST_SUITE("apply")
         CHECK(calls == 1);
     }
 
-    TEST_CASE("referenced_function_invokes_as_lvalue")
+    TEST_CASE("Функция, переданная с помощью std::ref, всегда вызывается как lvalue")
     {
         auto calls = std::size_t{0};
         auto f = utility::lvalue_call_counter(calls);
@@ -107,7 +110,8 @@ TEST_SUITE("apply")
         CHECK(calls == 1);
     }
 
-    TEST_CASE("const_referenced_function_invokes_as_const_lvalue")
+    TEST_CASE("Неизменяемая функция, переданная с помощью std::ref, всегда вызывается как "
+        "const lvalue")
     {
         auto calls = std::size_t{0};
         const auto f = utility::const_lvalue_call_counter(calls);
@@ -117,7 +121,7 @@ TEST_SUITE("apply")
         CHECK(calls == 1);
     }
 
-    TEST_CASE("is_a_constexpr_function")
+    TEST_CASE("Может быть вычислен на этапе компиляции")
     {
         constexpr auto a = burst::apply(std::multiplies<>{});
         constexpr auto r = a(std::make_tuple(4, 5));

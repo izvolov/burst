@@ -10,7 +10,7 @@
 
 TEST_SUITE("galloping_upper_bound")
 {
-    TEST_CASE("searching_an_empty_range_results_range_end")
+    TEST_CASE("Поиск в пустом диапазоне возвращает конец этого диапазона")
     {
         std::vector<int> empty;
 
@@ -19,7 +19,8 @@ TEST_SUITE("galloping_upper_bound")
         CHECK(search_result == empty.end());
     }
 
-    TEST_CASE("searching_a_value_greater_than_all_values_in_a_given_range_results_range_end")
+    TEST_CASE("Поиск элемента, большего всех элементов данного диапазона, возвращает конец этого "
+        "диапазона")
     {
         std::vector<std::size_t> range{1, 2, 3, 4, 5};
 
@@ -28,7 +29,8 @@ TEST_SUITE("galloping_upper_bound")
         CHECK(search_result == range.end());
     }
 
-    TEST_CASE("searching_a_value_less_than_all_values_in_a_given_range_results_range_begin")
+    TEST_CASE("Поиск элемента, меньшего всех элементов данного диапазона, возвращает начало этого "
+        "диапазона")
     {
         std::list<std::int8_t> range{10, 20, 30, 40};
 
@@ -37,7 +39,8 @@ TEST_SUITE("galloping_upper_bound")
         CHECK(search_result == range.begin());
     }
 
-    TEST_CASE("searching_absent_value_results_iterator_to_first_value_greater_than_desired")
+    TEST_CASE("Поиск отсутствующего в диапазоне элемента возвращает итератор на первый элемент "
+        "диапазона, больший искомого элемента")
     {
         auto range = {50, 40, 30, 20, 10};
 
@@ -47,7 +50,8 @@ TEST_SUITE("galloping_upper_bound")
         CHECK(*search_result == 30);
     }
 
-    TEST_CASE("searching_existing_value_results_iterator_to_first_value_greater_than_desired")
+    TEST_CASE("Поиск существующего в диапазоне элемента возвращает итератор на первый элемент, "
+        "больший искомого")
     {
         std::vector<std::string> range{"abc", "bc", "c"};
 
@@ -57,7 +61,8 @@ TEST_SUITE("galloping_upper_bound")
         CHECK(*search_result == "c");
     }
 
-    TEST_CASE("searching_existing_value_results_iterator_past_the_end_of_range_of_equal_values")
+    TEST_CASE("Поиск существующего в диапазоне элемента возвращает итератор после последнего из "
+        "повторяющихся элементов")
     {
         std::vector<int> range{1, 1, 1, 2, 2, 2, 3, 3, 3};
 
@@ -67,7 +72,8 @@ TEST_SUITE("galloping_upper_bound")
         CHECK(*search_result == 3);
     }
 
-    TEST_CASE("searching_absent_value_results_iterator_to_beginning_of_range_of_equal_values")
+    TEST_CASE("Поиск несуществующего в диапазоне элемента возвращает итератор на первый из "
+        "повторяющихся элементов")
     {
         std::vector<int> range{30, 30, 30, 20, 20, 20, 10, 10, 10};
 
@@ -77,7 +83,7 @@ TEST_SUITE("galloping_upper_bound")
         CHECK(*search_result == 20);
     }
 
-    TEST_CASE("elements_must_be_partitioned_with_respect_to_searched_element")
+    TEST_CASE("Элементы диапазона должны быть разделены относительно искомого значения")
     {
         auto range = {3, 2, 1, 4, 7, 6, 5};
         //                        |
@@ -94,7 +100,7 @@ TEST_SUITE("galloping_upper_bound")
         CHECK(*search_result == 7);
     }
 
-    TEST_CASE("works_with_ranges")
+    TEST_CASE("Допускает диапазоны")
     {
         const auto range = {1, 2, 3, 4, 5};
 

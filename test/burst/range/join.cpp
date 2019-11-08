@@ -19,7 +19,7 @@
 
 TEST_SUITE("join")
 {
-    TEST_CASE("joining_empty_ranges_results_empty_range")
+    TEST_CASE("Склейка пустых диапазонов — пустой диапазон")
     {
         std::vector<int> first;
         std::vector<int> second;
@@ -30,7 +30,7 @@ TEST_SUITE("join")
         CHECK(joint_range.empty());
     }
 
-    TEST_CASE("joining_empty_range_of_ranges_results_empty_range")
+    TEST_CASE("Возвращает пустой диапазон, если на вход подан пустой диапазон диапазонов")
     {
         auto empty = std::vector<boost::iterator_range<std::vector<int>::iterator>>{};
 
@@ -39,7 +39,7 @@ TEST_SUITE("join")
         CHECK(joint_range.empty());
     }
 
-    TEST_CASE("joining_one_range_results_the_same_range")
+    TEST_CASE("Склейка одного диапазона — сам этот диапазон")
     {
         int array[] = {1, 2, 3, 4};
         auto ranges = burst::make_range_vector(array);
@@ -49,7 +49,7 @@ TEST_SUITE("join")
         CHECK(joint_range == array);
     }
 
-    TEST_CASE("overlaying_ranges_do_not_blend")
+    TEST_CASE("Накладывающиеся диапазоны не смешиваеются")
     {
         auto  first = burst::make_list({1, 2, 3});
         auto second = burst::make_list({2, 3, 4});
@@ -61,7 +61,8 @@ TEST_SUITE("join")
         CHECK(joint_range == expected_collection);
     }
 
-    TEST_CASE("joining_several_ranges_consecutively_puts_them_one_after_another")
+    TEST_CASE("Склейка нескольких диапазонов создаёт новый диапазон, в котором исходные диапазоны "
+        "помещены последовательно друг за другом в порядке их перечисления")
     {
         auto  first = {'h', 'e'};
         auto second = {'l', 'l'};
@@ -74,7 +75,8 @@ TEST_SUITE("join")
         CHECK(joint_range == expected_collection);
     }
 
-    TEST_CASE("modifying_joint_mutable_ranges_is_allowed")
+    TEST_CASE("Результирующий диапазон ссылается на исходные диапазоны, так что изменение "
+        "элементов результирующего диапазона влечёт изменение соответствующих элементов исходного")
     {
         auto first = burst::make_vector({100, 50});
         auto second = burst::make_vector({70, 30});
@@ -89,7 +91,7 @@ TEST_SUITE("join")
         CHECK(second[1] == 3);
     }
 
-    TEST_CASE("random_access_joined_range_has_size_method")
+    TEST_CASE("Диапазон склейки произвольного доступа имеет метод size()")
     {
         auto  first = burst::make_vector({1, 0});
         auto second = burst::make_vector({3, 2});
@@ -100,7 +102,7 @@ TEST_SUITE("join")
         CHECK(joint_range.size() == 4);
     }
 
-    TEST_CASE("joined_random_access_range_can_be_reversed")
+    TEST_CASE("Диапазон склейки произвольного доступа может быть обращён")
     {
         std::string join("join");
         std::string iterator("iterator");
@@ -117,7 +119,7 @@ TEST_SUITE("join")
         CHECK(reversed_range == expected);
     }
 
-    TEST_CASE("single_pass_join_range_skips_empty_range_at_the_beginning")
+    TEST_CASE("Однопроходный диапазон склейки пропускает пустой диапазон в начале")
     {
         const auto empty = burst::make_list<int>({});
         const auto first = burst::make_list({17, 19, 23});
@@ -129,7 +131,7 @@ TEST_SUITE("join")
         CHECK(joint_range == expected_collection);
     }
 
-    TEST_CASE("single_pass_join_range_skips_empty_range_in_the_middle")
+    TEST_CASE("Однопроходный диапазон склейки пропускает пустой диапазон в середине")
     {
         const auto first = burst::make_list({17, 19, 23});
         const auto empty = burst::make_list<int>({});
@@ -142,7 +144,7 @@ TEST_SUITE("join")
         CHECK(joint_range == expected_collection);
     }
 
-    TEST_CASE("single_pass_join_range_skips_empty_range_at_the_end")
+    TEST_CASE("Однопроходный диапазон склейки пропускает пустой диапазон в конце")
     {
         const auto first = burst::make_list({17, 19, 23});
         const auto empty = burst::make_list<int>({});
@@ -154,7 +156,7 @@ TEST_SUITE("join")
         CHECK(joint_range == expected_collection);
     }
 
-    TEST_CASE("random_access_join_range_skips_empty_range_at_the_beginning")
+    TEST_CASE("Диапазон склейки произвольного доступа пропускает пустой диапазон в начале")
     {
         const auto empty = burst::make_vector<int>({});
         const auto first = burst::make_vector({17, 19, 23});
@@ -166,7 +168,7 @@ TEST_SUITE("join")
         CHECK(joint_range == expected_collection);
     }
 
-    TEST_CASE("random_access_join_range_skips_empty_range_in_the_middle")
+    TEST_CASE("Диапазон склейки произвольного доступа пропускает пустой диапазон в середине")
     {
         const auto first = burst::make_vector({17, 19, 23});
         const auto empty = burst::make_vector<int>({});
@@ -179,7 +181,7 @@ TEST_SUITE("join")
         CHECK(joint_range == expected_collection);
     }
 
-    TEST_CASE("random_access_join_range_skips_empty_range_at_the_end")
+    TEST_CASE("Диапазон склейки произвольного доступа пропускает пустой диапазон в конце")
     {
         const auto first = burst::make_vector({17, 19, 23});
         const auto empty = burst::make_vector<int>({});
@@ -191,7 +193,7 @@ TEST_SUITE("join")
         CHECK(joint_range == expected_collection);
     }
 
-    TEST_CASE("single_pass_join_range_empties_inner_ranges")
+    TEST_CASE("Однопроходный диапазон склейки продвигает внутренние диапазоны до конца")
     {
         const auto one = burst::make_list({1, 2, 3});
         const auto another = burst::make_list({4, 5, 6});

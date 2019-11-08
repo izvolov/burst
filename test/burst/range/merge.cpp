@@ -12,7 +12,7 @@
 
 TEST_SUITE("merge")
 {
-    TEST_CASE("merging_empty_ranges_results_empty_range")
+    TEST_CASE("Слияние пустых диапазонов — пустой диапазон")
     {
         std::vector<int> first;
         std::vector<int> second;
@@ -22,7 +22,7 @@ TEST_SUITE("merge")
         CHECK(merged_range.empty());
     }
 
-    TEST_CASE("merging_one_range_results_the_same_range")
+    TEST_CASE("Слияние одного диапазона — сам этот диапазон")
     {
         int array[] = {1, 2, 3, 4};
         auto ranges = burst::make_range_vector(array);
@@ -31,7 +31,8 @@ TEST_SUITE("merge")
         CHECK(merged_range == array);
     }
 
-    TEST_CASE("merging_saw_toothed_sorted_ranges_results_sorted_range_containing_all_elements_from_initial_ranges")
+    TEST_CASE("Слияние пилообразно дополняющих друг друга диапазонов содержит все элементы "
+        "исходных диапазонов")
     {
         auto first = burst::make_list({'h', 'f', 'd', 'b'});
         auto second = burst::make_list({'g', 'e', 'c', 'a'});
@@ -43,7 +44,8 @@ TEST_SUITE("merge")
         CHECK(merged_range == expected_collection);
     }
 
-    TEST_CASE("merging_several_disjoint_sorted_ranges_results_sorted_range_composed_of_joined_initial_ranges")
+    TEST_CASE("Слияние нескольких непересекающихся диапазонов порождает диапазон, составленный из "
+        "всех элементов исходных диапазонов")
     {
         auto  first = {1, 2, 3};
         auto second = {4, 5, 6};
@@ -56,7 +58,8 @@ TEST_SUITE("merge")
         CHECK(merged_range == expected_collection);
     }
 
-    TEST_CASE("modifying_merged_mutable_ranges_is_allowed")
+    TEST_CASE("Результирующий диапазон ссылается на исходные диапазоны, так что изменение "
+        "элементов результирующего диапазона влечёт изменение соответствующих элементов исходных")
     {
         auto first = burst::make_vector({100, 50});
         auto second = burst::make_vector({70, 30});

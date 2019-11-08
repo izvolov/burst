@@ -61,14 +61,14 @@ namespace // anonymous
 
 TEST_SUITE("each")
 {
-    TEST_CASE("forwards_input_arguments_mapped_by_specified_function")
+    TEST_CASE("Пробрасывает входные аргументы, преобразуя их с помощью заданной функции")
     {
         auto e = burst::each([] (auto x) {return x + x;}) | burst::make_tuple;
         auto t = e(4, std::string("qwe"));
         CHECK(t == std::make_tuple(8, "qweqwe"));
     }
 
-    TEST_CASE("may_be_composed_with_another_each")
+    TEST_CASE("Может быть скомпонована с другим burst::each")
     {
         const auto square = [] (auto x) {return x * x;};
         auto e = burst::each(square) | burst::each(square) | burst::sum;
@@ -76,7 +76,7 @@ TEST_SUITE("each")
         CHECK(r == 1 + 16 + 81);
     }
 
-    TEST_CASE("composition_may_be_composed_again")
+    TEST_CASE("Результат композиции может участвовать в новой композиции")
     {
         const auto square = [] (auto x) {return x * x;};
         auto e = burst::each(square) | burst::sum | square;
@@ -84,7 +84,7 @@ TEST_SUITE("each")
         CHECK(r == (1 + 4 + 9) * (1 + 4 + 9));
     }
 
-    TEST_CASE("calls_inner_function_on_every_input_element")
+    TEST_CASE("Вызывает хранимую функцию на каждый входной элемент")
     {
         auto calls = std::size_t{0};
         auto e = burst::each(doubler{calls}) | burst::make_tuple;
@@ -94,7 +94,7 @@ TEST_SUITE("each")
         CHECK(calls == 3);
     }
 
-    TEST_CASE("every_passed_function_is_stored_inside")
+    TEST_CASE("Каждая переданная функция хранится внутри созданного функционального объекта")
     {
         const auto old_instances_count = dummy::instances_count;
 
@@ -104,7 +104,7 @@ TEST_SUITE("each")
         CHECK(dummy::instances_count == old_instances_count + 2);
     }
 
-    TEST_CASE("function_is_not_stored_if_passed_by_ref")
+    TEST_CASE("Функции, переданные с помощью std::ref, не хранятся внутри")
     {
         auto d = dummy{};
         const auto old_instances_count = dummy::instances_count;
@@ -115,7 +115,8 @@ TEST_SUITE("each")
         CHECK(dummy::instances_count == old_instances_count);
     }
 
-    TEST_CASE("stored_function_invokes_as_const_lvalue_if_each_is_const_lvalue")
+    TEST_CASE("Если созданный функциональный объект вызывается как const lvalue, то хранимый "
+        "функциональный объект вызывается так же")
     {
         auto calls = std::size_t{0};
         const auto each =
@@ -126,7 +127,8 @@ TEST_SUITE("each")
         CHECK(calls == 2);
     }
 
-    TEST_CASE("stored_function_invokes_as_lvalue_if_each_is_lvalue")
+    TEST_CASE("Если созданный функциональный объект вызывается как lvalue, то хранимый "
+        "функциональный объект вызывается так же")
     {
         auto calls = std::size_t{0};
         auto each = burst::each(utility::lvalue_call_counter(calls)) | burst::make_tuple;
@@ -136,7 +138,8 @@ TEST_SUITE("each")
         CHECK(calls == 2);
     }
 
-    TEST_CASE("composed_function_invokes_as_rvalue_when_each_is_rvalue")
+    TEST_CASE("Если созданный функциональный объект вызывается как rvalue, то скомпонованный "
+        "функциональный объект вызывается как rvalue")
     {
         auto calls = std::size_t{0};
         (burst::each([] (auto x) {return x + x;}) | utility::rvalue_call_counter(calls))(1, 2, 3);
@@ -144,7 +147,8 @@ TEST_SUITE("each")
         CHECK(calls == 1);
     }
 
-    TEST_CASE("stored_function_invokes_as_lvalue_if_each_is_rvalue")
+    TEST_CASE("Если созданный функциональный объект вызывается как rvalue, то хранимый "
+        "внутри each функциональный объект вызывается как lvalue")
     {
         auto calls = std::size_t{0};
         (burst::each(utility::lvalue_call_counter(calls)) | burst::make_tuple)(1, "qwe");
@@ -152,7 +156,7 @@ TEST_SUITE("each")
         CHECK(calls == 2);
     }
 
-    TEST_CASE("referenced_function_invokes_as_lvalue")
+    TEST_CASE("Функции, переданные с помощью std::ref, всегда вызываются как lvalue")
     {
         auto calls = std::size_t{0};
         auto c = utility::lvalue_call_counter(calls);
@@ -163,7 +167,8 @@ TEST_SUITE("each")
         CHECK(calls == 2);
     }
 
-    TEST_CASE("const_referenced_function_invokes_as_const_lvalue")
+    TEST_CASE("Неизменяемые функции, переданные с помощью std::ref, всегда вызываются как "
+        "const lvalue")
     {
         auto calls = std::size_t{0};
         const auto c = utility::const_lvalue_call_counter(calls);
@@ -174,14 +179,14 @@ TEST_SUITE("each")
         CHECK(calls == 2);
     }
 
-    TEST_CASE("is_a_constexpr_function")
+    TEST_CASE("Может быть вычислена на этапе компиляции")
     {
         constexpr auto e = burst::each(&burst::intlog2<int>) | burst::make_tuple;
         constexpr auto t = e(1, 256, 1024);
         CHECK(t == std::make_tuple(0, 8, 10));
     }
 
-    TEST_CASE("is_composable_with_only")
+    TEST_CASE("Компонуема с burst::only")
     {
         const auto cube = [] (auto x) {return x * x * x;};
         const auto stringify = [] (auto x) {return std::to_string(x);};

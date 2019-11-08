@@ -10,7 +10,7 @@
 
 TEST_SUITE("next_subset")
 {
-    TEST_CASE("accepts_iterators_of_a_set_and_iterators_of_a_valid_subset")
+    TEST_CASE("Принимает итераторы корректного подмножества и итераторы исходного множества")
     {
         using vector_type = std::vector<int>;
         auto items = vector_type{17};
@@ -29,7 +29,7 @@ TEST_SUITE("next_subset")
         CHECK(**subset_container.begin() == 17);
     }
 
-    TEST_CASE("empty_set_has_no_subsets")
+    TEST_CASE("У пустого множества нет подмножеств")
     {
         using vector_type = std::vector<int>;
         auto items = vector_type{};
@@ -47,7 +47,7 @@ TEST_SUITE("next_subset")
         CHECK((new_subset_end == subset_container.begin()));
     }
 
-    TEST_CASE("allows_custom_ordering")
+    TEST_CASE("Допускает пользовательскую фунцию для сравнения элементов")
     {
         using vector_type = std::vector<int>;
         auto items = vector_type{3, 2, 1};
@@ -63,7 +63,7 @@ TEST_SUITE("next_subset")
         CHECK(**subset_container.begin() == 3);
     }
 
-    TEST_CASE("subsets_are_listed_in_a_natural_order")
+    TEST_CASE("Подмножества перечисляются в естественном порядке")
     {
         using vector_type = std::vector<int>;
         auto items = vector_type{1, 2, 3};
