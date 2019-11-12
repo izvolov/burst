@@ -270,6 +270,7 @@ TEST_SUITE("dynamic_tuple")
 
     TEST_CASE("Исключение, брошенное вставляемым объектом, не приводит к утечкам")
     {
+        REQUIRE(kamikaze::instances_count == 0);
         REQUIRE_THROWS_AS(burst::dynamic_tuple(kamikaze{}, kamikaze{}, kamikaze{}), std::runtime_error);
         CHECK(kamikaze::instances_count == 0);
     }
