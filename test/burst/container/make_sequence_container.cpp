@@ -182,11 +182,11 @@ TEST_SUITE("make_sequence_container")
     TEST_CASE_TEMPLATE("Умеет инициализироваться N копиями заданного значения",
         make_sequence, SIZED_SEQUENCE_GENERATORS)
     {
-        const auto v = make_sequence::apply(5u, std::string{});
+        const auto v = make_sequence::apply(5u, std::string{"qwe"});
 
         CHECK(v.size() == 5);
         CHECK((std::is_same<typename decltype(v)::value_type, std::string>::value));
-        CHECK(boost::algorithm::all_of(v, [] (const auto & s) {return s.empty();}));
+        CHECK(boost::algorithm::all_of(v, [] (const auto & s) {return s == "qwe";}));
     }
 
     TEST_CASE("Умеет инициализировать std::forward_list N копиями заданного значения")
