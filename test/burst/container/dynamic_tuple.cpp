@@ -306,7 +306,7 @@ TEST_SUITE("dynamic_tuple")
 
     TEST_CASE("ДК может содержать в себе ДК")
     {
-        burst::dynamic_tuple t(burst::dynamic_tuple{}, burst::dynamic_tuple{});
+        burst::dynamic_tuple t(burst::dynamic_tuple{1, 2}, burst::dynamic_tuple{3, 4});
         CHECK(t.size() == 2);
     }
 
@@ -516,11 +516,11 @@ TEST_SUITE("dynamic_tuple")
     {
         REQUIRE(dummy::instances_count == 0);
         {
-            burst::dynamic_tuple t(dummy{}, std::make_unique<int>(17));
-            REQUIRE(dummy::instances_count == 1);
+            burst::dynamic_tuple t(dummy{}, std::make_unique<int>(17), dummy{});
+            REQUIRE(dummy::instances_count == 2);
 
             REQUIRE_THROWS_AS(burst::dynamic_tuple copy(t), std::runtime_error);
-            CHECK(dummy::instances_count == 1);
+            CHECK(dummy::instances_count == 2);
         }
         CHECK(dummy::instances_count == 0);
     }
