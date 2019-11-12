@@ -288,7 +288,9 @@ namespace burst
         template <typename RandomAccessRange>
         void initialize (const RandomAccessRange & range)
         {
-            if (std::is_sorted(range.begin(), range.end(), m_compare))
+            const auto is_sorted_and_unique =
+                std::adjacent_find(range.begin(), range.end(), not_fn(m_compare)) == range.end();
+            if (is_sorted_and_unique)
             {
                 initialize_trusted(range);
             }

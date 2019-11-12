@@ -1,4 +1,5 @@
 #include <burst/container/k_ary_search_set.hpp>
+#include <burst/container/make_set.hpp>
 #include <burst/container/make_vector.hpp>
 
 #include <doctest/doctest.h>
@@ -78,6 +79,16 @@ TEST_SUITE("k_ary_search")
         burst::k_ary_search_set<int> set(burst::container::unique_ordered_tag, something.begin(), something.end());
 
         CHECK(set.size() == something.size());
+    }
+
+    TEST_CASE("Размер k-местного дерева равен количеству неповторяющихся элементов диапазона, "
+        "из которых оно проиницилизировано")
+    {
+        auto something = burst::make_vector({1, 1, 2, 2, 3, 3, 4, 4});
+
+        burst::k_ary_search_set<int> set(something.begin(), something.end());
+
+        CHECK(set.size() == burst::make_set(something).size());
     }
 
     TEST_CASE("k-местное дерево поиска представляет собой совершенное дерево при количестве "
