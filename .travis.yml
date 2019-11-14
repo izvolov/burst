@@ -4,16 +4,19 @@ language: cpp
   os: linux
   dist: bionic
   install:
+  - wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | sudo apt-key add -
+  - sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
+
   - sudo apt update
   - sudo apt install --yes
     $COMPILER_PACKAGE
     libboost-program-options$BOOST_VERSION-dev
     libboost-test$BOOST_VERSION-dev
+    cmake
+
   script:
-  - mkdir Build
-  - cd Build
-  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_COMPILER=$COMPILER_NAME
-  - cmake --build . --target check
+  - /usr/bin/cmake -S . -B Build/burst -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCMAKE_CXX_COMPILER=$COMPILER_NAME
+  - /usr/bin/cmake --build Build/burst --target check
 
 .macos-job-template: &macos-job
   os: osx
@@ -23,24 +26,28 @@ language: cpp
       packages:
       - cmake
       - boost
+  install:
+  - git clone https://github.com/onqtam/doctest.git third_party/doctest
+  - git -C third_party/doctest checkout 2.3.3
+  - cmake -Hthird_party/doctest -BBuild/third_party/doctest -DCMAKE_BUILD_TYPE=Release
+  - sudo cmake --build Build/third_party/doctest --target install/fast
   script:
-  - mkdir Build
-  - cd Build
-  - cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE
-  - cmake --build . --target check
+  - cmake -H. -BBuild/burst -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+  - cmake --build Build/burst --target check
 
 .coverage-job-template: &coverage-job
   os: linux
   dist: bionic
   install:
+  - wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | sudo apt-key add -
+  - sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
+
   - sudo apt update
-  - sudo apt install --yes gcovr libboost-program-options-dev libboost-test-dev
+  - sudo apt install --yes gcovr libboost-program-options-dev libboost-test-dev cmake
   - pip install --user cpp-coveralls
   script:
-  - mkdir Build
-  - cd Build
-  - cmake .. -DCMAKE_BUILD_TYPE=Debug -DBURST_COVERAGE=ON
-  - cmake --build . --target coverage
+  - /usr/bin/cmake -S . -B Build/burst -DCMAKE_BUILD_TYPE=Debug -DBURST_COVERAGE=ON
+  - /usr/bin/cmake --build Build/burst --target coverage
   after_success:
   - coveralls --root .. --include include
 
