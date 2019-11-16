@@ -74,7 +74,7 @@ def parse_command_line (options):
         choices=['int8', 'int16', 'int32', 'int64', 'uint8', 'uint16', 'uint32', 'uint64'])
     parser.add_argument('--prepare', type=str, default='shuffle',
         help='Предобработка массива перед каждой сортировкой',
-        choices=['shuffle', 'ascending', 'descending'])
+        choices=['shuffle', 'ascending', 'descending', 'outlier'])
     args = parser.parse_args(options[1:])
     return args.begin, args.end, args.step, args.prefix, args.integer, args.prepare
 

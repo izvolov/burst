@@ -104,6 +104,29 @@ struct sort_fn
     BinaryPredicate compare = BinaryPredicate{};
 };
 
+// Сортирует диапазон и ставит его максимальное значение на случайную позицию.
+struct outlier_fn
+{
+    template <typename Container>
+    auto operator () (Container c)
+    {
+        if (c.size() > 1)
+        {
+            std::sort(c.begin(), c.end());
+
+            std::default_random_engine engine((*rd)());
+            const auto max_outlier_index = std::distance(c.begin(), c.end()) - 2;
+            using difference_type = typename Container::difference_type;
+            auto uniform = std::uniform_int_distribution<difference_type>(0, max_outlier_index);
+            auto outlier_index = uniform(engine);
+            std::rotate(c.begin() + outlier_index, c.end() - 1, c.end());
+        }
+        return c;
+    }
+
+    std::shared_ptr<std::random_device> rd = std::make_shared<std::random_device>();
+};
+
 template <typename Integer>
 test_call_type dispatch_preparation (const std::string & prepare_type)
 {
@@ -129,6 +152,13 @@ test_call_type dispatch_preparation (const std::string & prepare_type)
                 [sort = sort_fn<std::greater<>>{}] (std::size_t attempts)
                 {
                     return test_all<Integer>(attempts, sort);
+                }
+            },
+            {
+                "outlier",
+                [swap = outlier_fn{}] (std::size_t attempts)
+                {
+                    return test_all<Integer>(attempts, swap);
                 }
             }
         };
@@ -192,7 +222,7 @@ int main (int argc, const char * argv[])
             "Допустимые значения: uint8, uint16, uint32, uint64, int8, int16, int32, int64")
         ("prepare", bpo::value<std::string>()->required(),
             "Тип подготовки массива перед каждым испытанием.\n"
-            "Допустимые значения: shuffle, ascending, descending");
+            "Допустимые значения: shuffle, ascending, descending, outlier");
 
     try
     {
