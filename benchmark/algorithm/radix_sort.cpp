@@ -61,6 +61,13 @@ void test_all (std::size_t attempts, UnaryFunction prepare)
         };
     test_sort("std::sort", std_sort, numbers, attempts, prepare);
 
+    auto std_stable_sort =
+        [] (auto && ... args)
+        {
+            return std::stable_sort(std::forward<decltype(args)>(args)...);
+        };
+    test_sort("std::stable_sort", std_stable_sort, numbers, attempts, prepare);
+
     auto boost_int_sort =
         [] (auto && ... args)
         {
