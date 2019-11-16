@@ -111,13 +111,6 @@ test_call_type dispatch_preparation (const std::string & prepare_type)
         std::unordered_map<std::string, test_call_type>
         {
             {
-                "noshuffle",
-                [] (std::size_t attempts)
-                {
-                    return test_all<Integer>(attempts, burst::identity);
-                }
-            },
-            {
                 "shuffle",
                 [shuffle = shuffle_fn<Integer>{}] (std::size_t attempts)
                 {
@@ -197,9 +190,9 @@ int main (int argc, const char * argv[])
         ("integer", bpo::value<std::string>()->default_value("uint32"),
             "Тип сортируемых чисел.\n"
             "Допустимые значения: uint8, uint16, uint32, uint64, int8, int16, int32, int64")
-        ("prepare", bpo::value<std::string>()->default_value("shuffle"),
+        ("prepare", bpo::value<std::string>()->required(),
             "Тип подготовки массива перед каждым испытанием.\n"
-            "Допустимые значения: noshuffle, shuffle, ascending, descending");
+            "Допустимые значения: shuffle, ascending, descending");
 
     try
     {
