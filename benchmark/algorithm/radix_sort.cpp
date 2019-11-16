@@ -91,6 +91,19 @@ struct shuffle_fn
     std::shared_ptr<std::random_device> rd = std::make_shared<std::random_device>();
 };
 
+template <typename BinaryPredicate>
+struct sort_fn
+{
+    template <typename Container>
+    auto operator () (Container c) const
+    {
+        std::sort(c.begin(), c.end(), compare);
+        return c;
+    }
+
+    BinaryPredicate compare = BinaryPredicate{};
+};
+
 template <typename Integer>
 test_call_type dispatch_preparation (const std::string & prepare_type)
 {
@@ -109,6 +122,20 @@ test_call_type dispatch_preparation (const std::string & prepare_type)
                 [shuffle = shuffle_fn<Integer>{}] (std::size_t attempts)
                 {
                     return test_all<Integer>(attempts, shuffle);
+                }
+            },
+            {
+                "ascending",
+                [sort = sort_fn<std::less<>>{}] (std::size_t attempts)
+                {
+                    return test_all<Integer>(attempts, sort);
+                }
+            },
+            {
+                "descending",
+                [sort = sort_fn<std::greater<>>{}] (std::size_t attempts)
+                {
+                    return test_all<Integer>(attempts, sort);
                 }
             }
         };
@@ -172,7 +199,7 @@ int main (int argc, const char * argv[])
             "Допустимые значения: uint8, uint16, uint32, uint64, int8, int16, int32, int64")
         ("prepare", bpo::value<std::string>()->default_value("shuffle"),
             "Тип подготовки массива перед каждым испытанием.\n"
-            "Допустимые значения: noshuffle, shuffle");
+            "Допустимые значения: noshuffle, shuffle, ascending, descending");
 
     try
     {
