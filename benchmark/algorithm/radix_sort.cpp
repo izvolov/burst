@@ -126,40 +126,27 @@ struct outlier_fn
     std::shared_ptr<std::random_device> rd = std::make_shared<std::random_device>();
 };
 
+template <typename Integer, typename UnaryFunction>
+auto make_test_all (std::string name, UnaryFunction f)
+{
+    auto test_call =
+        [f = std::move(f)] (std::size_t attempts)
+        {
+            return test_all<Integer>(attempts, f);
+        };
+    return std::pair<std::string, test_call_type>(std::move(name), test_call);
+}
+
 template <typename Integer>
 test_call_type dispatch_preparation (const std::string & prepare_type)
 {
     static const auto test_calls =
         std::unordered_map<std::string, test_call_type>
         {
-            {
-                "shuffle",
-                [shuffle = shuffle_fn{}] (std::size_t attempts)
-                {
-                    return test_all<Integer>(attempts, shuffle);
-                }
-            },
-            {
-                "ascending",
-                [sort = sort_fn<std::less<>>{}] (std::size_t attempts)
-                {
-                    return test_all<Integer>(attempts, sort);
-                }
-            },
-            {
-                "descending",
-                [sort = sort_fn<std::greater<>>{}] (std::size_t attempts)
-                {
-                    return test_all<Integer>(attempts, sort);
-                }
-            },
-            {
-                "outlier",
-                [swap = outlier_fn{}] (std::size_t attempts)
-                {
-                    return test_all<Integer>(attempts, swap);
-                }
-            }
+            make_test_all<Integer>("shuffle", shuffle_fn{}),
+            make_test_all<Integer>("ascending", sort_fn<std::less<>>{}),
+            make_test_all<Integer>("descending", sort_fn<std::greater<>>{}),
+            make_test_all<Integer>("outlier", outlier_fn{})
         };
 
     auto call = test_calls.find(prepare_type);
