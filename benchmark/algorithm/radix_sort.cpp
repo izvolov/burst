@@ -78,7 +78,6 @@ void test_all (std::size_t attempts, UnaryFunction prepare)
 
 using test_call_type = std::function<void (std::size_t)>;
 
-template <typename Integer>
 struct shuffle_fn
 {
     template <typename Container>
@@ -135,7 +134,7 @@ test_call_type dispatch_preparation (const std::string & prepare_type)
         {
             {
                 "shuffle",
-                [shuffle = shuffle_fn<Integer>{}] (std::size_t attempts)
+                [shuffle = shuffle_fn{}] (std::size_t attempts)
                 {
                     return test_all<Integer>(attempts, shuffle);
                 }
