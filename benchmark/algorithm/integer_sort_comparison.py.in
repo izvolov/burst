@@ -75,16 +75,16 @@ def parse_command_line (options):
     parser.add_argument('--prepare', type=str, default='shuffle',
         help='Предобработка массива перед каждой сортировкой',
         choices=['shuffle', 'ascending', 'descending', 'outlier'])
+    parser.add_argument('--attempts', type=int, default=10000000,
+        help='Максимальное количество итераций')
     args = parser.parse_args(options[1:])
-    return args.begin, args.end, args.step, args.prefix, args.integer, args.prepare
+    return args.begin, args.end, args.step, args.prefix, args.integer, args.prepare, args.attempts
 
-max_attempts = 10000000
-
-begin, end, step, prefix, integer_type, prepare = parse_command_line(sys.argv)
+begin, end, step, prefix, integer_type, prepare, attempts = parse_command_line(sys.argv)
 lengths = range(begin, end, step)
 
-measurements = measure(lengths, max_attempts, integer_type, prepare)
+measurements = measure(lengths, attempts, integer_type, prepare)
 
-file_name = '_'.join((prefix, str(begin), str(end), str(step), integer_type, prepare))
+file_name = '_'.join((prefix, str(begin), str(end), str(step), integer_type, prepare, str(attempts)))
 plot(lengths, measurements, integer_type, file_name + '.png')
 table(lengths, measurements, integer_type, file_name + '.txt')
