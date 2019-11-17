@@ -126,6 +126,18 @@ struct outlier_fn
     std::shared_ptr<std::random_device> rd = std::make_shared<std::random_device>();
 };
 
+// Сортирует первую половину по возрастанию, а вторую — по убыванию.
+struct pipe_organ_fn
+{
+    template <typename Container>
+    auto operator () (Container c) const
+    {
+        std::sort(c.begin(), c.end());
+        std::reverse(c.begin() + std::distance(c.begin(), c.end()) / 2, c.end());
+        return c;
+    }
+};
+
 template <typename Integer, typename UnaryFunction>
 auto make_test_all (std::string name, UnaryFunction f)
 {
@@ -146,7 +158,8 @@ test_call_type dispatch_preparation (const std::string & prepare_type)
             make_test_all<Integer>("shuffle", shuffle_fn{}),
             make_test_all<Integer>("ascending", sort_fn<std::less<>>{}),
             make_test_all<Integer>("descending", sort_fn<std::greater<>>{}),
-            make_test_all<Integer>("outlier", outlier_fn{})
+            make_test_all<Integer>("outlier", outlier_fn{}),
+            make_test_all<Integer>("pipe-organ", pipe_organ_fn{})
         };
 
     auto call = test_calls.find(prepare_type);
@@ -208,7 +221,7 @@ int main (int argc, const char * argv[])
             "Допустимые значения: uint8, uint16, uint32, uint64, int8, int16, int32, int64")
         ("prepare", bpo::value<std::string>()->required(),
             "Тип подготовки массива перед каждым испытанием.\n"
-            "Допустимые значения: shuffle, ascending, descending, outlier");
+            "Допустимые значения: shuffle, ascending, descending, outlier, pipe-organ");
 
     try
     {
