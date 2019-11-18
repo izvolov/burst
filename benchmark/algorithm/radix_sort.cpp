@@ -138,6 +138,26 @@ struct pipe_organ_fn
     }
 };
 
+// Делает все элементы диапазона равными одному (случайному) из тех, что были в этом диапазоне.
+struct single_fn
+{
+    template <typename Container>
+    auto operator () (Container c)
+    {
+        if (c.size() > 1)
+        {
+            std::default_random_engine engine((*rd)());
+            using size_type = typename Container::size_type;
+            auto uniform = std::uniform_int_distribution<size_type>(0, c.size() - 1);
+            auto item = c[uniform(engine)];
+            std::fill(c.begin(), c.end(), item);
+        }
+        return c;
+    }
+
+    std::shared_ptr<std::random_device> rd = std::make_shared<std::random_device>();
+};
+
 template <typename Integer, typename UnaryFunction>
 auto make_test_all (std::string name, UnaryFunction f)
 {
@@ -159,7 +179,8 @@ test_call_type dispatch_preparation (const std::string & prepare_type)
             make_test_all<Integer>("ascending", sort_fn<std::less<>>{}),
             make_test_all<Integer>("descending", sort_fn<std::greater<>>{}),
             make_test_all<Integer>("outlier", outlier_fn{}),
-            make_test_all<Integer>("pipe-organ", pipe_organ_fn{})
+            make_test_all<Integer>("pipe-organ", pipe_organ_fn{}),
+            make_test_all<Integer>("single", single_fn{})
         };
 
     auto call = test_calls.find(prepare_type);
