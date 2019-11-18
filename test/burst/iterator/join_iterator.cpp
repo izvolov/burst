@@ -1,3 +1,4 @@
+#include <burst/container/make_forward_list.hpp>
 #include <burst/container/make_vector.hpp>
 #include <burst/iterator/join_iterator.hpp>
 #include <burst/range/make_range_vector.hpp>
@@ -51,7 +52,31 @@ TEST_SUITE("join_iterator")
         CHECK(*joined_end == 0);
     }
 
-    TEST_CASE("Изменение копии итератора склейки не изменяет оригинал")
+    TEST_CASE("Копия однопроходного итератора склейки равна оригиналу")
+    {
+        auto first = burst::make_forward_list({100, 50});
+        auto second = burst::make_forward_list({70, 30});
+        auto ranges = burst::make_range_vector(first, second);
+
+        auto join_iterator = burst::make_join_iterator(ranges);
+
+        auto join_iterator_copy = join_iterator;
+        CHECK(join_iterator_copy == join_iterator);
+    }
+
+    TEST_CASE("Копия итератора склейки произвольного доступа равна оригиналу")
+    {
+        auto first = burst::make_vector({100, 50});
+        auto second = burst::make_vector({70, 30});
+        auto ranges = burst::make_range_vector(first, second);
+
+        auto join_iterator = burst::make_join_iterator(ranges);
+
+        auto join_iterator_copy = join_iterator;
+        CHECK(join_iterator_copy == join_iterator);
+    }
+
+    TEST_CASE("Изменение копии итератора склейки произвольного доступа не изменяет оригинал")
     {
         auto first = burst::make_vector({100, 50});
         auto second = burst::make_vector({70, 30});
@@ -64,6 +89,21 @@ TEST_SUITE("join_iterator")
 
         CHECK(*join_iterator_copy == 70);
         CHECK(*join_iterator == 100);
+    }
+
+    TEST_CASE("Изменение копии однопроходного итератора склейки изменяет оригинал")
+    {
+        auto first = burst::make_forward_list({100, 50});
+        auto second = burst::make_forward_list({70, 30});
+        auto ranges = burst::make_range_vector(first, second);
+
+        auto join_iterator = burst::make_join_iterator(ranges);
+
+        auto join_iterator_copy = join_iterator;
+        ++join_iterator_copy;
+
+        CHECK(*join_iterator_copy == 50);
+        CHECK(*join_iterator == 50);
     }
 
     TEST_CASE("Произвольный доступ между границами склейки происходит бесшовно")
