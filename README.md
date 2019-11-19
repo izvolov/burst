@@ -414,7 +414,7 @@ auto c = burst::make_sequence_container<boost::container::vector>(...);
 > cmake -DCMAKE_BUILD_TYPE=Release path/to/burst -DBURST_TESTING=OFF
 > ```
 >
-> Также тестирование автоматически отключается в случае, если Проксима подключается в качестве подпроекта.
+> Также тестирование автоматически отключается в случае, если Burst подключается в качестве подпроекта.
 
 Установка
 ---------
