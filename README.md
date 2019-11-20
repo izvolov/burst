@@ -441,14 +441,6 @@ cmake -DCMAKE_BUILD_TYPE=Release path/to/burst
 cmake --build . --target install
 ```
 
-> При желании можно миновать этап сборки тестов и замеров производительности.
->
-> ```shell
-> cd path/to/build/directory
-> cmake -DCMAKE_BUILD_TYPE=Release path/to/burst -DBURST_TESTING=OFF -DBURST_BENCHMARKING=OFF
-> cmake --build . --target install
-> ```
-
 После этого в системе сборки CMake будет доступен пакет `Burst`:
 
 ```cmake
