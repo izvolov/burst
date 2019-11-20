@@ -13,387 +13,76 @@ Burst
 
 В данном проекте я попытался собрать некоторые алгоритмы и инструменты, совместимые с СБШ и Бустом, которые нужны в повседневной работе, но которых пока нет ни в стандартной библиотеке, ни в библиотеке Boost, либо же они есть, но не устраивают с точки зрения интерфейса или производительности.
 
+Содержание
+----------
+
+1.  [Что интересного?](#что-интересного)
+    1.  [Целочисленные сортировки](#целочисленные-сортировки)
+    2.  [Динамический кортеж](#динамический-кортеж)
+    3.  [Ленивые вычисления над диапазонами](#ленивые-вычисления-над-диапазонами)
+2.  [Требования](#требования)
+3.  [Установка](#установка)
+    1.  [Вариант 1: Скопировать исходники](#вариант-1-скопировать-исходники)
+    2.  [Вариант 2: Установить с помощью CMake](#вариант-2-установить-с-помощью-cmake)
+    3.  [Вариант 3: Подключить папку с проектом в CMake](#вариант-3-подключить-папку-с-проектом-в-cmake)
+
 Что интересного?
 ----------------
 
-1.  [Алгоритмы](#algorithms)
-    1.  [Целочисленные сортировки](#intsort)
-        1.  [Поразрядная сортировка](#radix)
-        2.  [Сортировка подсчётом](#counting)
-    2.  [Скачущий поиск](#gallop)
-        1.  [Поиск нижней грани](#galloping-lb)
-        2.  [Поиск верхней грани](#galloping-ub)
-2.  [Структуры данных](#data-structures)
-    1.  [Плоское k-местное дерево поиска](#kary)
-    2.  [Динамический кортеж](#dynamic-tuple)
-3.  [Ленивые вычисления](#lazy-ranges)
-    1.  [Склейка](#join)
-    2.  [Слияние](#merge)
-    3.  [Пересечение](#intersect)
-    4.  [Полупересечение](#semiintersect)
-    5.  [Объединение](#union)
-    6.  [Разность](#difference)
-    7.  [Симметрическая разность](#symmetric-difference)
-4.  [Рабочие инструменты](#utilities)
-    1.  [Конструирование контейнеров с выводом типа](#inferring-constructors)
+Полный список интересных штук можно изучить в [справочнике](doc/README.md).
 
-<a name="algorithms"/> Алгоритмы
---------------------------------
+### Целочисленные сортировки
 
-### <a name="intsort"/> Целочисленные сортировки
+Алгоритмы сортировок стандартной библиотеки `std::sort` и `std::stable_sort` являются классическими представителями сортировок, основанных на сравнениях. В то же время время существует другой класс алгоритмов, применимый к целым числам и не использующий в своей работе сравнения. Таким алгоритмом является [поразрядная сортировка](https://ru.wikipedia.org/wiki/%D0%9F%D0%BE%D1%80%D0%B0%D0%B7%D1%80%D1%8F%D0%B4%D0%BD%D0%B0%D1%8F_%D1%81%D0%BE%D1%80%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B0). И, хотя это такой же классический алгоритм, как, например, быстрая сортировка или сортировка подсчётом, реализации поразрядной сортировки, как правило, оставляют желать лучшего. Возможно, поэтому многие люди до сих пор считают поразрядку алгоритмом, представляющим исключительно академический интерес, и малоприменимым в реальности. Однако, это заблуждение.
 
-Классические алгоритмы эффективной сортировки целых чисел с линейным временем вычисления.
+Представленная в данной библиотеке реализация поразрядной сортировки существенно быстрее стандартных `std::sort` и `std::stable_sort` (и даже [`boost::integer_sort`](https://www.boost.org/doc/libs/1_71_0/libs/sort/doc/html/boost/sort/spreadsort/integer__idm46709765154208.html)) при условии, что сортируются целые числа или доступно отображение из сортируемых элементов в целые числа.
 
-#### <a name="radix"/> Поразрядная сортировка
+![Сравнение сортировок целых чисел](doc/images/radix_sort_is_fast.png)
+
+[Подробнее про `burst::radix_sort` и `burst::counting_sort`](doc/README.md#intsort).
+
+### Динамический кортеж
+
+Представьте, что вам нужно сложить в один контейнер объекты разных типов, при этом набор типов неизвестен на этапе компиляции, а объекты должны быть расположены в непрерывной области памяти и плотно упакованы, то есть между ними не должно быть пустот.
+
+Никакая комбинация стандартных средств (`tuple`, `vector`, `any`) не позволяют добиться требуемого результата.
+
+Поэтому был разработан класс `burst::dynamic_tuple`, удовлетворяющий всем этим требованиям, а соответствие данным требованиям означает оптимальность по занимаемой памяти и времени доступа к нужным объектам.
 
 ```cpp
-std::vector<std::string> strings{"aaaa", "bbb", "cc", "d"};
+burst::dynamic_tuple t(std::string("123"));
 
-std::vector<std::string> buffer(strings.size());
-burst::radix_sort(strings.begin(), strings.end(), buffer.begin(),
-    [] (const std::string & string)
-    {
-        return string.size();
-    }
-);
-assert((strings == std::vector<std::string>{"d", "cc", "bbb", "aaaa"}));
-```
-
-Находится в заголовке
-```cpp
-#include <burst/algorithm/radix_sort.hpp>
-```
-
-#### <a name="counting"/> Сортировка подсчётом
-
-```cpp
-std::vector<std::size_t> chaos{0x0104, 0x0203, 0x0302, 0x0401};
-
-std::vector<std::size_t> sorted_by_low_byte(chaos.size());
-burst::counting_sort(chaos.begin(), chaos.end(), sorted_by_low_byte.begin(),
-    [] (const std::size_t & integer) -> std::uint8_t
-    {
-        return integer & 0xff;
-    });
-
-assert((sorted_by_low_byte == std::vector<std::size_t>{0x0401, 0x0302, 0x0203, 0x0104}));
-```
-
-Находится в заголовке
-```cpp
-#include <burst/algorithm/counting_sort.hpp>
-```
-
-### <a name="gallop"/> Скачущий поиск
-
-Эффективен и обгоняет двоичный поиск в том случае, если искомый элемент находится близко к началу
-диапазона.
-
-#### <a name="galloping-lb"/> Поиск нижней грани
-
-```cpp
-std::vector<int> range{1, 2, 2, 3, 3, 3};
-//                              ^
-
-auto search_result = burst::galloping_lower_bound(range.begin(), range.end(), 3);
-
-assert(search_result == range.begin() + 3);
-assert(*search_result == 3);
-```
-
-В заголовке
-```cpp
-#include <burst/algorithm/galloping_lower_bound.hpp>
-```
-
-#### <a name="galloping-ub"/> Поиск верхней грани
-
-```cpp
-std::vector<int> range{30, 30, 30, 20, 20, 10};
-//                                         ^
-
-auto search_result =
-    burst::galloping_upper_bound(range.begin(), range.end(), 20, std::greater<>{});
-
-assert(search_result == range.begin() + 5);
-assert(*search_result == 10);
-```
-
-В заголовке
-```cpp
-#include <burst/algorithm/galloping_upper_bound.hpp>
-```
-
-<a name="data-structures"/> Структуры данных
---------------------------------------------
-
-### <a name="kary"/> Плоское k-местное дерево поиска
-
-На достаточно большом количестве данных опережает по скорости поиска и `std::set`, и `std::unordered_set`, и `boost::container::flat_set`.
-
-Скорость достигается за счёт удобной для процессорного кэша упаковки данных.
-
-```cpp
-burst::k_ary_search_set<int> set{3, 4, 6, 1, 7, 8, 2};
-assert(*set.find(3) == 3);
-assert(set.find(0) == set.end());
-```
-
-В заголовке
-```cpp
-#include <burst/container/k_ary_search_set.hpp>
-```
-
-### <a name="dynamic-tuple"/> Динамический кортеж
-
-Неоднородный контейнер с плотной упаковкой.
-Ключевые особенности:
-1. Складываемые в контейнер типы не обязаны быть членами одной иерархии классов — это могут быть совершенно разные типы. Например, можно поместить одновременно `bool`, `double`, `std::string`, `std::vector<int>` и т.п.
-2. Объекты плотно расположены в памяти. То есть они лежат в едином буфере подряд, друг за другом. Это снимает лишний уровень косвенности при обращении к ним по сравнению с тем, если бы это был, например, массив указателей на базовый класс, как это обычно делается для хранения в массиве классов из одной иерархии.
-
-Объект можно получить зная его тип и индекс в контейнере.
-```cpp
-burst::dynamic_tuple t(std::vector<int>{1, 2, 3});
-
+t.push_back(std::vector<int>{1, 2, 3});
 t.push_back(true);
-t.push_back(std::string("123"));
+t.push_back(123u);
 
-assert(t.size() == 3);
+assert(t.size() == 4);
+assert(t.get<std::string>(0) == "123");
+assert((t.get<std::vector<int>>(1) == std::vector<int>{1, 2, 3}));
+assert(t.get<bool>(2) == true);
 
-assert(t.get<std::vector<int>>(0) == (std::vector<int>{1, 2, 3}));
-assert(t.get<bool>(1) == true);
-assert(t.get<std::string>(2) == std::string("123"));
+t.get<unsigned>(3) = 789u;
+assert(t.get<unsigned>(3) == 789u);
 ```
 
-В заголовке
-```cpp
-#include <burst/container/dynamic_tuple.hpp>
-```
+[Подробнее про `burst::dynamic_tuple`](doc/README.md#dynamic-tuple).
 
-<a name="lazy-ranges"/> Ленивые вычисления
-------------------------------------------
+### Ленивые вычисления над диапазонами
 
-Операции с диапазонами без создания дополнительного буфера для хранения их содержимого.
+Периодически возникает потребность в работе с диапазонами как с множествами, то есть производить операции разности, слияния, объединения, пересечения и т.д. Стандартные средства (`std::set_intersection` и т.д.) умеют работать только с двумя диапазонами одновременно, а кроме того, память, в которую будет записан результат, должен быть известен заранее.
 
-### <a name="join"/> Склейка
+В данной библиотеке реализован ряд алгоритмов, каждый из которых работает с произвольным количеством диапазонов, а результатом является ленивый диапазон, который производит нужную операцию (пересечение, слияние и т.д.) "на лету".
 
-Представляет набор диапазонов таким образом, как будто это единый диапазон.
+Доступные операции:
+1.  [Склейка](doc/README.md#join)
+2.  [Слияние](doc/README.md#merge)
+3.  [Пересечение](doc/README.md#intersect)
+4.  [Полупересечение](doc/README.md#semiintersect)
+5.  [Объединение](doc/README.md#union)
+6.  [Разность](doc/README.md#difference)
+7.  [Симметрическая разность](doc/README.md#symmetric-difference)
 
-```cpp
-std::string hello("hello");
-std::string world("world");
-auto ranges = burst::make_range_vector(hello, world);
-
-auto helloworld = burst::join(ranges);
-
-assert(helloworld == std::string("helloworld"));
-```
-
-В заголовке
-```cpp
-#include <burst/range/join.hpp>
-```
-  
-### <a name="merge"/> Слияние
-
-Производит ленивое слияние набора упорядоченных множеств.
-Создаёт упорядоченный диапазон, пробегающийся по всем элементам всех входных множеств.
-
-Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`even` и `odd`) остаются нетронутыми.
-
-```cpp
-std::vector<int> even{   2,    4,    6};
-std::vector<int>  odd{1,    3,    5   };
-//                    ^  ^  ^  ^  ^  ^
-auto ranges = burst::make_range_vector(even, odd);
-
-auto merged_range = burst::merge(ranges);
-
-auto expected_collection = {1, 2, 3, 4, 5, 6};
-assert(merged_range == expected_collection);
-```
-
-В заголовке
-```cpp
-#include <burst/range/merge.hpp>
-```
-  
-### <a name="intersect"/> Пересечение
-
-Производит ленивое пересечение набора упорядоченных множеств.
-Создаёт упорядоченный диапазон, пробегающийся по тем элементам, которые есть одновременно во всех входных множествах.
-
-Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`natural`, `prime` и `odd`) остаются нетронутыми.
-
-```cpp
-std::vector<int> natural{1, 2, 3, 4, 5, 6, 7};
-std::vector<int>   prime{   2, 3,    5,    7};
-std::vector<int>     odd{1,    3,    5,    7};
-//                             ^     ^     ^
-auto ranges = burst::make_range_vector(natural, prime, odd);
-
-auto intersected_range = burst::intersect(ranges);
-
-auto expected_collection = {3, 5, 7};
-assert(intersected_range == expected_collection);
-```
-
-В заголовке
-```cpp
-#include <burst/range/intersect.hpp>
-```
-
-### <a name="semiintersect"/> Полупересечение
-
-`m`-полупересечение нескольких множеств содержит те элементы, которые содержатся не менее, чем в `m` из этих множеств.
-
-Производит ленивое полупересечение набора упорядоченных множеств.
-Создаёт упорядоченный диапазон, пробегающийся по всем элементам, которые есть не менее, чем в `m` входных множествах.
-
-Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`first`, `second` и `third`) остаются нетронутыми.
-
-```cpp
-auto  first = {0, 0, 1,       2};
-auto second = {0,    1, 1      };
-auto  third = {      1, 1, 1, 2};
-//             ^     ^  ^     ^
-auto ranges = burst::make_range_vector(first, second, third);
-
-auto semiintersection = burst::semiintersect(ranges, 2);
-
-auto expected_collection = {0, 1, 1, 2};
-assert(semiintersection == expected_collection);
-```
-
-В заголовке
-```cpp
-#include <burst/range/semiintersect.hpp>
-```
-
-### <a name="union"/> Объединение
-
-Производит ленивое объединение набора упорядоченных множеств.
-Создаёт упорядоченный диапазон, пробегающийся по всем элементам входных множеств без учёта повторяющихся элементов.
-
-Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`one`, `two` и `three`) остаются нетронутыми.
-
-```cpp
-std::vector<int>   one{1, 2      };
-std::vector<int>   two{   2, 3   };
-std::vector<int> three{      3, 4};
-//                     ^  ^  ^  ^
-auto ranges = burst::make_range_vector(one, two, three);
-
-auto range_union = burst::unite(ranges);
-
-auto expected_collection = {1, 2, 3, 4};
-assert(range_union == expected_collection);
-```
-
-В заголовке
-```cpp
-#include <burst/range/unite.hpp>
-```
-
-### <a name="difference"/> Разность
-
-Производит ленивую разность двух упорядоченных множеств.
-Создаёт упорядоченный диапазон, пробегающийся по всем элементам, которые есть в первом множестве, но которых нет во втором.
-
-```cpp
-const auto natural = burst::make_vector({1, 2, 3, 4, 5, 6});
-const auto     odd = burst::make_vector({1,    3,    5   });
-//                                          ^     ^     ^
-
-const auto difference = burst::difference(natural, odd);
-
-auto even = {2, 4, 6};
-assert(difference == even);
-```
-
-В заголовке
-```cpp
-#include <burst/range/difference.hpp>
-```
-
-### <a name="symmetric-difference"/> Симметрическая разность
-
-Производит ленивую симметрическую разность набора упорядоченных множеств.
-Создаёт упорядоченный диапазон, пробегающийся по всем элементам, которые есть в нечётном числе входных множеств.
-
-Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`first`, `second`, `third` и `fourth`) остаются нетронутыми.
-
-```cpp
-const auto  first = burst::make_vector({1, 2, 3, 4      });
-const auto second = burst::make_vector({1, 2, 3,    5, 5});
-const auto  third = burst::make_vector({1,    3, 4, 5   });
-const auto fourth = burst::make_vector({1, 2,    4      });
-//                                         ^  ^  ^     ^
-auto ranges = burst::make_range_vector(first, second, third, fourth);
-
-const auto difference = burst::symmetric_difference(ranges);
-
-auto result = {2, 3, 4, 5};
-assert(difference == result);
-```
-
-В заголовке
-```cpp
-#include <burst/range/symmetric_difference.hpp>
-```
-
-<a name="utilities"/> Рабочие инструменты
------------------------------------------
-
-### <a name="inferring-constructors"/> Конструирование контейнеров с выводом типа
-
-Часто бывает так, что нужно сохранить данные в контейнер, но при этом тип этих данных либо заранее неизвестен, либо его сложно описать, либо он просто не важен.
-
-В этом случае полезно иметь функцию, выполняющую конструирование этого контейнера так, что тип контейнера выведется автоматически из входных аргументов функции, и пользователю не придётся задавать этот тип вручную.
-
-#### Конструирование из списка инициализации
-
-```cpp
-auto v = burst::make_vector({1, 2, 3, 4});
-```
-
-#### Конструирование при помощи двух итераторов
-
-```cpp
-auto v = burst::make_vector(collection.begin() + 3, collection.end());
-```
-
-#### Конструирование из диапазона
-
-```cpp
-auto v = burst::make_vector(collection);
-```
-
-#### Заполняющее конструирование
-
-```cpp
-auto v = burst::make_vector(5, x);
-```
-
-Доступны практически все варианты конструкторов, а также варианты с конструированием из диапазона для стандартных последовательных контейнеров (`std::vector`, `std::deque`, `std::list`, `std::forward_list`).
-
-В заголовках
-```cpp
-#include <burst/container/make_deque.hpp>
-#include <burst/container/make_forward_list.hpp>
-#include <burst/container/make_list.hpp>
-#include <burst/container/make_vector.hpp>
-```
-
-Кроме того, поддерживается любой совместимый сторониий контейнер при помощи функции `make_sequence_container`:
-```cpp
-auto c = burst::make_sequence_container<boost::container::vector>(...);
-```
-
-В заголовке
-```cpp
-#include <burst/container/make_sequence_container.hpp>
-```
+[Подробнее про ленивые вычисления над диапазонами](doc/README.md#lazy-ranges).
 
 Требования
 ----------
