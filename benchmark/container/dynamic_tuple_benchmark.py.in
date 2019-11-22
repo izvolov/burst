@@ -28,7 +28,7 @@ def measure (array_size, spreads, attempts):
 def plot (array_size, spreads, measurements, file_name):
     plt.rc('font',**{'family':'verdana'})
     plt.figure(num=1)
-    plt.title(u'Контейнеры размера ' + str(array_size), size=14)
+    plt.title(u'Доступ к элементам контейнеров размера ' + str(array_size), size=14)
     plt.xlabel(u'Показатель разброса, ед', size=14)
     plt.ylabel(u'Среднее время доступа, с', size=14)
     plt.grid(True)
