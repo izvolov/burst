@@ -45,6 +45,7 @@ def plot (array_size, spreads, measurements, file_name):
     ymin, ymax = plt.ylim()
     plt.ylim(0.0, ymax)
     plt.legend(loc='lower left')
+    plt.tight_layout()
     plt.savefig(file_name, format='png')
 
 def parse_command_line (options):
