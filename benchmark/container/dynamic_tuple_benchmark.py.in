@@ -43,8 +43,7 @@ def plot (array_size, spreads, measurements, file_name):
         y = np.array(times)
         plt.plot(x, y, label=container, marker=next(markercycle))
 
-    ymin, ymax = plt.ylim()
-    plt.ylim(0.0, ymax)
+    plt.ylim(bottom=0)
     plt.legend(loc='lower left')
     plt.tight_layout()
     plt.savefig(file_name, format='png')
