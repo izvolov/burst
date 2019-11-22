@@ -44,6 +44,8 @@ def plot (lengths, measurements, integer_type, file_name):
         y = np.array(times)
         plt.plot(x, y, label=algorithm)
 
+    plt.xlim(left=0)
+    plt.ylim(bottom=0)
     plt.legend(loc='upper left')
     plt.tight_layout()
     plt.savefig(file_name, format='png')
