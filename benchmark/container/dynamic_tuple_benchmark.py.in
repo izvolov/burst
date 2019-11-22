@@ -31,6 +31,7 @@ def plot (array_size, spreads, measurements, file_name):
     plt.title(u'Контейнеры размера ' + str(array_size), size=14)
     plt.xlabel(u'Показатель разброса, ед', size=14)
     plt.ylabel(u'Среднее время доступа, с', size=14)
+    plt.grid(True)
 
     x = np.array(spreads)
     plt.xticks(x)
