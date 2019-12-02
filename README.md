@@ -25,6 +25,7 @@ Burst
     1.  [Вариант 1: Скопировать исходники](#вариант-1-скопировать-исходники)
     2.  [Вариант 2: Установить с помощью CMake](#вариант-2-установить-с-помощью-cmake)
     3.  [Вариант 3: Подключить папку с проектом в CMake](#вариант-3-подключить-папку-с-проектом-в-cmake)
+    4.  [Вариант 4: CMake FetchContent](#вариант-4-cmake-fetchcontent)
 
 Что интересного?
 ----------------
@@ -150,6 +151,23 @@ add_subdirectory("path/to/burst")
 ```
 
 После этого в системе сборки CMake будет доступна цель `Burst::burst`, которую можно использовать при подключении библиотек:
+
+```cmake
+add_executable(program program.cpp)
+target_link_libraries(program PRIVATE Burst::burst)
+```
+
+### Вариант 4: CMake FetchContent
+
+Начиная с версии CMake 3.14 можно скачать и подключить репозиторий с зависимостью прямо во время сборки с помощью модуля [FetchContent](https://cmake.org/cmake/help/v3.14/module/FetchContent.html). В случае с библиотекой `Burst` это можно записать тремя командами:
+
+```cmake
+include(FetchContent)
+FetchContent_Declare(Burst GIT_REPOSITORY https://github.com/izvolov/burst.git)
+FetchContent_MakeAvailable(Burst)
+```
+
+Этот набор команд породит интерфейсную библиотеку Burst::burst, которую можно использовать при подключении библиотек:
 
 ```cmake
 add_executable(program program.cpp)
