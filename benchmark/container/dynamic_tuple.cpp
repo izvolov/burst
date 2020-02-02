@@ -60,9 +60,10 @@ auto create_sparse_pointer_array (std::size_t size, std::size_t spread)
 {
     std::vector<std::unique_ptr<A>> pointer_array = create_pointer_array<T>(size * spread);
 
+    std::size_t index = 0;
     auto last =
         std::remove_if(pointer_array.begin(), pointer_array.end(),
-            [spread, index = 0ul] (const auto &) mutable
+            [spread, & index] (const auto &)
             {
                 return index++ % spread != 0;
             });
