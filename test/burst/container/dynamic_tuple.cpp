@@ -80,6 +80,37 @@ namespace // anonymous
     };
 
     int kamikaze::instances_count = 0;
+
+    struct move_constructor_counter
+    {
+        explicit move_constructor_counter (std::size_t & move_count):
+            move_count(move_count)
+        {
+        }
+
+        move_constructor_counter (move_constructor_counter && that):
+            move_count(that.move_count)
+        {
+            ++move_count;
+        }
+
+        std::size_t & move_count;
+    };
+
+    struct destructor_counter
+    {
+        explicit destructor_counter (std::size_t & destruct_count):
+            destruct_count(destruct_count)
+        {
+        }
+
+        ~destructor_counter ()
+        {
+            ++destruct_count;
+        }
+
+        std::size_t & destruct_count;
+    };
 } // namespace anonymous
 
 TEST_SUITE("dynamic_tuple")
@@ -192,6 +223,44 @@ TEST_SUITE("dynamic_tuple")
         t.reserve(desired_capacity);
 
         CHECK(t.capacity() >= desired_capacity);
+    }
+
+    TEST_CASE("Запрос на резервирование большей вместимости для непустого ДК приводит к "
+        "переносу внутренних объектов на новое место")
+    {
+        std::size_t move_count = 0;
+        auto t =
+            burst::dynamic_tuple
+            (
+                move_constructor_counter{move_count},
+                move_constructor_counter{move_count}
+            );
+
+        auto move_count_before_reserve = move_count;
+
+        auto desired_capacity = t.capacity() + 1;
+        t.reserve(desired_capacity);
+
+        CHECK(move_count == move_count_before_reserve + t.size());
+    }
+
+    TEST_CASE("Запрос на резервирование большей вместимости для непустого ДК приводит к "
+        "разрушению старых объектов")
+    {
+        std::size_t destructor_count = 0;
+        auto t =
+            burst::dynamic_tuple
+            (
+                destructor_counter{destructor_count},
+                destructor_counter{destructor_count}
+            );
+
+        auto destructor_count_before_reserve = destructor_count;
+
+        auto desired_capacity = t.capacity() + 1;
+        t.reserve(desired_capacity);
+
+        CHECK(destructor_count == destructor_count_before_reserve + t.size());
     }
 
     TEST_CASE("Размер ДК равен количеству содержащихся в нём элементов")
