@@ -260,7 +260,7 @@ namespace burst
         const T & get (size_type index) const
         {
             assert(management::conforms<T>(m_objects[index]));
-            return *static_cast<const T *>(static_cast<const void *>(data() + offset(index)));
+            return get_by_offset<T>(offset(index));
         }
 
         //!     Доступ к изменяемому элементу по индексу.
@@ -271,7 +271,7 @@ namespace burst
         T & get (size_type index)
         {
             assert(management::conforms<T>(m_objects[index]));
-            return *static_cast<T *>(static_cast<void *>(data() + offset(index)));
+            return get_by_offset<T>(offset(index));
         }
 
         //!     Отступ элемента, находящегося по заданному индексу.
