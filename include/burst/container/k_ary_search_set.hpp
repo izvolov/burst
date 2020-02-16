@@ -165,7 +165,7 @@ namespace burst
                 где N = |values|.
             Память: O(log_k(N) + k).
          */
-        k_ary_search_set
+        explicit k_ary_search_set
                 (
                     std::initializer_list<value_type> values,
                     std::size_t arity = default_arity,
