@@ -7,10 +7,10 @@ target_include_directories(testutility INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
 add_executable(burst-unit-tests test_main.cpp)
 target_link_libraries(burst-unit-tests
     PRIVATE
-        testutility
         Boost::boost
         Burst::burst
         doctest::doctest
+        testutility
 )
 
 find_program(GCOVR_EXECUTABLE gcovr)
