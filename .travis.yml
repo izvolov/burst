@@ -108,4 +108,10 @@ matrix:
   - <<: *macos-job
     osx_image: xcode10.3
     env: BUILD_TYPE=Release
+  - <<: *macos-job
+    osx_image: xcode11.4
+    env: BUILD_TYPE=Debug
+  - <<: *macos-job
+    osx_image: xcode11.4
+    env: BUILD_TYPE=Release
   - <<: *coverage-job
