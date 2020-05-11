@@ -54,7 +54,7 @@ language: cpp
   - /usr/bin/cmake -S . -B Build/burst -DCMAKE_BUILD_TYPE=Debug -DBURST_COVERAGE=ON
   - /usr/bin/cmake --build Build/burst --target coverage
   after_success:
-  - coveralls --root .. --include include
+  - coveralls --root . --build-root Build/burst --include include
 
 matrix:
   include:
