@@ -43,7 +43,7 @@ language: cpp
   - sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
 
   - sudo apt update
-  - sudo apt install --yes gcovr libboost-program-options-dev cmake git
+  - sudo apt install --yes gcovr libboost-program-options-dev cmake git lcov
   - pip install --user cpp-coveralls
 
   - git clone https://github.com/onqtam/doctest.git third_party/doctest
@@ -54,7 +54,10 @@ language: cpp
   - /usr/bin/cmake -S . -B Build/burst -DCMAKE_BUILD_TYPE=Debug -DBURST_COVERAGE=ON
   - /usr/bin/cmake --build Build/burst --target coverage
   after_success:
-  - coveralls --root . --build-root Build/burst --include include
+  - lcov --capture --directory Build/burst --output-file coverage.info
+  - lcov --remove coverage.info "/usr/*" --output-file coverage.info
+  - lcov --remove coverage.info "*/test/*" --output-file coverage.info
+  - bash <(curl -s https://codecov.io/bash) -f coverage.info || echo "Codecov did not collect coverage reports"
 
 matrix:
   include:
