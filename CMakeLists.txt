@@ -27,6 +27,7 @@ option(BURST_BENCHMARKING "Включить сборку программ для
 
 add_compile_options(
     -Werror
+    -pedantic-errors
 
     -Wall
     -Wextra
@@ -36,7 +37,6 @@ add_compile_options(
     -Wcast-qual
     -Wconversion
     -Wctor-dtor-privacy
-    -Wenum-compare
     -Wfloat-equal
     -Wnon-virtual-dtor
     -Wold-style-cast
