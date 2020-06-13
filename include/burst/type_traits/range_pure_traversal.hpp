@@ -2,7 +2,7 @@
 #define BURST_TYPE_TRAITS_RANGE_PURE_TRAVERSAL_HPP
 
 #include <boost/iterator/iterator_categories.hpp>
-#include <boost/range/traversal.hpp>
+#include <boost/range/iterator.hpp>
 
 namespace burst
 {
