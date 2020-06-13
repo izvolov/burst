@@ -3,6 +3,8 @@
 
 #include <burst/iterator/end_tag.hpp>
 #include <burst/range/skip_to_lower_bound.hpp>
+#include <burst/type_traits/iterator_reference.hpp>
+#include <burst/type_traits/iterator_value.hpp>
 
 #include <boost/assert.hpp>
 #include <boost/iterator/iterator_concepts.hpp>
@@ -66,9 +68,9 @@ namespace burst
         public boost::iterator_facade
         <
             difference_iterator<ForwardIterator1, ForwardIterator2, Compare>,
-            typename std::iterator_traits<ForwardIterator1>::value_type,
+            iterator_value_t<ForwardIterator1>,
             boost::forward_traversal_tag,
-            typename std::iterator_traits<ForwardIterator1>::reference
+            iterator_reference_t<ForwardIterator1>
         >
     {
     private:
@@ -82,9 +84,9 @@ namespace burst
             boost::iterator_facade
             <
                 difference_iterator,
-                typename std::iterator_traits<minuend_iterator>::value_type,
+                iterator_value_t<minuend_iterator>,
                 boost::forward_traversal_tag,
-                typename std::iterator_traits<minuend_iterator>::reference
+                iterator_reference_t<minuend_iterator>
             >;
 
     public:

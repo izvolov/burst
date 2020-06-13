@@ -1,4 +1,5 @@
 #include <burst/algorithm/searching/bitap.hpp>
+#include <burst/type_traits/iterator_difference.hpp>
 
 #include <doctest/doctest.h>
 
@@ -17,7 +18,7 @@ TEST_SUITE("bitap")
 
         auto match_position = search(text.begin() + 1, text.end());
 
-        using difference_type = typename std::iterator_traits<std::string::iterator>::difference_type;
+        using difference_type = burst::iterator_difference_t<std::string::iterator>;
         difference_type repeat_offset = static_cast<difference_type>(pattern.size());
         CHECK(match_position == text.begin() + repeat_offset);
     }

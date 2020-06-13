@@ -6,6 +6,8 @@
 #include <burst/iterator/detail/prevent_writing.hpp>
 #include <burst/iterator/end_tag.hpp>
 #include <burst/range/skip_to_lower_bound.hpp>
+#include <burst/type_traits/iterator_difference.hpp>
+#include <burst/type_traits/iterator_value.hpp>
 #include <burst/type_traits/range_reference.hpp>
 #include <burst/type_traits/range_value.hpp>
 
@@ -81,19 +83,16 @@ namespace burst
         public boost::iterator_facade
         <
             semiintersect_iterator<RandomAccessIterator, Compare>,
-            range_value_t<typename std::iterator_traits<RandomAccessIterator>::value_type>,
+            range_value_t<iterator_value_t<RandomAccessIterator>>,
             boost::single_pass_traversal_tag,
-            detail::prevent_writing_t
-            <
-                range_reference_t<typename std::iterator_traits<RandomAccessIterator>::value_type>
-            >
+            detail::prevent_writing_t<range_reference_t<iterator_value_t<RandomAccessIterator>>>
         >
     {
     private:
         using outer_range_iterator = RandomAccessIterator;
         BOOST_CONCEPT_ASSERT((boost::RandomAccessIteratorConcept<outer_range_iterator>));
 
-        using inner_range_type = typename std::iterator_traits<outer_range_iterator>::value_type;
+        using inner_range_type = iterator_value_t<outer_range_iterator>;
         BOOST_CONCEPT_ASSERT((boost::ForwardRangeConcept<inner_range_type>));
 
         using compare_type = Compare;
@@ -328,13 +327,7 @@ namespace burst
          */
         outer_range_iterator semiintersection_candidate ()
         {
-            using difference_type =
-                typename std::iterator_traits
-                <
-                    outer_range_iterator
-                >
-                ::difference_type;
-
+            using difference_type = iterator_difference_t<outer_range_iterator>;
             return m_begin + static_cast<difference_type>(m_min_items - 1);
         }
 

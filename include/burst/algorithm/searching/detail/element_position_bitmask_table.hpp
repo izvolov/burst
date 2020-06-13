@@ -2,11 +2,11 @@
 #define BURST_ALGORITHM_SEARCHING_DETAIL_ELEMENT_POSITION_BITMASK_TABLE_HPP
 
 #include <burst/integer/left_shift.hpp>
+#include <burst/type_traits/iterator_value.hpp>
 
 #include <array>
 #include <cstddef>
 #include <initializer_list>
-#include <iterator>
 #include <type_traits>
 
 namespace burst
@@ -55,7 +55,7 @@ namespace burst
                 template <typename InputIterator>
                 void initialize (InputIterator first, InputIterator last)
                 {
-                    using iterated_type = typename std::iterator_traits<InputIterator>::value_type;
+                    using iterated_type = iterator_value_t<InputIterator>;
                     static_assert(std::is_same<iterated_type, key_type>::value,
                         "Неверно задан тип входного элемента.");
 
@@ -158,7 +158,7 @@ namespace burst
                 template <typename InputIterator>
                 void initialize (InputIterator first, InputIterator last)
                 {
-                    using iterated_type = typename std::iterator_traits<InputIterator>::value_type;
+                    using iterated_type = iterator_value_t<InputIterator>;
                     static_assert
                     (
                         std::is_integral<iterated_type>::value && sizeof(iterated_type) == 1,

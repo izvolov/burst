@@ -1,6 +1,10 @@
 #ifndef BURST_ITERATOR_CACHE_ITERATOR_HPP
 #define BURST_ITERATOR_CACHE_ITERATOR_HPP
 
+#include <burst/type_traits/iterator_difference.hpp>
+#include <burst/type_traits/iterator_reference.hpp>
+#include <burst/type_traits/iterator_value.hpp>
+
 #include <boost/iterator/iterator_categories.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/optional.hpp>
@@ -34,27 +38,23 @@ namespace burst
             boost::iterator_facade
             <
                 cache_iterator<Iterator>,
-                typename std::iterator_traits<Iterator>::value_type,
+                iterator_value_t<Iterator>,
                 typename boost::iterators::pure_iterator_traversal<Iterator>::type,
-                const typename std::iterator_traits<Iterator>::value_type &,
-                typename std::iterator_traits<Iterator>::difference_type
+                const iterator_value_t<Iterator> &,
+                iterator_difference_t<Iterator>
             >
     {
     private:
-        static_assert
-        (
-            not std::is_lvalue_reference<typename std::iterator_traits<Iterator>::reference>::value,
-            ""
-        );
+        static_assert(not std::is_lvalue_reference<iterator_reference_t<Iterator>>::value, "");
 
         using base_type =
             boost::iterator_facade
             <
                 cache_iterator<Iterator>,
-                typename std::iterator_traits<Iterator>::value_type,
+                iterator_value_t<Iterator>,
                 typename boost::iterators::pure_iterator_traversal<Iterator>::type,
-                const typename std::iterator_traits<Iterator>::value_type &,
-                typename std::iterator_traits<Iterator>::difference_type
+                const iterator_value_t<Iterator> &,
+                iterator_difference_t<Iterator>
             >;
     public:
         explicit cache_iterator (Iterator iterator):
@@ -115,11 +115,7 @@ namespace burst
     template <typename Iterator>
     typename std::enable_if
     <
-        std::is_lvalue_reference
-        <
-            typename std::iterator_traits<Iterator>::reference
-        >
-        ::value,
+        std::is_lvalue_reference<iterator_reference_t<Iterator>>::value,
         Iterator
     >
     ::type make_cache_iterator (Iterator iterator)
@@ -135,11 +131,7 @@ namespace burst
     template <typename Iterator>
     typename std::enable_if
     <
-        not std::is_lvalue_reference
-        <
-            typename std::iterator_traits<Iterator>::reference
-        >
-        ::value,
+        not std::is_lvalue_reference<iterator_reference_t<Iterator>>::value,
         cache_iterator<Iterator>
     >
     ::type make_cache_iterator (Iterator iterator)

@@ -86,7 +86,7 @@ namespace burst
             ForwardIterator
                 operator () (ForwardIterator corpus_begin, ForwardIterator corpus_end) const
             {
-                using iterated_type = typename std::iterator_traits<ForwardIterator>::value_type;
+                using iterated_type = iterator_value_t<ForwardIterator>;
                 static_assert
                 (
                     std::is_same<iterated_type, value_type>::value,

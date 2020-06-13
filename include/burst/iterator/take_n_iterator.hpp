@@ -2,11 +2,13 @@
 #define BURST_ITERATOR_TAKE_N_ITERATOR_HPP
 
 #include <burst/iterator/end_tag.hpp>
+#include <burst/type_traits/iterator_difference.hpp>
+#include <burst/type_traits/iterator_reference.hpp>
+#include <burst/type_traits/iterator_value.hpp>
 
 #include <boost/iterator/iterator_categories.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 
-#include <iterator>
 #include <type_traits>
 
 namespace burst
@@ -28,30 +30,30 @@ namespace burst
         public boost::iterator_facade
         <
             take_n_iterator<Iterator, Integer>,
-            typename std::iterator_traits<Iterator>::value_type,
+            iterator_value_t<Iterator>,
             typename std::common_type
             <
                 boost::forward_traversal_tag,
                 typename boost::iterators::pure_iterator_traversal<Iterator>::type
             >
             ::type,
-            typename std::iterator_traits<Iterator>::reference,
-            typename std::iterator_traits<Iterator>::difference_type
+            iterator_reference_t<Iterator>,
+            iterator_difference_t<Iterator>
         >
     {
     private:
         using base_type = boost::iterator_facade
         <
             take_n_iterator,
-            typename std::iterator_traits<Iterator>::value_type,
+            iterator_value_t<Iterator>,
             typename std::common_type
             <
                 boost::forward_traversal_tag,
                 typename boost::iterators::pure_iterator_traversal<Iterator>::type
             >
             ::type,
-            typename std::iterator_traits<Iterator>::reference,
-            typename std::iterator_traits<Iterator>::difference_type
+            iterator_reference_t<Iterator>,
+            iterator_difference_t<Iterator>
         >;
 
     public:

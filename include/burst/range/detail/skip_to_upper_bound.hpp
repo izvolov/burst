@@ -1,6 +1,7 @@
 #ifndef BURST_RANGE_DETAIL_SKIP_TO_UPPER_BOUND_HPP
 #define BURST_RANGE_DETAIL_SKIP_TO_UPPER_BOUND_HPP
 
+#include <burst/type_traits/iterator_category.hpp>
 #include <burst/type_traits/range_iterator.hpp>
 
 #include <boost/range/algorithm/upper_bound.hpp>
@@ -23,7 +24,7 @@ namespace burst
             std::is_same
             <
                 std::random_access_iterator_tag,
-                typename std::iterator_traits<range_iterator_t<RandomAccessRange>>::iterator_category
+                iterator_category_t<range_iterator_t<RandomAccessRange>>
             >
             ::value,
             void
@@ -52,7 +53,7 @@ namespace burst
             not std::is_same
             <
                 std::random_access_iterator_tag,
-                typename std::iterator_traits<range_iterator_t<InputRange>>::iterator_category
+                iterator_category_t<range_iterator_t<InputRange>>
             >
             ::value,
             void

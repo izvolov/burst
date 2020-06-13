@@ -2,6 +2,9 @@
 #define BURST_ITERATOR_OWNING_ITERATOR_HPP
 
 #include <burst/iterator/end_tag.hpp>
+#include <burst/type_traits/iterator_difference.hpp>
+#include <burst/type_traits/iterator_reference.hpp>
+#include <burst/type_traits/iterator_value.hpp>
 
 #include <boost/iterator/iterator_categories.hpp>
 #include <boost/iterator/iterator_facade.hpp>
@@ -29,10 +32,10 @@ namespace burst
             boost::iterator_facade
             <
                 owning_iterator<Container>,
-                typename std::iterator_traits<typename Container::iterator>::value_type,
+                iterator_value_t<typename Container::iterator>,
                 typename boost::iterators::pure_iterator_traversal<typename Container::iterator>::type,
-                typename std::iterator_traits<typename Container::iterator>::reference,
-                typename std::iterator_traits<typename Container::iterator>::difference_type
+                iterator_reference_t<typename Container::iterator>,
+                iterator_difference_t<typename Container::iterator>
             >
     {
     private:
@@ -41,10 +44,10 @@ namespace burst
             boost::iterator_facade
             <
                 owning_iterator<Container>,
-                typename std::iterator_traits<iterator>::value_type,
+                iterator_value_t<iterator>,
                 typename boost::iterators::pure_iterator_traversal<iterator>::type,
-                typename std::iterator_traits<iterator>::reference,
-                typename std::iterator_traits<iterator>::difference_type
+                iterator_reference_t<iterator>,
+                iterator_difference_t<iterator>
             >;
 
     public:

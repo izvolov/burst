@@ -1,5 +1,6 @@
 #include <burst/container/make_forward_list.hpp>
 #include <burst/range/bitap.hpp>
+#include <burst/type_traits/iterator_difference.hpp>
 
 #include <doctest/doctest.h>
 
@@ -86,7 +87,7 @@ TEST_SUITE("bitap")
         REQUIRE(not matches.empty());
         REQUIRE(std::distance(matches.begin(), matches.end()) == 2);
 
-        using difference_type = typename std::iterator_traits<std::string::iterator>::difference_type;
+        using difference_type = burst::iterator_difference_t<std::string::iterator>;
         const auto first_match_start_position = static_cast<difference_type>(text.find_first_not_of(" "));
         const auto second_match_end_position = static_cast<difference_type>(text.find_first_of(" ", static_cast<std::size_t>(first_match_start_position)));
         const auto pattern_size = static_cast<difference_type>(pattern.size());

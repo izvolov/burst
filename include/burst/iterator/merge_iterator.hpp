@@ -5,6 +5,7 @@
 #include <burst/functional/each.hpp>
 #include <burst/functional/invert.hpp>
 #include <burst/iterator/end_tag.hpp>
+#include <burst/type_traits/iterator_value.hpp>
 #include <burst/type_traits/range_reference.hpp>
 #include <burst/type_traits/range_value.hpp>
 
@@ -56,9 +57,9 @@ namespace burst
         public boost::iterator_facade
         <
             merge_iterator<RandomAccessIterator, Compare>,
-            range_value_t<typename std::iterator_traits<RandomAccessIterator>::value_type>,
+            range_value_t<iterator_value_t<RandomAccessIterator>>,
             boost::single_pass_traversal_tag,
-            range_reference_t<typename std::iterator_traits<RandomAccessIterator>::value_type>
+            range_reference_t<iterator_value_t<RandomAccessIterator>>
         >
     {
     private:
@@ -69,9 +70,9 @@ namespace burst
             boost::iterator_facade
             <
                 merge_iterator,
-                range_value_t<typename std::iterator_traits<outer_range_iterator>::value_type>,
+                range_value_t<iterator_value_t<outer_range_iterator>>,
                 boost::single_pass_traversal_tag,
-                range_reference_t<typename std::iterator_traits<outer_range_iterator>::value_type>
+                range_reference_t<iterator_value_t<outer_range_iterator>>
             >;
 
     public:
