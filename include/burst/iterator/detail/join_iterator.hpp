@@ -2,6 +2,8 @@
 #define BURST_ITERATOR_DETAIL_JOIN_ITERATOR_HPP
 
 #include <burst/iterator/end_tag.hpp>
+#include <burst/type_traits/iterator_reference.hpp>
+#include <burst/type_traits/iterator_value.hpp>
 #include <burst/type_traits/range_iterator.hpp>
 #include <burst/type_traits/range_reference.hpp>
 #include <burst/type_traits/range_value.hpp>
@@ -32,21 +34,17 @@ namespace burst
             public boost::iterator_facade
             <
                 join_iterator_impl<InputIterator, IteratorCategory>,
-                range_value_t<typename std::iterator_traits<InputIterator>::value_type>,
+                range_value_t<iterator_value_t<InputIterator>>,
                 boost::single_pass_traversal_tag,
-                range_reference_t<typename std::iterator_traits<InputIterator>::value_type>
+                range_reference_t<iterator_value_t<InputIterator>>
             >
         {
         private:
             using outer_range_iterator = InputIterator;
-            using inner_range_type = typename std::iterator_traits<outer_range_iterator>::value_type;
+            using inner_range_type = iterator_value_t<outer_range_iterator>;
             static_assert
             (
-                std::is_lvalue_reference
-                <
-                    typename std::iterator_traits<outer_range_iterator>::reference
-                >
-                ::value,
+                std::is_lvalue_reference<iterator_reference_t<outer_range_iterator>>::value,
                 ""
             );
 
@@ -175,14 +173,14 @@ namespace burst
             public boost::iterator_facade
             <
                 join_iterator_impl<RandomAccessIterator, boost::random_access_traversal_tag>,
-                range_value_t<typename std::iterator_traits<RandomAccessIterator>::value_type>,
+                range_value_t<iterator_value_t<RandomAccessIterator>>,
                 boost::random_access_traversal_tag,
-                range_reference_t<typename std::iterator_traits<RandomAccessIterator>::value_type>
+                range_reference_t<iterator_value_t<RandomAccessIterator>>
             >
         {
         private:
             using outer_range_iterator = RandomAccessIterator;
-            using inner_range_type = typename std::iterator_traits<outer_range_iterator>::value_type;
+            using inner_range_type = iterator_value_t<outer_range_iterator>;
             using inner_range_iterator = range_iterator_t<inner_range_type>;
 
             using base_type =

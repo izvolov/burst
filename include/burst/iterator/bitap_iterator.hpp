@@ -37,7 +37,7 @@ namespace burst
         BOOST_CONCEPT_ASSERT((boost::ForwardRangeConcept<TextRange>));
         using text_range_type = TextRange;
         using text_iterator = typename TextRange::const_iterator;
-        using text_value_type = typename std::iterator_traits<text_iterator>::value_type;
+        using text_value_type = iterator_value_t<text_iterator>;
 
         using base_type = boost::iterator_facade
         <

@@ -79,7 +79,7 @@ namespace burst
             typename boost::iterators::minimum_category
             <
                 typename boost::iterators::pure_iterator_traversal<Iterator>::type,
-                range_pure_traversal_t<typename std::iterator_traits<Iterator>::value_type>
+                range_pure_traversal_t<iterator_value_t<Iterator>>
             >
             ::type
         >;

@@ -2,6 +2,7 @@
 #include <burst/container/make_list.hpp>
 #include <burst/container/make_vector.hpp>
 #include <burst/iterator/owning_iterator.hpp>
+#include <burst/type_traits/iterator_category.hpp>
 
 #include <doctest/doctest.h>
 
@@ -39,18 +40,9 @@ TEST_SUITE("owning_iterator")
         std::forward_list<int>, std::list<int>, std::vector<int>)
     {
         using container_iterator_category =
-            typename std::iterator_traits
-            <
-                typename container::iterator
-            >
-            ::iterator_category;
-
+            burst::iterator_category_t<typename container::iterator>;
         using owning_iterator_category =
-            typename std::iterator_traits
-            <
-                burst::owning_iterator<container>
-            >
-            ::iterator_category;
+            burst::iterator_category_t<burst::owning_iterator<container>>;
 
         CHECK(std::is_same<container_iterator_category, owning_iterator_category>::value);
     }
