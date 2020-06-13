@@ -6,14 +6,14 @@
 #include <burst/functional/each.hpp>
 #include <burst/iterator/detail/prevent_writing.hpp>
 #include <burst/iterator/end_tag.hpp>
+#include <burst/type_traits/range_reference.hpp>
+#include <burst/type_traits/range_value.hpp>
 
 #include <boost/algorithm/cxx11/is_sorted.hpp>
 #include <boost/assert.hpp>
 #include <boost/iterator/iterator_concepts.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/range/concepts.hpp>
-#include <boost/range/reference.hpp>
-#include <boost/range/value_type.hpp>
 
 #include <algorithm>
 #include <functional>
@@ -69,19 +69,11 @@ namespace burst
         public boost::iterator_facade
         <
             symmetric_difference_iterator<RandomAccessIterator, Compare>,
-            typename boost::range_value
-            <
-                typename std::iterator_traits<RandomAccessIterator>::value_type
-            >
-            ::type,
+            range_value_t<typename std::iterator_traits<RandomAccessIterator>::value_type>,
             boost::single_pass_traversal_tag,
             detail::prevent_writing_t
             <
-                typename boost::range_reference
-                <
-                    typename std::iterator_traits<RandomAccessIterator>::value_type
-                >
-                ::type
+                range_reference_t<typename std::iterator_traits<RandomAccessIterator>::value_type>
             >
         >
     {
@@ -98,9 +90,9 @@ namespace burst
             boost::iterator_facade
             <
                 symmetric_difference_iterator,
-                typename boost::range_value<inner_range_type>::type,
+                range_value_t<inner_range_type>,
                 boost::single_pass_traversal_tag,
-                detail::prevent_writing_t<typename boost::range_reference<inner_range_type>::type>
+                detail::prevent_writing_t<range_reference_t<inner_range_type>>
             >;
 
     public:

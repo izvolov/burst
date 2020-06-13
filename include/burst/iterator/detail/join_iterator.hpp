@@ -2,14 +2,14 @@
 #define BURST_ITERATOR_DETAIL_JOIN_ITERATOR_HPP
 
 #include <burst/iterator/end_tag.hpp>
+#include <burst/type_traits/range_reference.hpp>
+#include <burst/type_traits/range_value.hpp>
 
 #include <boost/iterator/iterator_categories.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/next_prior.hpp>
 #include <boost/range/difference_type.hpp>
 #include <boost/range/distance.hpp>
-#include <boost/range/reference.hpp>
-#include <boost/range/value_type.hpp>
 
 #include <algorithm>
 #include <cassert>
@@ -33,9 +33,9 @@ namespace burst
             public boost::iterator_facade
             <
                 join_iterator_impl<InputIterator, IteratorCategory>,
-                typename boost::range_value<typename std::iterator_traits<InputIterator>::value_type>::type,
+                range_value_t<typename std::iterator_traits<InputIterator>::value_type>,
                 boost::single_pass_traversal_tag,
-                typename boost::range_reference<typename std::iterator_traits<InputIterator>::value_type>::type
+                range_reference_t<typename std::iterator_traits<InputIterator>::value_type>
             >
         {
         private:
@@ -55,9 +55,9 @@ namespace burst
                 boost::iterator_facade
                 <
                     join_iterator_impl,
-                    typename boost::range_value<inner_range_type>::type,
+                    range_value_t<inner_range_type>,
                     boost::single_pass_traversal_tag,
-                    typename boost::range_reference<inner_range_type>::type
+                    range_reference_t<inner_range_type>
                 >;
 
         public:
@@ -176,9 +176,9 @@ namespace burst
             public boost::iterator_facade
             <
                 join_iterator_impl<RandomAccessIterator, boost::random_access_traversal_tag>,
-                typename boost::range_value<typename std::iterator_traits<RandomAccessIterator>::value_type>::type,
+                range_value_t<typename std::iterator_traits<RandomAccessIterator>::value_type>,
                 boost::random_access_traversal_tag,
-                typename boost::range_reference<typename std::iterator_traits<RandomAccessIterator>::value_type>::type
+                range_reference_t<typename std::iterator_traits<RandomAccessIterator>::value_type>
             >
         {
         private:
@@ -190,9 +190,9 @@ namespace burst
                 boost::iterator_facade
                 <
                     join_iterator_impl,
-                    typename boost::range_value<inner_range_type>::type,
+                    range_value_t<inner_range_type>,
                     boost::random_access_traversal_tag,
-                    typename boost::range_reference<inner_range_type>::type
+                    range_reference_t<inner_range_type>
                 >;
 
         public:
