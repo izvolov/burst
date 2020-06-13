@@ -3,7 +3,7 @@
 
 #include <burst/iterator/detail/join_iterator.hpp>
 #include <burst/iterator/end_tag.hpp>
-#include <burst/range/pure_traversal.hpp>
+#include <burst/type_traits/range_pure_traversal.hpp>
 
 #include <boost/iterator/minimum_category.hpp>
 #include <boost/range/value_type.hpp>

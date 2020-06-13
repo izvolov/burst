@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_PURE_TRAVERSAL_HPP
-#define BURST_RANGE_PURE_TRAVERSAL_HPP
+#ifndef BURST_TYPE_TRAITS_RANGE_PURE_TRAVERSAL_HPP
+#define BURST_TYPE_TRAITS_RANGE_PURE_TRAVERSAL_HPP
 
 #include <boost/iterator/iterator_categories.hpp>
 #include <boost/range/traversal.hpp>
@@ -21,4 +21,4 @@ namespace burst
     using range_pure_traversal_t = typename range_pure_traversal<Range>::type;
 } // namespace burst
 
-#endif // BURST_RANGE_PURE_TRAVERSAL_HPP
+#endif // BURST_TYPE_TRAITS_RANGE_PURE_TRAVERSAL_HPP
