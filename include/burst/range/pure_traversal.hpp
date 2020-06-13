@@ -16,6 +16,9 @@ namespace burst
             >
             ::type;
     };
+
+    template <typename Range>
+    using pure_range_traversal_t = typename pure_range_traversal<Range>::type;
 } // namespace burst
 
 #endif // BURST_RANGE_PURE_TRAVERSAL_HPP
