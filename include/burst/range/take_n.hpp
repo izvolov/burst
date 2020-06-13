@@ -5,7 +5,6 @@
 #include <burst/type_traits/range_iterator.hpp>
 
 #include <boost/iterator/iterator_categories.hpp>
-#include <boost/range/difference_type.hpp>
 
 #include <type_traits>
 #include <utility>

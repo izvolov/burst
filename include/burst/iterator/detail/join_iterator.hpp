@@ -9,8 +9,6 @@
 #include <boost/iterator/iterator_categories.hpp>
 #include <boost/iterator/iterator_facade.hpp>
 #include <boost/next_prior.hpp>
-#include <boost/range/difference_type.hpp>
-#include <boost/range/distance.hpp>
 
 #include <algorithm>
 #include <cassert>

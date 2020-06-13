@@ -4,7 +4,6 @@
 #include <burst/type_traits/range_iterator.hpp>
 
 #include <boost/range/algorithm/lower_bound.hpp>
-#include <boost/range/iterator_range.hpp>
 
 #include <iterator>
 #include <type_traits>
