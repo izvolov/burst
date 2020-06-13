@@ -1,5 +1,5 @@
-#ifndef BURST_ITERATOR_TRAITS_ITERATOR_REFERENCE_HPP
-#define BURST_ITERATOR_TRAITS_ITERATOR_REFERENCE_HPP
+#ifndef BURST_TYPE_TRAITS_ITERATOR_REFERENCE_HPP
+#define BURST_TYPE_TRAITS_ITERATOR_REFERENCE_HPP
 
 #include <iterator>
 
@@ -9,4 +9,4 @@ namespace burst
     using iterator_reference_t = typename std::iterator_traits<Iterator>::reference;
 }
 
-#endif // BURST_ITERATOR_TRAITS_ITERATOR_REFERENCE_HPP
+#endif // BURST_TYPE_TRAITS_ITERATOR_REFERENCE_HPP

@@ -1,7 +1,7 @@
 #ifndef BURST_ALGORITHM_DETAIL_MOVE_ASSIGN_PLEASE_HPP
 #define BURST_ALGORITHM_DETAIL_MOVE_ASSIGN_PLEASE_HPP
 
-#include <burst/iterator/traits/iterator_value.hpp>
+#include <burst/type_traits/iterator_value.hpp>
 
 #include <iterator>
 #include <type_traits>
