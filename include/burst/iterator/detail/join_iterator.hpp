@@ -2,6 +2,7 @@
 #define BURST_ITERATOR_DETAIL_JOIN_ITERATOR_HPP
 
 #include <burst/iterator/end_tag.hpp>
+#include <burst/type_traits/range_iterator.hpp>
 #include <burst/type_traits/range_reference.hpp>
 #include <burst/type_traits/range_value.hpp>
 
@@ -184,7 +185,7 @@ namespace burst
         private:
             using outer_range_iterator = RandomAccessIterator;
             using inner_range_type = typename std::iterator_traits<outer_range_iterator>::value_type;
-            using inner_range_iterator = typename boost::range_iterator<inner_range_type>::type;
+            using inner_range_iterator = range_iterator_t<inner_range_type>;
 
             using base_type =
                 boost::iterator_facade

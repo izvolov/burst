@@ -2,10 +2,10 @@
 #define BURST_RANGE_TAKE_N_HPP
 
 #include <burst/range/detail/take_n.hpp>
+#include <burst/type_traits/range_iterator.hpp>
 
 #include <boost/iterator/iterator_categories.hpp>
 #include <boost/range/difference_type.hpp>
-#include <boost/range/iterator.hpp>
 
 #include <type_traits>
 #include <utility>
@@ -24,7 +24,7 @@ namespace burst
         template <typename Range, typename Integer>
         auto operator () (Range && range, Integer n) const
         {
-            using range_iterator = typename boost::range_iterator<Range>::type;
+            using range_iterator = range_iterator_t<Range>;
             using category =
                 typename std::common_type
                 <
