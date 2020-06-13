@@ -7,7 +7,7 @@
 namespace burst
 {
     template <typename Range>
-    struct pure_range_traversal
+    struct range_pure_traversal
     {
         using type =
             typename boost::iterators::pure_iterator_traversal
@@ -18,7 +18,7 @@ namespace burst
     };
 
     template <typename Range>
-    using pure_range_traversal_t = typename pure_range_traversal<Range>::type;
+    using range_pure_traversal_t = typename range_pure_traversal<Range>::type;
 } // namespace burst
 
 #endif // BURST_RANGE_PURE_TRAVERSAL_HPP
