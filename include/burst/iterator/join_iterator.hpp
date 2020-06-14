@@ -3,10 +3,11 @@
 
 #include <burst/iterator/detail/join_iterator.hpp>
 #include <burst/iterator/end_tag.hpp>
-#include <burst/type_traits/range_pure_traversal.hpp>
+#include <burst/type_traits/iterator_value.hpp>
+#include <burst/type_traits/range_iterator.hpp>
 
+#include <boost/iterator/iterator_categories.hpp>
 #include <boost/iterator/minimum_category.hpp>
-#include <boost/range/value_type.hpp>
 
 #include <iterator>
 #include <utility>
@@ -79,7 +80,11 @@ namespace burst
             typename boost::iterators::minimum_category
             <
                 typename boost::iterators::pure_iterator_traversal<Iterator>::type,
-                range_pure_traversal_t<iterator_value_t<Iterator>>
+                typename boost::iterators::pure_iterator_traversal
+                <
+                    range_iterator_t<iterator_value_t<Iterator>>
+                >
+                ::type
             >
             ::type
         >;
