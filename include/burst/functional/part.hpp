@@ -24,21 +24,21 @@ namespace burst
         template <typename ... As>
         constexpr decltype(auto) operator () (As && ... as) const &
         {
-            return apply(invoke,
+            return burst::apply(invoke,
                 std::tuple_cat(forward_tuple(t), std::forward_as_tuple(std::forward<As>(as)...)));
         }
 
         template <typename ... As>
         constexpr decltype(auto) operator () (As && ... as) &
         {
-            return apply(invoke,
+            return burst::apply(invoke,
                 std::tuple_cat(forward_tuple(t), std::forward_as_tuple(std::forward<As>(as)...)));
         }
 
         template <typename ... As>
         constexpr decltype(auto) operator () (As && ... as) &&
         {
-            return apply(invoke,
+            return burst::apply(invoke,
                 std::tuple_cat(forward_tuple(std::move(t)), std::forward_as_tuple(std::forward<As>(as)...)));
         }
 

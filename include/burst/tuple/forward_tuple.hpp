@@ -24,7 +24,7 @@ namespace burst
         template <typename T>
         constexpr decltype(auto) operator () (T && t) const
         {
-            return apply(forward_as_tuple, std::forward<T>(t));
+            return burst::apply(forward_as_tuple, std::forward<T>(t));
         }
     };
 
