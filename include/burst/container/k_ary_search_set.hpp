@@ -289,7 +289,7 @@ namespace burst
         void initialize (const RandomAccessRange & range)
         {
             const auto is_sorted_and_unique =
-                std::adjacent_find(range.begin(), range.end(), not_fn(m_compare)) == range.end();
+                std::adjacent_find(range.begin(), range.end(), burst::not_fn(m_compare)) == range.end();
             if (is_sorted_and_unique)
             {
                 initialize_trusted(range);
@@ -300,7 +300,7 @@ namespace burst
                 std::sort(buffer.begin(), buffer.end(), m_compare);
                 buffer.erase
                 (
-                    std::unique(buffer.begin(), buffer.end(), not_fn(m_compare)),
+                    std::unique(buffer.begin(), buffer.end(), burst::not_fn(m_compare)),
                     buffer.end()
                 );
 
@@ -325,7 +325,7 @@ namespace burst
         {
             BOOST_ASSERT
             (
-                std::adjacent_find(range.begin(), range.end(), not_fn(m_compare)) == range.end()
+                std::adjacent_find(range.begin(), range.end(), burst::not_fn(m_compare)) == range.end()
             );
             if (not range.empty())
             {

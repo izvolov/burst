@@ -15,7 +15,7 @@ namespace burst
     template <typename BinaryPredicate>
     auto non_strict (BinaryPredicate && strict_order)
     {
-        return not_fn(invert(std::forward<BinaryPredicate>(strict_order)));
+        return burst::not_fn(invert(std::forward<BinaryPredicate>(strict_order)));
     }
 }
 

@@ -56,7 +56,7 @@ namespace burst
     auto operator | (Range && range, adaptor_compare_forwarder_t<Adaptor, Tuple> forwarder)
     {
         return
-            apply
+            burst::apply
             (
                 forwarder.adaptor,
                 std::tuple_cat
