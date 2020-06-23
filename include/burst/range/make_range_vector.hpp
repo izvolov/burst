@@ -7,16 +7,21 @@
 
 namespace burst
 {
-    //!     Превратить набор коллекций в std::vector диапазонов.
-    /*!
-            Принимает произвольное множество коллекций одного типа, создаёт для них диапазоны и
-        возвращает вектор этих диапазонов в соответствующем порядке.
-     */
-    template <typename ... Collections>
-    auto make_range_vector (Collections & ... collections)
+    struct make_range_vector_t
     {
-        return make_vector({boost::make_iterator_range(collections)...});
-    }
+        //!     Превратить набор коллекций в std::vector диапазонов.
+        /*!
+                Принимает произвольное множество коллекций одного типа, создаёт для них диапазоны и
+            возвращает вектор этих диапазонов в соответствующем порядке.
+         */
+        template <typename ... Collections>
+        auto operator () (Collections & ... collections) const
+        {
+            return make_vector({boost::make_iterator_range(collections)...});
+        }
+    };
+
+    constexpr auto make_range_vector = make_range_vector_t{};
 } // namespace burst
 
 #endif // BURST_RANGE_MAKE_RANGE_VECTOR_HPP
