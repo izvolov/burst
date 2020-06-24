@@ -98,9 +98,8 @@ TEST_SUITE("intersect")
         auto  first = {1, 2, 3                  };
         auto second = {         4, 5, 6         };
         auto  third = {                  7, 8, 9};
-        auto ranges = burst::make_range_vector(first, second, third);
 
-        auto intersected_range = burst::intersect(ranges, std::less<>{});
+        auto intersected_range = burst::intersect(std::tie(first, second, third));
 
         CHECK(intersected_range.empty());
     }
@@ -126,6 +125,17 @@ TEST_SUITE("intersect")
         auto intersected_range = burst::intersect(ranges);
 
         auto expected_collection = {0, 1};
+        CHECK(intersected_range == expected_collection);
+    }
+
+    TEST_CASE("Пересечение можно вызывать без предварительного создания диапазона диапазонов")
+    {
+        const auto  first = burst::make_list({2, 2, 1});
+        const auto second = burst::make_list({2, 1, 1});
+
+        auto intersected_range = burst::intersect(std::tie(first, second), std::greater<>{});
+
+        auto expected_collection = {2, 1};
         CHECK(intersected_range == expected_collection);
     }
 }

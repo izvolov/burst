@@ -5,7 +5,10 @@
 #include <burst/functional/each.hpp>
 #include <burst/iterator/detail/prevent_writing.hpp>
 #include <burst/iterator/end_tag.hpp>
+#include <burst/range/make_range_vector.hpp>
+#include <burst/range/own_as_range.hpp>
 #include <burst/range/skip_to_lower_bound.hpp>
+#include <burst/tuple/apply.hpp>
 #include <burst/type_traits/iterator_value.hpp>
 #include <burst/type_traits/range_reference.hpp>
 #include <burst/type_traits/range_value.hpp>
@@ -271,6 +274,41 @@ namespace burst
             );
     }
 
+    /*!
+        \brief
+            Функция для создания итератора пересечения с предикатом из кортежа ссылок
+
+        \details
+            Создаёт итератор ленивого пересечения нескольких диапазонов. Проход от созданного
+            итератора до итератора-конца (см. перегрузку с `end_tag_t`) перечисляет те, и только те
+            элементы исходных диапазонов `ranges`, которые присутствуют одновременно во всех этих
+            диапазонах, причём в порядке их неубывания относительно операции `compare`.
+
+        \param ranges
+            Кортеж ссылок на диапазоны, которые нужно пересечь.
+        \param compare
+            Операция, задающая отношение строгого порядка на элементах результирующего диапазона.
+
+        \pre
+            Каждый диапазон в `ranges` упорядочен относительно операции `compare`.
+
+        \returns
+            Итератор на наименьший относительно заданного отношения порядка элемент ленивого
+            пересечения входных диапазонов.
+
+        \see intersect_iterator
+     */
+    template <typename ... Ranges, typename Compare>
+    auto make_intersect_iterator (std::tuple<Ranges &...> ranges, Compare compare)
+    {
+        return
+            make_intersect_iterator
+            (
+                burst::own_as_range(burst::apply(burst::make_range_vector, ranges)),
+                std::move(compare)
+            );
+    }
+
     //!     Функция для создания итератора пересечения.
     /*!
             Принимает на вход набор диапазонов, которые нужно пересечь.
@@ -293,6 +331,26 @@ namespace burst
             (
                 begin(std::forward<RandomAccessRange>(ranges)),
                 end(std::forward<RandomAccessRange>(ranges))
+            );
+    }
+
+    /*!
+        \brief
+            Функция для создания итератора пересечения из кортежа ссылок
+
+        \returns
+            Итератор ленивого пересечения с отношением порядка по умолчанию.
+
+        \see make_intersect_iterator
+        \see intersect_iterator
+     */
+    template <typename ... Ranges>
+    auto make_intersect_iterator (std::tuple<Ranges &...> ranges)
+    {
+        return
+            make_intersect_iterator
+            (
+                burst::own_as_range(burst::apply(burst::make_range_vector, ranges))
             );
     }
 
