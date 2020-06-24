@@ -64,14 +64,23 @@ TEST_SUITE("merge")
         auto first = burst::make_vector({100, 50});
         auto second = burst::make_vector({70, 30});
 
-        auto ranges = burst::make_range_vector(first, second);
-
-        auto merged_range = burst::merge(ranges, std::greater<>{});
+        auto merged_range = burst::merge(std::tie(first, second), std::greater<>{});
         boost::for_each(merged_range, [] (auto & x) { x /= 10; });
 
         CHECK(first[0] == 10);
         CHECK(first[1] == 5);
         CHECK(second[0] == 7);
         CHECK(second[1] == 3);
+    }
+
+    TEST_CASE("Слияние можно вызывать без предварительного создания диапазона диапазонов")
+    {
+        auto odd = burst::make_vector({1, 3, 5, 7});
+        auto even = burst::make_vector({0, 2, 4, 6, 8});
+
+        auto merged_range = burst::merge(std::tie(odd, even));
+
+        auto expected_collection = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+        CHECK(merged_range == expected_collection);
     }
 }
