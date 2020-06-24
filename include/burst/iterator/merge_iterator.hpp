@@ -16,6 +16,7 @@
 #include <boost/assert.hpp>
 #include <boost/iterator/iterator_concepts.hpp>
 #include <boost/iterator/iterator_facade.hpp>
+#include <boost/range/concepts.hpp>
 
 #include <algorithm>
 #include <functional>
@@ -66,16 +67,19 @@ namespace burst
         >
     {
     private:
-        BOOST_CONCEPT_ASSERT((boost::RandomAccessIteratorConcept<RandomAccessIterator>));
         using outer_range_iterator = RandomAccessIterator;
+        BOOST_CONCEPT_ASSERT((boost::RandomAccessIteratorConcept<outer_range_iterator>));
+
+        using inner_range_type = iterator_value_t<outer_range_iterator>;
+        BOOST_CONCEPT_ASSERT((boost::ForwardRangeConcept<inner_range_type>));
 
         using base_type =
             boost::iterator_facade
             <
                 merge_iterator,
-                range_value_t<iterator_value_t<outer_range_iterator>>,
+                range_value_t<inner_range_type>,
                 boost::single_pass_traversal_tag,
-                range_reference_t<iterator_value_t<outer_range_iterator>>
+                range_reference_t<inner_range_type>
             >;
 
     public:
