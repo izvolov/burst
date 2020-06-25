@@ -12,17 +12,27 @@ namespace burst
 {
     struct join_t
     {
-        //!     Функция для создания склеенного диапазона.
         /*!
-                Принимает на вход диапазон диапазонов, которые нужно склеить.
-                Возвращает диапазон, представляющий из себя один большой диапазон, в котором
-            входные диапазоны поставлены друг за другом таким образом, что после последнего
-            элемента i-го диапазона сразу следует первый элемент (i + 1)-го.
+            \brief
+                Функция для создания склеенного диапазона
+
+            \details
+                Склеивает несколько диапазонов в один логически единый диапазон.
+                Для этого пробрасывает аргументы этой функции в функцию `make_join_iterator`, а из
+                получившегося итератора создаёт диапазон.
+
+            \returns
+                Диапазон, представляющий из себя один большой диапазон, в котором входные диапазоны
+                поставлены друг за другом таким образом, что после последнего элемента `i`-го
+                диапазона сразу следует первый элемент `(i + 1)`-го.
+
+            \see make_join_iterator
+            \see join_iterator
          */
-        template <typename Range>
-        auto operator () (Range && ranges) const
+        template <typename ... Args>
+        auto operator () (Args && ... args) const
         {
-            auto begin = make_join_iterator(std::forward<Range>(ranges));
+            auto begin = make_join_iterator(std::forward<Args>(args)...);
             auto end = make_join_iterator(iterator::end_tag, begin);
 
             return boost::make_iterator_range(std::move(begin), std::move(end));

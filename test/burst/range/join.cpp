@@ -109,9 +109,8 @@ TEST_SUITE("join")
         std::string can("can");
         std::string be("be");
         std::string reversed("reversed");
-        auto ranges = burst::make_range_vector(join, iterator, can, be, reversed);
 
-        auto joint_range = burst::join(ranges);
+        auto joint_range = burst::join(std::tie(join, iterator, can, be, reversed));
         auto reversed_range = boost::adaptors::reverse(joint_range);
 
         std::string expected = join + iterator + can + be + reversed;
@@ -205,5 +204,17 @@ TEST_SUITE("join")
         for (auto x: burst::join(ranges)) { static_cast<void>(x); };
 
         CHECK(boost::algorithm::all_of(ranges, empty));
+    }
+
+    TEST_CASE("Склейку можно вызывать без предварительной подготовки диапазона диапазонов")
+    {
+        const auto one = burst::make_vector({'1'});
+        const auto two = burst::make_vector({'2'});
+        const auto three = burst::make_vector({'3'});
+
+        const auto joint_range = burst::join(std::tie(one, two, three));
+
+        const auto expected_collection = {'1', '2', '3'};
+        CHECK(joint_range == expected_collection);
     }
 }

@@ -3,6 +3,9 @@
 
 #include <burst/iterator/detail/join_iterator.hpp>
 #include <burst/iterator/end_tag.hpp>
+#include <burst/range/make_range_vector.hpp>
+#include <burst/range/own_as_range.hpp>
+#include <burst/tuple/apply.hpp>
 #include <burst/type_traits/iterator_value.hpp>
 #include <burst/type_traits/range_iterator.hpp>
 
@@ -112,6 +115,32 @@ namespace burst
                 begin(std::forward<Range>(ranges)),
                 end(std::forward<Range>(ranges))
             );
+    }
+
+    /*!
+        \brief
+            Функция для создания итератора склейки
+
+        \details
+            Создаёт итератор ленивой склейки нескольких диапазонов. Проход от созданного итератора
+            до итератора-конца (см. перегрузку с `end_tag_t`) перечисляет все элементы непустых
+            входных диапазонов, причём диапазоны перечисляются в порядке их размещения в кортеже
+            `ranges`.
+
+        \param ranges
+            Кортеж ссылок на диапазоны, которые нужно склеить.
+
+        \returns
+            Итератор на первый элемент склеенного списка, который является первым элементом первого
+            из непустых входных диапазонов.
+
+        \see join_iterator
+     */
+    template <typename ... Ranges>
+    auto make_join_iterator (std::tuple<Ranges &...> ranges)
+    {
+        return
+            make_join_iterator(burst::own_as_range(burst::apply(burst::make_range_vector, ranges)));
     }
 
     //!     Функция для создания итератора на конец склейки.
