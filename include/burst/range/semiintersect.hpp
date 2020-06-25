@@ -13,44 +13,28 @@ namespace burst
 {
     struct semiintersect_t
     {
-        //!     Функция для создания диапазона полупересечений с предикатом.
         /*!
-                Принимает на вход набор диапазонов, для которых нужно найти полупересечение,
-            минимальное количество элементов в полупересечениии и операцию, задающую отношение
-            строгого порядка на элементах этих диапазонов. При этом сами диапазоны тоже должны быть
-            упорядочены относительно этой операции.
-                Возвращает диапазон, упорядоченный относительно всё той же операции, каждое
-            значение которого соответствует одному элементу, который есть не менее чем в заданном
-            количестве входных диапазонов.
-         */
-        template <typename RandomAccessRange, typename Compare>
-        auto operator () (RandomAccessRange && ranges, std::size_t min_items, Compare compare) const
-        {
-            auto begin =
-                make_semiintersect_iterator
-                (
-                    std::forward<RandomAccessRange>(ranges),
-                    min_items,
-                    compare
-                );
-            auto end = make_semiintersect_iterator(iterator::end_tag, begin);
+            \brief
+                Функция для создания диапазона полупересечения
 
-            return boost::make_iterator_range(std::move(begin), std::move(end));
-        }
+            \details
+                Создаёт итератор полупересечения посредством пробрасывания аргументов этой функции в
+                функцию `make_semiintersect_iterator`, а из этого итератора создаёт диапазон.
 
-        //!     Функция для создания диапазона полупересечений.
-        /*!
-                Принимает на вход набор диапазонов, для которых нужно найти полупересечение, и
-            минимальное количество элементов в полупересечениии.
-                Возвращает диапазон элементов, которые есть не менее чем в заданном количестве
-            входных диапазонов.
-                Отношение порядка выбирается по-умолчанию.
+                `M`-полупересечение диапазонов — это такой набор элементов, которые есть
+                одновременно хотя бы в `M` из `N` входных диапазонах.
+
+            \returns
+                Диапазон, представляющий собой полупересечение нескольких (переданных в аргументах)
+                диапазонов.
+
+            \see make_semiintersect_iterator
+            \see semiintersect_iterator
          */
-        template <typename RandomAccessRange>
-        auto operator () (RandomAccessRange && ranges, std::size_t min_items) const
+        template <typename ... Args>
+        auto operator () (Args && ... args) const
         {
-            auto begin =
-                make_semiintersect_iterator(std::forward<RandomAccessRange>(ranges), min_items);
+            auto begin = make_semiintersect_iterator(std::forward<Args>(args)...);
             auto end = make_semiintersect_iterator(iterator::end_tag, begin);
 
             return boost::make_iterator_range(std::move(begin), std::move(end));

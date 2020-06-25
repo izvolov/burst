@@ -356,30 +356,31 @@ namespace burst
             Сами диапазоны должны быть упорядочены относительно этой операции.
             Возвращает итератор на первое полупересечение входных диапазонов.
      */
-    template <typename RandomAccessIterator, typename Compare>
+    template <typename RandomAccessIterator, typename Integral, typename Compare>
     auto
         make_semiintersect_iterator
         (
             RandomAccessIterator first, RandomAccessIterator last,
-            std::size_t min_items,
+            Integral min_items,
             Compare compare
         )
     {
+        assert(min_items > 0);
         return
             semiintersect_iterator<RandomAccessIterator, Compare>
             (
                 std::move(first), std::move(last),
-                min_items,
+                static_cast<std::size_t>(min_items),
                 compare
             );
     }
 
-    template <typename RandomAccessRange, typename Compare>
+    template <typename RandomAccessRange, typename Integral, typename Compare>
     auto
         make_semiintersect_iterator
         (
             RandomAccessRange && ranges,
-            std::size_t min_items,
+            Integral min_items,
             Compare compare
         )
     {
@@ -402,24 +403,25 @@ namespace burst
             Возвращает итератор на первое полупересечение входных диапазонов.
             Отношение порядка для элементов диапазона выбирается по-умолчанию.
      */
-    template <typename RandomAccessIterator>
+    template <typename RandomAccessIterator, typename Integral>
     auto
         make_semiintersect_iterator
         (
             RandomAccessIterator first, RandomAccessIterator last,
-            std::size_t min_items
+            Integral min_items
         )
     {
+        assert(min_items > 0);
         return
             semiintersect_iterator<RandomAccessIterator>
             (
                 std::move(first), std::move(last),
-                min_items
+                static_cast<std::size_t>(min_items)
             );
     }
 
-    template <typename RandomAccessRange>
-    auto make_semiintersect_iterator (RandomAccessRange && ranges, std::size_t min_items)
+    template <typename RandomAccessRange, typename Integral>
+    auto make_semiintersect_iterator (RandomAccessRange && ranges, Integral min_items)
     {
         using std::begin;
         using std::end;
