@@ -198,10 +198,9 @@ TEST_SUITE("semiintersect")
         auto second = {1, 1, 1};
         auto  third = {1, 1, 1};
         //             ^  ^  ^
-        auto ranges = burst::make_range_vector(first, second, third);
 
         auto semiintersection =
-            burst::semiintersect(ranges, 2, std::less<>{});
+            burst::semiintersect(std::tie(first, second, third), 2, std::less<>{});
 
         CHECK(semiintersection == first);
     }
@@ -217,6 +216,19 @@ TEST_SUITE("semiintersect")
         auto semiintersection = burst::semiintersect(ranges, 2);
 
         auto expected_collection = {0, 1, 1, 2};
+        CHECK(semiintersection == expected_collection);
+    }
+
+    TEST_CASE("Полупересечение можно вызывать без предварительного создания диапазона диапазонов")
+    {
+        const auto  first = {0, 0, 1,       2};
+        const auto second = {0,    1, 1,    2};
+        const auto  third = {0,    1, 1, 1, 2};
+        //                   ^     ^        ^
+
+        auto semiintersection = burst::semiintersect(std::tie(first, second, third), 3);
+
+        const auto expected_collection = {0, 1, 2};
         CHECK(semiintersection == expected_collection);
     }
 }
