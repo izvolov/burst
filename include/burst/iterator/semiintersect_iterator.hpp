@@ -5,7 +5,10 @@
 #include <burst/functional/each.hpp>
 #include <burst/iterator/detail/prevent_writing.hpp>
 #include <burst/iterator/end_tag.hpp>
+#include <burst/range/make_range_vector.hpp>
+#include <burst/range/own_as_range.hpp>
 #include <burst/range/skip_to_lower_bound.hpp>
+#include <burst/tuple/apply.hpp>
 #include <burst/type_traits/iterator_difference.hpp>
 #include <burst/type_traits/iterator_value.hpp>
 #include <burst/type_traits/range_reference.hpp>
@@ -430,6 +433,71 @@ namespace burst
             (
                 begin(std::forward<RandomAccessRange>(ranges)),
                 end(std::forward<RandomAccessRange>(ranges)),
+                min_items
+            );
+    }
+
+    /*!
+        \brief
+            Функция для создания итератора полупересечения с предикатом из кортежа ссылок
+
+        \details
+            Создаёт итератор ленивого полупересечения нескольких диапазонов. Проход от созданного
+            итератора до итератора-конца (см. перегрузку с `end_tag_t`) перечисляет те, и только те
+            элементы исходных диапазонов `ranges`, которые присутствуют одновременно хотя бы в
+            `min_items` диапазонах, причём в порядке их неубывания относительно операции `compare`.
+
+        \param ranges
+            Кортеж ссылок на диапазоны, для которых нужно найти полупересечение.
+        \param min_items
+            Параметр полупересечения.
+        \param compare
+            Операция, задающая отношение строгого порядка на элементах результирующего диапазона.
+
+        \pre
+            Каждый диапазон в `ranges` упорядочен относительно операции `compare`.
+
+        \returns
+            Итератор на наименьший относительно заданного отношения порядка элемент ленивого
+            полупересечения входных диапазонов.
+
+        \see semiintersect_iterator
+     */
+    template <typename ... Ranges, typename Integral, typename Compare>
+    auto
+        make_semiintersect_iterator
+        (
+            std::tuple<Ranges &...> ranges,
+            Integral min_items,
+            Compare compare
+        )
+    {
+        return
+            make_semiintersect_iterator
+            (
+                burst::own_as_range(burst::apply(burst::make_range_vector, ranges)),
+                min_items,
+                std::move(compare)
+            );
+    }
+
+    /*!
+        \brief
+            Функция для создания итератора полупересечения из кортежа ссылок
+
+        \returns
+            Итератор ленивого полупересечения с отношением порядка по умолчанию.
+
+        \see make_semiintersect_iterator
+        \see semiintersect_iterator
+     */
+    template <typename ... Ranges, typename Integral>
+    auto make_semiintersect_iterator (std::tuple<Ranges &...> ranges, Integral min_items)
+    {
+        return
+            make_semiintersect_iterator
+            (
+                burst::own_as_range(burst::apply(burst::make_range_vector, ranges)),
                 min_items
             );
     }
