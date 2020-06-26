@@ -167,9 +167,8 @@ assert(t.get<std::string>(2) == std::string("123"));
 ```cpp
 std::string hello("hello");
 std::string world("world");
-auto ranges = burst::make_range_vector(hello, world);
 
-auto helloworld = burst::join(ranges);
+auto helloworld = burst::join(std::tie(hello, world));
 
 assert(helloworld == std::string("helloworld"));
 ```
@@ -184,15 +183,14 @@ assert(helloworld == std::string("helloworld"));
 Производит ленивое слияние набора упорядоченных множеств.
 Создаёт упорядоченный диапазон, пробегающийся по всем элементам всех входных множеств.
 
-Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`even` и `odd`) остаются нетронутыми.
+Созданный диапазон однопроходный (SinglePass в терминологии Буста).
 
 ```cpp
 std::vector<int> even{   2,    4,    6};
 std::vector<int>  odd{1,    3,    5   };
 //                    ^  ^  ^  ^  ^  ^
-auto ranges = burst::make_range_vector(even, odd);
 
-auto merged_range = burst::merge(ranges);
+auto merged_range = burst::merge(std::tie(even, odd));
 
 auto expected_collection = {1, 2, 3, 4, 5, 6};
 assert(merged_range == expected_collection);
@@ -208,16 +206,15 @@ assert(merged_range == expected_collection);
 Производит ленивое пересечение набора упорядоченных множеств.
 Создаёт упорядоченный диапазон, пробегающийся по тем элементам, которые есть одновременно во всех входных множествах.
 
-Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`natural`, `prime` и `odd`) остаются нетронутыми.
+Созданный диапазон однопроходный (SinglePass в терминологии Буста).
 
 ```cpp
 std::vector<int> natural{1, 2, 3, 4, 5, 6, 7};
 std::vector<int>   prime{   2, 3,    5,    7};
 std::vector<int>     odd{1,    3,    5,    7};
 //                             ^     ^     ^
-auto ranges = burst::make_range_vector(natural, prime, odd);
 
-auto intersected_range = burst::intersect(ranges);
+auto intersected_range = burst::intersect(std::tie(natural, prime, odd));
 
 auto expected_collection = {3, 5, 7};
 assert(intersected_range == expected_collection);
@@ -235,16 +232,15 @@ assert(intersected_range == expected_collection);
 Производит ленивое полупересечение набора упорядоченных множеств.
 Создаёт упорядоченный диапазон, пробегающийся по всем элементам, которые есть не менее, чем в `m` входных множествах.
 
-Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`first`, `second` и `third`) остаются нетронутыми.
+Созданный диапазон однопроходный (SinglePass в терминологии Буста).
 
 ```cpp
 auto  first = {0, 0, 1,       2};
 auto second = {0,    1, 1      };
 auto  third = {      1, 1, 1, 2};
 //             ^     ^  ^     ^
-auto ranges = burst::make_range_vector(first, second, third);
 
-auto semiintersection = burst::semiintersect(ranges, 2);
+auto semiintersection = burst::semiintersect(std::tie(first, second, third), 2);
 
 auto expected_collection = {0, 1, 1, 2};
 assert(semiintersection == expected_collection);
@@ -260,16 +256,15 @@ assert(semiintersection == expected_collection);
 Производит ленивое объединение набора упорядоченных множеств.
 Создаёт упорядоченный диапазон, пробегающийся по всем элементам входных множеств без учёта повторяющихся элементов.
 
-Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`one`, `two` и `three`) остаются нетронутыми.
+Созданный диапазон однопроходный (SinglePass в терминологии Буста).
 
 ```cpp
 std::vector<int>   one{1, 2      };
 std::vector<int>   two{   2, 3   };
 std::vector<int> three{      3, 4};
 //                     ^  ^  ^  ^
-auto ranges = burst::make_range_vector(one, two, three);
 
-auto range_union = burst::unite(ranges);
+auto range_union = burst::unite(std::tie(one, two, three));
 
 auto expected_collection = {1, 2, 3, 4};
 assert(range_union == expected_collection);
@@ -306,7 +301,7 @@ assert(difference == even);
 Производит ленивую симметрическую разность набора упорядоченных множеств.
 Создаёт упорядоченный диапазон, пробегающийся по всем элементам, которые есть в нечётном числе входных множеств.
 
-Алгоритм деструктивен по отношению к хранилищу диапазонов (`ranges` в примере ниже). Сами же множества (`first`, `second`, `third` и `fourth`) остаются нетронутыми.
+Созданный диапазон однопроходный (SinglePass в терминологии Буста).
 
 ```cpp
 const auto  first = burst::make_vector({1, 2, 3, 4      });
@@ -314,9 +309,9 @@ const auto second = burst::make_vector({1, 2, 3,    5, 5});
 const auto  third = burst::make_vector({1,    3, 4, 5   });
 const auto fourth = burst::make_vector({1, 2,    4      });
 //                                         ^  ^  ^     ^
-auto ranges = burst::make_range_vector(first, second, third, fourth);
 
-const auto difference = burst::symmetric_difference(ranges);
+const auto difference =
+    burst::symmetric_difference(std::tie(first, second, third, fourth));
 
 auto result = {2, 3, 4, 5};
 assert(difference == result);
