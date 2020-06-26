@@ -47,9 +47,8 @@ TEST_SUITE("unite")
     {
         std::string  long_range("abcdef");
         std::string short_range("cde");
-        auto ranges = burst::make_range_vector(long_range, short_range);
 
-        auto range_union = burst::unite(ranges);
+        auto range_union = burst::unite(std::tie(long_range, short_range));
 
         CHECK(range_union == long_range);
     }
@@ -89,6 +88,18 @@ TEST_SUITE("unite")
         auto range_union = burst::unite(ranges);
 
         auto expected_collection = {1, 1, 1, 2, 2, 3};
+        CHECK(range_union == expected_collection);
+    }
+
+    TEST_CASE("Объединение можно вызывать без предварительного создания диапазона диапазонов")
+    {
+        const auto  first = {5, 5, 5, 4, 4, 3};
+        const auto second = {5, 5, 4, 4};
+        const auto  third = {5, 5};
+
+        auto range_union = burst::unite(std::tie(first, second, third), std::greater<>{});
+
+        auto expected_collection = {5, 5, 5, 4, 4, 3};
         CHECK(range_union == expected_collection);
     }
 }
