@@ -1,6 +1,7 @@
+#include <utility/io/read.hpp>
+
 #include <burst/algorithm/radix_sort.hpp>
 #include <burst/functional/identity.hpp>
-#include <io.hpp>
 
 #include <boost/program_options.hpp>
 #include <boost/sort/spreadsort/integer_sort.hpp>

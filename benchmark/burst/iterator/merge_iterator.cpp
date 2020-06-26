@@ -1,6 +1,7 @@
+#include <utility/io/read_many.hpp>
+
 #include <burst/iterator/merge_iterator.hpp>
 #include <burst/range/merge.hpp>
-#include <io.hpp>
 
 #include <boost/assert.hpp>
 #include <boost/range/algorithm/for_each.hpp>
