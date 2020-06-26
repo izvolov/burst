@@ -1,6 +1,7 @@
 #ifndef BURST_RANGE_UNITE_HPP
 #define BURST_RANGE_UNITE_HPP
 
+#include <burst/iterator/end_tag.hpp>
 #include <burst/iterator/union_iterator.hpp>
 
 #include <boost/range/iterator_range.hpp>
@@ -11,34 +12,29 @@ namespace burst
 {
     struct unite_t
     {
-        //!     Функция для создания диапазона объединений с предикатом.
         /*!
-                Принимает на вход набор диапазонов, которые нужно объединить, и операцию, задающую
-            отношение строгого порядка на элементах этих диапазонов. При этом сами диапазоны тоже
-            должны быть упорядочены относительно этой операции.
-                Возвращает диапазон, упорядоченный относительно всё той же операции, каждое
-            значение которого соответствует одному элементу, который есть хотя бы в одном из
-            входных диапазонов.
-         */
-        template <typename RandomAccessRange, typename Compare>
-        auto operator () (RandomAccessRange && ranges, Compare compare) const
-        {
-            auto begin = make_union_iterator(std::forward<RandomAccessRange>(ranges), compare);
-            auto end = make_union_iterator(iterator::end_tag, begin);
+            \brief
+                Функция для создания диапазона объединения
 
-            return boost::make_iterator_range(std::move(begin), std::move(end));
-        }
+            \details
+                Создаёт итератор объединения посредством пробрасывания аргументов этой функции в
+                функцию `make_union_iterator`, а из этого итератора создаёт диапазон.
 
-        //!     Функция для создания диапазона объединений.
-        /*!
-                Принимает на вход набор диапазонов, которые нужно объединить.
-                Возвращает диапазон элементов, которые есть хотя бы в одном из входных диапазонов.
-                Отношение порядка выбирается по-умолчанию.
+                Объединение диапазонов рассматривается в теоретико-множественном смысле, то есть в
+                результирующем диапазоне все элементы, которые есть хотя бы в одном из входных
+                диапазонов.
+
+            \returns
+                Диапазон, представляющий собой объединение нескольких (переданных в аргументах)
+                диапазонов.
+
+            \see make_union_iterator
+            \see union_iterator
          */
-        template <typename RandomAccessRange>
-        auto operator () (RandomAccessRange && ranges) const
+        template <typename ... Args>
+        auto operator () (Args && ... args) const
         {
-            auto begin = make_union_iterator(std::forward<RandomAccessRange>(ranges));
+            auto begin = make_union_iterator(std::forward<Args>(args)...);
             auto end = make_union_iterator(iterator::end_tag, begin);
 
             return boost::make_iterator_range(std::move(begin), std::move(end));
