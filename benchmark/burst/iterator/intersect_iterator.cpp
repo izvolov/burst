@@ -54,7 +54,7 @@ void test_std_intersect (const Container & values)
 int main ()
 {
     std::vector<std::vector<std::int64_t>> values;
-    read_many(std::cin, values);
+    utility::read_many(std::cin, values);
 
     test_std_intersect(values);
     test_on_the_fly_intersect(values);

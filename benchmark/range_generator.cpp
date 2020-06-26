@@ -48,7 +48,7 @@ void
             }
         }
 
-        write(std::cout, range);
+        utility::write(std::cout, range);
     }
 }
 

@@ -81,7 +81,7 @@ void test (const Container & arities, std::size_t attempts)
 {
     using integer_type = std::int64_t;
     std::vector<integer_type> numbers;
-    read(std::cin, numbers);
+    utility::read(std::cin, numbers);
     std::sort(numbers.begin(), numbers.end());
     numbers.erase(std::unique(numbers.begin(), numbers.end()), numbers.end());
 

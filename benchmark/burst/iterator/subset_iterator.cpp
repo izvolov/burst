@@ -29,7 +29,7 @@ void test (const Container & numbers)
 int main ()
 {
     std::vector<std::int64_t> numbers;
-    read(std::cin, numbers);
+    utility::read(std::cin, numbers);
 
     test(numbers);
 }
