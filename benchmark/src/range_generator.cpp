@@ -1,56 +1,12 @@
-#include <utility/io/write.hpp>
+#include <utility/io/generate.hpp>
 
 #include <boost/program_options.hpp>
 
-#include <algorithm>
-#include <chrono>
+#include <cstddef>
 #include <cstdint>
 #include <exception>
-#include <functional>
 #include <iostream>
-#include <random>
-#include <vector>
-
-void
-    generate
-    (
-        std::size_t range_count,
-        std::size_t range_length,
-        std::int64_t min,
-        std::int64_t max,
-        bool seed,
-        bool sort,
-        bool descending
-    )
-{
-    auto seed_value = seed
-        ? static_cast<std::default_random_engine::result_type>
-        (
-            std::chrono::system_clock::now().time_since_epoch().count()
-        )
-        : 0;
-    std::default_random_engine engine(seed_value);
-    std::uniform_int_distribution<std::int64_t> uniform(min, max);
-
-    std::vector<std::int64_t> range(range_length);
-    for (std::size_t i = 0; i < range_count; ++i)
-    {
-        std::generate(range.begin(), range.end(), [&] () { return uniform(engine); });
-        if (sort)
-        {
-            if (descending)
-            {
-                std::sort(range.begin(), range.end(), std::greater<>{});
-            }
-            else
-            {
-                std::sort(range.begin(), range.end());
-            }
-        }
-
-        utility::write(std::cout, range);
-    }
-}
+#include <limits>
 
 int main (int argc, const char * argv[])
 {
@@ -95,7 +51,7 @@ int main (int argc, const char * argv[])
             bool sort = vm["sort"].as<bool>();
             bool descending = vm["descending"].as<bool>();
 
-            generate(range_count, range_length, min, max, seed, sort, descending);
+            utility::generate(range_count, range_length, min, max, seed, sort, descending);
         }
     }
     catch (std::exception &)
