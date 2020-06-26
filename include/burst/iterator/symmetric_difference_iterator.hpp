@@ -6,6 +6,9 @@
 #include <burst/functional/each.hpp>
 #include <burst/iterator/detail/prevent_writing.hpp>
 #include <burst/iterator/end_tag.hpp>
+#include <burst/range/make_range_vector.hpp>
+#include <burst/range/own_as_range.hpp>
+#include <burst/tuple/apply.hpp>
 #include <burst/type_traits/iterator_value.hpp>
 #include <burst/type_traits/range_reference.hpp>
 #include <burst/type_traits/range_value.hpp>
@@ -234,6 +237,41 @@ namespace burst
             );
     }
 
+    /*!
+        \brief
+            Функция для создания итератора симметрической разности с предикатом из кортежа ссылок
+
+        \details
+            Создаёт итератор ленивой симметрической разности нескольких диапазонов. Проход от
+            созданного итератора до итератора-конца (см. перегрузку с `end_tag_t`) перечисляет
+            те, и только те элементы исходных диапазонов `ranges`, которые присутствуют в нечётном
+            числе этих диапазонов, причём в порядке их неубывания относительно операции `compare`.
+
+        \param ranges
+            Кортеж ссылок на диапазоны, для которых нужно вычислить симметрическую разность.
+        \param compare
+            Операция, задающая отношение строгого порядка на элементах результирующего диапазона.
+
+        \pre
+            Каждый диапазон в `ranges` упорядочен относительно операции `compare`.
+
+        \returns
+            Итератор на наименьший относительно заданного отношения порядка элемент ленивой
+            симметрической разности входных диапазонов.
+
+        \see symmetric_difference_iterator
+     */
+    template <typename ... Ranges, typename Compare>
+    auto make_symmetric_difference_iterator (std::tuple<Ranges &...> ranges, Compare compare)
+    {
+        return
+            make_symmetric_difference_iterator
+            (
+                burst::own_as_range(burst::apply(burst::make_range_vector, ranges)),
+                std::move(compare)
+            );
+    }
+
     //!     Функция для создания итератора симметрической разности
     /*!
             Принимает на вход набор диапазонов, для которых нужно найти симметрическую разность.
@@ -257,6 +295,26 @@ namespace burst
             (
                 begin(std::forward<RandomAccessRange>(ranges)),
                 end(std::forward<RandomAccessRange>(ranges))
+            );
+    }
+
+    /*!
+        \brief
+            Функция для создания итератора симметрической разности из кортежа ссылок
+
+        \returns
+            Итератор ленивой симметрической разности с отношением порядка по умолчанию.
+
+        \see make_symmetric_difference_iterator
+        \see symmetric_difference_iterator
+     */
+    template <typename ... Ranges>
+    auto make_symmetric_difference_iterator (std::tuple<Ranges &...> ranges)
+    {
+        return
+            make_symmetric_difference_iterator
+            (
+                burst::own_as_range(burst::apply(burst::make_range_vector, ranges))
             );
     }
 
