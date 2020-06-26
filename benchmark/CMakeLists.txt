@@ -1,7 +1,7 @@
 find_package(Boost 1.62.0 COMPONENTS program_options REQUIRED)
 
 add_library(benchIO INTERFACE)
-target_include_directories(benchIO INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(benchIO INTERFACE include)
 
 add_executable(rangegen range_generator.cpp)
 target_link_libraries(rangegen PRIVATE Burst::burst benchIO Boost::program_options)
