@@ -86,7 +86,7 @@ void test_std_merge (const Container & values)
 int main ()
 {
     std::vector<std::vector<std::int64_t>> values;
-    read_many(std::cin, values);
+    utility::read_many(std::cin, values);
 
     test_merge_by_sorting(values);
     test_std_merge(values);

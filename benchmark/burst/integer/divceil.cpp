@@ -45,7 +45,7 @@ template <typename Integer1, typename Integer2>
 void test_all (std::int64_t divisor, std::size_t attempt_count)
 {
     std::vector<Integer1> values;
-    read(std::cin, values);
+    utility::read(std::cin, values);
 
     test_divceil(values, static_cast<Integer2>(divisor), attempt_count);
 }

@@ -55,7 +55,7 @@ int main (int argc, const char * argv[])
         else
         {
             std::vector<std::int64_t> numbers;
-            read(std::cin, numbers);
+            utility::read(std::cin, numbers);
 
             std::size_t attempts = vm["attempts"].as<std::size_t>();
             test(numbers, attempts, [] (auto f, auto l, const auto & v) {return burst::galloping_lower_bound(f, l, v);}, "gallop");

@@ -7,23 +7,26 @@
 #include <cstdint>
 #include <istream>
 
-template <typename Container>
-std::istream & read (std::istream & stream, Container & values)
+namespace utility
 {
-    auto size = std::size_t{};
-    if (burst::trivial_read(stream, size))
+    template <typename Container>
+    std::istream & read (std::istream & stream, Container & values)
     {
-        values.resize(size);
-
-        for (auto & value: values)
+        auto size = std::size_t{};
+        if (burst::trivial_read(stream, size))
         {
-            auto n = std::int64_t{};
-            burst::trivial_read(stream, n);
-            value = static_cast<typename Container::value_type>(n);
-        }
-    }
+            values.resize(size);
 
-    return stream;
-}
+            for (auto & value: values)
+            {
+                auto n = std::int64_t{};
+                burst::trivial_read(stream, n);
+                value = static_cast<typename Container::value_type>(n);
+            }
+        }
+
+        return stream;
+    }
+} // namespace utility
 
 #endif // BURST_BENCHMARK_UTILITY_IO_READ_HPP

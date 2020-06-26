@@ -44,7 +44,7 @@ template <typename Integer, typename UnaryFunction>
 void test_all (std::size_t attempts, UnaryFunction prepare)
 {
     std::vector<Integer> numbers;
-    read(std::cin, numbers);
+    utility::read(std::cin, numbers);
 
     std::vector<Integer> buffer(numbers.size());
 
