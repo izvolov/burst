@@ -75,4 +75,42 @@ TEST_SUITE("owning_iterator")
 
         CHECK(*copy == 17);
     }
+
+    TEST_CASE("Владеющий итератор произвольного доступа умеет продвигаться на N элементов вперёд "
+        "и назад")
+    {
+        auto iterator = burst::make_owning_iterator(burst::make_vector({'a', 'b', 'c', 'd'}));
+
+        iterator += 3;
+        CHECK(*iterator == 'd');
+
+        iterator -= 2;
+        CHECK(*iterator == 'b');
+    }
+
+    TEST_CASE("Владеющий итератор произвольного доступа допускает вычисление расстояния при "
+        "помощи разности")
+    {
+        const auto one = burst::make_owning_iterator(burst::make_vector({'a', 'b', 'c', 'd'}));
+
+        const auto another = std::next(one, 3);
+        CHECK(another - one == 3);
+    }
+
+    TEST_CASE("Двунаправленный владеющий итератор умеет продвигаться вперёд и назад")
+    {
+        auto iterator = burst::make_owning_iterator(burst::make_list({'a', 'b', 'c', 'd'}));
+
+        ++iterator;
+        CHECK(*iterator == 'b');
+
+        iterator++;
+        CHECK(*iterator == 'c');
+
+        --iterator;
+        CHECK(*iterator == 'b');
+
+        iterator--;
+        CHECK(*iterator == 'a');
+    }
 }
