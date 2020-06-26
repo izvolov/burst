@@ -12,40 +12,30 @@ namespace burst
 {
     struct symmetric_difference_t
     {
-        //!     Функция для создания диапазона симметрической разности с предикатом
         /*!
-                Принимает на вход набор диапазонов, симметрическую разность которых нужно найти, и
-            операцию, задающую отношение строгого порядка на элементах этих диапазонов. При этом
-            сами диапазоны тоже должны быть упорядочены относительно этой операции.
-                Возвращает диапазон, упорядоченный относительно всё той же операции, каждое
-            значение которого соответствует одному элементу, который есть в нечётном количестве
-            входных диапазонов.
-         */
-        template <typename RandomAccessRange, typename Compare>
-        auto operator () (RandomAccessRange && ranges, Compare compare) const
-        {
-            auto begin =
-                make_symmetric_difference_iterator
-                (
-                    std::forward<RandomAccessRange>(ranges),
-                    compare
-                );
-            auto end = make_symmetric_difference_iterator(iterator::end_tag, begin);
+            \brief
+                Функция для создания диапазона симметрической разности
 
-            return boost::make_iterator_range(std::move(begin), std::move(end));
-        }
+            \details
+                Создаёт итератор симметрической разности посредством пробрасывания аргументов этой
+                функции в функцию `make_symmetric_difference_iterator`, а из этого итератора создаёт
+                диапазон.
 
-        //!     Функция для создания диапазона симметрической разности
-        /*!
-                Принимает на вход набор диапазонов, симметрическую разность которых нужно найти.
-                Возвращает диапазон элементов, которые есть в нечётном количестве входных
-            диапазонов.
-                Отношение порядка выбирается по-умолчанию.
+                Симметрическая разность диапазонов рассматривается в теоретико-множественном смысле,
+                то есть в результирующем диапазоне будут те, и только те элементы, которые есть в
+                нечётном количестве входных диапазонов.
+
+            \returns
+                Диапазон, представляющий собой симметрическую разность нескольких (переданных в
+                аргументах) диапазонов.
+
+            \see make_symmetric_difference_iterator
+            \see symmetric_difference_iterator
          */
-        template <typename RandomAccessRange>
-        auto operator () (RandomAccessRange && ranges) const
+        template <typename ... Args>
+        auto operator () (Args && ... args) const
         {
-            auto begin = make_symmetric_difference_iterator(std::forward<RandomAccessRange>(ranges));
+            auto begin = make_symmetric_difference_iterator(std::forward<Args>(args)...);
             auto end = make_symmetric_difference_iterator(iterator::end_tag, begin);
 
             return boost::make_iterator_range(std::move(begin), std::move(end));
