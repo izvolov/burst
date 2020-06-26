@@ -91,9 +91,9 @@ TEST_SUITE("symmetric_difference")
         const auto  first = {   3, 3, 2, 1};
         const auto second = {4, 3,    2   };
         //                   ^     ^     ^
-        auto ranges = burst::make_range_vector(first, second);
 
-        const auto symmetric_difference = burst::symmetric_difference(ranges, std::greater<>{});
+        const auto symmetric_difference =
+            burst::symmetric_difference(std::tie(first, second), std::greater<>{});
 
         const auto expected = {4, 3, 1};
         CHECK(symmetric_difference == expected);
@@ -137,6 +137,21 @@ TEST_SUITE("symmetric_difference")
         const auto symmetric_difference = burst::symmetric_difference(ranges);
 
         const auto expected = {0, 1, 1};
+        CHECK(symmetric_difference == expected);
+    }
+
+    TEST_CASE("Симметрическую разность можно вызывать без предварительного создания диапазона "
+        "диапазонов")
+    {
+        const auto  first = {0, 0, 1,       2   };
+        const auto second = {0,    1, 1,       3};
+        const auto  third = {      1, 1, 1, 2   };
+        //                      ^  ^     ^     ^
+
+        const auto symmetric_difference =
+            burst::symmetric_difference(std::tie(first, second, third));
+
+        const auto expected = {0, 1, 1, 3};
         CHECK(symmetric_difference == expected);
     }
 }
