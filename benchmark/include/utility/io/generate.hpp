@@ -8,15 +8,16 @@
 #include <cstddef>
 #include <cstdint>
 #include <functional>
-#include <iostream>
+#include <ostream>
 #include <random>
 #include <vector>
 
 namespace utility
 {
-    void
+    std::ostream &
         generate
         (
+            std::ostream & stream,
             std::size_t range_count,
             std::size_t range_length,
             std::int64_t min,
@@ -51,8 +52,10 @@ namespace utility
                 }
             }
 
-            write(std::cout, range);
+            write(stream, range);
         }
+
+        return stream;
     }
 } // namespace utility
 

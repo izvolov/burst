@@ -51,7 +51,7 @@ int main (int argc, const char * argv[])
             bool sort = vm["sort"].as<bool>();
             bool descending = vm["descending"].as<bool>();
 
-            utility::generate(range_count, range_length, min, max, seed, sort, descending);
+            utility::generate(std::cout, range_count, range_length, min, max, seed, sort, descending);
         }
     }
     catch (std::exception &)
