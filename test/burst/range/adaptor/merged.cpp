@@ -47,4 +47,16 @@ TEST_SUITE("merged")
         const auto expected = {5, 3, 3, 2, 1, 1};
         CHECK(merged == expected);
     }
+
+    TEST_CASE("Может работать с кортежем диапазонов")
+    {
+        const auto first = burst::make_vector({1, 4, 7});
+        const auto second = burst::make_vector({2, 5, 8});
+        const auto third = burst::make_forward_list({3, 6, 9});
+
+        const auto merged = std::tie(first, second, third) | burst::merged;
+
+        const auto expected = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        CHECK(merged == expected);
+    }
 }

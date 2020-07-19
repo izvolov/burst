@@ -1,3 +1,4 @@
+#include <burst/container/make_deque.hpp>
 #include <burst/container/make_list.hpp>
 #include <burst/container/make_vector.hpp>
 #include <burst/range/make_range_vector.hpp>
@@ -81,6 +82,30 @@ TEST_SUITE("merge")
         auto merged_range = burst::merge(std::tie(odd, even));
 
         auto expected_collection = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+        CHECK(merged_range == expected_collection);
+    }
+
+    TEST_CASE("Можно сливать диапазоны разных типов")
+    {
+        auto one = burst::make_vector({0, 3, 6, 9});
+        auto two = burst::make_list({1, 4, 7, 10});
+        auto three = burst::make_deque({2, 5, 8, 11});
+
+        auto merged_range = burst::merge(std::tie(one, two, three));
+
+        auto expected_collection = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+        CHECK(merged_range == expected_collection);
+    }
+
+    TEST_CASE("Можно сливать с предикатом диапазоны разных типов")
+    {
+        auto one = burst::make_vector({9, 6, 3, 0});
+        auto two = burst::make_list({10, 7, 4, 1});
+        auto three = burst::make_deque({11, 8, 5, 2});
+
+        auto merged_range = burst::merge(std::tie(one, two, three), std::greater<>{});
+
+        auto expected_collection = {11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
         CHECK(merged_range == expected_collection);
     }
 }
