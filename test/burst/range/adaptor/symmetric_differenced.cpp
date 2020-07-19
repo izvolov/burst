@@ -1,4 +1,6 @@
+#include <burst/container/make_deque.hpp>
 #include <burst/container/make_forward_list.hpp>
+#include <burst/container/make_list.hpp>
 #include <burst/container/make_vector.hpp>
 #include <burst/range/adaptor/symmetric_differenced.hpp>
 #include <burst/range/make_range_vector.hpp>
@@ -56,6 +58,22 @@ TEST_SUITE("symmetric_differenced")
 
         const auto symmetric_differenced =
             boost::make_iterator_range(ranges)
+                | burst::symmetric_differenced(std::greater<>{});
+
+        const auto expected = {5, 4, 3, 2};
+        CHECK(symmetric_differenced == expected);
+    }
+
+    TEST_CASE("Может работать с кортежем диапазонов")
+    {
+        const auto  first = burst::make_forward_list({      4, 3, 2, 1});
+        const auto second = burst::make_list        ({5, 5,    3, 2, 1});
+        const auto  third = burst::make_vector      ({5,    4, 3,    1});
+        const auto fourth = burst::make_deque       ({      4,    2, 1});
+        //                                               ^  ^  ^  ^
+
+        const auto symmetric_differenced =
+            std::tie(first, second, third, fourth)
                 | burst::symmetric_differenced(std::greater<>{});
 
         const auto expected = {5, 4, 3, 2};

@@ -1,5 +1,6 @@
 #include <burst/container/make_list.hpp>
 #include <burst/container/make_vector.hpp>
+#include <burst/container/make_deque.hpp>
 #include <burst/range/make_range_vector.hpp>
 #include <burst/range/symmetric_difference.hpp>
 
@@ -152,6 +153,33 @@ TEST_SUITE("symmetric_difference")
             burst::symmetric_difference(std::tie(first, second, third));
 
         const auto expected = {0, 1, 1, 3};
+        CHECK(symmetric_difference == expected);
+    }
+
+    TEST_CASE("Возможно вычисление симметрической разности диапазонов разных типов")
+    {
+        auto   one = burst::make_vector({1, 2, 3, 4, 5, 6, 7       });
+        auto   two = burst::make_list  ({1,    3,    5,    7, 9    });
+        auto three = burst::make_deque ({1,       4,       7,    10});
+        //                               ^  ^           ^  ^  ^  ^
+
+        auto symmetric_difference = burst::symmetric_difference(std::tie(one, two, three));
+
+        auto expected = {1, 2, 6, 7, 9, 10};
+        CHECK(symmetric_difference == expected);
+    }
+
+    TEST_CASE("Возможно вычисление симметрической разности с предикатом диапазонов разных типов")
+    {
+        auto   one = burst::make_vector({      7, 6, 5, 4, 3, 2, 1, 0});
+        auto   two = burst::make_list  ({   8,    6,    4,    2,    0});
+        auto three = burst::make_deque ({9,       6,       3,       0});
+        //                               ^  ^  ^  ^  ^           ^  ^
+
+        auto symmetric_difference =
+            burst::symmetric_difference(std::tie(one, two, three), std::greater<>{});
+
+        auto expected = {9, 8, 7, 6, 5, 1, 0};
         CHECK(symmetric_difference == expected);
     }
 }
