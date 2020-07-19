@@ -1,3 +1,4 @@
+#include <burst/container/make_deque.hpp>
 #include <burst/container/make_list.hpp>
 #include <burst/container/make_vector.hpp>
 #include <burst/range/join.hpp>
@@ -215,6 +216,18 @@ TEST_SUITE("join")
         const auto joint_range = burst::join(std::tie(one, two, three));
 
         const auto expected_collection = {'1', '2', '3'};
+        CHECK(joint_range == expected_collection);
+    }
+
+    TEST_CASE("Может склеивать диапазоны разных типов")
+    {
+        auto one = burst::make_vector({1, 2});
+        auto two = burst::make_list({3, 4});
+        auto three = burst::make_deque({5, 6});
+
+        auto joint_range = burst::join(std::tie(one, two, three));
+
+        auto expected_collection = {1, 2, 3, 4, 5, 6};
         CHECK(joint_range == expected_collection);
     }
 }

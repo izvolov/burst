@@ -1,4 +1,5 @@
 #include <burst/container/make_forward_list.hpp>
+#include <burst/container/make_vector.hpp>
 #include <burst/range/adaptor/joined.hpp>
 #include <burst/range/make_range_vector.hpp>
 #include <utility/io/initializer_list.hpp>
@@ -33,6 +34,18 @@ TEST_SUITE("joined")
                 | burst::joined;
 
         const auto expected = boost::irange(0, 20);
+        CHECK(joined == expected);
+    }
+
+    TEST_CASE("Может работать с кортежем диапазонов")
+    {
+        const auto first = burst::make_vector({0, 1});
+        const auto second = burst::make_vector({2, 3});
+        const auto third = burst::make_forward_list({4, 5});
+
+        const auto joined = std::tie(first, second, third) | burst::joined;
+
+        const auto expected = {0, 1, 2, 3, 4, 5};
         CHECK(joined == expected);
     }
 }

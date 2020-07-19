@@ -2,6 +2,7 @@
 #define BURST_ITERATOR_JOIN_ITERATOR_HPP
 
 #include <burst/iterator/detail/join_iterator.hpp>
+#include <burst/iterator/detail/uniform_range_tuple_please.hpp>
 #include <burst/iterator/end_tag.hpp>
 #include <burst/range/make_range_vector.hpp>
 #include <burst/range/own_as_range.hpp>
@@ -13,6 +14,7 @@
 #include <boost/iterator/minimum_category.hpp>
 
 #include <iterator>
+#include <tuple>
 #include <utility>
 
 namespace burst
@@ -139,8 +141,8 @@ namespace burst
     template <typename ... Ranges>
     auto make_join_iterator (std::tuple<Ranges &...> ranges)
     {
-        return
-            make_join_iterator(burst::own_as_range(burst::apply(burst::make_range_vector, ranges)));
+        auto common_ranges = detail::uniform_range_tuple_please(ranges);
+        return make_join_iterator(own_as_range(burst::apply(make_range_vector, common_ranges)));
     }
 
     //!     Функция для создания итератора на конец склейки.
