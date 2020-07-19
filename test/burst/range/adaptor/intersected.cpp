@@ -51,4 +51,17 @@ TEST_SUITE("intersected")
         const auto expected = {3, 1};
         CHECK(intersected == expected);
     }
+
+    TEST_CASE("Может работать с кортежем диапазонов")
+    {
+        const auto  first = burst::make_vector      ({0, 0, 1, 1, 2, 2      });
+        const auto second = burst::make_vector      ({0,    1,    2         });
+        const auto  third = burst::make_forward_list({      1,    2,    3, 4});
+        //                                                  ^     ^
+
+        const auto intersected = std::tie(first, second, third) | burst::intersected;
+
+        const auto expected = {1, 2};
+        CHECK(intersected == expected);
+    }
 }
