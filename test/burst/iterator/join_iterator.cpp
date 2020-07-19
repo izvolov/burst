@@ -1,3 +1,4 @@
+#include <burst/container/make_deque.hpp>
 #include <burst/container/make_forward_list.hpp>
 #include <burst/container/make_vector.hpp>
 #include <burst/iterator/join_iterator.hpp>
@@ -33,6 +34,19 @@ TEST_SUITE("join_iterator")
         auto ranges = burst::make_range_vector(first, second);
 
         auto joined_begin = burst::make_join_iterator(ranges);
+        auto joined_end   = burst::make_join_iterator(burst::iterator::end_tag, joined_begin);
+
+        BOOST_CONCEPT_ASSERT((boost::RandomAccessIterator<decltype(joined_begin)>));
+        BOOST_CONCEPT_ASSERT((boost::RandomAccessIterator<decltype(joined_end)>));
+    }
+
+    TEST_CASE("Итератор склейки, созданный из диапазонов произвольного доступа (с помощью "
+        "кортежа) — итератор произвольного доступа")
+    {
+        auto  first = burst::make_vector({3, 2});
+        auto second = burst::make_deque({1, 0});
+
+        auto joined_begin = burst::make_join_iterator(std::tie(first, second));
         auto joined_end   = burst::make_join_iterator(burst::iterator::end_tag, joined_begin);
 
         BOOST_CONCEPT_ASSERT((boost::RandomAccessIterator<decltype(joined_begin)>));
