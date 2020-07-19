@@ -1,3 +1,6 @@
+#include <burst/container/make_deque.hpp>
+#include <burst/container/make_list.hpp>
+#include <burst/container/make_vector.hpp>
 #include <burst/range/make_range_vector.hpp>
 #include <burst/range/semiintersect.hpp>
 
@@ -229,6 +232,33 @@ TEST_SUITE("semiintersect")
         auto semiintersection = burst::semiintersect(std::tie(first, second, third), 3);
 
         const auto expected_collection = {0, 1, 2};
+        CHECK(semiintersection == expected_collection);
+    }
+
+    TEST_CASE("Возможно полупересечение диапазонов разных типов")
+    {
+        auto   one = burst::make_vector({1, 2, 3, 4, 5, 6, 7       });
+        auto   two = burst::make_list  ({1,    3,    5,    7, 9    });
+        auto three = burst::make_deque ({1,       4,       7,    10});
+        //                               ^     ^  ^  ^     ^
+
+        auto semiintersection = burst::semiintersect(std::tie(one, two, three), 2);
+
+        auto expected_collection = {1, 3, 4, 5, 7};
+        CHECK(semiintersection == expected_collection);
+    }
+
+    TEST_CASE("Возможно полупересечение с предикатом диапазонов разных типов")
+    {
+        auto   one = burst::make_vector({      7, 6, 5, 4, 3, 2, 1, 0});
+        auto   two = burst::make_list  ({   8,    6,    4,    2,    0});
+        auto three = burst::make_deque ({9,       6,       3,       0});
+        //                                        ^                 ^
+
+        auto semiintersection =
+            burst::semiintersect(std::tie(one, two, three), 3, std::greater<>{});
+
+        auto expected_collection = {6, 0};
         CHECK(semiintersection == expected_collection);
     }
 }
