@@ -4,6 +4,7 @@
 #include <burst/container/access/front.hpp>
 #include <burst/functional/each.hpp>
 #include <burst/iterator/detail/prevent_writing.hpp>
+#include <burst/iterator/detail/uniform_range_tuple_please.hpp>
 #include <burst/iterator/end_tag.hpp>
 #include <burst/range/make_range_vector.hpp>
 #include <burst/range/own_as_range.hpp>
@@ -26,6 +27,7 @@
 #include <cstddef>
 #include <functional>
 #include <iterator>
+#include <tuple>
 #include <type_traits>
 #include <utility>
 
@@ -474,10 +476,11 @@ namespace burst
             Compare compare
         )
     {
+        auto common_ranges = detail::uniform_range_tuple_please(ranges);
         return
             make_semiintersect_iterator
             (
-                burst::own_as_range(burst::apply(burst::make_range_vector, ranges)),
+                burst::own_as_range(burst::apply(burst::make_range_vector, common_ranges)),
                 min_items,
                 std::move(compare)
             );
@@ -496,10 +499,11 @@ namespace burst
     template <typename ... Ranges, typename Integral>
     auto make_semiintersect_iterator (std::tuple<Ranges &...> ranges, Integral min_items)
     {
+        auto common_ranges = detail::uniform_range_tuple_please(ranges);
         return
             make_semiintersect_iterator
             (
-                burst::own_as_range(burst::apply(burst::make_range_vector, ranges)),
+                burst::own_as_range(burst::apply(burst::make_range_vector, common_ranges)),
                 min_items
             );
     }

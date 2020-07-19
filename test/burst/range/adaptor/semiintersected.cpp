@@ -58,4 +58,17 @@ TEST_SUITE("semiintersected")
         const auto expected = {3, 1};
         CHECK(semiintersected == expected);
     }
+
+    TEST_CASE("Может работать с кортежем диапазонов")
+    {
+        const auto  first = burst::make_vector      ({0, 0, 1, 1, 2, 2      });
+        const auto second = burst::make_vector      ({0,    1,    2, 2      });
+        const auto  third = burst::make_forward_list({      1,    2,    3, 4});
+        //                                            ^     ^     ^  ^
+
+        const auto semiintersected = std::tie(first, second, third) | burst::semiintersected(2);
+
+        const auto expected = {0, 1, 2, 2};
+        CHECK(semiintersected == expected);
+    }
 }
