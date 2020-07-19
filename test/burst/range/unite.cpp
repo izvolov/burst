@@ -1,4 +1,6 @@
+#include <burst/container/make_deque.hpp>
 #include <burst/container/make_list.hpp>
+#include <burst/container/make_vector.hpp>
 #include <burst/range/make_range_vector.hpp>
 #include <burst/range/unite.hpp>
 
@@ -101,5 +103,29 @@ TEST_SUITE("unite")
 
         auto expected_collection = {5, 5, 5, 4, 4, 3};
         CHECK(range_union == expected_collection);
+    }
+
+    TEST_CASE("Можно объединять диапазоны разных типов")
+    {
+        auto   one = burst::make_vector({1, 2, 3, 4, 5, 6, 7       });
+        auto   two = burst::make_list  ({1,    3,    5,    7, 9    });
+        auto three = burst::make_deque ({1,       4,       7,    10});
+
+        auto union_range = burst::unite(std::tie(one, two, three));
+
+        auto expected_collection = {1, 2, 3, 4, 5, 6, 7, 9, 10};
+        CHECK(union_range == expected_collection);
+    }
+
+    TEST_CASE("Можно объединять с предикатом диапазоны разных типов")
+    {
+        auto   one = burst::make_vector({      7, 6, 5, 4, 3, 2, 1, 0});
+        auto   two = burst::make_list  ({   8,    6,    4,    2,    0});
+        auto three = burst::make_deque ({9,       6,       3,       0});
+
+        auto union_range = burst::unite(std::tie(one, two, three), std::greater<>{});
+
+        auto expected_collection = {9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
+        CHECK(union_range == expected_collection);
     }
 }
