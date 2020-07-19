@@ -47,4 +47,16 @@ TEST_SUITE("united")
         const auto expected = {5, 4, 3, 2, 1};
         CHECK(united == expected);
     }
+
+    TEST_CASE("Может работать с кортежем диапазонов")
+    {
+        const auto  first = burst::make_vector      ({0, 0, 1, 1, 2, 2      });
+        const auto second = burst::make_vector      ({0,    1,    2, 2      });
+        const auto  third = burst::make_forward_list({      1,    2,    3, 4});
+
+        const auto united = std::tie(first, second, third) | burst::united;
+
+        const auto expected = {0, 0, 1, 1, 2, 2, 3, 4};
+        CHECK(united == expected);
+    }
 }
