@@ -1,0 +1,58 @@
+name: Linux
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-18.04]
+        compiler:
+          - name: "g++-7"
+            package: "g++-7"
+          - name: "g++-8"
+            package: "g++-8"
+          - name: "g++-9"
+            package: "g++-9"
+          - name: "clang++-8"
+            package: "clang-8"
+          - name: "clang++-9"
+            package: "clang-9"
+          - name: "clang++-10"
+            package: "clang-10"
+        build_type: ["Debug", "Release"]
+        boost_version: ["1.65"]
+
+    runs-on: ${{matrix.os}}
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Add APT repositories
+      run: |
+        wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | sudo apt-key add -
+        sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
+
+    - name: Install APT dependencies
+      run: |
+        sudo apt update
+        sudo apt install --yes ${{matrix.compiler.package}} libboost-program-options${{matrix.boost_version}}-dev git cmake
+
+    - name: Install doctest
+      run: |
+        git clone https://github.com/onqtam/doctest.git third_party/doctest
+        git -C third_party/doctest checkout 2.3.3
+        cmake -S third_party/doctest -B Build/third_party/doctest -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=${{matrix.compiler.name}}
+        sudo cmake --build Build/third_party/doctest --target install/fast
+
+    - name: Configure
+      run: |
+        cmake -S . -B Build/burst -DCMAKE_BUILD_TYPE=${{matrix.build_type}} -DCMAKE_CXX_COMPILER=${{matrix.compiler.name}}
+
+    - name: Build and test
+      run: |
+        cmake --build Build/burst --target check
