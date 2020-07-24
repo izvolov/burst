@@ -1,0 +1,46 @@
+name: Coverage
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Add APT repositories
+      run: |
+        wget -O - https://apt.kitware.com/keys/kitware-archive-latest.asc 2>/dev/null | sudo apt-key add -
+        sudo apt-add-repository 'deb https://apt.kitware.com/ubuntu/ bionic main'
+
+    - name: Install APT dependencies
+      run: |
+        sudo apt update
+        sudo apt install --yes gcovr lcov libboost-program-options-dev cmake git
+
+    - name: Install doctest
+      run: |
+        git clone https://github.com/onqtam/doctest.git third_party/doctest
+        git -C third_party/doctest checkout 2.3.3
+        cmake -S third_party/doctest -B Build/third_party/doctest -DCMAKE_BUILD_TYPE=Release
+        sudo cmake --build Build/third_party/doctest --target install/fast
+
+    - name: Configure
+      run: |
+        cmake -S . -B Build/burst -DCMAKE_BUILD_TYPE=Debug -DBURST_COVERAGE=ON
+
+    - name: Build and test
+      run: |
+        cmake --build Build/burst --target coverage
+
+    - name: Publish coverage to codecov
+      run: |
+        lcov --version
+        lcov --capture --directory Build/burst --output-file coverage.info
+        lcov --remove coverage.info "/usr/*" --output-file coverage.info
+        lcov --remove coverage.info "*/test/*" --output-file coverage.info
+        bash <(curl -s https://codecov.io/bash) -f coverage.info || echo "Codecov did not collect coverage reports"

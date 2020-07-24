@@ -3,7 +3,7 @@ Burst
 
 То, чего нет в Бусте.
 
-[![Статус сборки](https://travis-ci.org/izvolov/burst.svg?branch=master)](https://travis-ci.org/izvolov/burst) [![Покрытие кода тестами](https://codecov.io/gh/izvolov/burst/branch/master/graph/badge.svg)](https://codecov.io/gh/izvolov/burst) [![Качество кода](https://api.codacy.com/project/badge/Grade/ddaf89951f3245b685a08e19e8f274d8)](https://www.codacy.com/app/izvolov/burst) [![Попробовать онлайн на Wandbox.org](https://img.shields.io/badge/try-online-blue.svg)](https://wandbox.org/permlink/Hcmx94lZxvWnNfBH)
+![Статус сборки под Linux](https://github.com/izvolov/burst/workflows/Linux/badge.svg) ![Статус сборки под macOS](https://github.com/izvolov/burst/workflows/macOS/badge.svg) [![Покрытие кода тестами](https://codecov.io/gh/izvolov/burst/branch/master/graph/badge.svg)](https://codecov.io/gh/izvolov/burst) [![Качество кода](https://api.codacy.com/project/badge/Grade/ddaf89951f3245b685a08e19e8f274d8)](https://www.codacy.com/app/izvolov/burst) [![Попробовать онлайн на Wandbox.org](https://img.shields.io/badge/try-online-blue.svg)](https://wandbox.org/permlink/Hcmx94lZxvWnNfBH)
 
 О проекте
 ---------
@@ -89,12 +89,12 @@ assert(t.get<unsigned>(3) == 789u);
 ----------
 
 1.  Система сборки [CMake](https://cmake.org/) версии 3.8.2 и выше;
-2.  Компилятор [GCC](https://gcc.gnu.org/) версии 7.3 и выше или компилятор [Clang](http://clang.llvm.org/) версии 7 и выше\*;
+2.  Компилятор [GCC](https://gcc.gnu.org/) версии 7.3 и выше или компилятор [Clang](http://clang.llvm.org/) версии 8 и выше\*;
 3.  Библиотека тестирования [doctest](https://github.com/onqtam/doctest) \[Не обязательно\*\*\];
-4.  Библиотека [Boost](https://www.boost.org/) (модуль [`program_options`](https://www.boost.org/doc/libs/1_62_0/doc/html/program_options.html) \[Не обязательно\*\*\*\]) версии 1.62 и выше;
+4.  Библиотека [Boost](https://www.boost.org/) (модуль [`program_options`](https://www.boost.org/doc/libs/1_62_0/doc/html/program_options.html) \[Не обязательно\*\*\*\]) версии 1.65 и выше;
 5.  [Doxygen](http://doxygen.nl) \[Не обязательно\].
 
-Заведомо работающие конфигурации перечислены в [интеграционном скрипте](.travis.yml).
+Заведомо работающие конфигурации перечислены в [интеграционных скриптах](.github/workflows).
 
 > \*) При работе с идущей в комплекте `libc++` или `libstdc++` версии 7 и выше.
 
