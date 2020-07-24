@@ -89,14 +89,14 @@ assert(t.get<unsigned>(3) == 789u);
 ----------
 
 1.  Система сборки [CMake](https://cmake.org/) версии 3.8.2 и выше;
-2.  Компилятор [GCC](https://gcc.gnu.org/) версии 6.2 и выше или компилятор [Clang](http://clang.llvm.org/) версии 3.9 и выше\*;
+2.  Компилятор [GCC](https://gcc.gnu.org/) версии 7.3 и выше или компилятор [Clang](http://clang.llvm.org/) версии 7 и выше\*;
 3.  Библиотека тестирования [doctest](https://github.com/onqtam/doctest) \[Не обязательно\*\*\];
 4.  Библиотека [Boost](https://www.boost.org/) (модуль [`program_options`](https://www.boost.org/doc/libs/1_62_0/doc/html/program_options.html) \[Не обязательно\*\*\*\]) версии 1.62 и выше;
 5.  [Doxygen](http://doxygen.nl) \[Не обязательно\].
 
 Заведомо работающие конфигурации перечислены в [интеграционном скрипте](.travis.yml).
 
-> \*) При работе с идущей в комплекте `libc++` или `libstdc++` версии 6 и выше.
+> \*) При работе с идущей в комплекте `libc++` или `libstdc++` версии 7 и выше.
 
 > \*\*) Можно миновать этап сборки и тестирования, если при сборке с помощью `CMake` выключить опцию `BURST_TESTING`:
 >
