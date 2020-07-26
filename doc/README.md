@@ -32,16 +32,12 @@
 #### <a name="radix"/> Поразрядная сортировка
 
 ```cpp
-std::vector<std::string> strings{"aaaa", "bbb", "cc", "d"};
+std::vector<int> ints{4, 3, 2, 1};
+std::vector<int> buffer(ints.size());
 
-std::vector<std::string> buffer(strings.size());
-burst::radix_sort(strings.begin(), strings.end(), buffer.begin(),
-    [] (const std::string & string)
-    {
-        return string.size();
-    }
-);
-assert((strings == std::vector<std::string>{"d", "cc", "bbb", "aaaa"}));
+burst::radix_sort(ints.begin(), ints.end(), buffer.begin());
+
+assert((ints == std::vector<int>{1, 2, 3, 4}));
 ```
 
 Находится в заголовке
