@@ -115,7 +115,7 @@ assert(intersected_range == expected_collection);
 > \*\*) Можно миновать этап сборки и тестирования, если при сборке с помощью `CMake` выключить опцию `BURST_TESTING`:
 >
 > ```shell
-> cmake -DCMAKE_BUILD_TYPE=Release path/to/burst -DBURST_TESTING=OFF
+> cmake -DBURST_TESTING=OFF <прочие аргументы ...>
 > ```
 >
 > Также тестирование автоматически отключается в случае, если Burst подключается в качестве подпроекта.
@@ -123,7 +123,7 @@ assert(intersected_range == expected_collection);
 > \*\*\*) `Boost.Program_options` не понадобится, если отключить этап сборки замеров производительности с помощью опции `BURST_BENCHMARKING`:
 >
 > ```shell
-> cmake ... -DBURST_BENCHMARKING=OFF
+> cmake -DBURST_BENCHMARKING=OFF <прочие аргументы ...>
 > ```
 >
 > Также замеры производительности отключаются в случае, если Burst подключается в качестве подпроекта.
