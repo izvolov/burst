@@ -74,6 +74,20 @@ assert(t.get<unsigned>(3) == 789u);
 
 В данной библиотеке реализован ряд алгоритмов, каждый из которых работает с произвольным количеством диапазонов, а результатом является ленивый диапазон, который производит нужную операцию (пересечение, слияние и т.д.) "на лету".
 
+Например, следующим образом можно получить пересечение нескольких диапазонов, причём исходные диапазоны могут быть разного типа:
+
+```cpp
+auto natural = std::vector<int>{1, 2, 3, 4, 5, 6, 7};
+auto   prime = std::list<int>  {   2, 3,    5,    7};
+auto     odd = std::deque<int> {1,    3,    5,    7};
+//                                    ^     ^     ^
+
+auto intersected_range = burst::intersect(std::tie(natural, prime, odd));
+
+auto expected_collection = {3, 5, 7};
+assert(intersected_range == expected_collection);
+```
+
 Доступные операции:
 1.  [Склейка](doc/README.md#join)
 2.  [Слияние](doc/README.md#merge)
