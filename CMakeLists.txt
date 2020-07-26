@@ -5,7 +5,7 @@
 ###################################################################################################
 
 cmake_minimum_required(VERSION 3.8.2)
-project(Burst VERSION 1.1.0 LANGUAGES CXX)
+project(Burst VERSION 2.0.0 LANGUAGES CXX)
 
 get_directory_property(IS_SUBPROJECT PARENT_DIRECTORY)
 
