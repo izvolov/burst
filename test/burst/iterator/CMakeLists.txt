@@ -1,6 +1,7 @@
 target_sources(burst-unit-tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/binary_stream_iterators.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/bitap_iterator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/buffered_chunk_iterator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/cache_iterator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/difference_iterator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/intersect_iterator.cpp
