@@ -1,5 +1,6 @@
 target_sources(burst-unit-tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/bitap.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/buffered_chunks.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/cache_one.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/difference.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/intersect.cpp
