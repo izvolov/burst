@@ -19,6 +19,7 @@
     5.  [Объединение](#union)
     6.  [Разность](#difference)
     7.  [Симметрическая разность](#symmetric-difference)
+    8.  [Разбиение на куски](#buffered-chunks)
 4.  [Рабочие инструменты](#utilities)
     1.  [Конструирование контейнеров с выводом типа](#inferring-constructors)
 
@@ -316,6 +317,40 @@ assert(difference == result);
 В заголовке
 ```cpp
 #include <burst/range/symmetric_difference.hpp>
+```
+
+### <a name="buffered-chunks"/> Разбиение на куски
+
+Разбивает входную последовательность элементов на куски равного размера (последний может быть меньше), причём текущий кусок копируется во внутренний буфер и хранится в нём. Исходная последовательность воздействию не подвергается.
+
+Созданный диапазон однопроходный (SinglePass в терминологии Буста).
+
+```cpp
+const auto sequence =
+    burst::make_vector
+    ({
+        1, 2, 3, 4, // Первый кусок
+        5, 6, 7, 8, // Второй кусок
+        9           // Третий кусок
+    });
+
+auto chunks = burst::buffered_chunks(sequence, 4);
+
+const auto first_chunk = {1, 2, 3, 4};
+assert(chunks.front() == first_chunk);
+
+chunks.advance_begin(1);
+const auto second_chunk = {5, 6, 7, 8};
+assert(chunks.front() == second_chunk);
+
+chunks.advance_begin(1);
+const auto third_chunk = {9};
+assert(chunks.front() == third_chunk);
+```
+
+В заголовке
+```cpp
+#include <burst/range/buffered_chunks.hpp>
 ```
 
 <a name="utilities"/> Рабочие инструменты

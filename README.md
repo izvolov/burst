@@ -96,6 +96,7 @@ assert(intersected_range == expected_collection);
 5.  [Объединение](doc/README.md#union)
 6.  [Разность](doc/README.md#difference)
 7.  [Симметрическая разность](doc/README.md#symmetric-difference)
+8.  [Разбиение на куски](doc/README.md#buffered-chunks)
 
 [Подробнее про ленивые вычисления над диапазонами](doc/README.md#lazy-ranges).
 
