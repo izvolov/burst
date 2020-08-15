@@ -7,12 +7,13 @@
 #include <burst/type_traits/iterator_value.hpp>
 
 #include <boost/iterator/iterator_facade.hpp>
+#include <boost/range/iterator_range.hpp>
 
 #include <cassert>
+#include <cstddef>
 #include <iterator>
 #include <memory>
 #include <tuple>
-#include <vector>
 
 namespace burst
 {
@@ -39,21 +40,21 @@ namespace burst
         public boost::iterator_facade
         <
             buffered_chunk_iterator<Iterator, Integral>,
-            std::vector<iterator_value_t<Iterator>>,
+            boost::iterator_range<iterator_value_t<Iterator> *>,
             std::input_iterator_tag,
-            std::vector<iterator_value_t<Iterator>> &,
+            boost::iterator_range<iterator_value_t<Iterator> *>,
             iterator_difference_t<Iterator>
         >
     {
     private:
-        using container_type = std::vector<iterator_value_t<Iterator>>;
+        using buffer_value_type = iterator_value_t<Iterator>;
         using base_type =
             boost::iterator_facade
             <
                 buffered_chunk_iterator,
-                container_type,
+                boost::iterator_range<buffer_value_type *>,
                 std::input_iterator_tag,
-                container_type &,
+                boost::iterator_range<buffer_value_type *>,
                 iterator_difference_t<Iterator>
             >;
 
@@ -64,29 +65,41 @@ namespace burst
         buffered_chunk_iterator (Iterator first, Iterator last, Integral chunk_size):
             m_current(first),
             m_end(last),
-            m_chunk(std::make_shared<container_type>()),
-            m_chunk_size(static_cast<difference_type>(chunk_size))
+            m_chunk_size(static_cast<difference_type>(chunk_size)),
+            m_chunk
+            (
+                std::shared_ptr<buffer_value_type>
+                (
+                    new buffer_value_type[static_cast<std::size_t>(m_chunk_size)],
+                    std::default_delete<buffer_value_type[]>{}
+                )
+            ),
+            m_chunk_end(m_chunk.get())
         {
             assert(m_chunk_size > 0);
-
-            m_chunk->reserve(static_cast<typename container_type::size_type>(m_chunk_size));
             increment();
         }
 
         buffered_chunk_iterator (iterator::end_tag_t, const buffered_chunk_iterator & begin):
             m_current(begin.m_end),
             m_end(begin.m_end),
+            m_chunk_size(begin.m_chunk_size),
             m_chunk{begin.m_chunk},
-            m_chunk_size(begin.m_chunk_size)
+            m_chunk_end(m_chunk.get())
         {
         }
 
     private:
         friend class boost::iterator_core_access;
 
+        bool empty () const
+        {
+            return m_chunk.get() == m_chunk_end;
+        }
+
         reference dereference () const
         {
-            return *m_chunk;
+            return boost::make_iterator_range(m_chunk.get(), m_chunk_end);
         }
 
         bool equal (const buffered_chunk_iterator & that) const
@@ -94,20 +107,20 @@ namespace burst
             assert(this->m_end == that.m_end);
             assert(this->m_chunk == that.m_chunk);
             assert(this->m_chunk_size == that.m_chunk_size);
-            return this->m_current == that.m_current && this->m_chunk->empty();
+            return this->m_current == that.m_current && empty();
         }
 
         void increment ()
         {
-            m_chunk->clear();
-            std::tie(m_current, std::ignore, std::ignore) =
-                copy_at_most_n(m_current, m_end, m_chunk_size, std::back_inserter(*m_chunk));
+            std::tie(m_current, std::ignore, m_chunk_end) =
+                copy_at_most_n(m_current, m_end, m_chunk_size, m_chunk.get());
         }
 
         Iterator m_current;
         Iterator m_end;
-        std::shared_ptr<container_type> m_chunk;
         difference_type m_chunk_size;
+        std::shared_ptr<buffer_value_type> m_chunk;
+        buffer_value_type * m_chunk_end;
     };
 
     /*!
