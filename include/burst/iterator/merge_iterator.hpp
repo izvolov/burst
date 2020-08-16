@@ -75,7 +75,7 @@ namespace burst
         BOOST_CONCEPT_ASSERT((boost::RandomAccessIteratorConcept<outer_range_iterator>));
 
         using inner_range_type = iterator_value_t<outer_range_iterator>;
-        BOOST_CONCEPT_ASSERT((boost::ForwardRangeConcept<inner_range_type>));
+        BOOST_CONCEPT_ASSERT((boost::SinglePassRangeConcept<inner_range_type>));
 
         using base_type =
             boost::iterator_facade
@@ -92,11 +92,13 @@ namespace burst
             m_end(std::move(last)),
             m_compare(compare)
         {
-            BOOST_ASSERT(std::all_of(m_begin, m_end,
-                [& compare] (const auto & range)
-                {
-                    return boost::algorithm::is_sorted(range, compare);
-                }));
+            // Чтобы провести эту проверку, внутренние диапазоны должны быть однонаправленными.
+            // Подумать, как сделать эту проверку не требуя однонаправленности.
+            // BOOST_ASSERT(std::all_of(m_begin, m_end,
+            //     [& compare] (const auto & range)
+            //     {
+            //         return boost::algorithm::is_sorted(range, compare);
+            //     }));
 
             remove_empty_ranges();
             std::make_heap(m_begin, m_end, each(front) | invert(m_compare));
