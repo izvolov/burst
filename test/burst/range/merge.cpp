@@ -9,7 +9,23 @@
 #include <boost/range/algorithm/for_each.hpp>
 
 #include <functional>
+#include <sstream>
+#include <tuple>
 #include <vector>
+
+namespace
+{
+    template <typename Value>
+    auto make_istream_range (std::istream & s)
+    {
+        return
+            boost::make_iterator_range
+            (
+                std::istream_iterator<Value>(s),
+                std::istream_iterator<Value>{}
+            );
+    }
+}
 
 TEST_SUITE("merge")
 {
@@ -106,6 +122,20 @@ TEST_SUITE("merge")
         auto merged_range = burst::merge(std::tie(one, two, three), std::greater<>{});
 
         auto expected_collection = {11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
+        CHECK(merged_range == expected_collection);
+    }
+
+    TEST_CASE("Можно сливать однопроходные диапазоны")
+    {
+        auto first = std::stringstream("0 2 4 6");
+        auto second = std::stringstream("1 3 5 7");
+
+        auto one = make_istream_range<int>(first);
+        auto two = make_istream_range<int>(second);
+
+        auto merged_range = burst::merge(std::tie(one, two));
+
+        auto expected_collection = {0, 1, 2, 3, 4, 5, 6, 7};
         CHECK(merged_range == expected_collection);
     }
 }
