@@ -7,6 +7,6 @@ target_sources(burst-unit-tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/owned_as_range.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/semiintersected.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/symmetric_differenced.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/taken_n.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/taken_exactly.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/united.cpp
 )

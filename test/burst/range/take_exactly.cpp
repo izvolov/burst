@@ -1,6 +1,6 @@
 #include <burst/container/make_forward_list.hpp>
 #include <burst/container/make_vector.hpp>
-#include <burst/range/take_n.hpp>
+#include <burst/range/take_exactly.hpp>
 #include <utility/io/forward_list.hpp>
 
 #include <doctest/doctest.h>
@@ -10,14 +10,14 @@
 
 #include <iterator>
 
-TEST_SUITE("take_n")
+TEST_SUITE("take_exactly")
 {
     TEST_CASE("Откусывает ровно заданное количество элементов")
     {
         const auto items = burst::make_forward_list({1, 2, 3, 4});
 
         const auto items_to_take = 3;
-        const auto taken = burst::take_n(items, items_to_take);
+        const auto taken = burst::take_exactly(items, items_to_take);
 
         using std::begin;
         const auto expected =
@@ -30,7 +30,7 @@ TEST_SUITE("take_n")
         const auto items = burst::make_vector({'a', 'b', 'c', 'd'});
 
         const auto items_to_take = 100500;
-        const auto taken = burst::take_n(items, items_to_take);
+        const auto taken = burst::take_exactly(items, items_to_take);
 
         CHECK(std::distance(taken.begin(), taken.end()) == items_to_take);
     }
@@ -41,7 +41,7 @@ TEST_SUITE("take_n")
         auto items = burst::make_forward_list({1, 2, 3, 4});
 
         const auto items_to_take = 3;
-        auto taken = burst::take_n(items, items_to_take);
+        auto taken = burst::take_exactly(items, items_to_take);
 
         for (auto & x: taken)
         {
@@ -57,7 +57,7 @@ TEST_SUITE("take_n")
         const int items[] = {1, 2, 3};
 
         const auto items_to_take = 3;
-        const auto taken = burst::take_n(items, items_to_take);
+        const auto taken = burst::take_exactly(items, items_to_take);
 
         BOOST_CONCEPT_ASSERT((boost::RandomAccessIterator<decltype(std::begin(taken))>));
     }
