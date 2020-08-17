@@ -1,5 +1,5 @@
 #include <burst/container/make_forward_list.hpp>
-#include <burst/range/adaptor/taken_n.hpp>
+#include <burst/range/adaptor/taken_exactly.hpp>
 
 #include <doctest/doctest.h>
 
@@ -8,14 +8,14 @@
 
 #include <iterator>
 
-TEST_SUITE("taken_n")
+TEST_SUITE("taken_exactly")
 {
     TEST_CASE("Создаёт диапазон из префикса ровно заданной длины исходного диапазона")
     {
         const auto items = burst::make_forward_list({1, 2, 3, 4});
 
         const auto items_to_take = 3l;
-        const auto taken = items | burst::taken_n(items_to_take);
+        const auto taken = items | burst::taken_exactly(items_to_take);
 
         using std::begin;
         const auto expected =
@@ -26,7 +26,7 @@ TEST_SUITE("taken_n")
 
     TEST_CASE("Может работать с rvalue-диапазоном")
     {
-        const auto taken = boost::irange(0, 100500) | burst::taken_n(5l);
+        const auto taken = boost::irange(0, 100500) | burst::taken_exactly(5l);
 
         CHECK(taken == boost::irange(0, 5));
     }
