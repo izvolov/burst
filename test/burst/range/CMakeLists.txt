@@ -13,6 +13,7 @@ target_sources(burst-unit-tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/subsequences.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/subsets.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/symmetric_difference.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/take_at_most.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/take_exactly.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/unite.cpp
 )
