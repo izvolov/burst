@@ -3,6 +3,7 @@
 #include <burst/container/make_vector.hpp>
 #include <burst/iterator/buffered_chunk_iterator.hpp>
 #include <burst/iterator/end_tag.hpp>
+#include <burst/range/istream_range.hpp>
 
 #include <doctest/doctest.h>
 
@@ -14,20 +15,6 @@
 #include <iterator>
 #include <sstream>
 #include <vector>
-
-namespace
-{
-    template <typename Value>
-    auto make_istream_range (std::istream & s)
-    {
-        return
-            boost::make_iterator_range
-            (
-                std::istream_iterator<Value>(s),
-                std::istream_iterator<Value>{}
-            );
-    }
-}
 
 TEST_SUITE("buffered_chunk_iterator")
 {
@@ -83,7 +70,7 @@ TEST_SUITE("buffered_chunk_iterator")
     {
         auto stream = std::stringstream("1 2 3 4 5");
 
-        auto begin = burst::make_buffered_chunk_iterator(make_istream_range<int>(stream), 3);
+        auto begin = burst::make_buffered_chunk_iterator(burst::make_istream_range<int>(stream), 3);
         auto end = burst::make_buffered_chunk_iterator(burst::iterator::end_tag, begin);
 
         CHECK(std::next(begin, 2) == end);
@@ -93,7 +80,7 @@ TEST_SUITE("buffered_chunk_iterator")
     {
         auto stream = std::stringstream("1 2 3 4 5");
 
-        auto first = burst::make_buffered_chunk_iterator(make_istream_range<int>(stream), 3);
+        auto first = burst::make_buffered_chunk_iterator(burst::make_istream_range<int>(stream), 3);
         ++first;
 
         const auto expected = std::vector<int>{4, 5};
@@ -117,7 +104,8 @@ TEST_SUITE("buffered_chunk_iterator")
         auto stream = std::stringstream("a b c d e f g");
 
         const auto n = 2;
-        auto iterator = burst::make_buffered_chunk_iterator(make_istream_range<char>(stream), n);
+        auto iterator =
+            burst::make_buffered_chunk_iterator(burst::make_istream_range<char>(stream), n);
 
         std::fill(iterator->begin(), iterator->end(), 'z');
 
