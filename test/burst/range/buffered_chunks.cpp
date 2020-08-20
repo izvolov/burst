@@ -2,6 +2,7 @@
 #include <burst/container/make_vector.hpp>
 #include <burst/integer/divceil.hpp>
 #include <burst/range/buffered_chunks.hpp>
+#include <burst/range/istream_range.hpp>
 
 #include <doctest/doctest.h>
 
@@ -10,20 +11,6 @@
 #include <iterator>
 #include <sstream>
 #include <vector>
-
-namespace
-{
-    template <typename Value>
-    auto make_istream_range (std::istream & s)
-    {
-        return
-            boost::make_iterator_range
-            (
-                std::istream_iterator<Value>(s),
-                std::istream_iterator<Value>{}
-            );
-    }
-}
 
 TEST_SUITE("buffered_chunks")
 {
@@ -51,7 +38,7 @@ TEST_SUITE("buffered_chunks")
     {
         auto s = std::stringstream("5 4 3 2 1");
 
-        auto chunks = burst::buffered_chunks(make_istream_range<int>(s), 3);
+        auto chunks = burst::buffered_chunks(burst::make_istream_range<int>(s), 3);
 
         const auto expected_first = {5, 4, 3};
         CHECK(chunks.front() == expected_first);

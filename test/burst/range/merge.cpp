@@ -1,6 +1,7 @@
 #include <burst/container/make_deque.hpp>
 #include <burst/container/make_list.hpp>
 #include <burst/container/make_vector.hpp>
+#include <burst/range/istream_range.hpp>
 #include <burst/range/make_range_vector.hpp>
 #include <burst/range/merge.hpp>
 
@@ -12,20 +13,6 @@
 #include <sstream>
 #include <tuple>
 #include <vector>
-
-namespace
-{
-    template <typename Value>
-    auto make_istream_range (std::istream & s)
-    {
-        return
-            boost::make_iterator_range
-            (
-                std::istream_iterator<Value>(s),
-                std::istream_iterator<Value>{}
-            );
-    }
-}
 
 TEST_SUITE("merge")
 {
@@ -130,8 +117,8 @@ TEST_SUITE("merge")
         auto first = std::stringstream("0 2 4 6");
         auto second = std::stringstream("1 3 5 7");
 
-        auto one = make_istream_range<int>(first);
-        auto two = make_istream_range<int>(second);
+        auto one = burst::make_istream_range<int>(first);
+        auto two = burst::make_istream_range<int>(second);
 
         auto merged_range = burst::merge(std::tie(one, two));
 

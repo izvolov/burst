@@ -1,5 +1,6 @@
 #include <burst/container/make_forward_list.hpp>
 #include <burst/range/adaptor/taken_at_most.hpp>
+#include <burst/range/istream_range.hpp>
 
 #include <doctest/doctest.h>
 
@@ -9,15 +10,6 @@
 #include <istream>
 #include <iterator>
 #include <sstream>
-
-namespace
-{
-    template <typename T>
-    auto make_istream_range (std::istream & s)
-    {
-        return boost::make_iterator_range(std::istream_iterator<T>(s), std::istream_iterator<T>{});
-    }
-}
 
 TEST_SUITE("taken_at_most")
 {
@@ -38,7 +30,7 @@ TEST_SUITE("taken_at_most")
     {
         std::stringstream s("0 1 2 3 4");
 
-        const auto taken = make_istream_range<int>(s) | burst::taken_at_most(100500l);
+        const auto taken = burst::make_istream_range<int>(s) | burst::taken_at_most(100500l);
 
         CHECK(taken == boost::irange(0, 5));
     }
