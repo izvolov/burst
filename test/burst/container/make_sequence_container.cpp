@@ -1,4 +1,5 @@
 #include <burst/container/make_vector.hpp>
+#include <utility/counters.hpp>
 #include <utility/io/deque.hpp>
 #include <utility/io/forward_list.hpp>
 #include <utility/io/list.hpp>
@@ -244,5 +245,37 @@ TEST_SUITE("make_sequence_container")
             >
             ::value
         ));
+    }
+
+    TEST_CASE_TEMPLATE("Пробрасывает rvalue-контейнер как ссылку на rvalue",
+        make_sequence, SEQUENCE_GENERATORS)
+    {
+        using inner_type = decltype(make_sequence::actual({1, 2, 3}));
+        using outer_type = decltype(make_sequence::apply(std::declval<inner_type&&>()));
+
+        CHECK(std::is_same<outer_type, inner_type &&>::value);
+    }
+
+    TEST_CASE_TEMPLATE("При пробрасывании rvalue-контейнера не производит ни копирований, ни "
+        "переносов", make_sequence, SEQUENCE_GENERATORS)
+    {
+        auto copy_count = std::size_t{0};
+        auto move_count = std::size_t{0};
+
+        const auto v =
+            make_sequence::apply
+            (
+                // Создаём контейнер из только что созданного контейнера.
+                make_sequence::apply
+                ({
+                    utility::copy_move_constructor_counter{copy_count, move_count}
+                })
+            );
+
+        CHECK(not v.empty());
+        // Только одно копирование при вызове конструктора изначального контейнера.
+        CHECK(copy_count == 1);
+        // Больше никаких копирований и переносов.
+        CHECK(move_count == 0);
     }
 }

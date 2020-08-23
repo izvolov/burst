@@ -67,6 +67,23 @@ namespace burst
             );
     }
 
+    /*!
+        \brief
+            Создать последовательний контейнер из этого же контейнера
+
+        \details
+            Пробрасывает вход на выход.
+
+            \code{.cpp}
+            make_sequence_container<std::list, std::uint32_t>(std::list<std::uint32_t>{1, 2})
+            \endcode
+     */
+    template <template <typename ...> class SequenceContainer, typename Value, typename... Args>
+    decltype(auto) make_sequence_container (SequenceContainer<Value, Args...> && container)
+    {
+        return std::move(container);
+    }
+
     //!     Создать последовательний контейнер из диапазона с аллокатором и явным указанием типа его значений
     /*!
             Отличается тем, что тип значений контейнера не выводится из типа значений диапазона, а
