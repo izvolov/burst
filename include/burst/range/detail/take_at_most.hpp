@@ -38,17 +38,17 @@ namespace burst
             \returns
                 Диапазон из тех же итераторов, которые были во входном диапазоне.
          */
-        template <typename Iterator, typename Integer>
+        template <typename RandomAccessIterator, typename Integer>
         auto
             take_at_most_impl
             (
-                Iterator first,
-                Iterator last,
+                RandomAccessIterator first,
+                RandomAccessIterator last,
                 Integer n,
                 std::random_access_iterator_tag
             )
         {
-            using difference_type = iterator_difference_t<Iterator>;
+            using difference_type = iterator_difference_t<RandomAccessIterator>;
             auto m = std::min(static_cast<difference_type>(n), std::distance(first, last));
             return boost::make_iterator_range(first, std::next(first, m));
         }
