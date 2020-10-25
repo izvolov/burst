@@ -27,19 +27,19 @@ namespace
     struct make_sequence_t
     {
         template <typename Value, typename ... Xs>
-        static auto apply (std::initializer_list<Value> values, Xs && ... xs)
+        static decltype(auto) apply (std::initializer_list<Value> values, Xs && ... xs)
         {
             return burst::make_sequence_container<SequenceContainer>(values, std::forward<Xs>(xs)...);
         }
 
         template <typename ... Xs>
-        static auto apply (Xs && ... xs)
+        static decltype(auto) apply (Xs && ... xs)
         {
             return burst::make_sequence_container<SequenceContainer>(std::forward<Xs>(xs)...);
         }
 
         template <typename Value, typename ... Xs>
-        static auto apply (Xs && ... xs)
+        static decltype(auto) apply (Xs && ... xs)
         {
             return burst::make_sequence_container<SequenceContainer, Value>(std::forward<Xs>(xs)...);
         }
