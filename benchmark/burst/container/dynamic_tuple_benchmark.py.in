@@ -24,6 +24,7 @@ def measure (array_size, spreads, attempts):
 
     for spread, attempts in [(l, attempts) for l in spreads]:
         command = command_template.format(array_size, attempts, spread)
+        sys.stderr.write(command + '\n');
         results = Popen(command, shell=True, stdin=PIPE, stdout=PIPE).stdout.read().splitlines()
 
         for container, time in [(c.decode('utf8'), float(t) / attempts) for c, t in [item.split() for item in results]]:
