@@ -26,7 +26,7 @@ def measure (array_size, spreads, attempts):
         command = command_template.format(array_size, attempts, spread)
         results = Popen(command, shell=True, stdin=PIPE, stdout=PIPE).stdout.read().splitlines()
 
-        for container, time in [(c.decode('utf8'), float(t) / attempts) for c, t in [item.split() for item in results]]:
+        for container, time in [(c, float(t) / attempts) for c, t in [item.split() for item in results]]:
             name = spreading_names.get(container, container)
             times = measurements.setdefault(name, [])
             times += [time]
@@ -58,7 +58,7 @@ def plot (array_size, spreads, measurements, file_name):
 
 def parse_command_line (options):
     parser = argparse.ArgumentParser(options[0])
-    parser.add_argument('--size', type=str, default='100')
+    parser.add_argument('--size', type=int, default='100')
     parser.add_argument('--attempts', type=int, default='1000')
     parser.add_argument('--begin', type=int, default=1)
     parser.add_argument('--end', type=int, default=20)
