@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 from subprocess import Popen, PIPE
@@ -19,12 +19,12 @@ def measure (lengths, max_attempts, integer_type, prepare):
             "--integer={} "
             "--prepare={}")
 
-    for length, attempts in [(l, max_attempts / l) for l in lengths]:
+    for length, attempts in [(l, int(max_attempts / l)) for l in lengths]:
         command = command_template.format(length, attempts, integer_type, prepare)
         sys.stderr.write(command + '\n');
         results = Popen(command, shell=True, stdin=PIPE, stdout=PIPE).stdout.read().splitlines()
 
-        for algorithm, time in [(a, float(t) / attempts) for a, t in [item.split() for item in results]]:
+        for algorithm, time in [(a.decode('utf8'), float(t) / attempts) for a, t in [item.split() for item in results]]:
             times = measurements.setdefault(algorithm, [])
             times += [time]
 
@@ -61,7 +61,7 @@ def table (lengths, measurements, integer_type, file_name):
     for i in range(0, len(lengths)):
         table_string += row_template.format(lengths[i], *[times[i] for _, times in measurements.items()])
 
-    f.write(table_string.encode('utf-8'))
+    f.write(table_string)
 
 def parse_command_line (options):
     parser = argparse.ArgumentParser(options[0])
