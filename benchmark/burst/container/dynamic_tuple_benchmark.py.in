@@ -14,8 +14,16 @@ def measure (array_size, spreads, attempts):
     spreading_names = {'sparse': u'Разреженный массив', 'shuffled': u'Перемешанный массив'}
     measurements = {}
 
+    command_template =\
+        ("@CMAKE_BINARY_DIR@/benchmark/burst/container/dyntuple "
+            "--size={} "
+            "--attempts={} "
+            "--type=sparse shuffled "
+            "--spread={} "
+            "2>/dev/null")
+
     for spread, attempts in [(l, attempts) for l in spreads]:
-        command = "@CMAKE_BINARY_DIR@/benchmark/container/dyntuple --size=" + str(array_size) + " --attempts=" + str(attempts) + " --type=sparse shuffled --spread=" + str(spread) + " 2> /dev/null"
+        command = command_template.format(array_size, attempts, spread)
         results = Popen(command, shell=True, stdin=PIPE, stdout=PIPE).stdout.read().splitlines()
 
         for container, time in [(c.decode('utf8'), float(t) / attempts) for c, t in [item.split() for item in results]]:
