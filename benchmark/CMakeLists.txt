@@ -4,4 +4,4 @@ add_library(benchIO INTERFACE)
 target_include_directories(benchIO INTERFACE include)
 
 add_subdirectory(burst)
-add_subdirectory(src)
+add_subdirectory(tools)
