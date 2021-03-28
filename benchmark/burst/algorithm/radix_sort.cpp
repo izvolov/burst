@@ -217,14 +217,13 @@ struct mean_fn
 };
 
 template <typename Integer, typename UnaryFunction1, typename UnaryFunction2>
-auto make_test_all (std::string name, UnaryFunction2 prepare)
+test_call_type make_test_all ()
 {
-    auto test_call =
-        [prepare = std::move(prepare)] (std::size_t attempts)
+    return
+        [] (std::size_t attempts)
         {
-            return test_all<Integer>(attempts, UnaryFunction1{}, prepare);
+            return test_all<Integer>(attempts, UnaryFunction1{}, UnaryFunction2{});
         };
-    return std::pair<std::string, test_call_type>(std::move(name), test_call);
 }
 
 template <typename Integer, typename UnaryFunction>
@@ -233,12 +232,12 @@ test_call_type dispatch_preparation (const std::string & prepare_type)
     static const auto test_calls =
         std::unordered_map<std::string, test_call_type>
         {
-            make_test_all<Integer, UnaryFunction>("shuffle", shuffle_fn{}),
-            make_test_all<Integer, UnaryFunction>("ascending", sort_fn<std::less<>>{}),
-            make_test_all<Integer, UnaryFunction>("descending", sort_fn<std::greater<>>{}),
-            make_test_all<Integer, UnaryFunction>("outlier", outlier_fn{}),
-            make_test_all<Integer, UnaryFunction>("pipe-organ", pipe_organ_fn{}),
-            make_test_all<Integer, UnaryFunction>("single", single_fn{})
+            {"shuffle", make_test_all<Integer, UnaryFunction, shuffle_fn>()},
+            {"ascending", make_test_all<Integer, UnaryFunction, sort_fn<std::less<>>>()},
+            {"descending", make_test_all<Integer, UnaryFunction, sort_fn<std::greater<>>>()},
+            {"outlier", make_test_all<Integer, UnaryFunction, outlier_fn>()},
+            {"pipe-organ", make_test_all<Integer, UnaryFunction, pipe_organ_fn>()},
+            {"single", make_test_all<Integer, UnaryFunction, single_fn>()}
         };
 
     auto call = test_calls.find(prepare_type);
