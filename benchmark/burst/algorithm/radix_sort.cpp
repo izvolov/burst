@@ -13,7 +13,9 @@
 #include <unordered_map>
 #include <vector>
 
-template <typename Sort, typename Container, typename UnaryFunction>
+using clock_type = std::chrono::steady_clock;
+
+template <typename Sort, typename Container, typename UnaryFunction1, typename UnaryFunction2>
 void
     test_sort
     (
@@ -21,27 +23,30 @@ void
         Sort sort,
         const Container & numbers,
         std::size_t attempts,
-        UnaryFunction prepare
+        UnaryFunction1 statistic,
+        UnaryFunction2 prepare
     )
 {
     using namespace std::chrono;
-    auto total_time = steady_clock::duration{0};
+    std::vector<clock_type::duration> times;
+    times.reserve(attempts);
 
     for (std::size_t attempt = 0; attempt < attempts; ++attempt)
     {
         auto unsorted = prepare(numbers);
 
-        auto attempt_start_time = steady_clock::now();
+        auto attempt_start_time = clock_type::now();
         sort(unsorted.begin(), unsorted.end());
-        auto attempt_time = steady_clock::now() - attempt_start_time;
-        total_time += attempt_time;
+        auto attempt_time = clock_type::now() - attempt_start_time;
+        times.push_back(attempt_time);
     }
 
-    std::cout << name << ' ' << duration_cast<duration<double>>(total_time).count() << std::endl;
+    const auto stat = statistic(times);
+    std::cout << name << ' ' << duration_cast<duration<double>>(stat).count() << std::endl;
 }
 
-template <typename Integer, typename UnaryFunction>
-void test_all (std::size_t attempts, UnaryFunction prepare)
+template <typename Integer, typename UnaryFunction1, typename UnaryFunction2>
+void test_all (std::size_t attempts, UnaryFunction1 statistic, UnaryFunction2 prepare)
 {
     std::vector<Integer> numbers;
     utility::read(std::cin, numbers);
@@ -53,28 +58,28 @@ void test_all (std::size_t attempts, UnaryFunction prepare)
         {
             return burst::radix_sort(std::forward<decltype(args)>(args)..., buffer.begin());
         };
-    test_sort("burst::radix_sort", radix_sort, numbers, attempts, prepare);
+    test_sort("burst::radix_sort", radix_sort, numbers, attempts, statistic, prepare);
 
     auto std_sort =
         [] (auto && ... args)
         {
             return std::sort(std::forward<decltype(args)>(args)...);
         };
-    test_sort("std::sort", std_sort, numbers, attempts, prepare);
+    test_sort("std::sort", std_sort, numbers, attempts, statistic, prepare);
 
     auto std_stable_sort =
         [] (auto && ... args)
         {
             return std::stable_sort(std::forward<decltype(args)>(args)...);
         };
-    test_sort("std::stable_sort", std_stable_sort, numbers, attempts, prepare);
+    test_sort("std::stable_sort", std_stable_sort, numbers, attempts, statistic, prepare);
 
     auto boost_int_sort =
         [] (auto && ... args)
         {
             return boost::sort::spreadsort::integer_sort(std::forward<decltype(args)>(args)...);
         };
-    test_sort("boost::integer_sort", boost_int_sort, numbers, attempts, prepare);
+    test_sort("boost::integer_sort", boost_int_sort, numbers, attempts, statistic, prepare);
 }
 
 using test_call_type = std::function<void (std::size_t)>;
@@ -159,29 +164,81 @@ struct single_fn
     std::shared_ptr<std::random_device> rd = std::make_shared<std::random_device>();
 };
 
-template <typename Integer, typename UnaryFunction>
-auto make_test_all (std::string name, UnaryFunction f)
+struct min_fn
+{
+    template <typename Container>
+    auto operator () (const Container & c) const
+    {
+        return *std::min_element(c.begin(), c.end());
+    }
+};
+
+struct max_fn
+{
+    template <typename Container>
+    auto operator () (const Container & c) const
+    {
+        return *std::max_element(c.begin(), c.end());
+    }
+};
+
+struct sum_fn
+{
+    template <typename Container>
+    auto operator () (Container c) const
+    {
+        using value_type = typename Container::value_type;
+        std::sort(c.begin(), c.end());
+        return std::accumulate(c.begin(), c.end(), value_type{});
+    }
+};
+
+struct median_fn
+{
+    template <typename Container>
+    auto operator () (Container c) const
+    {
+        using difference_type = typename Container::difference_type;
+        auto n = static_cast<difference_type>(c.size() / 2);
+        auto nth = c.begin() + n;
+        std::nth_element(c.begin(), nth, c.end());
+        return *nth;
+    }
+};
+
+struct mean_fn
+{
+    template <typename Container>
+    auto operator () (const Container & c) const
+    {
+        using rep_type = clock_type::rep;
+        return sum_fn{}(c) / static_cast<rep_type>(c.size());
+    }
+};
+
+template <typename Integer, typename UnaryFunction1, typename UnaryFunction2>
+auto make_test_all (std::string name, UnaryFunction2 prepare)
 {
     auto test_call =
-        [f = std::move(f)] (std::size_t attempts)
+        [prepare = std::move(prepare)] (std::size_t attempts)
         {
-            return test_all<Integer>(attempts, f);
+            return test_all<Integer>(attempts, UnaryFunction1{}, prepare);
         };
     return std::pair<std::string, test_call_type>(std::move(name), test_call);
 }
 
-template <typename Integer>
+template <typename Integer, typename UnaryFunction>
 test_call_type dispatch_preparation (const std::string & prepare_type)
 {
     static const auto test_calls =
         std::unordered_map<std::string, test_call_type>
         {
-            make_test_all<Integer>("shuffle", shuffle_fn{}),
-            make_test_all<Integer>("ascending", sort_fn<std::less<>>{}),
-            make_test_all<Integer>("descending", sort_fn<std::greater<>>{}),
-            make_test_all<Integer>("outlier", outlier_fn{}),
-            make_test_all<Integer>("pipe-organ", pipe_organ_fn{}),
-            make_test_all<Integer>("single", single_fn{})
+            make_test_all<Integer, UnaryFunction>("shuffle", shuffle_fn{}),
+            make_test_all<Integer, UnaryFunction>("ascending", sort_fn<std::less<>>{}),
+            make_test_all<Integer, UnaryFunction>("descending", sort_fn<std::greater<>>{}),
+            make_test_all<Integer, UnaryFunction>("outlier", outlier_fn{}),
+            make_test_all<Integer, UnaryFunction>("pipe-organ", pipe_organ_fn{}),
+            make_test_all<Integer, UnaryFunction>("single", single_fn{})
         };
 
     auto call = test_calls.find(prepare_type);
@@ -197,23 +254,51 @@ test_call_type dispatch_preparation (const std::string & prepare_type)
 
 using dispatch_preparation_call_type = std::function<test_call_type (const std::string &)>;
 
-dispatch_preparation_call_type dispatch_integer (const std::string & integer_type)
+template <typename Integer>
+dispatch_preparation_call_type dispatch_statistic (const std::string & statistic)
 {
     static const auto dispatch_prepare_calls =
         std::unordered_map<std::string, dispatch_preparation_call_type>
         {
-            {"uint8", &dispatch_preparation<std::uint8_t>},
-            {"uint16", &dispatch_preparation<std::uint16_t>},
-            {"uint32", &dispatch_preparation<std::uint32_t>},
-            {"uint64", &dispatch_preparation<std::uint64_t>},
-            {"int8", &dispatch_preparation<std::int8_t>},
-            {"int16", &dispatch_preparation<std::int16_t>},
-            {"int32", &dispatch_preparation<std::int32_t>},
-            {"int64", &dispatch_preparation<std::int64_t>}
+            {"min", &dispatch_preparation<Integer, min_fn>},
+            {"max", &dispatch_preparation<Integer, max_fn>},
+            {"mean", &dispatch_preparation<Integer, mean_fn>},
+            {"median", &dispatch_preparation<Integer, median_fn>},
+            {"sum", &dispatch_preparation<Integer, sum_fn>}
         };
 
-    auto call = dispatch_prepare_calls.find(integer_type);
+    auto call = dispatch_prepare_calls.find(statistic);
     if (call != dispatch_prepare_calls.end())
+    {
+        return call->second;
+    }
+    else
+    {
+        auto error_message = u8"Неверная статистика: " + statistic;
+        throw boost::program_options::error(error_message);
+    }
+}
+
+using dispatch_statistic_call_type =
+    std::function<dispatch_preparation_call_type (const std::string &)>;
+
+dispatch_statistic_call_type dispatch_integer (const std::string & integer_type)
+{
+    static const auto dispatch_statistic_calls =
+        std::unordered_map<std::string, dispatch_statistic_call_type>
+        {
+            {"uint8", &dispatch_statistic<std::uint8_t>},
+            {"uint16", &dispatch_statistic<std::uint16_t>},
+            {"uint32", &dispatch_statistic<std::uint32_t>},
+            {"uint64", &dispatch_statistic<std::uint64_t>},
+            {"int8", &dispatch_statistic<std::int8_t>},
+            {"int16", &dispatch_statistic<std::int16_t>},
+            {"int32", &dispatch_statistic<std::int32_t>},
+            {"int64", &dispatch_statistic<std::int64_t>}
+        };
+
+    auto call = dispatch_statistic_calls.find(integer_type);
+    if (call != dispatch_statistic_calls.end())
     {
         return call->second;
     }
@@ -224,9 +309,15 @@ dispatch_preparation_call_type dispatch_integer (const std::string & integer_typ
     }
 }
 
-test_call_type dispatch_call (const std::string & integer_type, const std::string & prepare_type)
+test_call_type
+    dispatch_call
+    (
+        const std::string & integer_type,
+        const std::string & statistic,
+        const std::string & prepare_type
+    )
 {
-    return dispatch_integer(integer_type)(prepare_type);
+    return dispatch_integer(integer_type)(statistic)(prepare_type);
 }
 
 int main (int argc, const char * argv[])
@@ -243,7 +334,10 @@ int main (int argc, const char * argv[])
             "Допустимые значения: uint8, uint16, uint32, uint64, int8, int16, int32, int64")
         ("prepare", bpo::value<std::string>()->required(),
             "Тип подготовки массива перед каждым испытанием.\n"
-            "Допустимые значения: shuffle, ascending, descending, outlier, pipe-organ");
+            "Допустимые значения: shuffle, ascending, descending, outlier, pipe-organ")
+        ("stat", bpo::value<std::string>()->default_value("mean"),
+            "Статистика, которая будет рассчитана.\n"
+            "Допустимые значения: min, max, mean, median, sum");
 
     try
     {
@@ -259,9 +353,10 @@ int main (int argc, const char * argv[])
         {
             std::size_t attempts = vm["attempts"].as<std::size_t>();
             auto integer_type = vm["integer"].as<std::string>();
+            auto statistic = vm["stat"].as<std::string>();
             auto prepare_type = vm["prepare"].as<std::string>();
 
-            auto test = dispatch_call(integer_type, prepare_type);
+            auto test = dispatch_call(integer_type, statistic, prepare_type);
             test(attempts);
         }
     }
