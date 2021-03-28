@@ -24,7 +24,7 @@ def measure (lengths, max_attempts, integer_type, prepare):
         sys.stderr.write(command + '\n');
         results = Popen(command, shell=True, stdin=PIPE, stdout=PIPE).stdout.read().splitlines()
 
-        for algorithm, time in [(a.decode('utf8'), float(t) / attempts) for a, t in [item.split() for item in results]]:
+        for algorithm, time in [(a.decode('utf8'), float(t)) for a, t in [item.split() for item in results]]:
             times = measurements.setdefault(algorithm, [])
             times += [time]
 
