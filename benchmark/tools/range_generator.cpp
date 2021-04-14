@@ -8,6 +8,31 @@
 #include <iostream>
 #include <limits>
 
+void
+    do_generate
+    (
+        std::ostream & stream,
+        std::size_t block_size,
+        std::size_t range_count,
+        std::size_t range_length,
+        std::int64_t min,
+        std::int64_t max,
+        bool seed,
+        bool sort,
+        bool descending
+    )
+{
+    const auto seed_value =
+        seed
+            ? static_cast<std::default_random_engine::result_type>
+            (
+                std::chrono::system_clock::now().time_since_epoch().count()
+            )
+            : 0;
+    std::default_random_engine generator(seed_value);
+    utility::generate(generator, stream, block_size, range_count, range_length, min, max, sort, descending);
+}
+
 int main (int argc, const char * argv[])
 {
     namespace bpo = boost::program_options;
@@ -54,7 +79,7 @@ int main (int argc, const char * argv[])
             bool sort = vm["sort"].as<bool>();
             bool descending = vm["descending"].as<bool>();
 
-            utility::generate(std::cout, block_size, range_count, range_length, min, max, seed, sort, descending);
+            do_generate(std::cout, block_size, range_count, range_length, min, max, seed, sort, descending);
         }
     }
     catch (std::exception &)
