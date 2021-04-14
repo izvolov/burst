@@ -16,39 +16,38 @@
 
 namespace utility
 {
-    template <typename URNG>
-    std::ostream &
+    template <typename URNG, typename OutputIterator>
+    OutputIterator
         generate_one
         (
             URNG && generator,
-            std::ostream & stream,
             std::size_t range_length,
             std::int64_t min,
-            std::int64_t max
+            std::int64_t max,
+            OutputIterator result
         )
     {
         std::uniform_int_distribution<std::int64_t> uniform(min, max);
 
-
-        burst::trivial_write(stream, static_cast<std::size_t>(range_length));
+        *result++ = range_length;
         for (auto i = 0ul; i < range_length; ++i)
         {
-            burst::trivial_write(stream, uniform(generator));
+            *result++ = uniform(generator);
         }
 
-        return stream;
+        return result;
     }
 
-    template <typename URNG>
-    std::ostream &
+    template <typename URNG, typename OutputIterator>
+    OutputIterator
         generate_one_sorted
         (
             URNG && generator,
-            std::ostream & stream,
             std::size_t range_length,
             std::int64_t min,
             std::int64_t max,
-            bool descending
+            bool descending,
+            OutputIterator result
         )
     {
         std::uniform_int_distribution<std::int64_t> uniform(min, max);
@@ -66,12 +65,7 @@ namespace utility
             std::sort(range.begin(), range.end());
         }
 
-        for (const auto & x: range)
-        {
-            burst::trivial_write(stream, x);
-        }
-
-        return stream;
+        return std::copy(range.begin(), range.end(), result);
     }
 
     template <typename URNG>
@@ -110,17 +104,17 @@ namespace utility
         return bounds;
     }
 
-    template <typename URNG>
-    std::ostream &
+    template <typename URNG, typename OutputIterator>
+    OutputIterator
         generate_one_blockwise
         (
             URNG && generator,
-            std::ostream & stream,
             std::size_t block_size,
             std::size_t range_length,
             std::int64_t global_min,
             std::int64_t global_max,
-            bool descending
+            bool descending,
+            OutputIterator result
         )
     {
         auto bounds =
@@ -134,49 +128,50 @@ namespace utility
             std::sort(bounds.begin(), bounds.end());
         }
 
-        burst::trivial_write(stream, range_length);
+        *result++ = range_length;
         for (auto i = 1ul; i < bounds.size() - 1; ++i)
         {
             const auto min = std::min(bounds[i - 1], bounds[i]);
             const auto max = std::max(bounds[i - 1], bounds[i]);
-            generate_one_sorted(generator, stream, block_size - 1, min, max, descending);
-            burst::trivial_write(stream, bounds[i]);
+            result = generate_one_sorted(generator, block_size - 1, min, max, descending, result);
+            *result++ = bounds[i];
         }
         const auto min = std::min(bounds[bounds.size() - 2], bounds[bounds.size() - 1]);
         const auto max = std::max(bounds[bounds.size() - 2], bounds[bounds.size() - 1]);
         const auto remainder = range_length % block_size;
         const auto tail = remainder != 0 ? remainder : block_size;
-        return generate_one_sorted(generator, stream, tail, min, max, descending);
+        return generate_one_sorted(generator, tail, min, max, descending, result);
     }
 
-    template <typename URNG>
-    std::ostream &
+    template <typename URNG, typename OutputIterator>
+    OutputIterator
         generate
         (
             URNG && generator,
-            std::ostream & stream,
             std::size_t block_size,
             std::size_t range_count,
             std::size_t range_length,
             std::int64_t min,
             std::int64_t max,
             bool sort,
-            bool descending
+            bool descending,
+            OutputIterator result
         )
     {
         for (std::size_t i = 0; i < range_count; ++i)
         {
             if (sort)
             {
-                generate_one_blockwise(generator, stream, block_size, range_length, min, max, descending);
+                result =
+                    generate_one_blockwise(generator, block_size, range_length, min, max, descending, result);
             }
             else
             {
-                generate_one(generator, stream, range_length, min, max);
+                result = generate_one(generator, range_length, min, max, result);
             }
         }
 
-        return stream;
+        return result;
     }
 } // namespace utility
 
