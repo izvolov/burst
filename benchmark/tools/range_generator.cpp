@@ -1,5 +1,7 @@
 #include <utility/io/generate.hpp>
 
+#include <burst/iterator/binary_ostream_iterator.hpp>
+
 #include <boost/program_options.hpp>
 
 #include <cstddef>
@@ -30,7 +32,9 @@ void
             )
             : 0;
     std::default_random_engine generator(seed_value);
-    utility::generate(generator, stream, block_size, range_count, range_length, min, max, sort, descending);
+
+    auto result = burst::make_binary_ostream_iterator(stream);
+    utility::generate(generator, block_size, range_count, range_length, min, max, sort, descending, result);
 }
 
 int main (int argc, const char * argv[])
