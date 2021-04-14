@@ -15,6 +15,8 @@ int main (int argc, const char * argv[])
     bpo::options_description description("Опции");
     description.add_options()
         ("help,h", "Подсказка")
+        ("block", bpo::value<std::size_t>()->default_value(1 << 20),
+            "Размер используемой памяти в элементах")
         ("count", bpo::value<std::size_t>(),
             "Количество генерируемых наборов")
         ("length", bpo::value<std::size_t>(),
@@ -42,6 +44,7 @@ int main (int argc, const char * argv[])
         }
         else
         {
+            std::size_t block_size = vm["block"].as<std::size_t>();
             std::size_t range_count = vm["count"].as<std::size_t>();
             std::size_t range_length = vm["length"].as<std::size_t>();
             std::int64_t min = vm["min"].as<std::int64_t>();
@@ -51,7 +54,7 @@ int main (int argc, const char * argv[])
             bool sort = vm["sort"].as<bool>();
             bool descending = vm["descending"].as<bool>();
 
-            utility::generate(std::cout, range_count, range_length, min, max, seed, sort, descending);
+            utility::generate(std::cout, block_size, range_count, range_length, min, max, seed, sort, descending);
         }
     }
     catch (std::exception &)
