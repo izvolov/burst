@@ -48,7 +48,7 @@ namespace utility
         return write(stream, range);
     }
 
-    std::ostream &
+    inline std::ostream &
         generate
         (
             std::ostream & stream,
