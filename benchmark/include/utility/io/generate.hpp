@@ -40,7 +40,7 @@ namespace utility
 
     template <typename URNG, typename OutputIterator>
     OutputIterator
-        generate_one_sorted
+        generate_sorted_part
         (
             URNG && generator,
             std::size_t range_length,
@@ -133,14 +133,14 @@ namespace utility
         {
             const auto min = std::min(bounds[i - 1], bounds[i]);
             const auto max = std::max(bounds[i - 1], bounds[i]);
-            result = generate_one_sorted(generator, block_size - 1, min, max, descending, result);
+            result = generate_sorted_part(generator, block_size - 1, min, max, descending, result);
             *result++ = bounds[i];
         }
         const auto min = std::min(bounds[bounds.size() - 2], bounds[bounds.size() - 1]);
         const auto max = std::max(bounds[bounds.size() - 2], bounds[bounds.size() - 1]);
         const auto remainder = range_length % block_size;
         const auto tail = remainder != 0 ? remainder : block_size;
-        return generate_one_sorted(generator, tail, min, max, descending, result);
+        return generate_sorted_part(generator, tail, min, max, descending, result);
     }
 
     template <typename URNG, typename OutputIterator>
