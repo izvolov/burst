@@ -14,47 +14,6 @@
 #include <limits>
 #include <random>
 
-template <typename URNG>
-void
-    generate_many_sorted
-    (
-        URNG && generator,
-        std::ostream & stream,
-        std::size_t block_size,
-        std::size_t range_count,
-        std::size_t range_length,
-        std::int64_t min,
-        std::int64_t max,
-        bool descending
-    )
-{
-    auto result = burst::make_binary_ostream_iterator(stream);
-    if (descending)
-    {
-        utility::generate_many_sorted(generator, block_size, range_count, range_length, min, max, std::greater<>{}, result);
-    }
-    else
-    {
-        utility::generate_many_sorted(generator, block_size, range_count, range_length, min, max, std::less<>{}, result);
-    }
-}
-
-template <typename URNG>
-void
-    generate_many
-    (
-        URNG && generator,
-        std::ostream & stream,
-        std::size_t range_count,
-        std::size_t range_length,
-        std::int64_t min,
-        std::int64_t max
-    )
-{
-    auto result = burst::make_binary_ostream_iterator(stream);
-    utility::generate_many(generator, range_count, range_length, min, max, result);
-}
-
 void
     do_generate
     (
@@ -78,13 +37,21 @@ void
             : 0;
     std::default_random_engine generator(seed_value);
 
+    auto result = burst::make_binary_ostream_iterator(stream);
     if (sort)
     {
-        generate_many_sorted(generator, stream, block_size, range_count, range_length, min, max, descending);
+        if (descending)
+        {
+            utility::generate_many_sorted(generator, block_size, range_count, range_length, min, max, std::greater<>{}, result);
+        }
+        else
+        {
+            utility::generate_many_sorted(generator, block_size, range_count, range_length, min, max, std::less<>{}, result);
+        }
     }
     else
     {
-        generate_many(generator, stream, range_count, range_length, min, max);
+        utility::generate_many(generator, range_count, range_length, min, max, result);
     }
 }
 
