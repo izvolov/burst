@@ -16,7 +16,7 @@
 
 template <typename URNG>
 void
-    do_generate_many_sorted
+    generate_many_sorted
     (
         URNG && generator,
         std::ostream & stream,
@@ -41,7 +41,7 @@ void
 
 template <typename URNG>
 void
-    do_generate_many
+    generate_many
     (
         URNG && generator,
         std::ostream & stream,
@@ -56,7 +56,7 @@ void
 }
 
 void
-    do_generate_many
+    do_generate
     (
         std::ostream & stream,
         std::size_t block_size,
@@ -80,11 +80,11 @@ void
 
     if (sort)
     {
-        do_generate_many_sorted(generator, stream, block_size, range_count, range_length, min, max, descending);
+        generate_many_sorted(generator, stream, block_size, range_count, range_length, min, max, descending);
     }
     else
     {
-        do_generate_many(generator, stream, range_count, range_length, min, max);
+        generate_many(generator, stream, range_count, range_length, min, max);
     }
 }
 
@@ -134,7 +134,7 @@ int main (int argc, const char * argv[])
             bool sort = vm["sort"].as<bool>();
             bool descending = vm["descending"].as<bool>();
 
-            do_generate_many(std::cout, block_size, range_count, range_length, min, max, seed, sort, descending);
+            do_generate(std::cout, block_size, range_count, range_length, min, max, seed, sort, descending);
         }
     }
     catch (std::exception &)
