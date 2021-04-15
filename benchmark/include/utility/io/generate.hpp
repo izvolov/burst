@@ -1,6 +1,7 @@
 #ifndef BURST_BENCHMARK_UTILITY_IO_GENERATE_HPP
 #define BURST_BENCHMARK_UTILITY_IO_GENERATE_HPP
 
+#include <algorithm>
 #include <cstddef>
 #include <cstdint>
 #include <random>
@@ -21,12 +22,9 @@ namespace utility
         std::uniform_int_distribution<std::int64_t> uniform(min, max);
 
         *result++ = range_length;
-        for (auto i = 0ul; i < range_length; ++i)
-        {
-            *result++ = uniform(generator);
-        }
-
-        return result;
+        return
+            std::generate_n(result, range_length,
+                [& uniform, & generator] {return uniform(generator);});
     }
 } // namespace utility
 
