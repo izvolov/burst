@@ -1,33 +1,32 @@
-#ifndef BURST_BENCHMARK_UTILITY_IO_GENERATE_HPP
-#define BURST_BENCHMARK_UTILITY_IO_GENERATE_HPP
+#ifndef BURST_BENCHMARK_UTILITY_IO_GENERATE_MANY_HPP
+#define BURST_BENCHMARK_UTILITY_IO_GENERATE_MANY_HPP
+
+#include <utility/io/generate.hpp>
 
 #include <cstddef>
 #include <cstdint>
-#include <random>
 
 namespace utility
 {
     template <typename URNG, typename OutputIterator>
     OutputIterator
-        generate
+        generate_many
         (
             URNG && generator,
+            std::size_t range_count,
             std::size_t range_length,
             std::int64_t min,
             std::int64_t max,
             OutputIterator result
         )
     {
-        std::uniform_int_distribution<std::int64_t> uniform(min, max);
-
-        *result++ = range_length;
-        for (auto i = 0ul; i < range_length; ++i)
+        for (std::size_t i = 0; i < range_count; ++i)
         {
-            *result++ = uniform(generator);
+            result = generate(generator, range_length, min, max, result);
         }
 
         return result;
     }
 } // namespace utility
 
-#endif // BURST_BENCHMARK_UTILITY_IO_GENERATE_HPP
+#endif // BURST_BENCHMARK_UTILITY_IO_GENERATE_MANY_HPP
