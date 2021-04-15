@@ -28,13 +28,8 @@ void
         bool descending
     )
 {
-    const auto seed_value =
-        seed
-            ? static_cast<std::default_random_engine::result_type>
-            (
-                std::chrono::system_clock::now().time_since_epoch().count()
-            )
-            : 0;
+    const auto time = std::chrono::system_clock::now().time_since_epoch().count();
+    const auto seed_value = seed ? static_cast<std::default_random_engine::result_type>(time) : 0;
     std::default_random_engine generator(seed_value);
 
     auto result = burst::make_binary_ostream_iterator(stream);
