@@ -1,18 +1,22 @@
-#include <utility/io/generate.hpp>
+#include <utility/io/generate_many.hpp>
+#include <utility/io/generate_many_sorted.hpp>
 
 #include <burst/iterator/binary_ostream_iterator.hpp>
 
 #include <boost/program_options.hpp>
 
+#include <chrono>
 #include <cstddef>
 #include <cstdint>
 #include <exception>
+#include <functional>
 #include <iostream>
 #include <limits>
+#include <random>
 
 template <typename URNG>
 void
-    do_generate_sorted
+    do_generate_many_sorted
     (
         URNG && generator,
         std::ostream & stream,
@@ -27,17 +31,17 @@ void
     auto result = burst::make_binary_ostream_iterator(stream);
     if (descending)
     {
-        utility::generate_sorted(generator, block_size, range_count, range_length, min, max, std::greater<>{}, result);
+        utility::generate_many_sorted(generator, block_size, range_count, range_length, min, max, std::greater<>{}, result);
     }
     else
     {
-        utility::generate_sorted(generator, block_size, range_count, range_length, min, max, std::less<>{}, result);
+        utility::generate_many_sorted(generator, block_size, range_count, range_length, min, max, std::less<>{}, result);
     }
 }
 
 template <typename URNG>
 void
-    do_generate
+    do_generate_many
     (
         URNG && generator,
         std::ostream & stream,
@@ -48,11 +52,11 @@ void
     )
 {
     auto result = burst::make_binary_ostream_iterator(stream);
-    utility::generate(generator, range_count, range_length, min, max, result);
+    utility::generate_many(generator, range_count, range_length, min, max, result);
 }
 
 void
-    do_generate
+    do_generate_many
     (
         std::ostream & stream,
         std::size_t block_size,
@@ -76,11 +80,11 @@ void
 
     if (sort)
     {
-        do_generate_sorted(generator, stream, block_size, range_count, range_length, min, max, descending);
+        do_generate_many_sorted(generator, stream, block_size, range_count, range_length, min, max, descending);
     }
     else
     {
-        do_generate(generator, stream, range_count, range_length, min, max);
+        do_generate_many(generator, stream, range_count, range_length, min, max);
     }
 }
 
@@ -130,7 +134,7 @@ int main (int argc, const char * argv[])
             bool sort = vm["sort"].as<bool>();
             bool descending = vm["descending"].as<bool>();
 
-            do_generate(std::cout, block_size, range_count, range_length, min, max, seed, sort, descending);
+            do_generate_many(std::cout, block_size, range_count, range_length, min, max, seed, sort, descending);
         }
     }
     catch (std::exception &)
