@@ -7,6 +7,7 @@
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
+#include <iterator>
 #include <random>
 #include <vector>
 
@@ -14,7 +15,13 @@ namespace utility
 {
     namespace detail
     {
-        template <typename URNG, typename BinaryPredicate, typename OutputIterator>
+        template
+        <
+            typename URNG,
+            typename BinaryPredicate,
+            typename OutputIterator,
+            typename RandomAccessIterator
+        >
         OutputIterator
             generate_sorted_part
             (
@@ -23,17 +30,20 @@ namespace utility
                 std::int64_t min,
                 std::int64_t max,
                 BinaryPredicate order,
-                OutputIterator result
+                OutputIterator result,
+                RandomAccessIterator buffer
             )
         {
+            using difference_type =
+                typename std::iterator_traits<RandomAccessIterator>::difference_type;
+            auto buffer_end = buffer + static_cast<difference_type>(range_length);
+
             std::uniform_int_distribution<std::int64_t> uniform(min, max);
-            std::vector<std::int64_t> range(range_length);
-
-            std::generate(range.begin(), range.end(),
+            std::generate(buffer, buffer_end,
                 [& uniform, & generator] {return uniform(generator);});
-            std::sort(range.begin(), range.end(), order);
+            std::sort(buffer, buffer_end, order);
 
-            return std::copy(range.begin(), range.end(), result);
+            return std::copy(buffer, buffer_end, result);
         }
 
         template <typename URNG>
@@ -71,7 +81,13 @@ namespace utility
             return bounds;
         }
 
-        template <typename URNG, typename BinaryPredicate, typename OutputIterator>
+        template
+        <
+            typename URNG,
+            typename BinaryPredicate,
+            typename OutputIterator,
+            typename RandomAccessIterator
+        >
         OutputIterator
             generate_blockwise
             (
@@ -81,7 +97,8 @@ namespace utility
                 std::int64_t global_min,
                 std::int64_t global_max,
                 BinaryPredicate order,
-                OutputIterator result
+                OutputIterator result,
+                RandomAccessIterator buffer
             )
         {
             auto bounds =
@@ -93,14 +110,15 @@ namespace utility
             {
                 const auto min = std::min(bounds[i - 1], bounds[i]);
                 const auto max = std::max(bounds[i - 1], bounds[i]);
-                result = generate_sorted_part(generator, block_size - 1, min, max, order, result);
+                result =
+                    generate_sorted_part(generator, block_size - 1, min, max, order, result, buffer);
                 *result++ = bounds[i];
             }
             const auto min = std::min(bounds[bounds.size() - 2], bounds[bounds.size() - 1]);
             const auto max = std::max(bounds[bounds.size() - 2], bounds[bounds.size() - 1]);
             const auto remainder = range_length % block_size;
             const auto tail = remainder != 0 ? remainder : block_size;
-            return generate_sorted_part(generator, tail, min, max, order, result);
+            return generate_sorted_part(generator, tail, min, max, order, result, buffer);
         }
     } // namespace detail
 } // namespace utility

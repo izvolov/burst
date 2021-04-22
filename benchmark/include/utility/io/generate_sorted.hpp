@@ -8,7 +8,13 @@
 
 namespace utility
 {
-    template <typename URNG, typename BinaryPredicate, typename OutputIterator>
+    template
+    <
+        typename URNG,
+        typename BinaryPredicate,
+        typename OutputIterator,
+        typename RandomAccessIterator
+    >
     OutputIterator
         generate_sorted
         (
@@ -18,7 +24,8 @@ namespace utility
             std::int64_t min,
             std::int64_t max,
             BinaryPredicate order,
-            OutputIterator result
+            OutputIterator result,
+            RandomAccessIterator buffer
         )
     {
         return
@@ -30,7 +37,8 @@ namespace utility
                 min,
                 max,
                 order,
-                result
+                result,
+                buffer
             );
     }
 } // namespace utility

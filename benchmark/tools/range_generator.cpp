@@ -35,6 +35,7 @@ void
     auto result = burst::make_binary_ostream_iterator(stream);
     if (sort)
     {
+        std::vector<std::int64_t> buffer(block_size);
         if (descending)
         {
             utility::generate_many_sorted
@@ -46,7 +47,8 @@ void
                 min,
                 max,
                 std::greater<>{},
-                result
+                result,
+                buffer.begin()
             );
         }
         else
@@ -60,7 +62,8 @@ void
                 min,
                 max,
                 std::less<>{},
-                result
+                result,
+                buffer.begin()
             );
         }
     }
