@@ -8,7 +8,13 @@
 
 namespace utility
 {
-    template <typename URNG, typename BinaryPredicate, typename OutputIterator>
+    template
+    <
+        typename URNG,
+        typename BinaryPredicate,
+        typename OutputIterator,
+        typename RandomAccessIterator
+    >
     OutputIterator
         generate_many_sorted
         (
@@ -19,12 +25,24 @@ namespace utility
             std::int64_t min,
             std::int64_t max,
             BinaryPredicate order,
-            OutputIterator result
+            OutputIterator result,
+            RandomAccessIterator buffer
         )
     {
         for (std::size_t i = 0; i < range_count; ++i)
         {
-            result = generate_sorted(generator, block_size, range_length, min, max, order, result);
+            result =
+                generate_sorted
+                (
+                    generator,
+                    block_size,
+                    range_length,
+                    min,
+                    max,
+                    order,
+                    result,
+                    buffer
+                );
         }
 
         return result;
