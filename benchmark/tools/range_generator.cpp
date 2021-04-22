@@ -37,11 +37,31 @@ void
     {
         if (descending)
         {
-            utility::generate_many_sorted(generator, block_size, range_count, range_length, min, max, std::greater<>{}, result);
+            utility::generate_many_sorted
+            (
+                generator,
+                block_size,
+                range_count,
+                range_length,
+                min,
+                max,
+                std::greater<>{},
+                result
+            );
         }
         else
         {
-            utility::generate_many_sorted(generator, block_size, range_count, range_length, min, max, std::less<>{}, result);
+            utility::generate_many_sorted
+            (
+                generator,
+                block_size,
+                range_count,
+                range_length,
+                min,
+                max,
+                std::less<>{},
+                result
+            );
         }
     }
     else
