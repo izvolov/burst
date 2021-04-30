@@ -60,8 +60,6 @@ namespace utility
             const auto n = range_length;
             auto bounds = std::vector<std::int64_t>{min};
 
-            auto current_min = min;
-
             const auto remainder = range_length % block_size;
             const auto block_count =
                 range_length / block_size + static_cast<std::size_t>(remainder != 0);
@@ -73,8 +71,6 @@ namespace utility
                 const auto kth_stat = std::llround(osd(generator));
 
                 bounds.push_back(kth_stat);
-
-                current_min = kth_stat;
             }
             bounds.push_back(max);
 
