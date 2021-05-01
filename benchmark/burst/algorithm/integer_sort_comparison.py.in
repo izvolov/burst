@@ -11,7 +11,7 @@ def measure (lengths, max_attempts, integer_type, prepare):
     measurements = {}
 
     command_template =\
-        ("@CMAKE_BINARY_DIR@/benchmark/src/rangegen "
+        ("@CMAKE_BINARY_DIR@/benchmark/tools/rangegen "
             "--count=1 "
             "--length={} | "
         "@CMAKE_BINARY_DIR@/benchmark/burst/algorithm/radix "
