@@ -1,7 +1,9 @@
 #ifndef BURST_ALGORITHM_RADIX_SORT_HPP
 #define BURST_ALGORITHM_RADIX_SORT_HPP
 
+#include <burst/algorithm/detail/get_shape.hpp>
 #include <burst/algorithm/detail/radix_sort.hpp>
+#include <burst/execution/parallel_policy.hpp>
 #include <burst/functional/compose.hpp>
 #include <burst/functional/identity.hpp>
 #include <burst/functional/low_byte.hpp>
@@ -110,6 +112,46 @@ namespace burst
         detail::radix_sort_impl(first, last, buffer, compose(to_unsigned, std::move(map)), radix);
     }
 
+    template
+    <
+        typename RandomAccessIterator1,
+        typename RandomAccessIterator2,
+        typename Map,
+        typename Radix
+    >
+    void
+        radix_sort
+        (
+            parallel_policy par,
+            RandomAccessIterator1 first,
+            RandomAccessIterator1 last,
+            RandomAccessIterator2 buffer,
+            Map map,
+            Radix radix
+        )
+    {
+        const auto shape = detail::get_shape(par, first, last);
+        const auto thread_count = shape[0];
+        if (thread_count > 1)
+        {
+            boost::asio::thread_pool pool(thread_count);
+            detail::radix_sort_impl
+            (
+                pool,
+                shape,
+                first,
+                last,
+                buffer,
+                compose(to_unsigned, std::move(map)),
+                radix
+            );
+        }
+        else
+        {
+            radix_sort(first, last, buffer, map, radix);
+        }
+    }
+
     template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map>
     void
         radix_sort
@@ -123,6 +165,20 @@ namespace burst
         radix_sort(first, last, buffer, map, low_byte);
     }
 
+    template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map>
+    void
+        radix_sort
+        (
+            parallel_policy par,
+            RandomAccessIterator1 first,
+            RandomAccessIterator1 last,
+            RandomAccessIterator2 buffer,
+            Map map
+        )
+    {
+        radix_sort(par, first, last, buffer, map, low_byte);
+    }
+
     template <typename RandomAccessIterator1, typename RandomAccessIterator2>
     void
         radix_sort
@@ -133,6 +189,19 @@ namespace burst
         )
     {
         radix_sort(first, last, buffer, identity, low_byte);
+    }
+
+    template <typename RandomAccessIterator1, typename RandomAccessIterator2>
+    void
+        radix_sort
+        (
+            parallel_policy par,
+            RandomAccessIterator1 first,
+            RandomAccessIterator1 last,
+            RandomAccessIterator2 buffer
+        )
+    {
+        radix_sort(par, first, last, buffer, identity, low_byte);
     }
 
     //!     Диапазонный вариант поразрядной сортировки
@@ -161,6 +230,36 @@ namespace burst
         );
     }
 
+    template
+    <
+        typename RandomAccessRange,
+        typename RandomAccessIterator,
+        typename Map,
+        typename Radix
+    >
+    void
+        radix_sort
+        (
+            parallel_policy par,
+            RandomAccessRange && range,
+            RandomAccessIterator buffer,
+            Map map,
+            Radix radix
+        )
+    {
+        using std::begin;
+        using std::end;
+        radix_sort
+        (
+            par,
+            begin(std::forward<RandomAccessRange>(range)),
+            end(std::forward<RandomAccessRange>(range)),
+            buffer,
+            map,
+            radix
+        );
+    }
+
     template <typename RandomAccessRange, typename RandomAccessIterator, typename Map>
     void radix_sort (RandomAccessRange && range, RandomAccessIterator buffer, Map map)
     {
@@ -175,6 +274,28 @@ namespace burst
         );
     }
 
+    template <typename RandomAccessRange, typename RandomAccessIterator, typename Map>
+    void
+        radix_sort
+        (
+            parallel_policy par,
+            RandomAccessRange && range,
+            RandomAccessIterator buffer,
+            Map map
+        )
+    {
+        using std::begin;
+        using std::end;
+        radix_sort
+        (
+            par,
+            begin(std::forward<RandomAccessRange>(range)),
+            end(std::forward<RandomAccessRange>(range)),
+            buffer,
+            map
+        );
+    }
+
     template <typename RandomAccessRange, typename RandomAccessIterator>
     void radix_sort (RandomAccessRange && range, RandomAccessIterator buffer)
     {
@@ -182,6 +303,20 @@ namespace burst
         using std::end;
         radix_sort
         (
+            begin(std::forward<RandomAccessRange>(range)),
+            end(std::forward<RandomAccessRange>(range)),
+            buffer
+        );
+    }
+
+    template <typename RandomAccessRange, typename RandomAccessIterator>
+    void radix_sort (parallel_policy par, RandomAccessRange && range, RandomAccessIterator buffer)
+    {
+        using std::begin;
+        using std::end;
+        radix_sort
+        (
+            par,
             begin(std::forward<RandomAccessRange>(range)),
             end(std::forward<RandomAccessRange>(range)),
             buffer
