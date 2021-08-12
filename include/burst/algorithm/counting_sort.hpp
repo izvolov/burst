@@ -85,12 +85,12 @@ namespace burst
         )
     {
         return
-            detail::counting_sort_impl
+            counting_sort_copy
             (
                 std::make_move_iterator(first),
                 std::make_move_iterator(last),
                 result,
-                compose(to_unsigned, std::move(map))
+                map
             );
     }
 
