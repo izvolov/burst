@@ -2,6 +2,8 @@
 #define BURST_ALGORITHM_COUNTING_SORT_HPP
 
 #include <burst/algorithm/detail/counting_sort.hpp>
+#include <burst/algorithm/detail/get_shape.hpp>
+#include <burst/execution/parallel_policy.hpp>
 #include <burst/functional/compose.hpp>
 #include <burst/functional/identity.hpp>
 #include <burst/integer/to_unsigned.hpp>
@@ -62,6 +64,39 @@ namespace burst
             detail::counting_sort_impl(first, last, result, compose(to_unsigned, std::move(map)));
     }
 
+    template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map>
+    RandomAccessIterator2
+        counting_sort_copy
+        (
+            parallel_policy par,
+            RandomAccessIterator1 first,
+            RandomAccessIterator1 last,
+            RandomAccessIterator2 result,
+            Map map
+        )
+    {
+        const auto shape = detail::get_shape(par, first, last);
+        const auto thread_count = shape[0];
+        if (thread_count > 1)
+        {
+            boost::asio::thread_pool pool(thread_count);
+            return
+                detail::counting_sort_impl
+                (
+                    pool,
+                    shape,
+                    first,
+                    last,
+                    result,
+                    compose(to_unsigned, std::move(map))
+                );
+        }
+        else
+        {
+            return counting_sort_copy(first, last, result, map);
+        }
+    }
+
     template <typename ForwardIterator, typename RandomAccessIterator>
     RandomAccessIterator
         counting_sort_copy
@@ -72,6 +107,19 @@ namespace burst
         )
     {
         return counting_sort_copy(first, last, result, identity);
+    }
+
+    template <typename RandomAccessIterator1, typename RandomAccessIterator2>
+    RandomAccessIterator2
+        counting_sort_copy
+        (
+            parallel_policy par,
+            RandomAccessIterator1 first,
+            RandomAccessIterator1 last,
+            RandomAccessIterator2 result
+        )
+    {
+        return counting_sort_copy(par, first, last, result, identity);
     }
 
     template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
@@ -94,6 +142,28 @@ namespace burst
             );
     }
 
+    template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map>
+    RandomAccessIterator2
+        counting_sort_move
+        (
+            parallel_policy par,
+            RandomAccessIterator1 first,
+            RandomAccessIterator1 last,
+            RandomAccessIterator2 result,
+            Map map
+        )
+    {
+        return
+            counting_sort_copy
+            (
+                par,
+                std::make_move_iterator(first),
+                std::make_move_iterator(last),
+                result,
+                map
+            );
+    }
+
     template <typename ForwardIterator, typename RandomAccessIterator>
     RandomAccessIterator
         counting_sort_move
@@ -104,6 +174,19 @@ namespace burst
         )
     {
         return counting_sort_move(first, last, result, identity);
+    }
+
+    template <typename RandomAccessIterator1, typename RandomAccessIterator2>
+    RandomAccessIterator2
+        counting_sort_move
+        (
+            parallel_policy par,
+            RandomAccessIterator1 first,
+            RandomAccessIterator1 last,
+            RandomAccessIterator2 result
+        )
+    {
+        return counting_sort_move(par, first, last, result, identity);
     }
 
     //!     Диапазонный вариант сортировки подсчётом
@@ -131,6 +214,30 @@ namespace burst
             );
     }
 
+    //!     Параллельный диапазонный вариант сортировки подсчётом
+    template <typename RandomAccessRange, typename RandomAccessIterator, typename Map>
+    RandomAccessIterator
+        counting_sort_copy
+        (
+            parallel_policy par,
+            RandomAccessRange && range,
+            RandomAccessIterator result,
+            Map map
+        )
+    {
+        using std::begin;
+        using std::end;
+        return
+            counting_sort_copy
+            (
+                par,
+                begin(std::forward<RandomAccessRange>(range)),
+                end(std::forward<RandomAccessRange>(range)),
+                result,
+                map
+            );
+    }
+
     template <typename ForwardRange, typename RandomAccessIterator>
     RandomAccessIterator counting_sort_copy (ForwardRange && range, RandomAccessIterator result)
     {
@@ -141,6 +248,27 @@ namespace burst
             (
                 begin(std::forward<ForwardRange>(range)),
                 end(std::forward<ForwardRange>(range)),
+                result
+            );
+    }
+
+    template <typename RandomAccessRange, typename RandomAccessIterator>
+    RandomAccessIterator
+        counting_sort_copy
+        (
+            parallel_policy par,
+            RandomAccessRange && range,
+            RandomAccessIterator result
+        )
+    {
+        using std::begin;
+        using std::end;
+        return
+            counting_sort_copy
+            (
+                par,
+                begin(std::forward<RandomAccessRange>(range)),
+                end(std::forward<RandomAccessRange>(range)),
                 result
             );
     }
@@ -166,6 +294,29 @@ namespace burst
             );
     }
 
+    template <typename RandomAccessRange, typename RandomAccessIterator, typename Map>
+    RandomAccessIterator
+        counting_sort_move
+        (
+            parallel_policy par,
+            RandomAccessRange && range,
+            RandomAccessIterator result,
+            Map map
+        )
+    {
+        using std::begin;
+        using std::end;
+        return
+            counting_sort_move
+            (
+                par,
+                begin(std::forward<RandomAccessRange>(range)),
+                end(std::forward<RandomAccessRange>(range)),
+                result,
+                map
+            );
+    }
+
     template <typename ForwardRange, typename RandomAccessIterator>
     RandomAccessIterator counting_sort_move (ForwardRange && range, RandomAccessIterator result)
     {
@@ -176,6 +327,27 @@ namespace burst
             (
                 begin(std::forward<ForwardRange>(range)),
                 end(std::forward<ForwardRange>(range)),
+                result
+            );
+    }
+
+    template <typename RandomAccessRange, typename RandomAccessIterator>
+    RandomAccessIterator
+        counting_sort_move
+        (
+            parallel_policy par,
+            RandomAccessRange && range,
+            RandomAccessIterator result
+        )
+    {
+        using std::begin;
+        using std::end;
+        return
+            counting_sort_move
+            (
+                par,
+                begin(std::forward<RandomAccessRange>(range)),
+                end(std::forward<RandomAccessRange>(range)),
                 result
             );
     }
