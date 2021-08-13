@@ -1,7 +1,6 @@
 #include <utility/io/read.hpp>
 
 #include <burst/algorithm/radix_sort.hpp>
-#include <burst/functional/identity.hpp>
 
 #include <boost/program_options.hpp>
 #include <boost/sort/spreadsort/integer_sort.hpp>
@@ -10,8 +9,28 @@
 #include <chrono>
 #include <iostream>
 #include <random>
+#include <string>
 #include <unordered_map>
 #include <vector>
+
+const auto burst_radix_sort_call_name = std::string("burst::radix_sort");
+const auto std_sort_call_name = std::string("std::sort");
+const auto std_stable_sort_call_name = std::string("std::stable_sort");
+const auto boost_integer_sort_call_name = std::string("boost::integer_sort");
+
+const auto burst_radix_sort_title = std::string("radix");
+const auto std_sort_title = std::string("std");
+const auto std_stable_sort_title = std::string("stable");
+const auto boost_integer_sort_title = std::string("boost");
+
+const auto default_algorithms_set =
+    std::vector<std::string>
+    {
+        burst_radix_sort_title,
+        std_sort_title,
+        std_stable_sort_title,
+        boost_integer_sort_title
+    };
 
 using clock_type = std::chrono::steady_clock;
 
@@ -46,7 +65,14 @@ void
 }
 
 template <typename Integer, typename UnaryFunction1, typename UnaryFunction2>
-void test_all (std::size_t attempts, UnaryFunction1 statistic, UnaryFunction2 prepare)
+void
+    test_all
+    (
+        const std::vector<std::string> & to_bench,
+        std::size_t attempts,
+        UnaryFunction1 statistic,
+        UnaryFunction2 prepare
+    )
 {
     std::vector<Integer> numbers;
     utility::read(std::cin, numbers);
@@ -58,31 +84,51 @@ void test_all (std::size_t attempts, UnaryFunction1 statistic, UnaryFunction2 pr
         {
             return burst::radix_sort(std::forward<decltype(args)>(args)..., buffer.begin());
         };
-    test_sort("burst::radix_sort", radix_sort, numbers, attempts, statistic, prepare);
-
     auto std_sort =
         [] (auto && ... args)
         {
             return std::sort(std::forward<decltype(args)>(args)...);
         };
-    test_sort("std::sort", std_sort, numbers, attempts, statistic, prepare);
-
     auto std_stable_sort =
         [] (auto && ... args)
         {
             return std::stable_sort(std::forward<decltype(args)>(args)...);
         };
-    test_sort("std::stable_sort", std_stable_sort, numbers, attempts, statistic, prepare);
-
     auto boost_int_sort =
         [] (auto && ... args)
         {
             return boost::sort::spreadsort::integer_sort(std::forward<decltype(args)>(args)...);
         };
-    test_sort("boost::integer_sort", boost_int_sort, numbers, attempts, statistic, prepare);
+
+    using iterator_type = typename std::vector<Integer>::iterator;
+    using sort_call_type = std::function<void(iterator_type, iterator_type)>;
+    auto sort_calls =
+        std::unordered_map<std::string, std::pair<std::string, sort_call_type>>
+        {
+            {burst_radix_sort_title, {burst_radix_sort_call_name, radix_sort}},
+            {std_sort_title, {std_sort_call_name, std_sort}},
+            {std_stable_sort_title, {std_stable_sort_call_name, std_stable_sort}},
+            {boost_integer_sort_title, {boost_integer_sort_call_name, boost_int_sort}}
+        };
+
+    for (const auto & sort_call_title: to_bench)
+    {
+        auto call_params = sort_calls.find(sort_call_title);
+        if (call_params != sort_calls.end())
+        {
+            const auto & name = call_params->second.first;
+            const auto & call = call_params->second.second;
+            test_sort(name, call, numbers, attempts, statistic, prepare);
+        }
+        else
+        {
+            const auto error_message = u8"Неверный тип тестируемого алгоритма: " + sort_call_title;
+            throw boost::program_options::error(error_message);
+        }
+    }
 }
 
-using test_call_type = std::function<void (std::size_t)>;
+using test_call_type = std::function<void (const std::vector<std::string> &, std::size_t)>;
 
 struct shuffle_fn
 {
@@ -220,10 +266,11 @@ template <typename Integer, typename UnaryFunction1, typename UnaryFunction2>
 test_call_type make_test_all (UnaryFunction1 statistic, UnaryFunction2 prepare)
 {
     return
-        [statistic, prepare] (std::size_t attempts)
-        {
-            return test_all<Integer>(attempts, statistic, prepare);
-        };
+        [statistic, prepare]
+            (const std::vector<std::string> & algorithm_set, std::size_t attempts)
+            {
+                return test_all<Integer>(algorithm_set, attempts, statistic, prepare);
+            };
 }
 
 template <typename T>
@@ -352,7 +399,11 @@ int main (int argc, const char * argv[])
             "Допустимые значения: shuffle, ascending, descending, outlier, pipe-organ")
         ("stat", bpo::value<std::string>()->default_value("mean"),
             "Статистика, которая будет рассчитана.\n"
-            "Допустимые значения: min, max, mean, median, sum");
+            "Допустимые значения: min, max, mean, median, sum")
+        ("algo", bpo::value<std::vector<std::string>>()->multitoken()
+            ->default_value(default_algorithms_set, "radix std stable boost"),
+            "Набор тестируемых алгоритмов.\n"
+            "Допустимые значения: radix, std, stable, boost");
 
     try
     {
@@ -370,9 +421,10 @@ int main (int argc, const char * argv[])
             auto integer_type = vm["integer"].as<std::string>();
             auto statistic = vm["stat"].as<std::string>();
             auto prepare_type = vm["prepare"].as<std::string>();
+            auto algorithm_set = vm["algo"].as<std::vector<std::string>>();
 
             auto test = dispatch_call(integer_type, statistic, prepare_type);
-            test(attempts);
+            test(algorithm_set, attempts);
         }
     }
     catch (bpo::error & e)
