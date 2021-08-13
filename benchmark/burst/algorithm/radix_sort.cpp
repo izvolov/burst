@@ -14,11 +14,21 @@
 #include <vector>
 
 const auto burst_radix_sort_call_name = std::string("burst::radix_sort");
+const auto burst_radix_sort_par_max_call_name = std::string("burst::radix_sort(par(max))");
+const auto burst_radix_sort_par_2_call_name = std::string("burst::radix_sort(par(2))");
+const auto burst_radix_sort_par_4_call_name = std::string("burst::radix_sort(par(4))");
+const auto burst_radix_sort_par_8_call_name = std::string("burst::radix_sort(par(8))");
+const auto burst_radix_sort_par_16_call_name = std::string("burst::radix_sort(par(16))");
 const auto std_sort_call_name = std::string("std::sort");
 const auto std_stable_sort_call_name = std::string("std::stable_sort");
 const auto boost_integer_sort_call_name = std::string("boost::integer_sort");
 
 const auto burst_radix_sort_title = std::string("radix");
+const auto burst_radix_sort_par_max_title = std::string("par");
+const auto burst_radix_sort_par_2_title = std::string("par2");
+const auto burst_radix_sort_par_4_title = std::string("par4");
+const auto burst_radix_sort_par_8_title = std::string("par8");
+const auto burst_radix_sort_par_16_title = std::string("par16");
 const auto std_sort_title = std::string("std");
 const auto std_stable_sort_title = std::string("stable");
 const auto boost_integer_sort_title = std::string("boost");
@@ -27,6 +37,7 @@ const auto default_algorithms_set =
     std::vector<std::string>
     {
         burst_radix_sort_title,
+        burst_radix_sort_par_max_title,
         std_sort_title,
         std_stable_sort_title,
         boost_integer_sort_title
@@ -84,6 +95,32 @@ void
         {
             return burst::radix_sort(std::forward<decltype(args)>(args)..., buffer.begin());
         };
+    auto radix_sort_par_max =
+        [& buffer] (auto && ... args)
+        {
+            const auto par = burst::par(std::max(std::thread::hardware_concurrency(), 2u));
+            return burst::radix_sort(par, std::forward<decltype(args)>(args)..., buffer.begin());
+        };
+    auto radix_sort_par_2 =
+        [& buffer] (auto && ... args)
+        {
+            return burst::radix_sort(burst::par(2), std::forward<decltype(args)>(args)..., buffer.begin());
+        };
+    auto radix_sort_par_4 =
+        [& buffer] (auto && ... args)
+        {
+            return burst::radix_sort(burst::par(4), std::forward<decltype(args)>(args)..., buffer.begin());
+        };
+    auto radix_sort_par_8 =
+        [& buffer] (auto && ... args)
+        {
+            return burst::radix_sort(burst::par(8), std::forward<decltype(args)>(args)..., buffer.begin());
+        };
+    auto radix_sort_par_16 =
+        [& buffer] (auto && ... args)
+        {
+            return burst::radix_sort(burst::par(16), std::forward<decltype(args)>(args)..., buffer.begin());
+        };
     auto std_sort =
         [] (auto && ... args)
         {
@@ -106,6 +143,11 @@ void
         std::unordered_map<std::string, std::pair<std::string, sort_call_type>>
         {
             {burst_radix_sort_title, {burst_radix_sort_call_name, radix_sort}},
+            {burst_radix_sort_par_max_title, {burst_radix_sort_par_max_call_name, radix_sort_par_max}},
+            {burst_radix_sort_par_2_title, {burst_radix_sort_par_2_call_name, radix_sort_par_2}},
+            {burst_radix_sort_par_4_title, {burst_radix_sort_par_4_call_name, radix_sort_par_4}},
+            {burst_radix_sort_par_8_title, {burst_radix_sort_par_8_call_name, radix_sort_par_8}},
+            {burst_radix_sort_par_16_title, {burst_radix_sort_par_16_call_name, radix_sort_par_16}},
             {std_sort_title, {std_sort_call_name, std_sort}},
             {std_stable_sort_title, {std_stable_sort_call_name, std_stable_sort}},
             {boost_integer_sort_title, {boost_integer_sort_call_name, boost_int_sort}}
@@ -401,9 +443,9 @@ int main (int argc, const char * argv[])
             "Статистика, которая будет рассчитана.\n"
             "Допустимые значения: min, max, mean, median, sum")
         ("algo", bpo::value<std::vector<std::string>>()->multitoken()
-            ->default_value(default_algorithms_set, "radix std stable boost"),
+            ->default_value(default_algorithms_set, "radix par std stable boost"),
             "Набор тестируемых алгоритмов.\n"
-            "Допустимые значения: radix, std, stable, boost");
+            "Допустимые значения: radix, std, stable, boost, par, par2, par4, par8, par16");
 
     try
     {
