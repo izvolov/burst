@@ -217,33 +217,39 @@ struct mean_fn
 };
 
 template <typename Integer, typename UnaryFunction1, typename UnaryFunction2>
-test_call_type make_test_all ()
+test_call_type make_test_all (UnaryFunction1 statistic, UnaryFunction2 prepare)
 {
     return
-        [] (std::size_t attempts)
+        [statistic, prepare] (std::size_t attempts)
         {
-            return test_all<Integer>(attempts, UnaryFunction1{}, UnaryFunction2{});
+            return test_all<Integer>(attempts, statistic, prepare);
         };
 }
 
-template <typename Integer, typename UnaryFunction>
-test_call_type dispatch_preparation (const std::string & prepare_type)
+template <typename T>
+using containter_for_t = std::vector<T>;
+
+template <typename Integer>
+using prepare_function_for_t = std::function<containter_for_t<Integer> (containter_for_t<Integer>)>;
+
+template <typename Integer>
+prepare_function_for_t<Integer> prepare_for (const std::string & prepare_type)
 {
-    static const auto test_calls =
-        std::unordered_map<std::string, test_call_type>
+    static const auto prepare_functions =
+        std::unordered_map<std::string, prepare_function_for_t<Integer>>
         {
-            {"shuffle", make_test_all<Integer, UnaryFunction, shuffle_fn>()},
-            {"ascending", make_test_all<Integer, UnaryFunction, sort_fn<std::less<>>>()},
-            {"descending", make_test_all<Integer, UnaryFunction, sort_fn<std::greater<>>>()},
-            {"outlier", make_test_all<Integer, UnaryFunction, outlier_fn>()},
-            {"pipe-organ", make_test_all<Integer, UnaryFunction, pipe_organ_fn>()},
-            {"single", make_test_all<Integer, UnaryFunction, single_fn>()}
+            {"shuffle", shuffle_fn{}},
+            {"ascending", sort_fn<std::less<>>{}},
+            {"descending", sort_fn<std::greater<>>{}},
+            {"outlier", outlier_fn{}},
+            {"pipe-organ", pipe_organ_fn{}},
+            {"single", single_fn{}}
         };
 
-    auto call = test_calls.find(prepare_type);
-    if (call != test_calls.end())
+    auto prepare_function = prepare_functions.find(prepare_type);
+    if (prepare_function != prepare_functions.end())
     {
-        return call->second;
+        return prepare_function->second;
     }
     else
     {
@@ -251,25 +257,26 @@ test_call_type dispatch_preparation (const std::string & prepare_type)
     }
 }
 
-using dispatch_preparation_call_type = std::function<test_call_type (const std::string &)>;
+template <typename Duration>
+using statistic_function_for_t = std::function<Duration (containter_for_t<Duration>)>;
 
-template <typename Integer>
-dispatch_preparation_call_type dispatch_statistic (const std::string & statistic)
+template <typename Duration>
+statistic_function_for_t<Duration> statistic_for (const std::string & statistic)
 {
-    static const auto dispatch_prepare_calls =
-        std::unordered_map<std::string, dispatch_preparation_call_type>
+    static const auto statistic_functions =
+        std::unordered_map<std::string, statistic_function_for_t<Duration>>
         {
-            {"min", &dispatch_preparation<Integer, min_fn>},
-            {"max", &dispatch_preparation<Integer, max_fn>},
-            {"mean", &dispatch_preparation<Integer, mean_fn>},
-            {"median", &dispatch_preparation<Integer, median_fn>},
-            {"sum", &dispatch_preparation<Integer, sum_fn>}
+            {"min", min_fn{}},
+            {"max", max_fn{}},
+            {"mean", mean_fn{}},
+            {"median", median_fn{}},
+            {"sum", sum_fn{}}
         };
 
-    auto call = dispatch_prepare_calls.find(statistic);
-    if (call != dispatch_prepare_calls.end())
+    auto stat_function = statistic_functions.find(statistic);
+    if (stat_function != statistic_functions.end())
     {
-        return call->second;
+        return stat_function->second;
     }
     else
     {
@@ -278,22 +285,31 @@ dispatch_preparation_call_type dispatch_statistic (const std::string & statistic
     }
 }
 
-using dispatch_statistic_call_type =
-    std::function<dispatch_preparation_call_type (const std::string &)>;
+using dispatch_parameters_call_type =
+    std::function<test_call_type (const std::string &, const std::string &)>;
 
-dispatch_statistic_call_type dispatch_integer (const std::string & integer_type)
+template <typename Integer>
+test_call_type dispatch_parameters (const std::string & statistic, const std::string & prepare_type)
+{
+    auto statistic_function = statistic_for<clock_type::duration>(statistic);
+    auto prepare_funcion = prepare_for<Integer>(prepare_type);
+
+    return make_test_all<Integer>(statistic_function, prepare_funcion);
+}
+
+dispatch_parameters_call_type dispatch_integer (const std::string & integer_type)
 {
     static const auto dispatch_statistic_calls =
-        std::unordered_map<std::string, dispatch_statistic_call_type>
+        std::unordered_map<std::string, dispatch_parameters_call_type>
         {
-            {"uint8", &dispatch_statistic<std::uint8_t>},
-            {"uint16", &dispatch_statistic<std::uint16_t>},
-            {"uint32", &dispatch_statistic<std::uint32_t>},
-            {"uint64", &dispatch_statistic<std::uint64_t>},
-            {"int8", &dispatch_statistic<std::int8_t>},
-            {"int16", &dispatch_statistic<std::int16_t>},
-            {"int32", &dispatch_statistic<std::int32_t>},
-            {"int64", &dispatch_statistic<std::int64_t>}
+            {"uint8", &dispatch_parameters<std::uint8_t>},
+            {"uint16", &dispatch_parameters<std::uint16_t>},
+            {"uint32", &dispatch_parameters<std::uint32_t>},
+            {"uint64", &dispatch_parameters<std::uint64_t>},
+            {"int8", &dispatch_parameters<std::int8_t>},
+            {"int16", &dispatch_parameters<std::int16_t>},
+            {"int32", &dispatch_parameters<std::int32_t>},
+            {"int64", &dispatch_parameters<std::int64_t>}
         };
 
     auto call = dispatch_statistic_calls.find(integer_type);
@@ -316,7 +332,7 @@ test_call_type
         const std::string & prepare_type
     )
 {
-    return dispatch_integer(integer_type)(statistic)(prepare_type);
+    return dispatch_integer(integer_type)(statistic, prepare_type);
 }
 
 int main (int argc, const char * argv[])
