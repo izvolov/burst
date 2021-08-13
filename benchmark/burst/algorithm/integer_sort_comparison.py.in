@@ -65,8 +65,14 @@ def table (lengths, measurements, integer_type, file_name):
     f.write(table_string)
 
 presets = {
-    'all': ['radix', 'std', 'stable', 'boost'],
-    'integral': ['radix', 'boost'],
+    'all': ['radix', 'par', 'par2', 'par4', 'par8', 'par16', 'std', 'stable', 'boost'],
+    'basic': ['radix', 'par', 'std', 'stable', 'boost'],
+    'integral': ['radix', 'par', 'par2', 'par4', 'par8', 'par16', 'boost'],
+    'integral_basic': ['radix', 'par', 'boost'],
+    'burst': ['radix', 'par', 'par2', 'par4', 'par8', 'par16'],
+    'burst_basic': ['radix', 'par'],
+    'sequential': ['radix', 'std', 'stable', 'boost'],
+    'parallel': ['par', 'par2', 'par4', 'par8', 'par16'],
 }
 
 def parse_command_line (options):
@@ -87,7 +93,7 @@ def parse_command_line (options):
         choices=['shuffle', 'ascending', 'descending', 'outlier', 'pipe-organ', 'single'])
     parser.add_argument('--attempts', type=int, default=10000000,
         help='Максимальное количество итераций')
-    parser.add_argument('--preset', type=str, default='all',
+    parser.add_argument('--preset', type=str, default='basic',
         help='Набор алгоритмов, которые нужно замерить', choices=presets.keys())
     args = parser.parse_args(options[1:])
     return args.begin, args.end, args.step, args.prefix, args.integer, args.prepare, args.attempts, args.preset
