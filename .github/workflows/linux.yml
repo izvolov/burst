@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-18.04]
+        os: [ubuntu-20.04]
         compiler:
           - name: "g++-7"
             package: "g++-7"
@@ -26,7 +26,7 @@ jobs:
           - name: "clang++-10"
             package: "clang-10"
         build_type: ["Debug", "Release"]
-        boost_version: ["1.65"]
+        boost_version: ["1.67", "1.71"]
 
     runs-on: ${{matrix.os}}
     steps:

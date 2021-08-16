@@ -106,7 +106,7 @@ assert(intersected_range == expected_collection);
 1.  Система сборки [CMake](https://cmake.org/) версии 3.8.2 и выше;
 2.  Компилятор [GCC](https://gcc.gnu.org/) версии 7.3 и выше или компилятор [Clang](http://clang.llvm.org/) версии 8 и выше\*;
 3.  Библиотека тестирования [doctest](https://github.com/onqtam/doctest) \[Не обязательно\*\*\];
-4.  Библиотека [Boost](https://www.boost.org/) (модуль [`program_options`](https://www.boost.org/doc/libs/1_62_0/doc/html/program_options.html) \[Не обязательно\*\*\*\]) версии 1.65 и выше;
+4.  Библиотека [Boost](https://www.boost.org/) (модуль [`program_options`](https://www.boost.org/doc/libs/1_62_0/doc/html/program_options.html) \[Не обязательно\*\*\*\]) версии 1.66 и выше;
 5.  [Doxygen](http://doxygen.nl) \[Не обязательно\].
 
 Заведомо работающие конфигурации перечислены в [интеграционных скриптах](.github/workflows).

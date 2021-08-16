@@ -1,4 +1,4 @@
-find_package(Boost 1.62 REQUIRED)
+find_package(Boost 1.66 REQUIRED)
 find_package(doctest 2.3.3 REQUIRED)
 
 add_library(testutility INTERFACE)
