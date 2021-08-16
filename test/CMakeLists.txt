@@ -1,5 +1,6 @@
 find_package(Boost 1.66.0 COMPONENTS system REQUIRED)
 find_package(doctest 2.3.3 REQUIRED)
+find_package(Threads)
 
 add_library(testutility INTERFACE)
 target_include_directories(testutility INTERFACE ${CMAKE_CURRENT_SOURCE_DIR})
@@ -12,6 +13,7 @@ target_link_libraries(burst-unit-tests
         Burst::burst
         doctest::doctest
         testutility
+        Threads::Threads
 )
 
 find_program(GCOVR_EXECUTABLE gcovr)

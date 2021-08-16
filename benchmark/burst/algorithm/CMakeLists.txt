@@ -8,6 +8,7 @@ target_link_libraries(radix
         Boost::program_options
         Boost::system
         Burst::burst
+        Threads::Threads
 )
 
 configure_file(integer_sort_comparison.py.in integer_sort_comparison.py @ONLY)
