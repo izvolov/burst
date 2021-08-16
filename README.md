@@ -104,16 +104,16 @@ assert(intersected_range == expected_collection);
 ----------
 
 1.  Система сборки [CMake](https://cmake.org/) версии 3.8.2 и выше;
-2.  Компилятор [GCC](https://gcc.gnu.org/) версии 7.3 и выше или компилятор [Clang](http://clang.llvm.org/) версии 8 и выше\*;
-3.  Библиотека тестирования [doctest](https://github.com/onqtam/doctest) \[Не обязательно\*\*\];
-4.  Библиотека [Boost](https://www.boost.org/) (модуль [`program_options`](https://www.boost.org/doc/libs/1_66_0/doc/html/program_options.html) \[Не обязательно\*\*\*\], модуль [`system`](https://www.boost.org/doc/libs/1_77_0/libs/system/doc/html/system.html) \[Не обязательно\*\*\*\*\]) версии 1.66 и выше;
+2.  Компилятор [GCC](https://gcc.gnu.org/) версии 7.3 и выше или компилятор [Clang](http://clang.llvm.org/) версии 8 и выше<sup>1</sup>;
+3.  Библиотека тестирования [doctest](https://github.com/onqtam/doctest) \[Не обязательно<sup>2</sup>\];
+4.  Библиотека [Boost](https://www.boost.org/) (модуль [`program_options`](https://www.boost.org/doc/libs/1_66_0/doc/html/program_options.html) \[Не обязательно<sup>3</sup>\], модуль [`system`](https://www.boost.org/doc/libs/1_77_0/libs/system/doc/html/system.html) \[Не обязательно<sup>4</sup>\]) версии 1.66 и выше;
 5.  [Doxygen](http://doxygen.nl) \[Не обязательно\].
 
 Заведомо работающие конфигурации перечислены в [интеграционных скриптах](.github/workflows).
 
-> \*) При работе с идущей в комплекте `libc++` или `libstdc++` версии 7 и выше.
+> <sup>1</sup> При работе с идущей в комплекте `libc++` или `libstdc++` версии 7 и выше.
 
-> \*\*) Можно миновать этап сборки и тестирования, если при сборке с помощью `CMake` выключить опцию `BURST_TESTING`:
+> <sup>2</sup> Можно миновать этап сборки и тестирования, если при сборке с помощью `CMake` выключить опцию `BURST_TESTING`:
 >
 > ```shell
 > cmake -DBURST_TESTING=OFF <прочие аргументы ...>
@@ -121,7 +121,7 @@ assert(intersected_range == expected_collection);
 >
 > Также тестирование автоматически отключается в случае, если Burst подключается в качестве подпроекта.
 
-> \*\*\*) `Boost.Program_options` не понадобится, если отключить этап сборки замеров производительности с помощью опции `BURST_BENCHMARKING`:
+> <sup>3</sup> `Boost.Program_options` не понадобится, если отключить этап сборки замеров производительности с помощью опции `BURST_BENCHMARKING`:
 >
 > ```shell
 > cmake -DBURST_BENCHMARKING=OFF <прочие аргументы ...>
@@ -129,7 +129,7 @@ assert(intersected_range == expected_collection);
 >
 > Также замеры производительности отключаются в случае, если Burst подключается в качестве подпроекта.
 
-> \*\*\*\*) `Boost.System` нужен только при использовании параллельных алгоритмов (например, [`radix_sort`](doc/README.md#intsort)).
+> <sup>4</sup> `Boost.System` нужен только при использовании параллельных алгоритмов (например, [`radix_sort`](doc/README.md#intsort)).
 
 Установка
 ---------
