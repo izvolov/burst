@@ -67,7 +67,14 @@ namespace utility
             {
                 const auto k = (i + 1) * block_size;
 
-                auto osd = utility::urd_order_statistic_distribution<double>(n, k, min, max);
+                auto osd =
+                    utility::urd_order_statistic_distribution<double>
+                    (
+                        n,
+                        k,
+                        static_cast<double>(min),
+                        static_cast<double>(max)
+                    );
                 const auto kth_stat = std::llround(osd(generator));
 
                 bounds.push_back(kth_stat);
