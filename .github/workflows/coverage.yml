@@ -20,7 +20,7 @@ jobs:
     - name: Install APT dependencies
       run: |
         sudo apt update
-        sudo apt install --yes gcovr lcov libboost-program-options-dev cmake git
+        sudo apt install --yes gcovr lcov libboost-program-options-dev libboost-system-dev cmake git
 
     - name: Install doctest
       run: |

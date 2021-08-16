@@ -1,4 +1,4 @@
-find_package(Boost 1.66 REQUIRED)
+find_package(Boost 1.66.0 COMPONENTS system REQUIRED)
 find_package(doctest 2.3.3 REQUIRED)
 
 add_library(testutility INTERFACE)
@@ -8,6 +8,7 @@ add_executable(burst-unit-tests test_main.cpp)
 target_link_libraries(burst-unit-tests
     PRIVATE
         Boost::boost
+        Boost::system
         Burst::burst
         doctest::doctest
         testutility
