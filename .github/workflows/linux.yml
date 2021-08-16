@@ -40,7 +40,7 @@ jobs:
     - name: Install APT dependencies
       run: |
         sudo apt update
-        sudo apt install --yes ${{matrix.compiler.package}} libboost-program-options${{matrix.boost_version}}-dev git cmake
+        sudo apt install --yes ${{matrix.compiler.package}} libboost-program-options${{matrix.boost_version}}-dev libboost-system${{matrix.boost_version}}-dev git cmake
 
     - name: Install doctest
       run: |
