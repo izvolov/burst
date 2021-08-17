@@ -31,13 +31,15 @@ def measure (algorithms, lengths, max_attempts, integer_type, prepare):
 
     return measurements
 
-def plot (lengths, measurements, integer_type, file_name):
+def plot (scale, lengths, measurements, integer_type, file_name):
     plt.rc('font',**{'family':'verdana'})
     plt.figure(num=1)
     plt.title(u'Сортировка целых чисел (' + integer_type + ')', size=14)
     plt.xlabel(u'Количество элементов в массиве, шт', size=10)
     plt.ylabel(u'Среднее время сортировки, с', size=10)
     plt.grid(True)
+    plt.xscale(scale)
+    plt.yscale(scale)
 
     x = np.array(lengths)
 
@@ -45,8 +47,9 @@ def plot (lengths, measurements, integer_type, file_name):
         y = np.array(times)
         plt.plot(x, y, label=algorithm)
 
-    plt.xlim(left=0)
-    plt.ylim(bottom=0)
+    if scale is not 'log':
+        plt.xlim(left=0)
+        plt.ylim(bottom=0)
     plt.legend(loc='upper left')
     plt.tight_layout()
     plt.savefig(file_name, format='png')
@@ -75,14 +78,18 @@ presets = {
     'parallel': ['par', 'par2', 'par4', 'par8', 'par16'],
 }
 
+def make_scale (linear, log):
+    if (linear):
+        begin, end, count = tuple(linear)
+        lengths = [int(i) for i in np.linspace(begin, end, count)]
+        return 'linear({},{},{})'.format(begin, end, count), lengths, 'linear'
+    elif (log):
+        begin, end, count = tuple(log)
+        lengths = [int(i) for i in np.logspace(begin, end, count)]
+        return 'log({},{},{})'.format(begin, end, count), lengths, 'log'
+
 def parse_command_line (options):
     parser = argparse.ArgumentParser(options[0])
-    parser.add_argument('--begin', type=int, default=10,
-        help='Минимальный размер массива')
-    parser.add_argument('--end', type=int, default=100,
-        help='Максимальный размер массива')
-    parser.add_argument('--step', type=int, default=10,
-        help='Шаг размера массива')
     parser.add_argument('--prefix', type=str, default='intsort',
         help='Префикс выходного файла')
     parser.add_argument('--integer', type=str, default='uint32',
@@ -95,15 +102,20 @@ def parse_command_line (options):
         help='Максимальное количество итераций')
     parser.add_argument('--preset', type=str, default='basic',
         help='Набор алгоритмов, которые нужно замерить', choices=presets.keys())
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--linear', type=int, nargs=3, metavar=('begin', 'end', 'count'),
+        help='Линейная шкала размеров тестируемого массива')
+    group.add_argument('--log', type=int, nargs=3, metavar=('begin', 'end', 'count'),
+        help='Логарифмическая шкала размеров тестируемого массива')
     args = parser.parse_args(options[1:])
-    return args.begin, args.end, args.step, args.prefix, args.integer, args.prepare, args.attempts, args.preset
+    return args.linear, args.log, args.prefix, args.integer, args.prepare, args.attempts, args.preset
 
-begin, end, step, prefix, integer_type, prepare, attempts, preset = parse_command_line(sys.argv)
-lengths = range(begin, end, step)
+linear, log, prefix, integer_type, prepare, attempts, preset = parse_command_line(sys.argv)
+scale_description, lengths, plot_scale = make_scale(linear, log)
 algorithms = ' '.join(presets[preset])
 
 measurements = measure(algorithms, lengths, attempts, integer_type, prepare)
 
-file_name = '_'.join((prefix, str(begin), str(end), str(step), integer_type, prepare, preset, str(attempts)))
-plot(lengths, measurements, integer_type, file_name + '.png')
+file_name = '_'.join((prefix, scale_description, integer_type, prepare, preset, str(attempts)))
+plot(plot_scale, lengths, measurements, integer_type, file_name + '.png')
 table(lengths, measurements, integer_type, file_name + '.txt')
