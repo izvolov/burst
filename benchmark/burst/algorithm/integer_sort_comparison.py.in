@@ -112,8 +112,9 @@ def parse_command_line (options):
 
 linear, log, prefix, integer_type, prepare, attempts, preset = parse_command_line(sys.argv)
 scale_description, lengths, plot_scale = make_scale(linear, log)
-algorithms = ' '.join(presets[preset])
+attempts = max(attempts, lengths[-1])
 
+algorithms = ' '.join(presets[preset])
 measurements = measure(algorithms, lengths, attempts, integer_type, prepare)
 
 file_name = '_'.join((prefix, scale_description, integer_type, prepare, preset, str(attempts)))
