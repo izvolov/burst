@@ -4,6 +4,7 @@
 #include <burst/algorithm/detail/get_shape.hpp>
 #include <burst/algorithm/detail/parallel_radix_sort.hpp>
 #include <burst/algorithm/detail/radix_sort.hpp>
+#include <burst/algorithm/radix_sort/radix_sort_seq.hpp>
 #include <burst/execution/parallel_policy.hpp>
 #include <burst/functional/compose.hpp>
 #include <burst/functional/identity.hpp>
