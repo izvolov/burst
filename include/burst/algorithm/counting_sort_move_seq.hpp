@@ -39,18 +39,6 @@ namespace burst
             );
     }
 
-    template <typename ForwardIterator, typename RandomAccessIterator>
-    RandomAccessIterator
-        counting_sort_move
-        (
-            ForwardIterator first,
-            ForwardIterator last,
-            RandomAccessIterator result
-        )
-    {
-        return counting_sort_move(first, last, result, identity);
-    }
-
     /*!
         \brief
             Диапазонный вариант сортировки подсчётом с переносом элементов из исходного диапазона в
@@ -74,20 +62,6 @@ namespace burst
                 end(std::forward<ForwardRange>(range)),
                 result,
                 map
-            );
-    }
-
-    template <typename ForwardRange, typename RandomAccessIterator>
-    RandomAccessIterator counting_sort_move (ForwardRange && range, RandomAccessIterator result)
-    {
-        using std::begin;
-        using std::end;
-        return
-            counting_sort_move
-            (
-                begin(std::forward<ForwardRange>(range)),
-                end(std::forward<ForwardRange>(range)),
-                result
             );
     }
 }
