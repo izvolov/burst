@@ -4,6 +4,7 @@
 #include <burst/algorithm/detail/counting_sort.hpp>
 #include <burst/algorithm/detail/move_assign_please.hpp>
 #include <burst/algorithm/detail/nth_radix.hpp>
+#include <burst/algorithm/detail/parallel_counting_sort.hpp>
 #include <burst/algorithm/detail/radix_sort_traits.hpp>
 #include <burst/container/shaped_array_view.hpp>
 #include <burst/type_traits/iterator_difference.hpp>

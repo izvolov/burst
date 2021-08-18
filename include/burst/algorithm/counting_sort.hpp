@@ -3,6 +3,7 @@
 
 #include <burst/algorithm/detail/counting_sort.hpp>
 #include <burst/algorithm/detail/get_shape.hpp>
+#include <burst/algorithm/detail/parallel_counting_sort.hpp>
 #include <burst/execution/parallel_policy.hpp>
 #include <burst/functional/compose.hpp>
 #include <burst/functional/identity.hpp>
