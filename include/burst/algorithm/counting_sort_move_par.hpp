@@ -45,19 +45,6 @@ namespace burst
             );
     }
 
-    template <typename RandomAccessIterator1, typename RandomAccessIterator2>
-    RandomAccessIterator2
-        counting_sort_move
-        (
-            parallel_policy par,
-            RandomAccessIterator1 first,
-            RandomAccessIterator1 last,
-            RandomAccessIterator2 result
-        )
-    {
-        return counting_sort_move(par, first, last, result, identity);
-    }
-
     /*!
         \brief
             Диапазонный вариант параллельной сортировки подсчётом с переносом элементов из исходного
@@ -83,27 +70,6 @@ namespace burst
                 end(std::forward<RandomAccessRange>(range)),
                 result,
                 map
-            );
-    }
-
-    template <typename RandomAccessRange, typename RandomAccessIterator>
-    RandomAccessIterator
-        counting_sort_move
-        (
-            parallel_policy par,
-            RandomAccessRange && range,
-            RandomAccessIterator result
-        )
-    {
-        using std::begin;
-        using std::end;
-        return
-            counting_sort_move
-            (
-                par,
-                begin(std::forward<RandomAccessRange>(range)),
-                end(std::forward<RandomAccessRange>(range)),
-                result
             );
     }
 }
