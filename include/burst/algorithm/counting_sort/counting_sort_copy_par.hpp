@@ -1,7 +1,7 @@
 #ifndef BURST_ALGORITHM_COUNTING_SORT_COPY_PAR_HPP
 #define BURST_ALGORITHM_COUNTING_SORT_COPY_PAR_HPP
 
-#include <burst/algorithm/counting_sort_copy_seq.hpp>
+#include <burst/algorithm/counting_sort/counting_sort_copy_seq.hpp>
 #include <burst/algorithm/detail/get_shape.hpp>
 #include <burst/algorithm/detail/parallel_counting_sort.hpp>
 #include <burst/execution/parallel_policy.hpp>

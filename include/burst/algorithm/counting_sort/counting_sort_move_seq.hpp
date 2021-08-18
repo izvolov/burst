@@ -1,7 +1,7 @@
 #ifndef BURST_ALGORITHM_COUNTING_SORT_MOVE_SEQ_HPP
 #define BURST_ALGORITHM_COUNTING_SORT_MOVE_SEQ_HPP
 
-#include <burst/algorithm/counting_sort_copy_seq.hpp>
+#include <burst/algorithm/counting_sort/counting_sort_copy_seq.hpp>
 #include <burst/functional/identity.hpp>
 
 #include <iterator>
