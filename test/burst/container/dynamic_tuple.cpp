@@ -1,10 +1,14 @@
-#include <burst/container/dynamic_tuple.hpp>
 #include <utility/io/vector.hpp>
+
+#include <burst/container/dynamic_tuple.hpp>
+#include <burst/string/u8s.hpp>
 
 #include <doctest/doctest.h>
 
 #include <string>
 #include <vector>
+
+using burst::literals::operator ""_u8s;
 
 namespace // anonymous
 {
@@ -42,7 +46,7 @@ namespace // anonymous
             }
             else
             {
-                throw std::runtime_error(u8"Двойное уничтожение!");
+                throw std::runtime_error(u8"Двойное уничтожение!"_u8s);
             }
             --instances_count;
         }
@@ -66,7 +70,7 @@ namespace // anonymous
         {
             if (instances_count > 4)
             {
-                throw std::runtime_error(u8"Привет!");
+                throw std::runtime_error(u8"Привет!"_u8s);
             }
             ++instances_count;
         }
@@ -399,7 +403,7 @@ TEST_SUITE("dynamic_tuple")
         throw_on_move & operator = (const throw_on_move &) = default;
         throw_on_move (throw_on_move &&)
         {
-            throw std::runtime_error(u8"Пока!");
+            throw std::runtime_error(u8"Пока!"_u8s);
         }
         throw_on_move & operator = (throw_on_move &&) = default;
         ~throw_on_move () = default;

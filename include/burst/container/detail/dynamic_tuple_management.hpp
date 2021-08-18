@@ -1,6 +1,8 @@
 #ifndef BURST_CONTAINER_DETAIL_DYNAMIC_TUPLE_MANAGEMENT_HPP
 #define BURST_CONTAINER_DETAIL_DYNAMIC_TUPLE_MANAGEMENT_HPP
 
+#include <burst/string/u8s.hpp>
+
 #include <boost/type_index/ctti_type_index.hpp>
 
 #include <algorithm>
@@ -37,7 +39,8 @@ namespace burst
                 >
         {
             auto type_name = boost::typeindex::ctti_type_index::type_id<T>().pretty_name();
-            throw std::runtime_error(u8"Объект типа " + type_name + u8" некопируем");
+            using literals::operator ""_u8s;
+            throw std::runtime_error(u8"Объект типа "_u8s + type_name + u8" некопируем"_u8s);
         }
 
         template <typename T>

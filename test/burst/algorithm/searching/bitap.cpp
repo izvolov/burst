@@ -1,5 +1,6 @@
 #include <burst/algorithm/searching/bitap.hpp>
 #include <burst/type_traits/iterator_difference.hpp>
+#include <burst/string/u8s.hpp>
 
 #include <doctest/doctest.h>
 
@@ -9,6 +10,8 @@
 
 TEST_SUITE("bitap")
 {
+    using burst::literals::operator ""_u8s;
+
     TEST_CASE("Если поиск начинается где-то в середине совпадения, то образец будет найден в "
         "следующем совпадении")
     {
@@ -53,7 +56,7 @@ TEST_SUITE("bitap")
 
     TEST_CASE("Метод find_first возвращает диапазон итераторов на корпус, если образец найден")
     {
-        const auto pattern = std::string(u8"аб");
+        const auto pattern = u8"аб"_u8s;
         const auto corpus = std::string(pattern + pattern + pattern);
 
         using bitmask_type = std::bitset<32>;
@@ -85,7 +88,7 @@ TEST_SUITE("bitap")
 
     TEST_CASE("Метод find_next возвращает диапазон итераторов на корпус, если образец найден")
     {
-        const auto pattern = std::string(u8"аб");
+        const auto pattern = u8"аб"_u8s;
         const auto corpus = std::string(pattern + pattern + pattern);
         const auto pattern_length = std::distance(pattern.begin(), pattern.end());
 
@@ -109,8 +112,8 @@ TEST_SUITE("bitap")
 
     TEST_CASE("Метод find_next находит следующее вхождение образца с учётом наложения")
     {
-        const auto pattern = std::string(u8"шалаш");
-        const auto corpus = std::string(u8"шалашалаш");
+        const auto pattern = u8"шалаш"_u8s;
+        const auto corpus = u8"шалашалаш"_u8s;
         const auto pattern_length = std::distance(pattern.begin(), pattern.end());
 
         using bitmask_type = std::bitset<32>;

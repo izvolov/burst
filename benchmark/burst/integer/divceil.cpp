@@ -1,6 +1,7 @@
 #include <utility/io/read.hpp>
 
 #include <burst/integer/divceil.hpp>
+#include <burst/string/u8s.hpp>
 
 #include <boost/program_options.hpp>
 #include <boost/tuple/tuple.hpp>
@@ -10,8 +11,11 @@
 #include <cstdint>
 #include <iostream>
 #include <numeric>
+#include <string>
 #include <unordered_map>
 #include <vector>
+
+using burst::literals::operator""_u8s;
 
 template <typename Container, typename Integer>
 void test_divceil (const Container & values, Integer divisor, std::size_t attempt_count)
@@ -74,7 +78,7 @@ test_call_type dispatch_divisor (const std::string & divisor_type)
     }
     else
     {
-        throw boost::program_options::error(u8"Неверная разрядность делителя: " + divisor_type);
+        throw boost::program_options::error(u8"Неверная разрядность делителя: "_u8s + divisor_type);
     }
 }
 
@@ -101,7 +105,7 @@ test_call_type get_call (const std::string & integer_type, const std::string & d
     }
     else
     {
-        throw boost::program_options::error(u8"Неверная разрядность сортируемых чисел: " + integer_type);
+        throw boost::program_options::error(u8"Неверная разрядность сортируемых чисел: "_u8s + integer_type);
     }
 }
 

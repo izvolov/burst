@@ -1,6 +1,7 @@
 #include <utility/io/read.hpp>
 
 #include <burst/algorithm/radix_sort.hpp>
+#include <burst/string/u8s.hpp>
 
 #include <boost/program_options.hpp>
 #include <boost/sort/spreadsort/integer_sort.hpp>
@@ -13,6 +14,8 @@
 #include <thread>
 #include <unordered_map>
 #include <vector>
+
+using burst::literals::operator ""_u8s;
 
 const auto burst_radix_sort_call_name = std::string("burst::radix_sort");
 const auto burst_radix_sort_par_max_call_name = std::string("burst::radix_sort(par(max))");
@@ -165,7 +168,8 @@ void
         }
         else
         {
-            const auto error_message = u8"Неверный тип тестируемого алгоритма: " + sort_call_title;
+            const auto error_message =
+                u8"Неверный тип тестируемого алгоритма: "_u8s + sort_call_title;
             throw boost::program_options::error(error_message);
         }
     }
@@ -343,7 +347,8 @@ prepare_function_for_t<Integer> prepare_for (const std::string & prepare_type)
     }
     else
     {
-        throw boost::program_options::error(u8"Неверный тип подготовки массива: " + prepare_type);
+        const auto error_message = u8"Неверный тип подготовки массива: "_u8s + prepare_type;
+        throw boost::program_options::error(error_message);
     }
 }
 
@@ -370,7 +375,7 @@ statistic_function_for_t<Duration> statistic_for (const std::string & statistic)
     }
     else
     {
-        auto error_message = u8"Неверная статистика: " + statistic;
+        auto error_message = u8"Неверная статистика: "_u8s + statistic;
         throw boost::program_options::error(error_message);
     }
 }
@@ -409,7 +414,7 @@ dispatch_parameters_call_type dispatch_integer (const std::string & integer_type
     }
     else
     {
-        auto error_message = u8"Неверная разрядность сортируемых чисел: " + integer_type;
+        auto error_message = u8"Неверная разрядность сортируемых чисел: "_u8s + integer_type;
         throw boost::program_options::error(error_message);
     }
 }
