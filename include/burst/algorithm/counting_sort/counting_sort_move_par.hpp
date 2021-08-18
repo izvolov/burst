@@ -1,7 +1,7 @@
 #ifndef BURST_ALGORITHM_COUNTING_SORT_MOVE_PAR_HPP
 #define BURST_ALGORITHM_COUNTING_SORT_MOVE_PAR_HPP
 
-#include <burst/algorithm/counting_sort_copy_par.hpp>
+#include <burst/algorithm/counting_sort/counting_sort_copy_par.hpp>
 #include <burst/execution/parallel_policy.hpp>
 #include <burst/functional/identity.hpp>
 
