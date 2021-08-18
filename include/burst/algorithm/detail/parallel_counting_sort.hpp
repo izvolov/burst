@@ -1,5 +1,5 @@
-#ifndef BURST_ALGORITHM_DETAIL_PARALLEL_COUNTING_SORT_HPP
-#define BURST_ALGORITHM_DETAIL_PARALLEL_COUNTING_SORT_HPP
+#ifndef BURST__ALGORITHM__DETAIL__PARALLEL_COUNTING_SORT_HPP
+#define BURST__ALGORITHM__DETAIL__PARALLEL_COUNTING_SORT_HPP
 
 #include <burst/algorithm/detail/counting_sort.hpp>
 #include <burst/algorithm/detail/cross_partial_sum.hpp>
@@ -102,4 +102,4 @@ namespace burst
     } // namespace detail
 } // namespace burst
 
-#endif // BURST_ALGORITHM_DETAIL_PARALLEL_COUNTING_SORT_HPP
+#endif // BURST__ALGORITHM__DETAIL__PARALLEL_COUNTING_SORT_HPP

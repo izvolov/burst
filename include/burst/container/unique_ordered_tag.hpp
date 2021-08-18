@@ -1,5 +1,5 @@
-#ifndef BURST_CONTAINER_UNIQUE_ORDERED_TAG_HPP
-#define BURST_CONTAINER_UNIQUE_ORDERED_TAG_HPP
+#ifndef BURST__CONTAINER__UNIQUE_ORDERED_TAG_HPP
+#define BURST__CONTAINER__UNIQUE_ORDERED_TAG_HPP
 
 namespace burst
 {
@@ -22,4 +22,4 @@ namespace burst
     } // namespace container
 } // namespace burst
 
-#endif // BURST_CONTAINER_UNIQUE_ORDERED_TAG_HPP
+#endif // BURST__CONTAINER__UNIQUE_ORDERED_TAG_HPP

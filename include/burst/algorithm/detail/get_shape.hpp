@@ -1,5 +1,5 @@
-#ifndef BURST_ALGORITHM_DETAIL_GET_SHAPE_HPP
-#define BURST_ALGORITHM_DETAIL_GET_SHAPE_HPP
+#ifndef BURST__ALGORITHM__DETAIL__GET_SHAPE_HPP
+#define BURST__ALGORITHM__DETAIL__GET_SHAPE_HPP
 
 #include <burst/execution/parallel_policy.hpp>
 #include <burst/integer/divceil.hpp>
@@ -41,4 +41,4 @@ namespace burst
     } // namespace detail
 } // namespace burst
 
-#endif // BURST_ALGORITHM_DETAIL_GET_SHAPE_HPP
+#endif // BURST__ALGORITHM__DETAIL__GET_SHAPE_HPP

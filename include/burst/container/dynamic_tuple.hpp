@@ -1,5 +1,5 @@
-#ifndef BURST_CONTAINER_DYNAMIC_TUPLE_HPP
-#define BURST_CONTAINER_DYNAMIC_TUPLE_HPP
+#ifndef BURST__CONTAINER__DYNAMIC_TUPLE_HPP
+#define BURST__CONTAINER__DYNAMIC_TUPLE_HPP
 
 #include <burst/container/detail/dynamic_tuple_management.hpp>
 #include <burst/type_traits/aligned_volume.hpp>
@@ -494,4 +494,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_CONTAINER_DYNAMIC_TUPLE_HPP
+#endif // BURST__CONTAINER__DYNAMIC_TUPLE_HPP

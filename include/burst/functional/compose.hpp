@@ -1,5 +1,5 @@
-#ifndef BURST_FUNCTIONAL_COMPOSE_HPP
-#define BURST_FUNCTIONAL_COMPOSE_HPP
+#ifndef BURST__FUNCTIONAL__COMPOSE_HPP
+#define BURST__FUNCTIONAL__COMPOSE_HPP
 
 #include <type_traits>
 #include <utility>
@@ -57,4 +57,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_FUNCTIONAL_COMPOSE_HPP
+#endif // BURST__FUNCTIONAL__COMPOSE_HPP

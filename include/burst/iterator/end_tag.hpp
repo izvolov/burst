@@ -1,5 +1,5 @@
-#ifndef BURST_ITERATOR_END_TAG_HPP
-#define BURST_ITERATOR_END_TAG_HPP
+#ifndef BURST__ITERATOR__END_TAG_HPP
+#define BURST__ITERATOR__END_TAG_HPP
 
 namespace burst
 {
@@ -23,4 +23,4 @@ namespace burst
     }
 }
 
-#endif // BURST_ITERATOR_END_TAG_HPP
+#endif // BURST__ITERATOR__END_TAG_HPP

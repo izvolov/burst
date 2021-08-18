@@ -1,5 +1,5 @@
-#ifndef BURST_FUNCTIONAL_LOW_BYTE_HPP
-#define BURST_FUNCTIONAL_LOW_BYTE_HPP
+#ifndef BURST__FUNCTIONAL__LOW_BYTE_HPP
+#define BURST__FUNCTIONAL__LOW_BYTE_HPP
 
 #include <cstdint>
 #include <type_traits>
@@ -28,4 +28,4 @@ namespace burst
     constexpr auto low_byte = low_byte_fn{};
 }
 
-#endif // BURST_FUNCTIONAL_LOW_BYTE_HPP
+#endif // BURST__FUNCTIONAL__LOW_BYTE_HPP

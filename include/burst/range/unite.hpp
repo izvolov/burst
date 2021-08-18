@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_UNITE_HPP
-#define BURST_RANGE_UNITE_HPP
+#ifndef BURST__RANGE__UNITE_HPP
+#define BURST__RANGE__UNITE_HPP
 
 #include <burst/iterator/end_tag.hpp>
 #include <burst/iterator/union_iterator.hpp>
@@ -44,4 +44,4 @@ namespace burst
     constexpr auto unite = unite_t{};
 } // namespace burst
 
-#endif // BURST_RANGE_UNITE_HPP
+#endif // BURST__RANGE__UNITE_HPP

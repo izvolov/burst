@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_ADAPTOR_TO_DEQUE_HPP
-#define BURST_RANGE_ADAPTOR_TO_DEQUE_HPP
+#ifndef BURST__RANGE__ADAPTOR__TO_DEQUE_HPP
+#define BURST__RANGE__ADAPTOR__TO_DEQUE_HPP
 
 #include <burst/range/adaptor/adaptor.hpp>
 #include <burst/container/make_deque.hpp>
@@ -37,4 +37,4 @@ namespace burst
     constexpr auto to_deque = make_adaptor_trigger(make_deque_t{});
 } // namespace burst
 
-#endif // BURST_RANGE_ADAPTOR_TO_DEQUE_HPP
+#endif // BURST__RANGE__ADAPTOR__TO_DEQUE_HPP

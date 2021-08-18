@@ -1,5 +1,5 @@
-#ifndef BURST_FUNCTIONAL_INVERT_HPP
-#define BURST_FUNCTIONAL_INVERT_HPP
+#ifndef BURST__FUNCTIONAL__INVERT_HPP
+#define BURST__FUNCTIONAL__INVERT_HPP
 
 #include <type_traits>
 #include <utility>
@@ -42,4 +42,4 @@ namespace burst
     }
 }
 
-#endif // BURST_FUNCTIONAL_INVERT_HPP
+#endif // BURST__FUNCTIONAL__INVERT_HPP

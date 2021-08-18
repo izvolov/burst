@@ -1,5 +1,5 @@
-#ifndef BURST_ALGORITHM_DETAIL_NTH_RADIX_HPP
-#define BURST_ALGORITHM_DETAIL_NTH_RADIX_HPP
+#ifndef BURST__ALGORITHM__DETAIL__NTH_RADIX_HPP
+#define BURST__ALGORITHM__DETAIL__NTH_RADIX_HPP
 
 #include <burst/algorithm/detail/radix_sort_traits.hpp>
 #include <burst/integer/right_shift.hpp>
@@ -27,4 +27,4 @@ namespace burst
     } // namespace detail
 } // namespace burst
 
-#endif // BURST_ALGORITHM_DETAIL_NTH_RADIX_HPP
+#endif // BURST__ALGORITHM__DETAIL__NTH_RADIX_HPP

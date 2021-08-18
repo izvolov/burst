@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_ISTREAM_RANGE_HPP
-#define BURST_RANGE_ISTREAM_RANGE_HPP
+#ifndef BURST__RANGE__ISTREAM_RANGE_HPP
+#define BURST__RANGE__ISTREAM_RANGE_HPP
 
 #include <boost/range/iterator_range.hpp>
 
@@ -19,4 +19,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_RANGE_ISTREAM_RANGE_HPP
+#endif // BURST__RANGE__ISTREAM_RANGE_HPP

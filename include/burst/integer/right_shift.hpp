@@ -1,5 +1,5 @@
-#ifndef BURST_INTEGER_RIGHT_SHIFT_HPP
-#define BURST_INTEGER_RIGHT_SHIFT_HPP
+#ifndef BURST__INTEGER__RIGHT_SHIFT_HPP
+#define BURST__INTEGER__RIGHT_SHIFT_HPP
 
 namespace burst
 {
@@ -15,4 +15,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_INTEGER_RIGHT_SHIFT_HPP
+#endif // BURST__INTEGER__RIGHT_SHIFT_HPP

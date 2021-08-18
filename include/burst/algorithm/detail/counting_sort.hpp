@@ -1,5 +1,5 @@
-#ifndef BURST_ALGORITHM_DETAIL_COUNTING_SORT_HPP
-#define BURST_ALGORITHM_DETAIL_COUNTING_SORT_HPP
+#ifndef BURST__ALGORITHM__DETAIL__COUNTING_SORT_HPP
+#define BURST__ALGORITHM__DETAIL__COUNTING_SORT_HPP
 
 #include <burst/algorithm/detail/counting_sort_traits.hpp>
 #include <burst/container/access/cback.hpp>
@@ -150,4 +150,4 @@ namespace burst
     } // namespace detail
 } // namespace burst
 
-#endif // BURST_ALGORITHM_DETAIL_COUNTING_SORT_HPP
+#endif // BURST__ALGORITHM__DETAIL__COUNTING_SORT_HPP

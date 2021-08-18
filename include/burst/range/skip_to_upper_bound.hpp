@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_SKIP_TO_UPPER_BOUND_HPP
-#define BURST_RANGE_SKIP_TO_UPPER_BOUND_HPP
+#ifndef BURST__RANGE__SKIP_TO_UPPER_BOUND_HPP
+#define BURST__RANGE__SKIP_TO_UPPER_BOUND_HPP
 
 #include <burst/range/detail/skip_to_upper_bound.hpp>
 
@@ -38,4 +38,4 @@ namespace burst
 
 }
 
-#endif // BURST_RANGE_SKIP_TO_UPPER_BOUND_HPP
+#endif // BURST__RANGE__SKIP_TO_UPPER_BOUND_HPP

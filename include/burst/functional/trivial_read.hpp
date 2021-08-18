@@ -1,5 +1,5 @@
-#ifndef BURST_FUNCTIONAL_TRIVIAL_READ_HPP
-#define BURST_FUNCTIONAL_TRIVIAL_READ_HPP
+#ifndef BURST__FUNCTIONAL__TRIVIAL_READ_HPP
+#define BURST__FUNCTIONAL__TRIVIAL_READ_HPP
 
 #include <istream>
 #include <memory>
@@ -19,4 +19,4 @@ namespace burst
     constexpr auto trivial_read = trivial_read_fn{};
 } // namespace burst
 
-#endif // BURST_FUNCTIONAL_TRIVIAL_READ_HPP
+#endif // BURST__FUNCTIONAL__TRIVIAL_READ_HPP

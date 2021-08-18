@@ -1,5 +1,5 @@
-#ifndef BURST_ALGORITHM_DETAIL_GALLOPING_SEARCH_HPP
-#define BURST_ALGORITHM_DETAIL_GALLOPING_SEARCH_HPP
+#ifndef BURST__ALGORITHM__DETAIL__GALLOPING_SEARCH_HPP
+#define BURST__ALGORITHM__DETAIL__GALLOPING_SEARCH_HPP
 
 #include <algorithm>
 #include <cassert>
@@ -46,4 +46,4 @@ namespace burst
     } // namespace detail
 } // namespace burst
 
-#endif // BURST_ALGORITHM_DETAIL_GALLOPING_SEARCH_HPP
+#endif // BURST__ALGORITHM__DETAIL__GALLOPING_SEARCH_HPP

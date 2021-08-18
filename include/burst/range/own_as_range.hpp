@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_OWN_AS_RANGE_HPP
-#define BURST_RANGE_OWN_AS_RANGE_HPP
+#ifndef BURST__RANGE__OWN_AS_RANGE_HPP
+#define BURST__RANGE__OWN_AS_RANGE_HPP
 
 #include <burst/iterator/owning_iterator.hpp>
 
@@ -30,4 +30,4 @@ namespace burst
     constexpr auto own_as_range = own_as_range_t{};
 } // namespace burst
 
-#endif // BURST_RANGE_OWN_AS_RANGE_HPP
+#endif // BURST__RANGE__OWN_AS_RANGE_HPP

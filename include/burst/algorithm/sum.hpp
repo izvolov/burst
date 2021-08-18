@@ -1,5 +1,5 @@
-#ifndef BURST_ALGORITHM_SUM_HPP
-#define BURST_ALGORITHM_SUM_HPP
+#ifndef BURST__ALGORITHM__SUM_HPP
+#define BURST__ALGORITHM__SUM_HPP
 
 #include <burst/concept/arithmetic.hpp>
 
@@ -38,4 +38,4 @@ namespace burst
     constexpr auto sum = sum_fn{};
 } // namespace burst
 
-#endif // BURST_ALGORITHM_SUM_HPP
+#endif // BURST__ALGORITHM__SUM_HPP

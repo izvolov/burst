@@ -1,5 +1,5 @@
-#ifndef BURST_TYPE_TRAITS_ALIGNED_VOLUME_HPP
-#define BURST_TYPE_TRAITS_ALIGNED_VOLUME_HPP
+#ifndef BURST__TYPE_TRAITS__ALIGNED_VOLUME_HPP
+#define BURST__TYPE_TRAITS__ALIGNED_VOLUME_HPP
 
 #include <burst/integer/intceil.hpp>
 
@@ -47,4 +47,4 @@ namespace burst
     constexpr auto aligned_volume_v = aligned_volume<Args...>::value;
 } // namespace burst
 
-#endif // BURST_TYPE_TRAITS_ALIGNED_VOLUME_HPP
+#endif // BURST__TYPE_TRAITS__ALIGNED_VOLUME_HPP

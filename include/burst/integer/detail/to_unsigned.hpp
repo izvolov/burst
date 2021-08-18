@@ -1,5 +1,5 @@
-#ifndef BURST_INTEGER_DETAIL_TO_UNSIGNED_HPP
-#define BURST_INTEGER_DETAIL_TO_UNSIGNED_HPP
+#ifndef BURST__INTEGER__DETAIL__TO_UNSIGNED_HPP
+#define BURST__INTEGER__DETAIL__TO_UNSIGNED_HPP
 
 #include <limits>
 #include <type_traits>
@@ -22,4 +22,4 @@ namespace burst
     } // namespace detail
 } // namespace burst
 
-#endif // BURST_INTEGER_DETAIL_TO_UNSIGNED_HPP
+#endif // BURST__INTEGER__DETAIL__TO_UNSIGNED_HPP

@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_TO_ANY_RANGE_HPP
-#define BURST_RANGE_TO_ANY_RANGE_HPP
+#ifndef BURST__RANGE__TO_ANY_RANGE_HPP
+#define BURST__RANGE__TO_ANY_RANGE_HPP
 
 #include <burst/type_traits/range_reference.hpp>
 #include <burst/type_traits/range_value.hpp>
@@ -44,4 +44,4 @@ namespace burst
     constexpr auto to_any_range = to_any_range_t<Traversal>{};
 } // namespace burst
 
-#endif // BURST_RANGE_TO_ANY_RANGE_HPP
+#endif // BURST__RANGE__TO_ANY_RANGE_HPP

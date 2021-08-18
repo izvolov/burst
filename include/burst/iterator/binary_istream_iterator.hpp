@@ -1,5 +1,5 @@
-#ifndef BURST_ITERATOR_BINARY_ISTREAM_ITERATOR_HPP
-#define BURST_ITERATOR_BINARY_ISTREAM_ITERATOR_HPP
+#ifndef BURST__ITERATOR__BINARY_ISTREAM_ITERATOR_HPP
+#define BURST__ITERATOR__BINARY_ISTREAM_ITERATOR_HPP
 
 #include <burst/functional/trivial_read.hpp>
 #include <burst/iterator/end_tag.hpp>
@@ -112,4 +112,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_ITERATOR_BINARY_ISTREAM_ITERATOR_HPP
+#endif // BURST__ITERATOR__BINARY_ISTREAM_ITERATOR_HPP

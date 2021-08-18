@@ -1,5 +1,5 @@
-#ifndef BURST_CONCEPT_CHECK_HPP
-#define BURST_CONCEPT_CHECK_HPP
+#ifndef BURST__CONCEPT__CHECK_HPP
+#define BURST__CONCEPT__CHECK_HPP
 
 #include <burst/type_traits/void_t.hpp>
 
@@ -41,4 +41,4 @@ namespace burst
     using Not = T;
 } // namespace burst
 
-#endif // BURST_CONCEPT_CHECK_HPP
+#endif // BURST__CONCEPT__CHECK_HPP

@@ -1,5 +1,5 @@
-#ifndef BURST_ALGORITHM_NEXT_SUBSEQUENCE_HPP
-#define BURST_ALGORITHM_NEXT_SUBSEQUENCE_HPP
+#ifndef BURST__ALGORITHM__NEXT_SUBSEQUENCE_HPP
+#define BURST__ALGORITHM__NEXT_SUBSEQUENCE_HPP
 
 #include <burst/algorithm/next_chain.hpp>
 
@@ -50,4 +50,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_ALGORITHM_NEXT_SUBSEQUENCE_HPP
+#endif // BURST__ALGORITHM__NEXT_SUBSEQUENCE_HPP

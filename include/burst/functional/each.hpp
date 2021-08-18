@@ -1,5 +1,5 @@
-#ifndef BURST_FUNCTIONAL_EACH_HPP
-#define BURST_FUNCTIONAL_EACH_HPP
+#ifndef BURST__FUNCTIONAL__EACH_HPP
+#define BURST__FUNCTIONAL__EACH_HPP
 
 #include <burst/functional/tupless.hpp>
 #include <burst/tuple/by_all.hpp>
@@ -29,4 +29,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_FUNCTIONAL_EACH_HPP
+#endif // BURST__FUNCTIONAL__EACH_HPP

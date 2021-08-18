@@ -1,5 +1,5 @@
-#ifndef BURST_TYPE_TRAITS_RANGE_VALUE_HPP
-#define BURST_TYPE_TRAITS_RANGE_VALUE_HPP
+#ifndef BURST__TYPE_TRAITS__RANGE_VALUE_HPP
+#define BURST__TYPE_TRAITS__RANGE_VALUE_HPP
 
 #include <boost/range/value_type.hpp>
 
@@ -9,4 +9,4 @@ namespace burst
     using range_value_t = typename boost::range_value<Range>::type;
 } // namespace burst
 
-#endif // BURST_TYPE_TRAITS_RANGE_VALUE_HPP
+#endif // BURST__TYPE_TRAITS__RANGE_VALUE_HPP

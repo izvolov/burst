@@ -1,5 +1,5 @@
-#ifndef BURST_ALGORITHM_COPY_AT_MOST_N_HPP
-#define BURST_ALGORITHM_COPY_AT_MOST_N_HPP
+#ifndef BURST__ALGORITHM__COPY_AT_MOST_N_HPP
+#define BURST__ALGORITHM__COPY_AT_MOST_N_HPP
 
 #include <burst/algorithm/detail/copy_at_most_n.hpp>
 #include <burst/type_traits/iterator_category.hpp>
@@ -71,4 +71,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_ALGORITHM_COPY_AT_MOST_N_HPP
+#endif // BURST__ALGORITHM__COPY_AT_MOST_N_HPP

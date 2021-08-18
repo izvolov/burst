@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_BITAP_HPP
-#define BURST_RANGE_BITAP_HPP
+#ifndef BURST__RANGE__BITAP_HPP
+#define BURST__RANGE__BITAP_HPP
 
 #include <burst/iterator/bitap_iterator.hpp>
 #include <burst/iterator/end_tag.hpp>
@@ -44,4 +44,4 @@ namespace burst
     }
 }
 
-#endif // BURST_RANGE_BITAP_HPP
+#endif // BURST__RANGE__BITAP_HPP

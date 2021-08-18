@@ -1,5 +1,5 @@
-#ifndef BURST_CONCEPT_INTEGER_HPP
-#define BURST_CONCEPT_INTEGER_HPP
+#ifndef BURST__CONCEPT__INTEGER_HPP
+#define BURST__CONCEPT__INTEGER_HPP
 
 #include <type_traits>
 
@@ -17,4 +17,4 @@ namespace burst
     using Integer = T;
 } // namespace burst
 
-#endif // BURST_CONCEPT_INTEGER_HPP
+#endif // BURST__CONCEPT__INTEGER_HPP

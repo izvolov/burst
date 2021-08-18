@@ -1,5 +1,5 @@
-#ifndef BURST_TUPLE_DETAIL_APPLY_HPP
-#define BURST_TUPLE_DETAIL_APPLY_HPP
+#ifndef BURST__TUPLE__DETAIL__APPLY_HPP
+#define BURST__TUPLE__DETAIL__APPLY_HPP
 
 #include <burst/functional/invoke.hpp>
 
@@ -26,4 +26,4 @@ namespace burst
     } // namespace detail
 } // namespace burst
 
-#endif // BURST_TUPLE_DETAIL_APPLY_HPP
+#endif // BURST__TUPLE__DETAIL__APPLY_HPP

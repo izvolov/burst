@@ -1,5 +1,5 @@
-#ifndef BURST_CONTAINER_ACCESS_FRONT_HPP
-#define BURST_CONTAINER_ACCESS_FRONT_HPP
+#ifndef BURST__CONTAINER__ACCESS__FRONT_HPP
+#define BURST__CONTAINER__ACCESS__FRONT_HPP
 
 #include <cstddef>
 
@@ -23,4 +23,4 @@ namespace burst
     constexpr auto front = front_t{};
 } // namespace burst
 
-#endif // BURST_CONTAINER_ACCESS_FRONT_HPP
+#endif // BURST__CONTAINER__ACCESS__FRONT_HPP

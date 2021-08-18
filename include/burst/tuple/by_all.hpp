@@ -1,5 +1,5 @@
-#ifndef BURST_TUPLE_BY_ALL_HPP
-#define BURST_TUPLE_BY_ALL_HPP
+#ifndef BURST__TUPLE__BY_ALL_HPP
+#define BURST__TUPLE__BY_ALL_HPP
 
 #include <burst/functional/compose.hpp>
 #include <burst/tuple/detail/by_all.hpp>
@@ -60,4 +60,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_TUPLE_BY_ALL_HPP
+#endif // BURST__TUPLE__BY_ALL_HPP

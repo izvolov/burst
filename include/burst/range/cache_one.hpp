@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_CACHE_ONE_HPP
-#define BURST_RANGE_CACHE_ONE_HPP
+#ifndef BURST__RANGE__CACHE_ONE_HPP
+#define BURST__RANGE__CACHE_ONE_HPP
 
 #include <burst/iterator/cache_iterator.hpp>
 
@@ -28,4 +28,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_RANGE_CACHE_ONE_HPP
+#endif // BURST__RANGE__CACHE_ONE_HPP

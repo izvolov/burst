@@ -1,5 +1,5 @@
-#ifndef BURST_TYPE_TRAITS_ITERATOR_DIFFERENCE_HPP
-#define BURST_TYPE_TRAITS_ITERATOR_DIFFERENCE_HPP
+#ifndef BURST__TYPE_TRAITS__ITERATOR_DIFFERENCE_HPP
+#define BURST__TYPE_TRAITS__ITERATOR_DIFFERENCE_HPP
 
 #include <iterator>
 
@@ -9,4 +9,4 @@ namespace burst
     using iterator_difference_t = typename std::iterator_traits<Iterator>::difference_type;
 }
 
-#endif // BURST_TYPE_TRAITS_ITERATOR_DIFFERENCE_HPP
+#endif // BURST__TYPE_TRAITS__ITERATOR_DIFFERENCE_HPP

@@ -1,5 +1,5 @@
-#ifndef BURST_CONCEPT_ARITHMETIC_HPP
-#define BURST_CONCEPT_ARITHMETIC_HPP
+#ifndef BURST__CONCEPT__ARITHMETIC_HPP
+#define BURST__CONCEPT__ARITHMETIC_HPP
 
 #include <type_traits>
 
@@ -17,4 +17,4 @@ namespace burst
     using Arithmetic = T;
 } // namespace burst
 
-#endif // BURST_CONCEPT_ARITHMETIC_HPP
+#endif // BURST__CONCEPT__ARITHMETIC_HPP

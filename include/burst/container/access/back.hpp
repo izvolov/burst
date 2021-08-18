@@ -1,5 +1,5 @@
-#ifndef BURST_CONTAINER_ACCESS_BACK_HPP
-#define BURST_CONTAINER_ACCESS_BACK_HPP
+#ifndef BURST__CONTAINER__ACCESS__BACK_HPP
+#define BURST__CONTAINER__ACCESS__BACK_HPP
 
 #include <cstddef>
 
@@ -23,4 +23,4 @@ namespace burst
     constexpr auto back = back_t{};
 } // namespace burst
 
-#endif // BURST_CONTAINER_ACCESS_BACK_HPP
+#endif // BURST__CONTAINER__ACCESS__BACK_HPP

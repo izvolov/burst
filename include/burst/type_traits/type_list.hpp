@@ -1,5 +1,5 @@
-#ifndef BURST_TYPE_TRAITS_TYPE_LIST_HPP
-#define BURST_TYPE_TRAITS_TYPE_LIST_HPP
+#ifndef BURST__TYPE_TRAITS__TYPE_LIST_HPP
+#define BURST__TYPE_TRAITS__TYPE_LIST_HPP
 
 namespace burst
 {
@@ -7,4 +7,4 @@ namespace burst
     struct type_list {};
 } // namespace burst
 
-#endif // BURST_TYPE_TRAITS_TYPE_LIST_HPP
+#endif // BURST__TYPE_TRAITS__TYPE_LIST_HPP

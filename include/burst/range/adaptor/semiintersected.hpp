@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_ADAPTOR_SEMIINTERSECTED_HPP
-#define BURST_RANGE_ADAPTOR_SEMIINTERSECTED_HPP
+#ifndef BURST__RANGE__ADAPTOR__SEMIINTERSECTED_HPP
+#define BURST__RANGE__ADAPTOR__SEMIINTERSECTED_HPP
 
 #include <burst/range/adaptor/adaptor.hpp>
 #include <burst/range/semiintersect.hpp>
@@ -21,4 +21,4 @@ namespace burst
     constexpr auto semiintersected = make_adaptor_trigger(semiintersect);
 } // namespace burst
 
-#endif // BURST_RANGE_ADAPTOR_SEMIINTERSECTED_HPP
+#endif // BURST__RANGE__ADAPTOR__SEMIINTERSECTED_HPP

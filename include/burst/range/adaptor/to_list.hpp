@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_ADAPTOR_TO_LIST_HPP
-#define BURST_RANGE_ADAPTOR_TO_LIST_HPP
+#ifndef BURST__RANGE__ADAPTOR__TO_LIST_HPP
+#define BURST__RANGE__ADAPTOR__TO_LIST_HPP
 
 #include <burst/range/adaptor/adaptor.hpp>
 #include <burst/container/make_list.hpp>
@@ -37,4 +37,4 @@ namespace burst
     constexpr auto to_list = make_adaptor_trigger(make_list_t{});
 } // namespace burst
 
-#endif // BURST_RANGE_ADAPTOR_TO_LIST_HPP
+#endif // BURST__RANGE__ADAPTOR__TO_LIST_HPP

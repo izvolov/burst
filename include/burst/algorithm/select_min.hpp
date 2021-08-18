@@ -1,5 +1,5 @@
-#ifndef BURST_ALGORITHM_SELECT_MIN_HPP
-#define BURST_ALGORITHM_SELECT_MIN_HPP
+#ifndef BURST__ALGORITHM__SELECT_MIN_HPP
+#define BURST__ALGORITHM__SELECT_MIN_HPP
 
 #include <functional>
 #include <iterator>
@@ -90,4 +90,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_ALGORITHM_SELECT_MIN_HPP
+#endif // BURST__ALGORITHM__SELECT_MIN_HPP

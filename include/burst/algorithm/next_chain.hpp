@@ -1,5 +1,5 @@
-#ifndef BURST_ALGORITHM_NEXT_CHAIN_HPP
-#define BURST_ALGORITHM_NEXT_CHAIN_HPP
+#ifndef BURST__ALGORITHM__NEXT_CHAIN_HPP
+#define BURST__ALGORITHM__NEXT_CHAIN_HPP
 
 #include <iterator>
 
@@ -176,4 +176,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_ALGORITHM_NEXT_CHAIN_HPP
+#endif // BURST__ALGORITHM__NEXT_CHAIN_HPP

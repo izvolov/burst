@@ -1,5 +1,5 @@
-#ifndef BURST_ITERATOR_TAKE_AT_MOST_ITERATOR_HPP
-#define BURST_ITERATOR_TAKE_AT_MOST_ITERATOR_HPP
+#ifndef BURST__ITERATOR__TAKE_AT_MOST_ITERATOR_HPP
+#define BURST__ITERATOR__TAKE_AT_MOST_ITERATOR_HPP
 
 #include <burst/iterator/end_tag.hpp>
 #include <burst/type_traits/iterator_category.hpp>
@@ -179,4 +179,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_ITERATOR_TAKE_AT_MOST_ITERATOR_HPP
+#endif // BURST__ITERATOR__TAKE_AT_MOST_ITERATOR_HPP

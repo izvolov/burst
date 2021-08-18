@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_DIFFERENCE_HPP
-#define BURST_RANGE_DIFFERENCE_HPP
+#ifndef BURST__RANGE__DIFFERENCE_HPP
+#define BURST__RANGE__DIFFERENCE_HPP
 
 #include <burst/iterator/difference_iterator.hpp>
 #include <burst/iterator/end_tag.hpp>
@@ -54,4 +54,4 @@ namespace burst
     }
 }
 
-#endif // BURST_RANGE_DIFFERENCE_HPP
+#endif // BURST__RANGE__DIFFERENCE_HPP

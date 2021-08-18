@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_TAKE_EXACTLY_HPP
-#define BURST_RANGE_TAKE_EXACTLY_HPP
+#ifndef BURST__RANGE__TAKE_EXACTLY_HPP
+#define BURST__RANGE__TAKE_EXACTLY_HPP
 
 #include <burst/range/detail/take_exactly.hpp>
 #include <burst/type_traits/range_iterator.hpp>
@@ -48,4 +48,4 @@ namespace burst
     constexpr auto take_exactly = take_exactly_t{};
 } // namespace burst
 
-#endif // BURST_RANGE_TAKE_EXACTLY_HPP
+#endif // BURST__RANGE__TAKE_EXACTLY_HPP

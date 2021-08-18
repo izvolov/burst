@@ -1,5 +1,5 @@
-#ifndef BURST_FUNCTIONAL_MEMBER_HPP
-#define BURST_FUNCTIONAL_MEMBER_HPP
+#ifndef BURST__FUNCTIONAL__MEMBER_HPP
+#define BURST__FUNCTIONAL__MEMBER_HPP
 
 #include <burst/functional/func.hpp>
 
@@ -14,4 +14,4 @@
         return (std::forward<decltype(x)>(x).m);\
     })
 
-#endif // BURST_FUNCTIONAL_MEMBER_HPP
+#endif // BURST__FUNCTIONAL__MEMBER_HPP

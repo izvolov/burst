@@ -1,5 +1,5 @@
-#ifndef BURST_TYPE_TRAITS_VOID_T_HPP
-#define BURST_TYPE_TRAITS_VOID_T_HPP
+#ifndef BURST__TYPE_TRAITS__VOID_T_HPP
+#define BURST__TYPE_TRAITS__VOID_T_HPP
 
 namespace burst
 {
@@ -7,4 +7,4 @@ namespace burst
     using void_t = void;
 } // namespace burst
 
-#endif // BURST_TYPE_TRAITS_VOID_T_HPP
+#endif // BURST__TYPE_TRAITS__VOID_T_HPP

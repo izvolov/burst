@@ -1,5 +1,5 @@
-#ifndef BURST_FUNCTIONAL_TO_UNSIGNED_HPP
-#define BURST_FUNCTIONAL_TO_UNSIGNED_HPP
+#ifndef BURST__INTEGER__TO_UNSIGNED_HPP
+#define BURST__INTEGER__TO_UNSIGNED_HPP
 
 #include <burst/concept/integer.hpp>
 #include <burst/integer/detail/to_unsigned.hpp>
@@ -27,4 +27,4 @@ namespace burst
     constexpr auto to_unsigned = to_unsigned_fn{};
 } // namespace burst
 
-#endif // BURST_FUNCTIONAL_TO_UNSIGNED_HPP
+#endif // BURST__INTEGER__TO_UNSIGNED_HPP

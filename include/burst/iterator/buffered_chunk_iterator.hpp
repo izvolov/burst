@@ -1,5 +1,5 @@
-#ifndef BURST_ITERATOR_BUFFERED_CHUNK_ITERATOR_HPP
-#define BURST_ITERATOR_BUFFERED_CHUNK_ITERATOR_HPP
+#ifndef BURST__ITERATOR__BUFFERED_CHUNK_ITERATOR_HPP
+#define BURST__ITERATOR__BUFFERED_CHUNK_ITERATOR_HPP
 
 #include <burst/algorithm/copy_at_most_n.hpp>
 #include <burst/iterator/end_tag.hpp>
@@ -194,4 +194,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_ITERATOR_BUFFERED_CHUNK_ITERATOR_HPP
+#endif // BURST__ITERATOR__BUFFERED_CHUNK_ITERATOR_HPP

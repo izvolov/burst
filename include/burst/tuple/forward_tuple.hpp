@@ -1,5 +1,5 @@
-#ifndef BURST_TUPLE_FORWARD_TUPLE_HPP
-#define BURST_TUPLE_FORWARD_TUPLE_HPP
+#ifndef BURST__TUPLE__FORWARD_TUPLE_HPP
+#define BURST__TUPLE__FORWARD_TUPLE_HPP
 
 #include <burst/tuple/apply.hpp>
 #include <burst/tuple/forward_as_tuple.hpp>
@@ -31,4 +31,4 @@ namespace burst
     constexpr auto forward_tuple = forward_tuple_fn{};
 } // namespace burst
 
-#endif // BURST_TUPLE_FORWARD_TUPLE_HPP
+#endif // BURST__TUPLE__FORWARD_TUPLE_HPP

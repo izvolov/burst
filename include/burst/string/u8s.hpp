@@ -1,5 +1,5 @@
-#ifndef BURST_STRING_U8S_HPP
-#define BURST_STRING_U8S_HPP
+#ifndef BURST__STRING__U8S_HPP
+#define BURST__STRING__U8S_HPP
 
 #include <cstddef>
 #include <string>
@@ -23,4 +23,4 @@ namespace burst
     }
 }
 
-#endif // BURST_STRING_U8S_HPP
+#endif // BURST__STRING__U8S_HPP

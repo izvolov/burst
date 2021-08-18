@@ -1,5 +1,5 @@
-#ifndef BURST_CONTAINER_MAKE_SEQUENCE_CONTAINER_HPP
-#define BURST_CONTAINER_MAKE_SEQUENCE_CONTAINER_HPP
+#ifndef BURST__CONTAINER__MAKE_SEQUENCE_CONTAINER_HPP
+#define BURST__CONTAINER__MAKE_SEQUENCE_CONTAINER_HPP
 
 #include <burst/concept/check.hpp>
 #include <burst/concept/integer.hpp>
@@ -205,4 +205,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_CONTAINER_MAKE_SEQUENCE_CONTAINER_HPP
+#endif // BURST__CONTAINER__MAKE_SEQUENCE_CONTAINER_HPP

@@ -1,5 +1,5 @@
-#ifndef BURST_TUPLE_GET_HPP
-#define BURST_TUPLE_GET_HPP
+#ifndef BURST__TUPLE__GET_HPP
+#define BURST__TUPLE__GET_HPP
 
 #include <burst/functional/compose.hpp>
 
@@ -39,4 +39,4 @@ namespace burst
     constexpr auto third = get<2>;
 } // namespace burst
 
-#endif // BURST_TUPLE_GET_HPP
+#endif // BURST__TUPLE__GET_HPP

@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_ADAPTOR_MERGED_HPP
-#define BURST_RANGE_ADAPTOR_MERGED_HPP
+#ifndef BURST__RANGE__ADAPTOR__MERGED_HPP
+#define BURST__RANGE__ADAPTOR__MERGED_HPP
 
 #include <burst/range/adaptor/adaptor.hpp>
 #include <burst/range/merge.hpp>
@@ -21,4 +21,4 @@ namespace burst
     constexpr auto merged = make_adaptor_trigger(merge);
 } // namespace burst
 
-#endif // BURST_RANGE_ADAPTOR_MERGED_HPP
+#endif // BURST__RANGE__ADAPTOR__MERGED_HPP

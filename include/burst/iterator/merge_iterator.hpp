@@ -1,5 +1,5 @@
-#ifndef BURST_ITERATOR_MERGE_ITERATOR_HPP
-#define BURST_ITERATOR_MERGE_ITERATOR_HPP
+#ifndef BURST__ITERATOR__MERGE_ITERATOR_HPP
+#define BURST__ITERATOR__MERGE_ITERATOR_HPP
 
 #include <burst/container/access/front.hpp>
 #include <burst/functional/each.hpp>
@@ -274,4 +274,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_ITERATOR_MERGE_ITERATOR_HPP
+#endif // BURST__ITERATOR__MERGE_ITERATOR_HPP

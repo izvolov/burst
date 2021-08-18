@@ -1,5 +1,5 @@
-#ifndef BURST_ITERATOR_JOIN_ITERATOR_HPP
-#define BURST_ITERATOR_JOIN_ITERATOR_HPP
+#ifndef BURST__ITERATOR__JOIN_ITERATOR_HPP
+#define BURST__ITERATOR__JOIN_ITERATOR_HPP
 
 #include <burst/iterator/detail/join_iterator.hpp>
 #include <burst/iterator/detail/uniform_range_tuple_please.hpp>
@@ -158,4 +158,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_ITERATOR_JOIN_ITERATOR_HPP
+#endif // BURST__ITERATOR__JOIN_ITERATOR_HPP

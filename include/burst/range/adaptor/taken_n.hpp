@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_ADAPTOR_TAKEN_N_HPP
-#define BURST_RANGE_ADAPTOR_TAKEN_N_HPP
+#ifndef BURST__RANGE__ADAPTOR__TAKEN_N_HPP
+#define BURST__RANGE__ADAPTOR__TAKEN_N_HPP
 
 #include <burst/range/adaptor/adaptor.hpp>
 #include <burst/range/take_n.hpp>
@@ -13,4 +13,4 @@ namespace burst
     constexpr auto taken_n = make_adaptor_trigger(take_n);
 } // namespace burst
 
-#endif // BURST_RANGE_ADAPTOR_TAKEN_N_HPP
+#endif // BURST__RANGE__ADAPTOR__TAKEN_N_HPP

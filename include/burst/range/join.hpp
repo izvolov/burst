@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_JOIN_HPP
-#define BURST_RANGE_JOIN_HPP
+#ifndef BURST__RANGE__JOIN_HPP
+#define BURST__RANGE__JOIN_HPP
 
 #include <burst/iterator/end_tag.hpp>
 #include <burst/iterator/join_iterator.hpp>
@@ -42,4 +42,4 @@ namespace burst
     constexpr auto join = join_t{};
 }
 
-#endif // BURST_RANGE_JOIN_HPP
+#endif // BURST__RANGE__JOIN_HPP

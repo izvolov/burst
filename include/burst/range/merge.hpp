@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_MERGE_HPP
-#define BURST_RANGE_MERGE_HPP
+#ifndef BURST__RANGE__MERGE_HPP
+#define BURST__RANGE__MERGE_HPP
 
 #include <burst/iterator/end_tag.hpp>
 #include <burst/iterator/merge_iterator.hpp>
@@ -40,4 +40,4 @@ namespace burst
     constexpr auto merge = merge_t{};
 }
 
-#endif // BURST_RANGE_MERGE_HPP
+#endif // BURST__RANGE__MERGE_HPP

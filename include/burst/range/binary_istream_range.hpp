@@ -1,5 +1,5 @@
-#ifndef BURST_ITERATOR_BINARY_ISTREAM_RANGE_HPP
-#define BURST_ITERATOR_BINARY_ISTREAM_RANGE_HPP
+#ifndef BURST__RANGE__BINARY_ISTREAM_RANGE_HPP
+#define BURST__RANGE__BINARY_ISTREAM_RANGE_HPP
 
 #include <burst/iterator/binary_istream_iterator.hpp>
 #include <burst/iterator/end_tag.hpp>
@@ -21,4 +21,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_ITERATOR_BINARY_ISTREAM_RANGE_HPP
+#endif // BURST__RANGE__BINARY_ISTREAM_RANGE_HPP

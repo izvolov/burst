@@ -1,5 +1,5 @@
-#ifndef BURST_INTEGER_DETAIL_DIVCEIL_HPP
-#define BURST_INTEGER_DETAIL_DIVCEIL_HPP
+#ifndef BURST__INTEGER__DETAIL__DIVCEIL_HPP
+#define BURST__INTEGER__DETAIL__DIVCEIL_HPP
 
 #include <limits>
 #include <stdexcept>
@@ -88,4 +88,4 @@ namespace burst
     }
 }
 
-#endif // BURST_INTEGER_DETAIL_DIVCEIL_HPP
+#endif // BURST__INTEGER__DETAIL__DIVCEIL_HPP

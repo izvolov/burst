@@ -1,5 +1,5 @@
-#ifndef BURST_ITERATOR_DIFFERENCE_ITERATOR_HPP
-#define BURST_ITERATOR_DIFFERENCE_ITERATOR_HPP
+#ifndef BURST__ITERATOR__DIFFERENCE_ITERATOR_HPP
+#define BURST__ITERATOR__DIFFERENCE_ITERATOR_HPP
 
 #include <burst/iterator/end_tag.hpp>
 #include <burst/range/skip_to_lower_bound.hpp>
@@ -303,4 +303,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_ITERATOR_DIFFERENCE_ITERATOR_HPP
+#endif // BURST__ITERATOR__DIFFERENCE_ITERATOR_HPP

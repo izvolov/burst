@@ -1,5 +1,5 @@
-#ifndef BURST_INTEGER_INTPOW_HPP
-#define BURST_INTEGER_INTPOW_HPP
+#ifndef BURST__INTEGER__INTPOW_HPP
+#define BURST__INTEGER__INTPOW_HPP
 
 #include <stdexcept>
 #include <type_traits>
@@ -50,4 +50,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_INTEGER_INTPOW_HPP
+#endif // BURST__INTEGER__INTPOW_HPP

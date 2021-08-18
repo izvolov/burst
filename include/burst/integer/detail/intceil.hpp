@@ -1,5 +1,5 @@
-#ifndef BURST_INTEGER_DETAIL_INTCEIL_HPP
-#define BURST_INTEGER_DETAIL_INTCEIL_HPP
+#ifndef BURST__INTEGER__DETAIL__INTCEIL_HPP
+#define BURST__INTEGER__DETAIL__INTCEIL_HPP
 
 #include <burst/integer/detail/divceil.hpp>
 
@@ -18,4 +18,4 @@ namespace burst
     }
 }
 
-#endif // BURST_INTEGER_DETAIL_INTCEIL_HPP
+#endif // BURST__INTEGER__DETAIL__INTCEIL_HPP

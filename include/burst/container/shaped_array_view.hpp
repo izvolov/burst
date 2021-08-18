@@ -1,5 +1,5 @@
-#ifndef BURST_CONTAINER_SHAPED_ARRAY_VIEW_HPP
-#define BURST_CONTAINER_SHAPED_ARRAY_VIEW_HPP
+#ifndef BURST__CONTAINER__SHAPED_ARRAY_VIEW_HPP
+#define BURST__CONTAINER__SHAPED_ARRAY_VIEW_HPP
 
 #include <burst/container/detail/array_operations.hpp>
 #include <burst/container/detail/shaped_array_view_base.hpp>
@@ -355,4 +355,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_CONTAINER_SHAPED_ARRAY_VIEW_HPP
+#endif // BURST__CONTAINER__SHAPED_ARRAY_VIEW_HPP

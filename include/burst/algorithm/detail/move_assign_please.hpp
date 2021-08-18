@@ -1,5 +1,5 @@
-#ifndef BURST_ALGORITHM_DETAIL_MOVE_ASSIGN_PLEASE_HPP
-#define BURST_ALGORITHM_DETAIL_MOVE_ASSIGN_PLEASE_HPP
+#ifndef BURST__ALGORITHM__DETAIL__MOVE_ASSIGN_PLEASE_HPP
+#define BURST__ALGORITHM__DETAIL__MOVE_ASSIGN_PLEASE_HPP
 
 #include <burst/type_traits/iterator_value.hpp>
 
@@ -43,4 +43,4 @@ namespace burst
     } // namespace detail
 } // namespace burst
 
-#endif // BURST_ALGORITHM_DETAIL_MOVE_ASSIGN_PLEASE_HPP
+#endif // BURST__ALGORITHM__DETAIL__MOVE_ASSIGN_PLEASE_HPP

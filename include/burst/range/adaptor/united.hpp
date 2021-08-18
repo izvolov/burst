@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_ADAPTOR_UNITED_HPP
-#define BURST_RANGE_ADAPTOR_UNITED_HPP
+#ifndef BURST__RANGE__ADAPTOR__UNITED_HPP
+#define BURST__RANGE__ADAPTOR__UNITED_HPP
 
 #include <burst/range/adaptor/adaptor.hpp>
 #include <burst/range/unite.hpp>
@@ -21,4 +21,4 @@ namespace burst
     constexpr auto united = make_adaptor_trigger(unite);
 } // namespace burst
 
-#endif // BURST_RANGE_ADAPTOR_UNITED_HPP
+#endif // BURST__RANGE__ADAPTOR__UNITED_HPP

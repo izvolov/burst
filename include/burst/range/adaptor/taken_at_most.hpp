@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_ADAPTOR_TAKEN_AT_MOST_HPP
-#define BURST_RANGE_ADAPTOR_TAKEN_AT_MOST_HPP
+#ifndef BURST__RANGE__ADAPTOR__TAKEN_AT_MOST_HPP
+#define BURST__RANGE__ADAPTOR__TAKEN_AT_MOST_HPP
 
 #include <burst/range/adaptor/adaptor.hpp>
 #include <burst/range/take_at_most.hpp>
@@ -26,4 +26,4 @@ namespace burst
     constexpr auto taken_at_most = make_adaptor_trigger(take_at_most);
 } // namespace burst
 
-#endif // BURST_RANGE_ADAPTOR_TAKEN_AT_MOST_HPP
+#endif // BURST__RANGE__ADAPTOR__TAKEN_AT_MOST_HPP

@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_DETAIL_TAKE_AT_MOST_HPP
-#define BURST_RANGE_DETAIL_TAKE_AT_MOST_HPP
+#ifndef BURST__RANGE__DETAIL__TAKE_AT_MOST_HPP
+#define BURST__RANGE__DETAIL__TAKE_AT_MOST_HPP
 
 #include <burst/iterator/end_tag.hpp>
 #include <burst/iterator/take_at_most_iterator.hpp>
@@ -55,4 +55,4 @@ namespace burst
     } // namespace detail
 } // namespace burst
 
-#endif // BURST_RANGE_DETAIL_TAKE_AT_MOST_HPP
+#endif // BURST__RANGE__DETAIL__TAKE_AT_MOST_HPP

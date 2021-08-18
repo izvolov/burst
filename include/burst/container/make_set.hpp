@@ -1,5 +1,5 @@
-#ifndef BURST_CONTAINER_MAKE_SET_HPP
-#define BURST_CONTAINER_MAKE_SET_HPP
+#ifndef BURST__CONTAINER__MAKE_SET_HPP
+#define BURST__CONTAINER__MAKE_SET_HPP
 
 #include <boost/range/value_type.hpp>
 
@@ -140,4 +140,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_CONTAINER_MAKE_SET_HPP
+#endif // BURST__CONTAINER__MAKE_SET_HPP
