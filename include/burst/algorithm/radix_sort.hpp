@@ -2,6 +2,7 @@
 #define BURST_ALGORITHM_RADIX_SORT_HPP
 
 #include <burst/algorithm/detail/get_shape.hpp>
+#include <burst/algorithm/detail/parallel_radix_sort.hpp>
 #include <burst/algorithm/detail/radix_sort.hpp>
 #include <burst/execution/parallel_policy.hpp>
 #include <burst/functional/compose.hpp>
