@@ -133,7 +133,7 @@ assert(intersected_range == expected_collection);
 >
 > Также замеры производительности отключаются в случае, если Burst подключается в качестве подпроекта.
 
-> <sup>4</sup> `Boost.System` нужен только при использовании параллельных алгоритмов (например, [`radix_sort`](doc/README.md#intsort)).
+> <sup>4</sup> `Boost.System` нужен только при использовании параллельных алгоритмов (например, [параллельной версии `radix_sort`](doc/README.md#radix-par)).
 
 Установка
 ---------
