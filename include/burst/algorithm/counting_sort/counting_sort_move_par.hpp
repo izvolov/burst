@@ -1,5 +1,5 @@
-#ifndef BURST_ALGORITHM_COUNTING_SORT_MOVE_PAR_HPP
-#define BURST_ALGORITHM_COUNTING_SORT_MOVE_PAR_HPP
+#ifndef BURST__ALGORITHM__COUNTING_SORT__COUNTING_SORT_MOVE_PAR_HPP
+#define BURST__ALGORITHM__COUNTING_SORT__COUNTING_SORT_MOVE_PAR_HPP
 
 #include <burst/algorithm/counting_sort/counting_sort_copy_par.hpp>
 #include <burst/execution/parallel_policy.hpp>
@@ -74,4 +74,4 @@ namespace burst
     }
 }
 
-#endif // BURST_ALGORITHM_COUNTING_SORT_MOVE_PAR_HPP
+#endif // BURST__ALGORITHM__COUNTING_SORT__COUNTING_SORT_MOVE_PAR_HPP

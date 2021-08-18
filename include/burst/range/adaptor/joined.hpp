@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_ADAPTOR_JOINED_HPP
-#define BURST_RANGE_ADAPTOR_JOINED_HPP
+#ifndef BURST__RANGE__ADAPTOR__JOINED_HPP
+#define BURST__RANGE__ADAPTOR__JOINED_HPP
 
 #include <burst/range/adaptor/adaptor.hpp>
 #include <burst/range/join.hpp>
@@ -19,4 +19,4 @@ namespace burst
     constexpr auto joined = make_adaptor_trigger(join);
 } // namespace burst
 
-#endif // BURST_RANGE_ADAPTOR_JOINED_HPP
+#endif // BURST__RANGE__ADAPTOR__JOINED_HPP

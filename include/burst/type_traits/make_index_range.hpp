@@ -1,5 +1,5 @@
-#ifndef BURST_TYPE_TRAITS_MAKE_INDEX_RANGE_HPP
-#define BURST_TYPE_TRAITS_MAKE_INDEX_RANGE_HPP
+#ifndef BURST__TYPE_TRAITS__MAKE_INDEX_RANGE_HPP
+#define BURST__TYPE_TRAITS__MAKE_INDEX_RANGE_HPP
 
 #include <cstddef>
 #include <type_traits>
@@ -23,4 +23,4 @@ namespace burst
     using make_index_range = shift<std::make_index_sequence<End - Begin>, Begin>;
 } // namespace burst
 
-#endif // BURST_TYPE_TRAITS_MAKE_INDEX_RANGE_HPP
+#endif // BURST__TYPE_TRAITS__MAKE_INDEX_RANGE_HPP

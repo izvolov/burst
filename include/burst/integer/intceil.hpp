@@ -1,5 +1,5 @@
-#ifndef BURST_INTEGER_INTCEIL_HPP
-#define BURST_INTEGER_INTCEIL_HPP
+#ifndef BURST__INTEGER__INTCEIL_HPP
+#define BURST__INTEGER__INTCEIL_HPP
 
 #include <burst/concept/integer.hpp>
 #include <burst/integer/detail/intceil.hpp>
@@ -29,4 +29,4 @@ namespace burst
     }
 }
 
-#endif // BURST_INTEGER_INTCEIL_HPP
+#endif // BURST__INTEGER__INTCEIL_HPP

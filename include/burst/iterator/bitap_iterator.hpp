@@ -1,5 +1,5 @@
-#ifndef BURST_ITERATOR_BITAP_ITERATOR_HPP
-#define BURST_ITERATOR_BITAP_ITERATOR_HPP
+#ifndef BURST__ITERATOR__BITAP_ITERATOR_HPP
+#define BURST__ITERATOR__BITAP_ITERATOR_HPP
 
 #include <burst/algorithm/searching/bitap.hpp>
 #include <burst/iterator/end_tag.hpp>
@@ -138,4 +138,4 @@ namespace burst
     }
 }
 
-#endif // BURST_ITERATOR_BITAP_ITERATOR_HPP
+#endif // BURST__ITERATOR__BITAP_ITERATOR_HPP

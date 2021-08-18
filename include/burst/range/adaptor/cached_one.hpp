@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_ADAPTOR_CACHED_ONE_HPP
-#define BURST_RANGE_ADAPTOR_CACHED_ONE_HPP
+#ifndef BURST__RANGE__ADAPTOR__CACHED_ONE_HPP
+#define BURST__RANGE__ADAPTOR__CACHED_ONE_HPP
 
 #include <burst/range/cache_one.hpp>
 
@@ -31,4 +31,4 @@ namespace burst
     constexpr auto cached_one = detail::cache_one_trigger_t{};
 } // namespace burst
 
-#endif // BURST_RANGE_ADAPTOR_CACHED_ONE_HPP
+#endif // BURST__RANGE__ADAPTOR__CACHED_ONE_HPP

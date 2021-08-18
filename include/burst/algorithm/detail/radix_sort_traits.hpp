@@ -1,5 +1,5 @@
-#ifndef BURST_ALGORITHM_DETAIL_RADIX_SORT_TRAITS_HPP
-#define BURST_ALGORITHM_DETAIL_RADIX_SORT_TRAITS_HPP
+#ifndef BURST__ALGORITHM__DETAIL__RADIX_SORT_TRAITS_HPP
+#define BURST__ALGORITHM__DETAIL__RADIX_SORT_TRAITS_HPP
 
 #include <burst/integer/intlog2.hpp>
 
@@ -36,4 +36,4 @@ namespace burst
     } // namespace detail
 } // namespace burst
 
-#endif // BURST_ALGORITHM_DETAIL_RADIX_SORT_TRAITS_HPP
+#endif // BURST__ALGORITHM__DETAIL__RADIX_SORT_TRAITS_HPP

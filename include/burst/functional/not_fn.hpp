@@ -1,5 +1,5 @@
-#ifndef BURST_FUNCTIONAL_NOT_FN_HPP
-#define BURST_FUNCTIONAL_NOT_FN_HPP
+#ifndef BURST__FUNCTIONAL__NOT_FN_HPP
+#define BURST__FUNCTIONAL__NOT_FN_HPP
 
 #include <burst/functional/invoke.hpp>
 
@@ -40,4 +40,4 @@ namespace burst
     }
 }
 
-#endif // BURST_FUNCTIONAL_NOT_FN_HPP
+#endif // BURST__FUNCTIONAL__NOT_FN_HPP

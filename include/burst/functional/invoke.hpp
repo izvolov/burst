@@ -1,5 +1,5 @@
-#ifndef BURST_FUNCTIONAL_INVOKE_HPP
-#define BURST_FUNCTIONAL_INVOKE_HPP
+#ifndef BURST__FUNCTIONAL__INVOKE_HPP
+#define BURST__FUNCTIONAL__INVOKE_HPP
 
 #include <burst/type_traits/is_invokable.hpp>
 
@@ -25,4 +25,4 @@ namespace burst
     constexpr auto invoke = invoke_fn{};
 } // namespace burst
 
-#endif // BURST_FUNCTIONAL_INVOKE_HPP
+#endif // BURST__FUNCTIONAL__INVOKE_HPP

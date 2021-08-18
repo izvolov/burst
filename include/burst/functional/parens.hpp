@@ -1,5 +1,5 @@
-#ifndef BURST_FUNCTIONAL_PARENS_HPP
-#define BURST_FUNCTIONAL_PARENS_HPP
+#ifndef BURST__FUNCTIONAL__PARENS_HPP
+#define BURST__FUNCTIONAL__PARENS_HPP
 
 #include <utility>
 
@@ -24,4 +24,4 @@ namespace burst
     constexpr auto parens = parens_fn<T>{};
 }
 
-#endif // BURST_FUNCTIONAL_PARENS_HPP
+#endif // BURST__FUNCTIONAL__PARENS_HPP

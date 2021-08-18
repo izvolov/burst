@@ -1,5 +1,5 @@
-#ifndef BURST_CONTAINER_K_ARY_SEARCH_SET_HPP
-#define BURST_CONTAINER_K_ARY_SEARCH_SET_HPP
+#ifndef BURST__CONTAINER__K_ARY_SEARCH_SET_HPP
+#define BURST__CONTAINER__K_ARY_SEARCH_SET_HPP
 
 #include <burst/container/unique_ordered_tag.hpp>
 #include <burst/functional/not_fn.hpp>
@@ -476,4 +476,4 @@ namespace burst
     };
 }
 
-#endif // BURST_CONTAINER_K_ARY_SEARCH_SET_HPP
+#endif // BURST__CONTAINER__K_ARY_SEARCH_SET_HPP

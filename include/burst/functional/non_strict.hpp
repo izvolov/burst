@@ -1,5 +1,5 @@
-#ifndef BURST_FUNCTIONAL_NON_STRICT_HPP
-#define BURST_FUNCTIONAL_NON_STRICT_HPP
+#ifndef BURST__FUNCTIONAL__NON_STRICT_HPP
+#define BURST__FUNCTIONAL__NON_STRICT_HPP
 
 #include <burst/functional/invert.hpp>
 #include <burst/functional/not_fn.hpp>
@@ -19,4 +19,4 @@ namespace burst
     }
 }
 
-#endif // BURST_FUNCTIONAL_NON_STRICT_HPP
+#endif // BURST__FUNCTIONAL__NON_STRICT_HPP

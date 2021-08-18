@@ -1,5 +1,5 @@
-#ifndef BURST_ALGORITHM_RADIX_SORT_SEQ_HPP
-#define BURST_ALGORITHM_RADIX_SORT_SEQ_HPP
+#ifndef BURST__ALGORITHM__RADIX_SORT__RADIX_SORT_SEQ_HPP
+#define BURST__ALGORITHM__RADIX_SORT__RADIX_SORT_SEQ_HPP
 
 #include <burst/algorithm/detail/radix_sort.hpp>
 #include <burst/functional/compose.hpp>
@@ -191,4 +191,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_ALGORITHM_RADIX_SORT_SEQ_HPP
+#endif // BURST__ALGORITHM__RADIX_SORT__RADIX_SORT_SEQ_HPP

@@ -1,5 +1,5 @@
-#ifndef BURST_TUPLE_DETAIL_BY_HPP
-#define BURST_TUPLE_DETAIL_BY_HPP
+#ifndef BURST__TUPLE__DETAIL__BY_HPP
+#define BURST__TUPLE__DETAIL__BY_HPP
 
 #include <cstddef>
 #include <utility>
@@ -43,4 +43,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_TUPLE_DETAIL_BY_HPP
+#endif // BURST__TUPLE__DETAIL__BY_HPP

@@ -1,5 +1,5 @@
-#ifndef BURST_TYPE_TRAITS_MINIMUM_CATEGORY_HPP
-#define BURST_TYPE_TRAITS_MINIMUM_CATEGORY_HPP
+#ifndef BURST__TYPE_TRAITS__MINIMUM_CATEGORY_HPP
+#define BURST__TYPE_TRAITS__MINIMUM_CATEGORY_HPP
 
 #include <iterator>
 #include <type_traits>
@@ -39,4 +39,4 @@ namespace burst
     };
 } // namespace burst
 
-#endif // BURST_TYPE_TRAITS_MINIMUM_CATEGORY_HPP
+#endif // BURST__TYPE_TRAITS__MINIMUM_CATEGORY_HPP

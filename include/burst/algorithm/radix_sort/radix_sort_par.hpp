@@ -1,5 +1,5 @@
-#ifndef BURST_ALGORITHM_RADIX_SORT_PAR_HPP
-#define BURST_ALGORITHM_RADIX_SORT_PAR_HPP
+#ifndef BURST__ALGORITHM__RADIX_SORT__RADIX_SORT_PAR_HPP
+#define BURST__ALGORITHM__RADIX_SORT__RADIX_SORT_PAR_HPP
 
 #include <burst/algorithm/detail/get_shape.hpp>
 #include <burst/algorithm/detail/parallel_radix_sort.hpp>
@@ -178,4 +178,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_ALGORITHM_RADIX_SORT_PAR_HPP
+#endif // BURST__ALGORITHM__RADIX_SORT__RADIX_SORT_PAR_HPP

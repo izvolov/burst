@@ -1,5 +1,5 @@
-#ifndef BURST_TYPE_TRAITS_ARE_SAME_HPP
-#define BURST_TYPE_TRAITS_ARE_SAME_HPP
+#ifndef BURST__TYPE_TRAITS__ARE_SAME_HPP
+#define BURST__TYPE_TRAITS__ARE_SAME_HPP
 
 #include <burst/type_traits/type_list.hpp>
 
@@ -21,4 +21,4 @@ namespace burst
     constexpr const auto are_same_v = are_same<Ts...>::value;
 } // namespace burst
 
-#endif // BURST_TYPE_TRAITS_ARE_SAME_HPP
+#endif // BURST__TYPE_TRAITS__ARE_SAME_HPP

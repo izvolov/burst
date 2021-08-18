@@ -1,5 +1,5 @@
-#ifndef BURST_TYPE_TRAITS_ITERATOR_CATEGORY_HPP
-#define BURST_TYPE_TRAITS_ITERATOR_CATEGORY_HPP
+#ifndef BURST__TYPE_TRAITS__ITERATOR_CATEGORY_HPP
+#define BURST__TYPE_TRAITS__ITERATOR_CATEGORY_HPP
 
 #include <iterator>
 
@@ -9,4 +9,4 @@ namespace burst
     using iterator_category_t = typename std::iterator_traits<Iterator>::iterator_category;
 }
 
-#endif // BURST_TYPE_TRAITS_ITERATOR_CATEGORY_HPP
+#endif // BURST__TYPE_TRAITS__ITERATOR_CATEGORY_HPP

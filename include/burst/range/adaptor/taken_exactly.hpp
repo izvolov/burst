@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_ADAPTOR_TAKEN_EXACTLY_HPP
-#define BURST_RANGE_ADAPTOR_TAKEN_EXACTLY_HPP
+#ifndef BURST__RANGE__ADAPTOR__TAKEN_EXACTLY_HPP
+#define BURST__RANGE__ADAPTOR__TAKEN_EXACTLY_HPP
 
 #include <burst/range/adaptor/adaptor.hpp>
 #include <burst/range/take_exactly.hpp>
@@ -26,4 +26,4 @@ namespace burst
     constexpr auto taken_exactly = make_adaptor_trigger(take_exactly);
 } // namespace burst
 
-#endif // BURST_RANGE_ADAPTOR_TAKEN_EXACTLY_HPP
+#endif // BURST__RANGE__ADAPTOR__TAKEN_EXACTLY_HPP

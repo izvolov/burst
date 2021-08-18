@@ -1,5 +1,5 @@
-#ifndef BURST_VARIADIC_HPP
-#define BURST_VARIADIC_HPP
+#ifndef BURST__VARIADIC_HPP
+#define BURST__VARIADIC_HPP
 
 #include <initializer_list>
 
@@ -42,4 +42,4 @@ namespace burst
 #define BURST_EXPAND_VARIADIC(expression) \
     burst::detail::dummy({(expression, 0)...})
 
-#endif // BURST_VARIADIC_HPP
+#endif // BURST__VARIADIC_HPP

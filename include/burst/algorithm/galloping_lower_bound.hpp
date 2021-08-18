@@ -1,5 +1,5 @@
-#ifndef BURST_ALGORITHM_GALLOPING_LOWER_BOUND_HPP
-#define BURST_ALGORITHM_GALLOPING_LOWER_BOUND_HPP
+#ifndef BURST__ALGORITHM__GALLOPING_LOWER_BOUND_HPP
+#define BURST__ALGORITHM__GALLOPING_LOWER_BOUND_HPP
 
 #include <burst/algorithm/detail/galloping_search.hpp>
 
@@ -94,4 +94,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_ALGORITHM_GALLOPING_LOWER_BOUND_HPP
+#endif // BURST__ALGORITHM__GALLOPING_LOWER_BOUND_HPP

@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_DETAIL_TAKE_EXACTLY_HPP
-#define BURST_RANGE_DETAIL_TAKE_EXACTLY_HPP
+#ifndef BURST__RANGE__DETAIL__TAKE_EXACTLY_HPP
+#define BURST__RANGE__DETAIL__TAKE_EXACTLY_HPP
 
 #include <burst/iterator/end_tag.hpp>
 #include <burst/iterator/take_exactly_iterator.hpp>
@@ -48,4 +48,4 @@ namespace burst
     } // namespace detail
 } // namespace burst
 
-#endif // BURST_RANGE_DETAIL_TAKE_EXACTLY_HPP
+#endif // BURST__RANGE__DETAIL__TAKE_EXACTLY_HPP

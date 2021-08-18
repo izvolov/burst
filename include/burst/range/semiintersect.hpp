@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_SEMIINTERSECT_HPP
-#define BURST_RANGE_SEMIINTERSECT_HPP
+#ifndef BURST__RANGE__SEMIINTERSECT_HPP
+#define BURST__RANGE__SEMIINTERSECT_HPP
 
 #include <burst/iterator/end_tag.hpp>
 #include <burst/iterator/semiintersect_iterator.hpp>
@@ -44,4 +44,4 @@ namespace burst
     constexpr auto semiintersect = semiintersect_t{};
 }
 
-#endif // BURST_RANGE_SEMIINTERSECT_HPP
+#endif // BURST__RANGE__SEMIINTERSECT_HPP

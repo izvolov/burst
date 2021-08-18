@@ -1,5 +1,5 @@
-#ifndef BURST_FUNCTIONAL_TRIVIAL_WRITE_HPP
-#define BURST_FUNCTIONAL_TRIVIAL_WRITE_HPP
+#ifndef BURST__FUNCTIONAL__TRIVIAL_WRITE_HPP
+#define BURST__FUNCTIONAL__TRIVIAL_WRITE_HPP
 
 #include <memory>
 #include <ostream>
@@ -24,4 +24,4 @@ namespace burst
     constexpr auto trivial_write = trivial_write_fn{};
 } // namespace burst
 
-#endif // BURST_FUNCTIONAL_TRIVIAL_WRITE_HPP
+#endif // BURST__FUNCTIONAL__TRIVIAL_WRITE_HPP

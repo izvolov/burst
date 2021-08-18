@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_MAKE_RANGE_VECTOR_HPP
-#define BURST_RANGE_MAKE_RANGE_VECTOR_HPP
+#ifndef BURST__RANGE__MAKE_RANGE_VECTOR_HPP
+#define BURST__RANGE__MAKE_RANGE_VECTOR_HPP
 
 #include <burst/container/make_vector.hpp>
 
@@ -24,4 +24,4 @@ namespace burst
     constexpr auto make_range_vector = make_range_vector_t{};
 } // namespace burst
 
-#endif // BURST_RANGE_MAKE_RANGE_VECTOR_HPP
+#endif // BURST__RANGE__MAKE_RANGE_VECTOR_HPP

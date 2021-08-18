@@ -1,5 +1,5 @@
-#ifndef BURST_FUNCTIONAL_FUNC_HPP
-#define BURST_FUNCTIONAL_FUNC_HPP
+#ifndef BURST__FUNCTIONAL__FUNC_HPP
+#define BURST__FUNCTIONAL__FUNC_HPP
 
 #include <burst/functional/compose.hpp>
 #include <burst/functional/invoke.hpp>
@@ -51,4 +51,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_FUNCTIONAL_FUNC_HPP
+#endif // BURST__FUNCTIONAL__FUNC_HPP

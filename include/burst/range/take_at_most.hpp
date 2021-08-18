@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_TAKE_AT_MOST_HPP
-#define BURST_RANGE_TAKE_AT_MOST_HPP
+#ifndef BURST__RANGE__TAKE_AT_MOST_HPP
+#define BURST__RANGE__TAKE_AT_MOST_HPP
 
 #include <burst/range/detail/take_at_most.hpp>
 #include <burst/type_traits/iterator_category.hpp>
@@ -71,4 +71,4 @@ namespace burst
     constexpr auto take_at_most = take_at_most_t{};
 } // namespace burst
 
-#endif // BURST_RANGE_TAKE_AT_MOST_HPP
+#endif // BURST__RANGE__TAKE_AT_MOST_HPP

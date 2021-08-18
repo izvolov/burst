@@ -1,5 +1,5 @@
-#ifndef BURST_CONTAINER_MAKE_VECTOR_HPP
-#define BURST_CONTAINER_MAKE_VECTOR_HPP
+#ifndef BURST__CONTAINER__MAKE_VECTOR_HPP
+#define BURST__CONTAINER__MAKE_VECTOR_HPP
 
 #include <burst/container/make_sequence_container.hpp>
 
@@ -43,4 +43,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_CONTAINER_MAKE_VECTOR_HPP
+#endif // BURST__CONTAINER__MAKE_VECTOR_HPP

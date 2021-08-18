@@ -1,5 +1,5 @@
-#ifndef BURST_EXECUTION_PARALLEL_POLICY_HPP
-#define BURST_EXECUTION_PARALLEL_POLICY_HPP
+#ifndef BURST__EXECUTION__PARALLEL_POLICY_HPP
+#define BURST__EXECUTION__PARALLEL_POLICY_HPP
 
 #include <cassert>
 #include <cstddef>
@@ -25,4 +25,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_EXECUTION_PARALLEL_POLICY_HPP
+#endif // BURST__EXECUTION__PARALLEL_POLICY_HPP

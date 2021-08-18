@@ -1,5 +1,5 @@
-#ifndef BURST_ALGORITHM_SEARCHING_BITAP_HPP
-#define BURST_ALGORITHM_SEARCHING_BITAP_HPP
+#ifndef BURST__ALGORITHM__SEARCHING__BITAP_HPP
+#define BURST__ALGORITHM__SEARCHING__BITAP_HPP
 
 #include <burst/algorithm/searching/detail/bitmask_traits.hpp>
 #include <burst/algorithm/searching/detail/element_position_bitmask_table.hpp>
@@ -285,4 +285,4 @@ namespace burst
     } // namespace algorithm
 } // namespace burst
 
-#endif // BURST_ALGORITHM_SEARCHING_BITAP_HPP
+#endif // BURST__ALGORITHM__SEARCHING__BITAP_HPP

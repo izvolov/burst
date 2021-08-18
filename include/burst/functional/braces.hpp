@@ -1,5 +1,5 @@
-#ifndef BURST_FUNCTIONAL_BRACES_HPP
-#define BURST_FUNCTIONAL_BRACES_HPP
+#ifndef BURST__FUNCTIONAL__BRACES_HPP
+#define BURST__FUNCTIONAL__BRACES_HPP
 
 #include <utility>
 
@@ -24,4 +24,4 @@ namespace burst
     constexpr auto braces = braces_fn<T>{};
 }
 
-#endif // BURST_FUNCTIONAL_BRACES_HPP
+#endif // BURST__FUNCTIONAL__BRACES_HPP

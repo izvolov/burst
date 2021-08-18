@@ -1,5 +1,5 @@
-#ifndef BURST_FUNCTIONAL_MEM_FN_HPP
-#define BURST_FUNCTIONAL_MEM_FN_HPP
+#ifndef BURST__FUNCTIONAL__MEM_FN_HPP
+#define BURST__FUNCTIONAL__MEM_FN_HPP
 
 #include <burst/functional/func.hpp>
 
@@ -12,4 +12,4 @@
         return std::forward<decltype(x)>(x).f(std::forward<decltype(args)>(args)...);\
     })
 
-#endif // BURST_FUNCTIONAL_MEM_FN_HPP
+#endif // BURST__FUNCTIONAL__MEM_FN_HPP

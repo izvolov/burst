@@ -1,5 +1,5 @@
-#ifndef BURST_TUPLE_APPLY_HPP
-#define BURST_TUPLE_APPLY_HPP
+#ifndef BURST__TUPLE__APPLY_HPP
+#define BURST__TUPLE__APPLY_HPP
 
 #include <burst/functional/compose.hpp>
 #include <burst/tuple/detail/apply.hpp>
@@ -66,4 +66,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_TUPLE_APPLY_HPP
+#endif // BURST__TUPLE__APPLY_HPP

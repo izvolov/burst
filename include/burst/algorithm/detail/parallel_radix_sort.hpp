@@ -1,5 +1,5 @@
-#ifndef BURST_ALGORITHM_DETAIL_PARALLEL_RADIX_SORT_HPP
-#define BURST_ALGORITHM_DETAIL_PARALLEL_RADIX_SORT_HPP
+#ifndef BURST__ALGORITHM__DETAIL__PARALLEL_RADIX_SORT_HPP
+#define BURST__ALGORITHM__DETAIL__PARALLEL_RADIX_SORT_HPP
 
 #include <burst/algorithm/detail/move_assign_please.hpp>
 #include <burst/algorithm/detail/nth_radix.hpp>
@@ -81,4 +81,4 @@ namespace burst
     } // namespace detail
 } // namespace burst
 
-#endif // BURST_ALGORITHM_DETAIL_PARALLEL_RADIX_SORT_HPP
+#endif // BURST__ALGORITHM__DETAIL__PARALLEL_RADIX_SORT_HPP

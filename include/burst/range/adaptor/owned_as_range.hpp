@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_ADAPTOR_OWNED_AS_RANGE_HPP
-#define BURST_RANGE_ADAPTOR_OWNED_AS_RANGE_HPP
+#ifndef BURST__RANGE__ADAPTOR__OWNED_AS_RANGE_HPP
+#define BURST__RANGE__ADAPTOR__OWNED_AS_RANGE_HPP
 
 #include <burst/range/adaptor/adaptor.hpp>
 #include <burst/range/own_as_range.hpp>
@@ -19,4 +19,4 @@ namespace burst
     constexpr auto owned_as_range = make_adaptor_trigger(own_as_range);
 } // namespace burst
 
-#endif // BURST_RANGE_ADAPTOR_OWNED_AS_RANGE_HPP
+#endif // BURST__RANGE__ADAPTOR__OWNED_AS_RANGE_HPP

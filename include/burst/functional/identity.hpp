@@ -1,5 +1,5 @@
-#ifndef BURST_FUNCTIONAL_IDENTITY_HPP
-#define BURST_FUNCTIONAL_IDENTITY_HPP
+#ifndef BURST__FUNCTIONAL__IDENTITY_HPP
+#define BURST__FUNCTIONAL__IDENTITY_HPP
 
 #include <utility>
 
@@ -20,4 +20,4 @@ namespace burst
     constexpr auto identity = identity_fn{};
 }
 
-#endif // BURST_FUNCTIONAL_IDENTITY_HPP
+#endif // BURST__FUNCTIONAL__IDENTITY_HPP

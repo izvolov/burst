@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_SUBSETS_HPP
-#define BURST_RANGE_SUBSETS_HPP
+#ifndef BURST__RANGE__SUBSETS_HPP
+#define BURST__RANGE__SUBSETS_HPP
 
 #include <burst/iterator/subset_iterator.hpp>
 
@@ -43,4 +43,4 @@ namespace burst
     }
 }
 
-#endif // BURST_RANGE_SUBSETS_HPP
+#endif // BURST__RANGE__SUBSETS_HPP

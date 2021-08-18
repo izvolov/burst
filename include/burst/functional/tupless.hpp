@@ -1,5 +1,5 @@
-#ifndef BURST_FUNCTIONAL_TUPLESS_HPP
-#define BURST_FUNCTIONAL_TUPLESS_HPP
+#ifndef BURST__FUNCTIONAL__TUPLESS_HPP
+#define BURST__FUNCTIONAL__TUPLESS_HPP
 
 #include <burst/functional/compose.hpp>
 #include <burst/tuple/apply.hpp>
@@ -59,4 +59,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_FUNCTIONAL_TUPLESS_HPP
+#endif // BURST__FUNCTIONAL__TUPLESS_HPP

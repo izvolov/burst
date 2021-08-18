@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_BUFFERED_CHUNKS_HPP
-#define BURST_RANGE_BUFFERED_CHUNKS_HPP
+#ifndef BURST__RANGE__BUFFERED_CHUNKS_HPP
+#define BURST__RANGE__BUFFERED_CHUNKS_HPP
 
 #include <burst/iterator/buffered_chunk_iterator.hpp>
 #include <burst/iterator/end_tag.hpp>
@@ -42,4 +42,4 @@ namespace burst
     constexpr auto buffered_chunks = buffered_chunks_t{};
 }
 
-#endif // BURST_RANGE_BUFFERED_CHUNKS_HPP
+#endif // BURST__RANGE__BUFFERED_CHUNKS_HPP

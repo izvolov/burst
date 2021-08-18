@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_ADAPTOR_ADAPTOR_HPP
-#define BURST_RANGE_ADAPTOR_ADAPTOR_HPP
+#ifndef BURST__RANGE__ADAPTOR__ADAPTOR_HPP
+#define BURST__RANGE__ADAPTOR__ADAPTOR_HPP
 
 #include <burst/tuple/apply.hpp>
 #include <burst/tuple/forward_tuple.hpp>
@@ -74,4 +74,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_RANGE_ADAPTOR_ADAPTOR_HPP
+#endif // BURST__RANGE__ADAPTOR__ADAPTOR_HPP

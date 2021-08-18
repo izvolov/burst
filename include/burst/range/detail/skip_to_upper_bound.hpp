@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_DETAIL_SKIP_TO_UPPER_BOUND_HPP
-#define BURST_RANGE_DETAIL_SKIP_TO_UPPER_BOUND_HPP
+#ifndef BURST__RANGE__DETAIL__SKIP_TO_UPPER_BOUND_HPP
+#define BURST__RANGE__DETAIL__SKIP_TO_UPPER_BOUND_HPP
 
 #include <burst/type_traits/iterator_category.hpp>
 #include <burst/type_traits/range_iterator.hpp>
@@ -69,4 +69,4 @@ namespace burst
     }
 }
 
-#endif // BURST_RANGE_DETAIL_SKIP_TO_UPPER_BOUND_HPP
+#endif // BURST__RANGE__DETAIL__SKIP_TO_UPPER_BOUND_HPP

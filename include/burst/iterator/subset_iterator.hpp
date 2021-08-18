@@ -1,5 +1,5 @@
-#ifndef BURST_ITERATOR_SUBSET_ITERATOR_HPP
-#define BURST_ITERATOR_SUBSET_ITERATOR_HPP
+#ifndef BURST__ITERATOR__SUBSET_ITERATOR_HPP
+#define BURST__ITERATOR__SUBSET_ITERATOR_HPP
 
 #include <burst/algorithm/next_subset.hpp>
 #include <burst/iterator/end_tag.hpp>
@@ -238,4 +238,4 @@ namespace burst
     }
 } // namespace burst
 
-#endif // BURST_ITERATOR_SUBSET_ITERATOR_HPP
+#endif // BURST__ITERATOR__SUBSET_ITERATOR_HPP

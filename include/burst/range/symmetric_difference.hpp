@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_SYMMETRIC_DIFFERENCE_HPP
-#define BURST_RANGE_SYMMETRIC_DIFFERENCE_HPP
+#ifndef BURST__RANGE__SYMMETRIC_DIFFERENCE_HPP
+#define BURST__RANGE__SYMMETRIC_DIFFERENCE_HPP
 
 #include <burst/iterator/end_tag.hpp>
 #include <burst/iterator/symmetric_difference_iterator.hpp>
@@ -45,4 +45,4 @@ namespace burst
     constexpr auto symmetric_difference = symmetric_difference_t{};
 }
 
-#endif // BURST_RANGE_SYMMETRIC_DIFFERENCE_HPP
+#endif // BURST__RANGE__SYMMETRIC_DIFFERENCE_HPP

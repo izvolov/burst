@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_SUBSEQUENCES_HPP
-#define BURST_RANGE_SUBSEQUENCES_HPP
+#ifndef BURST__RANGE__SUBSEQUENCES_HPP
+#define BURST__RANGE__SUBSEQUENCES_HPP
 
 #include <burst/iterator/end_tag.hpp>
 #include <burst/iterator/subsequence_iterator.hpp>
@@ -33,4 +33,4 @@ namespace burst
     }
 }
 
-#endif // BURST_RANGE_SUBSEQUENCES_HPP
+#endif // BURST__RANGE__SUBSEQUENCES_HPP

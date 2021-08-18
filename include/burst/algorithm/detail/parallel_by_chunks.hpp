@@ -1,5 +1,5 @@
-#ifndef BURST_ALGORITHM_DETAIL_PARALLEL_BY_CHUNKS_HPP
-#define BURST_ALGORITHM_DETAIL_PARALLEL_BY_CHUNKS_HPP
+#ifndef BURST__ALGORITHM__DETAIL__PARALLEL_BY_CHUNKS_HPP
+#define BURST__ALGORITHM__DETAIL__PARALLEL_BY_CHUNKS_HPP
 
 #include <burst/type_traits/iterator_difference.hpp>
 
@@ -69,4 +69,4 @@ namespace burst
     } // namespace detail
 } // namespace burst
 
-#endif // BURST_ALGORITHM_DETAIL_PARALLEL_BY_CHUNKS_HPP
+#endif // BURST__ALGORITHM__DETAIL__PARALLEL_BY_CHUNKS_HPP

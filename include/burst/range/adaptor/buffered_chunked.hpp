@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_ADAPTOR_BUFFERED_CHUNKED_HPP
-#define BURST_RANGE_ADAPTOR_BUFFERED_CHUNKED_HPP
+#ifndef BURST__RANGE__ADAPTOR__BUFFERED_CHUNKED_HPP
+#define BURST__RANGE__ADAPTOR__BUFFERED_CHUNKED_HPP
 
 #include <burst/range/adaptor/adaptor.hpp>
 #include <burst/range/buffered_chunks.hpp>
@@ -28,4 +28,4 @@ namespace burst
     constexpr auto buffered_chunked = make_adaptor_trigger(buffered_chunks);
 } // namespace burst
 
-#endif // BURST_RANGE_ADAPTOR_BUFFERED_CHUNKED_HPP
+#endif // BURST__RANGE__ADAPTOR__BUFFERED_CHUNKED_HPP

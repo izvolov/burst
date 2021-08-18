@@ -1,5 +1,5 @@
-#ifndef BURST_ITERATOR_CACHE_ITERATOR_HPP
-#define BURST_ITERATOR_CACHE_ITERATOR_HPP
+#ifndef BURST__ITERATOR__CACHE_ITERATOR_HPP
+#define BURST__ITERATOR__CACHE_ITERATOR_HPP
 
 #include <burst/type_traits/iterator_difference.hpp>
 #include <burst/type_traits/iterator_reference.hpp>
@@ -140,4 +140,4 @@ namespace burst
     }
 }
 
-#endif // BURST_ITERATOR_CACHE_ITERATOR_HPP
+#endif // BURST__ITERATOR__CACHE_ITERATOR_HPP

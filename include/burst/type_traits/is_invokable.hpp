@@ -1,5 +1,5 @@
-#ifndef BURST_TYPE_TRAITS_IS_INVOKABLE_HPP
-#define BURST_TYPE_TRAITS_IS_INVOKABLE_HPP
+#ifndef BURST__TYPE_TRAITS__IS_INVOKABLE_HPP
+#define BURST__TYPE_TRAITS__IS_INVOKABLE_HPP
 
 #include <burst/type_traits/void_t.hpp>
 
@@ -19,4 +19,4 @@ namespace burst
         std::true_type {};
 }
 
-#endif // BURST_TYPE_TRAITS_IS_INVOKABLE_HPP
+#endif // BURST__TYPE_TRAITS__IS_INVOKABLE_HPP

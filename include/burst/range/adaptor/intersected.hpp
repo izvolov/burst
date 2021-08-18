@@ -1,5 +1,5 @@
-#ifndef BURST_RANGE_ADAPTOR_INTERSECTED_HPP
-#define BURST_RANGE_ADAPTOR_INTERSECTED_HPP
+#ifndef BURST__RANGE__ADAPTOR__INTERSECTED_HPP
+#define BURST__RANGE__ADAPTOR__INTERSECTED_HPP
 
 #include <burst/range/adaptor/adaptor.hpp>
 #include <burst/range/intersect.hpp>
@@ -21,4 +21,4 @@ namespace burst
     constexpr auto intersected = make_adaptor_trigger(intersect);
 } // namespace burst
 
-#endif // BURST_RANGE_ADAPTOR_INTERSECTED_HPP
+#endif // BURST__RANGE__ADAPTOR__INTERSECTED_HPP
