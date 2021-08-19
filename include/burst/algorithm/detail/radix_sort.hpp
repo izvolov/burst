@@ -21,8 +21,29 @@ namespace burst
 {
     namespace detail
     {
-        template <typename ForwardIterator, typename Map, typename Radix, typename RandomAccessIterator, std::size_t ... Radices>
-        bool collect_impl (ForwardIterator first, ForwardIterator last, Map map, Radix radix, RandomAccessIterator counters, std::index_sequence<Radices...>)
+        template <typename InputIterator, typename OutputIterator>
+        std::pair<OutputIterator, iterator_value_t<InputIterator>> partial_sum_max (InputIterator first, InputIterator last, OutputIterator result)
+        {
+            if (first == last) return {result, 0};
+
+            auto max = *first;
+            typename std::iterator_traits<InputIterator>::value_type sum = *first;
+            *result = sum;
+
+            while (++first != last)
+            {
+                if (max < *first)
+                {
+                    max = *first;
+                }
+                sum = std::move(sum) + *first;
+                *++result = sum;
+            }
+            return {++result, max};
+        }
+
+        template <typename ForwardIterator, typename Map, typename Radix, typename RandomAccessIterator1, typename RandomAccessIterator2, std::size_t ... Radices>
+        bool collect_impl (ForwardIterator first, ForwardIterator last, Map map, Radix radix, RandomAccessIterator1 counters, RandomAccessIterator2 maximums, std::index_sequence<Radices...>)
         {
             using value_type = iterator_value_t<ForwardIterator>;
             constexpr auto radix_value_range = radix_sort_traits<value_type, Map, Radix>::radix_value_range;
@@ -39,7 +60,7 @@ namespace burst
                     BURST_EXPAND_VARIADIC(++counters[Radices][nth_radix(Radices, radix)(current)]);
                 });
 
-            BURST_EXPAND_VARIADIC(std::partial_sum(counters[Radices], counters[Radices] + radix_value_range, counters[Radices]));
+            BURST_EXPAND_VARIADIC(maximums[Radices] = partial_sum_max(counters[Radices], counters[Radices] + radix_value_range, counters[Radices]).second);
 
             return is_sorted;
         }
@@ -49,12 +70,12 @@ namespace burst
                 Для каждого сортируемого числа подсчитывает количество элементов, которые меньше
             либо равны этому числу.
          */
-        template <typename ForwardIterator, typename Map, typename Radix, typename RandomAccessIterator>
-        bool collect (ForwardIterator first, ForwardIterator last, Map map, Radix radix, RandomAccessIterator counters)
+        template <typename ForwardIterator, typename Map, typename Radix, typename RandomAccessIterator1, typename RandomAccessIterator2>
+        bool collect (ForwardIterator first, ForwardIterator last, Map map, Radix radix, RandomAccessIterator1 counters, RandomAccessIterator2 maximums)
         {
             using value_type = iterator_value_t<ForwardIterator>;
             constexpr auto radix_count = radix_sort_traits<value_type, Map, Radix>::radix_count;
-            return collect_impl(first, last, map, radix, counters, std::make_index_sequence<radix_count>());
+            return collect_impl(first, last, map, radix, counters, maximums, std::make_index_sequence<radix_count>());
         }
 
         //!     Специализация для случая, когда в сортируемом числе всего один разряд.
@@ -120,14 +141,36 @@ namespace burst
 
             using difference_type = iterator_difference_t<RandomAccessIterator1>;
             difference_type counters[traits::radix_count][traits::radix_value_range] = {{0}};
-            const auto is_sorted = collect(first, last, map, radix, counters);
+            difference_type maximums[traits::radix_count] = {0};
+            const auto is_sorted = collect(first, last, map, radix, counters, maximums);
             if (not is_sorted)
             {
-                auto buffer_end = buffer_begin + std::distance(first, last);
+                const auto range_size = std::distance(first, last);
+                auto buffer_end = buffer_begin + range_size;
                 for (std::size_t radix_number = 0; radix_number < traits::radix_count; radix_number += 2)
                 {
-                    dispose_backward(move_assign_please(first), move_assign_please(last), buffer_begin, compose(nth_radix(radix_number, radix), map), std::begin(counters[radix_number]));
-                    dispose_backward(move_assign_please(buffer_begin), move_assign_please(buffer_end), first, compose(nth_radix(radix_number + 1, radix), map), std::begin(counters[radix_number + 1]));
+                    if (maximums[radix_number] == range_size && maximums[radix_number + 1] == range_size)
+                    {
+                        continue;
+                    }
+
+                    if (maximums[radix_number] == range_size)
+                    {
+                        std::copy(move_assign_please(first), move_assign_please(last), buffer_begin);
+                    }
+                    else
+                    {
+                        dispose_backward(move_assign_please(first), move_assign_please(last), buffer_begin, compose(nth_radix(radix_number, radix), map), std::begin(counters[radix_number]));
+                    }
+
+                    if (maximums[radix_number + 1] == range_size)
+                    {
+                        std::copy(move_assign_please(buffer_begin), move_assign_please(buffer_end), first);
+                    }
+                    else
+                    {
+                        dispose_backward(move_assign_please(buffer_begin), move_assign_please(buffer_end), first, compose(nth_radix(radix_number + 1, radix), map), std::begin(counters[radix_number + 1]));
+                    }
                 }
             }
         }
