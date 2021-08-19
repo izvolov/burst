@@ -30,7 +30,8 @@ namespace burst
             std::for_each(first, last,
                 [& counters, & map, & radix] (const auto & value)
                 {
-                    BURST_EXPAND_VARIADIC(++counters[Radices][nth_radix(Radices, radix)(map(value))]);
+                    auto n = map(value);
+                    BURST_EXPAND_VARIADIC(++counters[Radices][nth_radix(Radices, radix)(n)]);
                 });
 
             BURST_EXPAND_VARIADIC(std::partial_sum(counters[Radices], counters[Radices] + radix_value_range, counters[Radices]));
