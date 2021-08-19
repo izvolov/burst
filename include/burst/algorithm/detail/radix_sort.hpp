@@ -22,19 +22,26 @@ namespace burst
     namespace detail
     {
         template <typename ForwardIterator, typename Map, typename Radix, typename RandomAccessIterator, std::size_t ... Radices>
-        void collect_impl (ForwardIterator first, ForwardIterator last, Map map, Radix radix, RandomAccessIterator counters, std::index_sequence<Radices...>)
+        bool collect_impl (ForwardIterator first, ForwardIterator last, Map map, Radix radix, RandomAccessIterator counters, std::index_sequence<Radices...>)
         {
             using value_type = iterator_value_t<ForwardIterator>;
             constexpr auto radix_value_range = radix_sort_traits<value_type, Map, Radix>::radix_value_range;
 
+            auto previous = std::numeric_limits<std::result_of_t<Map(value_type)>>::min();
+            auto is_sorted = true;
             std::for_each(first, last,
-                [& counters, & map, & radix] (const auto & value)
+                [& counters, & map, & radix, & previous, & is_sorted] (const auto & value)
                 {
-                    auto n = map(value);
-                    BURST_EXPAND_VARIADIC(++counters[Radices][nth_radix(Radices, radix)(n)]);
+                    auto current = map(value);
+                    is_sorted &= (current >= previous);
+                    previous = current;
+
+                    BURST_EXPAND_VARIADIC(++counters[Radices][nth_radix(Radices, radix)(current)]);
                 });
 
             BURST_EXPAND_VARIADIC(std::partial_sum(counters[Radices], counters[Radices] + radix_value_range, counters[Radices]));
+
+            return is_sorted;
         }
 
         //!     Собрать счётчики сразу для всех разрядов.
@@ -43,11 +50,11 @@ namespace burst
             либо равны этому числу.
          */
         template <typename ForwardIterator, typename Map, typename Radix, typename RandomAccessIterator>
-        void collect (ForwardIterator first, ForwardIterator last, Map map, Radix radix, RandomAccessIterator counters)
+        bool collect (ForwardIterator first, ForwardIterator last, Map map, Radix radix, RandomAccessIterator counters)
         {
             using value_type = iterator_value_t<ForwardIterator>;
             constexpr auto radix_count = radix_sort_traits<value_type, Map, Radix>::radix_count;
-            collect_impl(first, last, map, radix, counters, std::make_index_sequence<radix_count>());
+            return collect_impl(first, last, map, radix, counters, std::make_index_sequence<radix_count>());
         }
 
         //!     Специализация для случая, когда в сортируемом числе всего один разряд.
@@ -113,13 +120,15 @@ namespace burst
 
             using difference_type = iterator_difference_t<RandomAccessIterator1>;
             difference_type counters[traits::radix_count][traits::radix_value_range] = {{0}};
-            collect(first, last, map, radix, counters);
-
-            auto buffer_end = buffer_begin + std::distance(first, last);
-            for (std::size_t radix_number = 0; radix_number < traits::radix_count; radix_number += 2)
+            const auto is_sorted = collect(first, last, map, radix, counters);
+            if (not is_sorted)
             {
-                dispose_backward(move_assign_please(first), move_assign_please(last), buffer_begin, compose(nth_radix(radix_number, radix), map), std::begin(counters[radix_number]));
-                dispose_backward(move_assign_please(buffer_begin), move_assign_please(buffer_end), first, compose(nth_radix(radix_number + 1, radix), map), std::begin(counters[radix_number + 1]));
+                auto buffer_end = buffer_begin + std::distance(first, last);
+                for (std::size_t radix_number = 0; radix_number < traits::radix_count; radix_number += 2)
+                {
+                    dispose_backward(move_assign_please(first), move_assign_please(last), buffer_begin, compose(nth_radix(radix_number, radix), map), std::begin(counters[radix_number]));
+                    dispose_backward(move_assign_please(buffer_begin), move_assign_please(buffer_end), first, compose(nth_radix(radix_number + 1, radix), map), std::begin(counters[radix_number + 1]));
+                }
             }
         }
     } // namespace detail
