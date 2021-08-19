@@ -5,6 +5,7 @@
 #include <burst/algorithm/detail/move_assign_please.hpp>
 #include <burst/algorithm/detail/nth_radix.hpp>
 #include <burst/algorithm/detail/radix_sort_traits.hpp>
+#include <burst/functional/compose.hpp>
 #include <burst/type_traits/iterator_difference.hpp>
 #include <burst/type_traits/iterator_value.hpp>
 #include <burst/variadic.hpp>
@@ -29,7 +30,7 @@ namespace burst
             std::for_each(first, last,
                 [& counters, & map, & radix] (const auto & value)
                 {
-                    BURST_EXPAND_VARIADIC(++counters[Radices][nth_radix(Radices, map, radix)(value)]);
+                    BURST_EXPAND_VARIADIC(++counters[Radices][nth_radix(Radices, radix)(map(value))]);
                 });
 
             BURST_EXPAND_VARIADIC(std::partial_sum(counters[Radices], counters[Radices] + radix_value_range, counters[Radices]));
@@ -116,8 +117,8 @@ namespace burst
             auto buffer_end = buffer_begin + std::distance(first, last);
             for (std::size_t radix_number = 0; radix_number < traits::radix_count; radix_number += 2)
             {
-                dispose_backward(move_assign_please(first), move_assign_please(last), buffer_begin, nth_radix(radix_number, map, radix), std::begin(counters[radix_number]));
-                dispose_backward(move_assign_please(buffer_begin), move_assign_please(buffer_end), first, nth_radix(radix_number + 1, map, radix), std::begin(counters[radix_number + 1]));
+                dispose_backward(move_assign_please(first), move_assign_please(last), buffer_begin, compose(nth_radix(radix_number, radix), map), std::begin(counters[radix_number]));
+                dispose_backward(move_assign_please(buffer_begin), move_assign_please(buffer_end), first, compose(nth_radix(radix_number + 1, radix), map), std::begin(counters[radix_number + 1]));
             }
         }
     } // namespace detail

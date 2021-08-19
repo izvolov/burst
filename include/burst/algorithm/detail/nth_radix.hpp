@@ -1,7 +1,7 @@
 #ifndef BURST__ALGORITHM__DETAIL__NTH_RADIX_HPP
 #define BURST__ALGORITHM__DETAIL__NTH_RADIX_HPP
 
-#include <burst/algorithm/detail/radix_sort_traits.hpp>
+#include <burst/algorithm/detail/counting_sort_traits.hpp>
 #include <burst/integer/right_shift.hpp>
 
 #include <cstddef>
@@ -12,16 +12,18 @@ namespace burst
 {
     namespace detail
     {
-        template <typename Map, typename Radix>
-        auto nth_radix (std::size_t radix_number, Map map, Radix radix)
+        template <typename Radix>
+        auto nth_radix (std::size_t radix_number, Radix radix)
         {
             return
-                [radix_number, map = std::move(map), radix = std::move(radix)] (const auto & value)
+                [radix_number, radix = std::move(radix)] (auto n)
                 {
-                    using value_type = std::remove_reference_t<decltype(value)>;
-                    using traits = radix_sort_traits<value_type, Map, Radix>;
+                    using value_type = decltype(n);
+                    static_assert(std::is_integral<value_type>::value, "");
+                    static_assert(std::is_unsigned<value_type>::value, "");
+                    using traits = counting_sort_traits<value_type, Radix>;
 
-                    return radix(right_shift(map(value), traits::radix_size * radix_number));
+                    return radix(right_shift(n, traits::radix_size * radix_number));
                 };
         }
     } // namespace detail

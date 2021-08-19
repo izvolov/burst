@@ -6,6 +6,7 @@
 #include <burst/algorithm/detail/parallel_counting_sort.hpp>
 #include <burst/algorithm/detail/radix_sort.hpp>
 #include <burst/container/shaped_array_view.hpp>
+#include <burst/functional/compose.hpp>
 #include <burst/type_traits/iterator_difference.hpp>
 #include <burst/type_traits/iterator_value.hpp>
 
@@ -71,11 +72,13 @@ namespace burst
             const auto buffer_end = buffer_begin + std::distance(first, last);
             for (auto radix_number = 0ul; radix_number < traits::radix_count; radix_number += 2)
             {
-                collect(pool, chunk_size, first, last, nth_radix(radix_number, map, radix), counters_view[radix_number]);
-                dispose_backward(pool, chunk_size, move_assign_please(first), move_assign_please(last), buffer_begin, nth_radix(radix_number, map, radix), counters_view[radix_number]);
+                auto nth = compose(nth_radix(radix_number, radix), map);
+                collect(pool, chunk_size, first, last, nth, counters_view[radix_number]);
+                dispose_backward(pool, chunk_size, move_assign_please(first), move_assign_please(last), buffer_begin, nth, counters_view[radix_number]);
 
-                collect(pool, chunk_size, buffer_begin, buffer_end, nth_radix(radix_number + 1, map, radix), counters_view[radix_number + 1]);
-                dispose_backward(pool, chunk_size, move_assign_please(buffer_begin), move_assign_please(buffer_end), first, nth_radix(radix_number + 1, map, radix), counters_view[radix_number + 1]);
+                auto n1th = compose(nth_radix(radix_number + 1, radix), map);
+                collect(pool, chunk_size, buffer_begin, buffer_end, n1th, counters_view[radix_number + 1]);
+                dispose_backward(pool, chunk_size, move_assign_please(buffer_begin), move_assign_please(buffer_end), first, n1th, counters_view[radix_number + 1]);
             }
         }
     } // namespace detail
