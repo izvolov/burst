@@ -5,6 +5,7 @@
 #include <burst/algorithm/detail/move_assign_please.hpp>
 #include <burst/algorithm/detail/nth_radix.hpp>
 #include <burst/algorithm/detail/radix_sort_traits.hpp>
+#include <burst/algorithm/partial_sum_max.hpp>
 #include <burst/functional/compose.hpp>
 #include <burst/type_traits/iterator_difference.hpp>
 #include <burst/type_traits/iterator_value.hpp>
@@ -21,27 +22,6 @@ namespace burst
 {
     namespace detail
     {
-        template <typename InputIterator, typename OutputIterator>
-        std::pair<OutputIterator, iterator_value_t<InputIterator>> partial_sum_max (InputIterator first, InputIterator last, OutputIterator result)
-        {
-            if (first == last) return {result, 0};
-
-            auto max = *first;
-            typename std::iterator_traits<InputIterator>::value_type sum = *first;
-            *result = sum;
-
-            while (++first != last)
-            {
-                if (max < *first)
-                {
-                    max = *first;
-                }
-                sum = std::move(sum) + *first;
-                *++result = sum;
-            }
-            return {++result, max};
-        }
-
         template <typename ForwardIterator, typename Map, typename Radix, typename RandomAccessIterator1, typename RandomAccessIterator2, std::size_t ... Radices>
         bool collect_impl (ForwardIterator first, ForwardIterator last, Map map, Radix radix, RandomAccessIterator1 counters, RandomAccessIterator2 maximums, std::index_sequence<Radices...>)
         {
