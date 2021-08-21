@@ -87,6 +87,75 @@ namespace burst
             std::copy(move_assign_please(buffer), move_assign_please(buffer_end), first);
         }
 
+        /*!
+            \brief
+                Би-итерация поразрядной сортировки
+
+            \details
+                "Би-" означает, что обрабатываются два разряда: чётный и следующий за ним нечётный.
+
+                Если каждый из разрядов содержит одинаковые значения (максимумы равны размеру
+                исходного диапазона), то это значит, что на результат сортировки эти разряды никак
+                не повлияют (например, и там, и там сплошные нули), следовательно, можно ничего не
+                делать.
+                Если хотя бы один из разрядов содержит разные значения, то тот разряд, который
+                содержит разные значения, должен быть распределён по общему правилу, а тот разряд,
+                который содержит одинаковые значения (если такой есть), может быть просто
+                скопирован.
+        */
+        template
+        <
+            typename RandomAccessIterator1,
+            typename RandomAccessIterator2,
+            typename Map,
+            typename Radix,
+            typename RandomAccessIterator3,
+            typename RandomAccessIterator4
+        >
+        void
+            radix_sort_impl_bi_iteration
+            (
+                RandomAccessIterator1 first,
+                RandomAccessIterator1 last,
+                RandomAccessIterator2 buffer_begin,
+                Map map,
+                Radix radix,
+                RandomAccessIterator3 counters,
+                RandomAccessIterator4 maximums,
+                std::size_t radix_number
+            )
+        {
+            using std::distance;
+            const auto range_size = distance(first, last);
+            const auto buffer_end = std::next(buffer_begin, range_size);
+
+            const auto nth_is_single = maximums[radix_number] == range_size;
+            const auto n1th_is_single = maximums[radix_number + 1] == range_size;
+
+            if (nth_is_single && n1th_is_single)
+            {
+                return;
+            }
+
+            if (nth_is_single)
+            {
+                std::copy(move_assign_please(first), move_assign_please(last), buffer_begin);
+            }
+            else
+            {
+                dispose_backward(move_assign_please(first), move_assign_please(last), buffer_begin, compose(nth_radix(radix_number, radix), map), std::begin(counters[radix_number]));
+            }
+
+            if (n1th_is_single)
+            {
+                std::copy(move_assign_please(buffer_begin), move_assign_please(buffer_end), first);
+            }
+            else
+            {
+                dispose_backward(move_assign_please(buffer_begin), move_assign_please(buffer_end), first, compose(nth_radix(radix_number + 1, radix), map), std::begin(counters[radix_number + 1]));
+            }
+        }
+
         //!     Специализация для случая, когда количество разрядов сортируемых чисел чётно.
         /*!
                 Других случаев не существует по построению. Либо разряд один, либо их количество
@@ -125,32 +194,9 @@ namespace burst
             const auto is_sorted = collect(first, last, map, radix, counters, maximums);
             if (not is_sorted)
             {
-                const auto range_size = std::distance(first, last);
-                auto buffer_end = buffer_begin + range_size;
                 for (std::size_t radix_number = 0; radix_number < traits::radix_count; radix_number += 2)
                 {
-                    if (maximums[radix_number] == range_size && maximums[radix_number + 1] == range_size)
-                    {
-                        continue;
-                    }
-
-                    if (maximums[radix_number] == range_size)
-                    {
-                        std::copy(move_assign_please(first), move_assign_please(last), buffer_begin);
-                    }
-                    else
-                    {
-                        dispose_backward(move_assign_please(first), move_assign_please(last), buffer_begin, compose(nth_radix(radix_number, radix), map), std::begin(counters[radix_number]));
-                    }
-
-                    if (maximums[radix_number + 1] == range_size)
-                    {
-                        std::copy(move_assign_please(buffer_begin), move_assign_please(buffer_end), first);
-                    }
-                    else
-                    {
-                        dispose_backward(move_assign_please(buffer_begin), move_assign_please(buffer_end), first, compose(nth_radix(radix_number + 1, radix), map), std::begin(counters[radix_number + 1]));
-                    }
+                    radix_sort_impl_bi_iteration(first, last, buffer_begin, map, radix, counters, maximums, radix_number);
                 }
             }
         }
