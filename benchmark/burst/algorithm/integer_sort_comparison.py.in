@@ -88,6 +88,12 @@ def make_scale (linear, log):
         lengths = [int(i) for i in np.logspace(begin, end, count)]
         return 'log({},{},{})'.format(begin, end, count), lengths, 'log'
 
+def make_algorithms (preset, algorithms):
+    if algorithms:
+        return ' '.join(algorithms)
+    elif preset:
+        return ' '.join(presets[preset])
+
 def parse_command_line (options):
     parser = argparse.ArgumentParser(options[0])
     parser.add_argument('--prefix', type=str, default='intsort',
@@ -100,23 +106,28 @@ def parse_command_line (options):
         choices=['shuffle', 'ascending', 'descending', 'outlier', 'pipe-organ', 'single'])
     parser.add_argument('--attempts', type=int, default=10000000,
         help='Максимальное количество итераций')
-    parser.add_argument('--preset', type=str, default='basic',
+    algorithms = parser.add_mutually_exclusive_group(required=True)
+    algorithms.add_argument('--preset', type=str, default='basic',
         help='Набор алгоритмов, которые нужно замерить', choices=presets.keys())
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument('--linear', type=int, nargs=3, metavar=('begin', 'end', 'count'),
+    algorithms.add_argument('--algo', type=str, nargs='+',
+        help='Алгоритмы, которые нужно замерить',
+        choices=presets['all'])
+    schema = parser.add_mutually_exclusive_group(required=True)
+    schema.add_argument('--linear', type=int, nargs=3, metavar=('begin', 'end', 'count'),
         help='Линейная шкала размеров тестируемого массива')
-    group.add_argument('--log', type=int, nargs=3, metavar=('begin', 'end', 'count'),
+    schema.add_argument('--log', type=int, nargs=3, metavar=('begin', 'end', 'count'),
         help='Логарифмическая шкала размеров тестируемого массива')
     args = parser.parse_args(options[1:])
-    return args.linear, args.log, args.prefix, args.integer, args.prepare, args.attempts, args.preset
+    return args.linear, args.log, args.prefix, args.integer, args.prepare, args.attempts, args.preset, args.algo
 
-linear, log, prefix, integer_type, prepare, attempts, preset = parse_command_line(sys.argv)
+linear, log, prefix, integer_type, prepare, attempts, preset, algo = parse_command_line(sys.argv)
 scale_description, lengths, plot_scale = make_scale(linear, log)
 attempts = max(attempts, lengths[-1])
 
-algorithms = ' '.join(presets[preset])
+algorithms = make_algorithms(preset, algo)
 measurements = measure(algorithms, lengths, attempts, integer_type, prepare)
 
-file_name = '_'.join((prefix, scale_description, integer_type, prepare, preset, str(attempts)))
+algo_description = '({})'.format(algorithms.replace(' ', ','))
+file_name = '_'.join((prefix, scale_description, integer_type, prepare, algo_description, str(attempts)))
 plot(plot_scale, lengths, measurements, integer_type, file_name + '.png')
 table(lengths, measurements, integer_type, file_name + '.txt')
