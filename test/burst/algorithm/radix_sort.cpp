@@ -490,10 +490,10 @@ TEST_SUITE("radix_sort")
 
     TEST_CASE("Допускает на вход диапазоны")
     {
-        const auto initial = std::vector<std::uint32_t>{100500, 42, 99999, 1000, 0};
-        std::vector<std::uint32_t> buffer(initial.size());
+        const auto initial = std::vector<std::uint16_t>{0xff00, 0x4200, 0x1d00, 0x0400, 0x0100};
+        std::vector<std::uint16_t> buffer(initial.size());
 
-        const auto  expected = std::vector<std::uint32_t>{0, 42, 1000, 99999, 100500};
+        const auto  expected = std::vector<std::uint16_t>{0x0100, 0x0400, 0x1d00, 0x4200, 0xff00};
 
         SUBCASE("при последовательной сортировке")
         {
