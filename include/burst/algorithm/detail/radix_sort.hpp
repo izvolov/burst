@@ -54,13 +54,13 @@ namespace burst
             auto previous = std::numeric_limits<std::result_of_t<Map(value_type)>>::min();
             auto is_sorted = true;
             std::for_each(first, last,
-                [& counters, & map, & radix, & previous, & is_sorted] (const auto & value)
+                [& counters, & map, & radix, & previous, & is_sorted] (const auto & preimage)
                 {
-                    auto current = map(value);
-                    is_sorted &= (current >= previous);
-                    previous = current;
+                    auto image = map(preimage);
+                    is_sorted &= (image >= previous);
+                    previous = image;
 
-                    BURST_EXPAND_VARIADIC(++counters[Radices][nth_radix(Radices, radix)(current)]);
+                    BURST_EXPAND_VARIADIC(++counters[Radices][nth_radix(Radices, radix)(image)]);
                 });
 
             BURST_EXPAND_VARIADIC(maximums[Radices] = partial_sum_max(counters[Radices], counters[Radices] + radix_value_range, counters[Radices]).second);
