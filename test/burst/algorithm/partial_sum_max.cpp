@@ -1,7 +1,10 @@
 #include <burst/algorithm/partial_sum_max.hpp>
+#include <burst/container/access/front.hpp>
 #include <burst/container/make_vector.hpp>
 
 #include <doctest/doctest.h>
+
+#include <boost/range/adaptor/transformed.hpp>
 
 #include <iterator>
 #include <sstream>
@@ -127,5 +130,36 @@ TEST_SUITE("partial_sum_max")
 
         const auto & max = result.second;
         CHECK(max == std::string("00000"));
+    }
+
+    TEST_CASE("Умеет принимать move_iterator")
+    {
+        auto items = std::vector<std::vector<int>>{};
+        items.push_back(std::vector<int>{1});
+        items.push_back(std::vector<int>{2});
+        items.push_back(std::vector<int>{3});
+        items.push_back(std::vector<int>{2});
+        items.push_back(std::vector<int>{1});
+
+        auto partial_sums = std::vector<std::vector<int>>(items.size());
+        const auto max =
+            burst::partial_sum_max
+            (
+                std::make_move_iterator(items.begin()),
+                std::make_move_iterator(items.end()),
+                partial_sums.begin(),
+                [] (auto && sum, const auto & next)
+                {
+                    return std::vector<int>{sum.front() + next.front()};
+                },
+                [] (const auto & l, const auto & r)
+                {
+                    return l.front() < r.front();
+                }
+            );
+
+        const auto expected = {1, 3, 6, 8, 9};
+        CHECK((partial_sums | boost::adaptors::transformed(burst::front)) == expected);
+        CHECK(max.second.front() == 3);
     }
 }
