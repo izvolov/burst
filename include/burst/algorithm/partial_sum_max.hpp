@@ -71,12 +71,13 @@ namespace burst
 
             while (++first != last)
             {
-                if (less(max, *first))
+                auto current = *first;
+                if (less(max, current))
                 {
-                    max = *first;
+                    max = current;
                 }
 
-                auto new_sum = plus(std::move(sum), *first);
+                auto new_sum = plus(std::move(sum), std::move(current));
                 sum = std::move(new_sum);
 
                 ++result;
