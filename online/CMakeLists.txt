@@ -1,3 +1,14 @@
+find_package(Boost 1.66.0 REQUIRED)
+
+add_executable(burst-example burst_example.cpp)
+target_link_libraries(burst-example
+    PRIVATE
+        Boost::boost
+        Burst::burst
+)
+
+add_custom_target(run-burst-example ALL COMMAND burst-example)
+
 find_package(Python3 COMPONENTS Interpreter)
 if(Python3_FOUND)
     set(WANDBOX_URL "https://wandbox.org/api/compile.json")
