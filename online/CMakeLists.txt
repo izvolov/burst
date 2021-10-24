@@ -21,6 +21,7 @@ if(Python3_FOUND)
             ${CMAKE_CURRENT_SOURCE_DIR}
         DEPENDS
             burst-unit-tests
+            run-burst-example
     )
 else()
     message(WARNING "Для создания онлайн-песочницы требуется интерпретатор ЯП python 3-й версии")
