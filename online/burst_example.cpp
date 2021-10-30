@@ -1,4 +1,4 @@
-#include <burst/algorithm/radix_sort.hpp>
+#include <burst/algorithm/radix_sort/radix_sort_seq.hpp>
 
 #include <cassert>
 #include <string>

@@ -3,6 +3,7 @@
 
 #include <burst/integer/intlog2.hpp>
 
+#include <cstdint>
 #include <limits>
 #include <type_traits>
 
