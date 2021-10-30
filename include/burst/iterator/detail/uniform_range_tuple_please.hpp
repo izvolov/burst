@@ -1,16 +1,13 @@
 #ifndef BURST__ITERATOR__DETAIL__UNIFORM_RANGE_TUPLE_PLEASE_HPP
 #define BURST__ITERATOR__DETAIL__UNIFORM_RANGE_TUPLE_PLEASE_HPP
 
-#include <burst/range/to_any_range.hpp>
+#include <burst/range/variant_range.hpp>
 #include <burst/tuple/by_all.hpp>
 #include <burst/type_traits/are_same.hpp>
-#include <burst/type_traits/minimum_category.hpp>
-#include <burst/type_traits/range_category.hpp>
-
-#include <boost/iterator/iterator_categories.hpp>
 
 #include <tuple>
 #include <type_traits>
+#include <utility>
 
 namespace burst
 {
@@ -39,10 +36,10 @@ namespace burst
         auto uniform_range_tuple_please_impl (std::tuple<Ranges &...> ranges, std::false_type)
         {
             static_assert(not are_same_v<Ranges...>, "");
-            using iterator_category = minimum_category_t<range_category_t<Ranges>...>;
-            using boost_traversal =
-                typename boost::iterator_category_to_traversal<iterator_category>::type;
-            return by_all(to_any_range<boost_traversal>, ranges);
+
+            const auto to_variant_range =
+                [] (auto & r) {return variant_range<Ranges...>(r.begin(), r.end());};
+            return by_all(to_variant_range, std::move(ranges));
         }
 
         /*!
