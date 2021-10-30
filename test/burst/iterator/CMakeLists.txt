@@ -15,4 +15,5 @@ target_sources(burst-unit-tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/take_at_most_iterator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/take_exactly_iterator.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/union_iterator.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/variant_iterator.cpp
 )
