@@ -3,7 +3,7 @@ Burst
 
 То, чего нет в Бусте.
 
-![Статус сборки под Linux](https://github.com/izvolov/burst/workflows/Linux/badge.svg) ![Статус сборки под macOS](https://github.com/izvolov/burst/workflows/macOS/badge.svg) [![Покрытие кода тестами](https://codecov.io/gh/izvolov/burst/branch/master/graph/badge.svg)](https://codecov.io/gh/izvolov/burst) [![Качество кода](https://api.codacy.com/project/badge/Grade/ddaf89951f3245b685a08e19e8f274d8)](https://www.codacy.com/app/izvolov/burst) [![Попробовать онлайн на Wandbox.org](https://img.shields.io/badge/try-online-blue.svg)](https://wandbox.org/permlink/VO7XR4gg8HfOVkDF)
+![Статус сборки под Linux](https://github.com/izvolov/burst/workflows/Linux/badge.svg) ![Статус сборки под macOS](https://github.com/izvolov/burst/workflows/macOS/badge.svg) [![Покрытие кода тестами](https://codecov.io/gh/izvolov/burst/branch/master/graph/badge.svg)](https://codecov.io/gh/izvolov/burst) [![Качество кода](https://api.codacy.com/project/badge/Grade/ddaf89951f3245b685a08e19e8f274d8)](https://www.codacy.com/app/izvolov/burst) [![Попробовать онлайн на Wandbox.org](https://img.shields.io/badge/try-online-blue.svg)](https://wandbox.org/permlink/sClSvn2yz7117J2h)
 
 О проекте
 ---------
