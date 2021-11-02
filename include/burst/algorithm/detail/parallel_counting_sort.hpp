@@ -69,6 +69,33 @@ namespace burst
                 });
         }
 
+        template
+        <
+            typename RandomAccessIterator1,
+            typename RandomAccessIterator2,
+            typename Map,
+            typename RandomAccessIterator3
+        >
+        RandomAccessIterator2
+            counting_sort_impl
+            (
+                boost::asio::thread_pool & pool,
+                iterator_difference_t<RandomAccessIterator1> chunk_size,
+                RandomAccessIterator1 first,
+                RandomAccessIterator1 last,
+                RandomAccessIterator2 result,
+                Map map,
+                RandomAccessIterator3 counters
+            )
+        {
+            collect(pool, chunk_size, first, last, map, counters);
+            dispose_backward(pool, chunk_size, first, last, result, map, counters);
+
+            using std::distance;
+            using std::next;
+            return next(result, distance(first, last));
+        }
+
         template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map>
         RandomAccessIterator2
             counting_sort_impl
@@ -93,11 +120,7 @@ namespace burst
             auto counters_view =
                 make_shaped_array_view(counters.get(), make_shape(count, traits::value_range));
 
-            collect(pool, chunk_size, first, last, map, counters_view);
-            dispose_backward(pool, chunk_size, first, last, result, map, counters_view);
-
-            using std::distance;
-            return result + distance(first, last);
+            return counting_sort_impl(pool, chunk_size, first, last, result, map, counters_view);
         }
     } // namespace detail
 } // namespace burst
