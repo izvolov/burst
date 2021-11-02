@@ -73,12 +73,10 @@ namespace burst
             for (auto radix_number = 0ul; radix_number < traits::radix_count; radix_number += 2)
             {
                 auto nth = compose(nth_radix(radix_number, radix), map);
-                collect(pool, chunk_size, first, last, nth, counters_view[radix_number]);
-                dispose_backward(pool, chunk_size, move_assign_please(first), move_assign_please(last), buffer_begin, nth, counters_view[radix_number]);
+                counting_sort_impl(pool, chunk_size, move_assign_please(first), move_assign_please(last), buffer_begin, nth, counters_view[radix_number]);
 
                 auto n1th = compose(nth_radix(radix_number + 1, radix), map);
-                collect(pool, chunk_size, buffer_begin, buffer_end, n1th, counters_view[radix_number + 1]);
-                dispose_backward(pool, chunk_size, move_assign_please(buffer_begin), move_assign_please(buffer_end), first, n1th, counters_view[radix_number + 1]);
+                counting_sort_impl(pool, chunk_size, move_assign_please(buffer_begin), move_assign_please(buffer_end), first, n1th, counters_view[radix_number + 1]);
             }
         }
     } // namespace detail
