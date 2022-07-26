@@ -25,7 +25,7 @@ jobs:
     - name: Install doctest
       run: |
         git clone https://github.com/onqtam/doctest.git third_party/doctest
-        git -C third_party/doctest checkout 2.3.3
+        git -C third_party/doctest checkout 2.3.4
         cmake -S third_party/doctest -B Build/third_party/doctest -DCMAKE_BUILD_TYPE=Release
         sudo cmake --build Build/third_party/doctest --target install/fast
 
