@@ -1,5 +1,5 @@
+include(${Burst_SOURCE_DIR}/cmake/doctest.cmake)
 find_package(Boost 1.66.0 COMPONENTS system REQUIRED)
-find_package(doctest 2.3.4 REQUIRED)
 find_package(Threads)
 
 add_library(testutility INTERFACE)
