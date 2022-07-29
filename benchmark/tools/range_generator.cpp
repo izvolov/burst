@@ -82,9 +82,9 @@ int main (int argc, const char * argv[])
         ("help,h", "Подсказка")
         ("block", bpo::value<std::size_t>()->default_value(1 << 20),
             "Размер используемой памяти в элементах")
-        ("count", bpo::value<std::size_t>(),
+        ("count", bpo::value<std::size_t>()->default_value(1),
             "Количество генерируемых наборов")
-        ("length", bpo::value<std::size_t>(),
+        ("length", bpo::value<std::size_t>()->required(),
             "Длина одного набора")
         ("min", bpo::value<std::int64_t>()->default_value(std::numeric_limits<std::int64_t>::min()),
             "Минимальное значение элемента набора")
