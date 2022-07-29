@@ -46,8 +46,9 @@ int main (int argc, const char * argv[])
             display(std::cin, std::cout);
         }
     }
-    catch (std::exception &)
+    catch (bpo::error & e)
     {
+        std::cout << e.what() << std::endl;
         std::cout << description << std::endl;
     }
 }

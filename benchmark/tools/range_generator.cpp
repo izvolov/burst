@@ -122,8 +122,9 @@ int main (int argc, const char * argv[])
             do_generate(std::cout, block_size, range_count, range_length, min, max, seed, sort, descending);
         }
     }
-    catch (std::exception &)
+    catch (bpo::error & e)
     {
+        std::cout << e.what() << std::endl;
         std::cout << description << std::endl;
     }
 }
