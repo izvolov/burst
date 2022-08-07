@@ -1,6 +1,7 @@
 #ifndef BURST__ALGORITHM__SELECT_MIN_HPP
 #define BURST__ALGORITHM__SELECT_MIN_HPP
 
+#include <algorithm>
 #include <functional>
 #include <iterator>
 #include <utility>
