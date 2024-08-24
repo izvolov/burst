@@ -30,10 +30,17 @@ jobs:
       run: |
         cmake --build Build/burst --target coverage
 
-    - name: Publish coverage to codecov
+    - name: Prepare coverage report
       run: |
         lcov --version
         lcov --capture --directory Build/burst --output-file coverage.info
         lcov --remove coverage.info "/usr/*" --output-file coverage.info
         lcov --remove coverage.info "*/test/*" --output-file coverage.info
-        bash <(curl -s https://codecov.io/bash) -f coverage.info || echo "Codecov did not collect coverage reports"
+
+    - name: Publish coverage report
+      uses: codecov/codecov-action@v4
+      with:
+        file: coverage.info
+        token: ${{secrets.CODECOV}}
+        disable_search: true
+        verbose: true
