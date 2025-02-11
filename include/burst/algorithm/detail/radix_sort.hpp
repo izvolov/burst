@@ -86,7 +86,7 @@ namespace burst
                 Вызывает сортировку подсчётом из входного диапазона в буфер, а потом переносит
             результат из буфера обратно во входной диапазон.
          */
-        template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map, typename Radix>
+        template <typename Counter, typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map, typename Radix>
         typename std::enable_if
         <
             radix_sort_traits
@@ -100,8 +100,9 @@ namespace burst
         >
         ::type radix_sort_impl (RandomAccessIterator1 first, RandomAccessIterator1 last, RandomAccessIterator2 buffer, Map map, Radix radix)
         {
+            using counter_type = Counter;
             auto buffer_end =
-                counting_sort_impl(move_assign_please(first), move_assign_please(last), buffer,
+                counting_sort_impl<counter_type>(move_assign_please(first), move_assign_please(last), buffer,
                     [& map, & radix] (const auto & value)
                     {
                         return radix(map(value));
@@ -196,7 +197,7 @@ namespace burst
                 Таким образом, в итоге во входном диапазоне оказывается отсортированная
             последовательность.
          */
-        template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map, typename Radix>
+        template <typename Counter, typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map, typename Radix>
         typename std::enable_if
         <
             radix_sort_traits
@@ -213,9 +214,9 @@ namespace burst
             using value_type = iterator_value_t<RandomAccessIterator1>;
             using traits = radix_sort_traits<value_type, Map, Radix>;
 
-            using difference_type = iterator_difference_t<RandomAccessIterator1>;
-            difference_type counters[traits::radix_count][traits::radix_value_range] = {{0}};
-            difference_type maximums[traits::radix_count] = {0};
+            using counter_type = Counter;
+            counter_type counters[traits::radix_count][traits::radix_value_range] = {{0}};
+            counter_type maximums[traits::radix_count] = {0};
             const auto is_sorted = collect(first, last, map, radix, counters, maximums);
             if (not is_sorted)
             {

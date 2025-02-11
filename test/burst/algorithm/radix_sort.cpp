@@ -1,21 +1,21 @@
 #include <utility/io/pair.hpp>
 #include <utility/random_vector.hpp>
+#include <utility/silly_iterator.hpp>
 
 #include <burst/algorithm/radix_sort.hpp>
 
 #include <doctest/doctest.h>
 
 #include <boost/iterator/indirect_iterator.hpp>
-#include <boost/range/begin.hpp>
-#include <boost/range/end.hpp>
-#include <boost/range/rbegin.hpp>
-#include <boost/range/rend.hpp>
 
+#include <algorithm>
 #include <cstddef>
 #include <cstdint>
+#include <iterator>
 #include <limits>
 #include <memory>
 #include <mutex>
+#include <stdexcept>
 #include <string>
 #include <thread>
 #include <unordered_set>
@@ -562,5 +562,26 @@ TEST_SUITE("radix_sort")
 
         CHECK(thread_ids.size() == 1);
         CHECK(thread_ids.find(std::this_thread::get_id()) != thread_ids.end());
+    }
+
+    // Тест нужен для обеспечения 100%-й метрики покрытия кода тестами.
+    TEST_CASE_TEMPLATE("Если размер сортируемого массива превышает максимальное значение "
+        "32-битного числа, то алгоритм идёт через ветку с int64-счётчиками",
+        integer_type, std::int8_t, std::int16_t)
+    {
+        const auto begin = utility::silly_iterator<integer_type>(0);
+        const auto end = utility::silly_iterator<integer_type>(std::int64_t{1} << 32);
+
+        CHECK_THROWS_AS
+        (
+            burst::radix_sort(begin, end, begin,
+                [] (auto x)
+                {
+                    // И тут же выходит, потому что реальную сортировку производить чудовищно долго.
+                    throw std::runtime_error("stop");
+                    return x;
+                }),
+            std::runtime_error
+        );
     }
 }

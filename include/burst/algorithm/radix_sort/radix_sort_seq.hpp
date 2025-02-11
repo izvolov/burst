@@ -6,8 +6,12 @@
 #include <burst/functional/identity.hpp>
 #include <burst/functional/low_byte.hpp>
 #include <burst/integer/to_unsigned.hpp>
+#include <burst/type_traits/iterator_difference.hpp>
 
+#include <cstdint>
 #include <iterator>
+#include <limits>
+#include <type_traits>
 #include <utility>
 
 namespace burst
@@ -106,7 +110,39 @@ namespace burst
             Radix radix
         )
     {
-        detail::radix_sort_impl(first, last, buffer, compose(to_unsigned, std::move(map)), radix);
+        using difference_type = iterator_difference_t<RandomAccessIterator1>;
+        using min_type =
+            typename std::conditional
+            <
+                sizeof(std::int32_t) < sizeof(difference_type),
+                std::int32_t,
+                difference_type
+            >
+            ::type;
+
+        using std::distance;
+        if (distance(first, last) <= std::numeric_limits<min_type>::max())
+        {
+            detail::radix_sort_impl<min_type>
+            (
+                first,
+                last,
+                buffer,
+                compose(to_unsigned, std::move(map)),
+                radix
+            );
+        }
+        else
+        {
+            detail::radix_sort_impl<difference_type>
+            (
+                first,
+                last,
+                buffer,
+                compose(to_unsigned, std::move(map)),
+                radix
+            );
+        }
     }
 
     template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map>

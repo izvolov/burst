@@ -125,7 +125,13 @@ namespace burst
                 });
         }
 
-        template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
+        template
+        <
+            typename Counter,
+            typename ForwardIterator,
+            typename RandomAccessIterator,
+            typename Map
+        >
         RandomAccessIterator
             counting_sort_impl
             (
@@ -138,14 +144,34 @@ namespace burst
             using value_type = iterator_value_t<ForwardIterator>;
             using traits = counting_sort_traits<value_type, Map>;
 
-            using difference_type = iterator_difference_t<RandomAccessIterator>;
+            using counter_type = Counter;
             // Единица для дополнительного нуля в начале массива.
-            difference_type counters[traits::value_range + 1] = {0};
+            counter_type counters[traits::value_range + 1] = {0};
 
             collect(first, last, map, std::next(std::begin(counters)));
             dispose(first, last, result, map, std::begin(counters));
 
             return result + burst::cback(counters);
+        }
+
+        template <typename ForwardIterator, typename RandomAccessIterator, typename Map>
+        RandomAccessIterator
+            counting_sort_impl
+            (
+                ForwardIterator first,
+                ForwardIterator last,
+                RandomAccessIterator result,
+                Map map
+            )
+        {
+            return
+                counting_sort_impl<iterator_difference_t<RandomAccessIterator>>
+                (
+                    first,
+                    last,
+                    result,
+                    map
+                );
         }
     } // namespace detail
 } // namespace burst
