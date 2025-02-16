@@ -11,22 +11,24 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-20.04]
+        os: [ubuntu-24.04]
         compiler:
-          - name: "g++-7"
-            package: "g++-7"
-          - name: "g++-8"
-            package: "g++-8"
-          - name: "g++-9"
-            package: "g++-9"
-          - name: "clang++-8"
-            package: "clang-8"
-          - name: "clang++-9"
-            package: "clang-9"
-          - name: "clang++-10"
-            package: "clang-10"
+          - name: "g++-10"
+            package: "g++-10"
+          - name: "g++-11"
+            package: "g++-11"
+          - name: "g++-12"
+            package: "g++-12"
+          - name: "g++-13"
+            package: "g++-13"
+          - name: "clang++-15"
+            package: "clang-15"
+          - name: "clang++-17"
+            package: "clang-17"
+          - name: "clang++-19"
+            package: "clang-19"
         build_type: ["Debug", "Release"]
-        boost_version: ["1.67", "1.71"]
+        boost_version: ["1.83"]
 
     runs-on: ${{matrix.os}}
     steps:
