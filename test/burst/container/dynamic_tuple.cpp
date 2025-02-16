@@ -5,7 +5,12 @@
 
 #include <doctest/doctest.h>
 
+#include <cstddef>
+#include <memory>
+#include <stdexcept>
 #include <string>
+#include <typeinfo>
+#include <utility>
 #include <vector>
 
 using burst::literals::operator ""_u8s;

@@ -8,6 +8,7 @@
 
 #include <doctest/doctest.h>
 
+#include <cstddef>
 #include <functional>
 #include <string>
 #include <tuple>

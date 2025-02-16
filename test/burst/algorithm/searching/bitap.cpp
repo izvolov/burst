@@ -5,6 +5,7 @@
 #include <doctest/doctest.h>
 
 #include <bitset>
+#include <cstdint>
 #include <forward_list>
 #include <string>
 

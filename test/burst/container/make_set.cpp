@@ -5,6 +5,8 @@
 
 #include <boost/range/irange.hpp>
 
+#include <cstddef>
+#include <cstdint>
 #include <set>
 #include <sstream>
 #include <type_traits>

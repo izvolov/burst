@@ -2,6 +2,8 @@
 
 #include <doctest/doctest.h>
 
+#include <cstddef>
+
 TEST_SUITE("sum")
 {
     TEST_CASE("Функция может быть вычислена на этапе компиляции")

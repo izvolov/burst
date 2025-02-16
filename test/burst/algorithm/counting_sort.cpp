@@ -11,6 +11,8 @@
 #include <boost/range/adaptor/indirected.hpp>
 #include <boost/range/iterator_range.hpp>
 
+#include <cstdint>
+#include <cstddef>
 #include <forward_list>
 #include <iterator>
 #include <limits>
