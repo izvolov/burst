@@ -2,6 +2,8 @@
 
 #include <doctest/doctest.h>
 
+#include <cstddef>
+#include <cstdint>
 #include <functional>
 #include <list>
 #include <ostream>

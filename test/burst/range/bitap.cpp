@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <bitset>
 #include <cstdint>
+#include <cstddef>
 #include <iterator>
 #include <string>
 #include <unordered_map>

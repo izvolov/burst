@@ -4,6 +4,7 @@
 
 #include <doctest/doctest.h>
 
+#include <cstdint>
 #include <string>
 
 TEST_SUITE("bitap_iterator")

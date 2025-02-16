@@ -5,6 +5,7 @@
 
 #include <boost/range/algorithm/copy.hpp>
 
+#include <cstddef>
 #include <iostream>
 #include <iterator>
 #include <sstream>

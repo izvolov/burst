@@ -12,6 +12,8 @@
 #include <boost/mpl/vector.hpp>
 #include <boost/range/irange.hpp>
 
+#include <cstddef>
+#include <cstdint>
 #include <deque>
 #include <forward_list>
 #include <initializer_list>
