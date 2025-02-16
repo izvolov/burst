@@ -3,7 +3,7 @@
 
 #include <burst/functional/trivial_write.hpp>
 
-#include <boost/function_output_iterator.hpp>
+#include <boost/iterator/function_output_iterator.hpp>
 
 #include <memory>
 #include <ostream>
