@@ -180,7 +180,7 @@ namespace burst
     template <typename Value, typename Integer, std::size_t Dimension>
     auto make_shaped_array_view (Value * data, std::array<Integer, Dimension> shape)
     {
-        static_assert(Dimension > 0, u8"Размерность массива должна быть положительной");
+        static_assert(Dimension > 0, "Размерность массива должна быть положительной");
         std::partial_sum(shape.rbegin(), shape.rend(), shape.rbegin(), std::multiplies<>{});
         return shaped_array_view<Value, Dimension>(data, detail::cast<std::size_t>(shape));
     }

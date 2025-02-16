@@ -13,9 +13,9 @@ namespace burst
         template <std::size_t From, std::size_t To, typename Value, std::size_t Size>
         constexpr auto subarray (const std::array<Value, Size> & a)
         {
-            static_assert(From <= Size, u8"Правая граница подмассива вылезает за сам массив");
-            static_assert(To <= Size, u8"Левая граница подмассива вылезает за сам массив");
-            static_assert(From <= To, u8"Левая граница подмассива правее правой границы");
+            static_assert(From <= Size, "Правая граница подмассива вылезает за сам массив");
+            static_assert(To <= Size, "Левая граница подмассива вылезает за сам массив");
+            static_assert(From <= To, "Левая граница подмассива правее правой границы");
 
             std::array<Value, To - From> b{};
             std::copy(std::next(std::begin(a), From), std::next(std::begin(a), To), std::begin(b));
