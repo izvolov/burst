@@ -33,7 +33,7 @@ TEST_SUITE("semiintersect")
         auto second = burst::make_vector({1, 2, 3, 4});
         auto ranges = burst::make_range_vector(first, second);
 
-        auto semiintersection = burst::semiintersect(ranges, 10);
+        auto semiintersection = burst::semiintersect(ranges.begin(), ranges.end(), 10);
 
         CHECK(semiintersection.empty());
     }

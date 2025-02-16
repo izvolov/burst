@@ -83,9 +83,9 @@ TEST_SUITE("intersect")
 
     TEST_CASE("Пересечение диапазонов, накладывающихся попарно, но не совместно — пустой диапазон")
     {
-        auto  first = {1, 2      };
-        auto second = {   2, 3   };
-        auto  third = {      3, 4};
+        auto  first = burst::make_vector({1, 2      });
+        auto second = burst::make_vector({   2, 3   });
+        auto  third = burst::make_vector({      3, 4});
         auto ranges = burst::make_range_vector(first, second, third);
 
         auto intersected_range = burst::intersect(ranges);
