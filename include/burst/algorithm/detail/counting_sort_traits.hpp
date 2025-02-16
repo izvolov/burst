@@ -2,6 +2,7 @@
 #define BURST__ALGORITHM__DETAIL__COUNTING_SORT_TRAITS_HPP
 
 #include <burst/integer/intlog2.hpp>
+#include <burst/type_traits/invoke_result.hpp>
 
 #include <cstdint>
 #include <limits>
@@ -14,7 +15,7 @@ namespace burst
         template <typename Value, typename Map>
         struct counting_sort_traits
         {
-            using image_type = std::decay_t<std::result_of_t<Map(Value)>>;
+            using image_type = std::decay_t<invoke_result_t<Map, Value>>;
             static_assert
             (
                 std::is_integral<image_type>::value && std::is_unsigned<image_type>::value,

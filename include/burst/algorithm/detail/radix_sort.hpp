@@ -7,6 +7,7 @@
 #include <burst/algorithm/detail/radix_sort_traits.hpp>
 #include <burst/algorithm/partial_sum_max.hpp>
 #include <burst/functional/compose.hpp>
+#include <burst/type_traits/invoke_result.hpp>
 #include <burst/type_traits/iterator_difference.hpp>
 #include <burst/type_traits/iterator_value.hpp>
 #include <burst/variadic.hpp>
@@ -51,7 +52,7 @@ namespace burst
             using value_type = iterator_value_t<ForwardIterator>;
             constexpr auto radix_value_range = radix_sort_traits<value_type, Map, Radix>::radix_value_range;
 
-            auto previous = std::numeric_limits<std::result_of_t<Map(value_type)>>::min();
+            auto previous = std::numeric_limits<invoke_result_t<Map, value_type>>::min();
             auto is_sorted = true;
             std::for_each(first, last,
                 [& counters, & map, & radix, & previous, & is_sorted] (const auto & preimage)

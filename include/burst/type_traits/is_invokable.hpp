@@ -1,6 +1,7 @@
 #ifndef BURST__TYPE_TRAITS__IS_INVOKABLE_HPP
 #define BURST__TYPE_TRAITS__IS_INVOKABLE_HPP
 
+#include <burst/type_traits/invoke_result.hpp>
 #include <burst/type_traits/void_t.hpp>
 
 #include <type_traits>
@@ -14,7 +15,7 @@ namespace burst
     struct is_invokable
         <
             F(As...),
-            void_t<std::result_of_t<F(As...)>>
+            void_t<invoke_result_t<F, As...>>
         >:
         std::true_type {};
 }

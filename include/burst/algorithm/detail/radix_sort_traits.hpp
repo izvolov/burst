@@ -2,6 +2,7 @@
 #define BURST__ALGORITHM__DETAIL__RADIX_SORT_TRAITS_HPP
 
 #include <burst/integer/intlog2.hpp>
+#include <burst/type_traits/invoke_result.hpp>
 
 #include <climits>
 #include <cstdint>
@@ -15,14 +16,14 @@ namespace burst
         template <typename Value, typename Map, typename Radix>
         struct radix_sort_traits
         {
-            using integer_type = std::decay_t<std::result_of_t<Map(Value)>>;
+            using integer_type = std::decay_t<invoke_result_t<Map, Value>>;
             static_assert
             (
                 std::is_integral<integer_type>::value && std::is_unsigned<integer_type>::value,
                 "Сортируемые элементы должны быть отображены в целые беззнаковые числа."
             );
 
-            using radix_type = std::decay_t<std::result_of_t<Radix(integer_type)>>;
+            using radix_type = std::decay_t<invoke_result_t<Radix, integer_type>>;
             static_assert
             (
                 std::is_integral<radix_type>::value,
