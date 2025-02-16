@@ -1,6 +1,7 @@
 #ifndef BURST__ALGORITHM__DETAIL__PARALLEL_BY_CHUNKS_HPP
 #define BURST__ALGORITHM__DETAIL__PARALLEL_BY_CHUNKS_HPP
 
+#include <burst/type_traits/invoke_result.hpp>
 #include <burst/type_traits/iterator_difference.hpp>
 
 #include <boost/asio/post.hpp>
@@ -10,7 +11,6 @@
 #include <cstddef>
 #include <future>
 #include <iterator>
-#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -21,7 +21,7 @@ namespace burst
         template <typename Executor, typename NullaryFunction>
         auto post (Executor & e, NullaryFunction && f)
         {
-            using return_type = std::result_of_t<NullaryFunction()>;
+            using return_type = invoke_result_t<NullaryFunction>;
             auto task = std::packaged_task<return_type ()>(std::forward<NullaryFunction>(f));
             auto future = task.get_future();
 

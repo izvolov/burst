@@ -1,6 +1,8 @@
 #ifndef BURST__TUPLE__DETAIL__BY_ALL_HPP
 #define BURST__TUPLE__DETAIL__BY_ALL_HPP
 
+#include <burst/type_traits/invoke_result.hpp>
+
 #include <cstddef>
 #include <utility>
 #include <tuple>
@@ -17,9 +19,9 @@ namespace burst
             return
                 std::tuple
                 <
-                    std::result_of_t
+                    invoke_result_t
                     <
-                        UnaryFunction &(std::tuple_element_t<Indices, std::decay_t<Tuple>>)
+                        UnaryFunction &, std::tuple_element_t<Indices, std::decay_t<Tuple>>
                     >...
                 >
                 (
