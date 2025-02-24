@@ -1,4 +1,4 @@
-#include <burst/integer/to_unsigned.hpp>
+#include <burst/integer/shift_to_unsigned.hpp>
 
 #include <doctest/doctest.h>
 
@@ -7,7 +7,7 @@
 #include <limits>
 #include <type_traits>
 
-TEST_SUITE("to_unsigned")
+TEST_SUITE("shift_to_unsigned")
 {
     TEST_CASE_TEMPLATE("Сдвигает область знакового целого так, чтобы она совпадала с областью "
         "равного по размеру беззнакового целого", signed_integer_type,
@@ -16,17 +16,17 @@ TEST_SUITE("to_unsigned")
         using unsigned_integer_type = std::make_unsigned_t<signed_integer_type>;
         CHECK
         (
-            burst::to_unsigned(std::numeric_limits<signed_integer_type>::min()) ==
+            burst::shift_to_unsigned(std::numeric_limits<signed_integer_type>::min()) ==
             std::numeric_limits<unsigned_integer_type>::min()
         );
         CHECK
         (
-            burst::to_unsigned(std::numeric_limits<signed_integer_type>::max()) ==
+            burst::shift_to_unsigned(std::numeric_limits<signed_integer_type>::max()) ==
             std::numeric_limits<unsigned_integer_type>::max()
         );
         CHECK
         (
-            burst::to_unsigned(signed_integer_type{0}) ==
+            burst::shift_to_unsigned(signed_integer_type{0}) ==
             std::numeric_limits<unsigned_integer_type>::max() / 2 + 1
         );
     }
@@ -36,29 +36,29 @@ TEST_SUITE("to_unsigned")
     {
         CHECK
         (
-            burst::to_unsigned(std::numeric_limits<unsigned_integer_type>::min()) ==
+            burst::shift_to_unsigned(std::numeric_limits<unsigned_integer_type>::min()) ==
             std::numeric_limits<unsigned_integer_type>::min()
         );
         CHECK
         (
-            burst::to_unsigned(std::numeric_limits<unsigned_integer_type>::max()) ==
+            burst::shift_to_unsigned(std::numeric_limits<unsigned_integer_type>::max()) ==
             std::numeric_limits<unsigned_integer_type>::max()
         );
         CHECK
         (
-            burst::to_unsigned(unsigned_integer_type{0}) ==
+            burst::shift_to_unsigned(unsigned_integer_type{0}) ==
             unsigned_integer_type{0}
         );
         CHECK
         (
-            burst::to_unsigned(unsigned_integer_type{1}) ==
+            burst::shift_to_unsigned(unsigned_integer_type{1}) ==
             unsigned_integer_type{1}
         );
     }
 
     TEST_CASE("Может быть вычислена на этапе компиляции")
     {
-        constexpr auto r = burst::to_unsigned(-1);
+        constexpr auto r = burst::shift_to_unsigned(-1);
         static_assert(r == std::numeric_limits<unsigned>::max () / 2, "");
     }
 }

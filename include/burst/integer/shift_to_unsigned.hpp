@@ -1,8 +1,8 @@
-#ifndef BURST__INTEGER__TO_UNSIGNED_HPP
-#define BURST__INTEGER__TO_UNSIGNED_HPP
+#ifndef BURST__INTEGER__SHIFT_TO_UNSIGNED_HPP
+#define BURST__INTEGER__SHIFT_TO_UNSIGNED_HPP
 
 #include <burst/concept/integer.hpp>
-#include <burst/integer/detail/to_unsigned.hpp>
+#include <burst/integer/detail/shift_to_unsigned.hpp>
 
 namespace burst
 {
@@ -15,16 +15,16 @@ namespace burst
             2. Если знаковое, то его диапазон [-x, x) переходит в [0, 2x), а, каждое знаковое `n`
                переходит беззнаковое `n + x`, где x = 2 ^ (sizeof(n) * CHAR_BIT - 1).
      */
-    struct to_unsigned_fn
+    struct shift_to_unsigned_fn
     {
         template <typename I>
         constexpr auto operator () (Integer<I> n) const
         {
-            return detail::to_unsigned_impl(n);
+            return detail::shift_to_unsigned_impl(n);
         }
     };
 
-    constexpr auto to_unsigned = to_unsigned_fn{};
+    constexpr auto shift_to_unsigned = shift_to_unsigned_fn{};
 } // namespace burst
 
-#endif // BURST__INTEGER__TO_UNSIGNED_HPP
+#endif // BURST__INTEGER__SHIFT_TO_UNSIGNED_HPP

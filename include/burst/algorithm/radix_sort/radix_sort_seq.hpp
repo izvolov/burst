@@ -5,7 +5,7 @@
 #include <burst/functional/compose.hpp>
 #include <burst/functional/identity.hpp>
 #include <burst/functional/low_byte.hpp>
-#include <burst/integer/to_unsigned.hpp>
+#include <burst/integer/shift_to_unsigned.hpp>
 #include <burst/type_traits/iterator_difference.hpp>
 
 #include <cstdint>
@@ -128,7 +128,7 @@ namespace burst
                 first,
                 last,
                 buffer,
-                compose(to_unsigned, std::move(map)),
+                compose(shift_to_unsigned, std::move(map)),
                 radix
             );
         }
@@ -139,7 +139,7 @@ namespace burst
                 first,
                 last,
                 buffer,
-                compose(to_unsigned, std::move(map)),
+                compose(shift_to_unsigned, std::move(map)),
                 radix
             );
         }
