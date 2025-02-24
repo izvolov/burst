@@ -9,7 +9,7 @@
 #include <burst/functional/compose.hpp>
 #include <burst/functional/identity.hpp>
 #include <burst/functional/low_byte.hpp>
-#include <burst/integer/to_unsigned.hpp>
+#include <burst/integer/shift_to_unsigned.hpp>
 
 #include <boost/asio/thread_pool.hpp>
 
@@ -66,7 +66,7 @@ namespace burst
                 first,
                 last,
                 buffer,
-                compose(to_unsigned, std::move(map)),
+                compose(shift_to_unsigned, std::move(map)),
                 radix
             );
         }

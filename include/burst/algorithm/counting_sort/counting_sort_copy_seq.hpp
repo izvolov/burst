@@ -4,7 +4,7 @@
 #include <burst/algorithm/detail/counting_sort.hpp>
 #include <burst/functional/compose.hpp>
 #include <burst/functional/identity.hpp>
-#include <burst/integer/to_unsigned.hpp>
+#include <burst/integer/shift_to_unsigned.hpp>
 
 #include <iterator>
 #include <utility>
@@ -65,7 +65,13 @@ namespace burst
         )
     {
         return
-            detail::counting_sort_impl(first, last, result, compose(to_unsigned, std::move(map)));
+            detail::counting_sort_impl
+            (
+                first,
+                last,
+                result,
+                compose(shift_to_unsigned, std::move(map))
+            );
     }
 
     /*!
