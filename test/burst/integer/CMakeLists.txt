@@ -7,4 +7,5 @@ target_sources(burst-unit-tests PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/left_shift.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/right_shift.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/shift_to_unsigned.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/to_ordered_integral.cpp
 )
