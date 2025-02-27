@@ -2,9 +2,10 @@
 
 #include <burst/algorithm/radix_sort.hpp>
 #include <burst/string/u8s.hpp>
+#include <burst/integer/to_ordered_integral.hpp>
 
 #include <boost/program_options.hpp>
-#include <boost/sort/spreadsort/integer_sort.hpp>
+#include <boost/sort/spreadsort/spreadsort.hpp>
 
 #include <algorithm>
 #include <chrono>
@@ -25,7 +26,7 @@ const auto burst_radix_sort_par_8_call_name = std::string("burst::radix_sort(par
 const auto burst_radix_sort_par_16_call_name = std::string("burst::radix_sort(par(16))");
 const auto std_sort_call_name = std::string("std::sort");
 const auto std_stable_sort_call_name = std::string("std::stable_sort");
-const auto boost_integer_sort_call_name = std::string("boost::integer_sort");
+const auto boost_spreadsort_call_name = std::string("boost::spreadsort");
 
 const auto burst_radix_sort_title = std::string("radix");
 const auto burst_radix_sort_par_max_title = std::string("par");
@@ -35,7 +36,7 @@ const auto burst_radix_sort_par_8_title = std::string("par8");
 const auto burst_radix_sort_par_16_title = std::string("par16");
 const auto std_sort_title = std::string("std");
 const auto std_stable_sort_title = std::string("stable");
-const auto boost_integer_sort_title = std::string("boost");
+const auto boost_spreadsort_title = std::string("boost");
 
 const auto default_algorithms_set =
     std::vector<std::string>
@@ -44,7 +45,7 @@ const auto default_algorithms_set =
         burst_radix_sort_par_max_title,
         std_sort_title,
         std_stable_sort_title,
-        boost_integer_sort_title
+        boost_spreadsort_title
     };
 
 using clock_type = std::chrono::steady_clock;
@@ -79,7 +80,7 @@ void
     std::cout << name << ' ' << duration_cast<duration<double>>(stat).count() << std::endl;
 }
 
-template <typename Integer, typename UnaryFunction1, typename UnaryFunction2>
+template <typename Value, typename UnaryFunction1, typename UnaryFunction2>
 void
     test_all
     (
@@ -89,41 +90,41 @@ void
         UnaryFunction2 prepare
     )
 {
-    std::vector<Integer> numbers;
+    std::vector<Value> numbers;
     utility::read(std::cin, numbers);
 
-    std::vector<Integer> buffer(numbers.size());
+    std::vector<Value> buffer(numbers.size());
 
     auto radix_sort =
         [& buffer] (auto && ... args)
         {
-            return burst::radix_sort(std::forward<decltype(args)>(args)..., buffer.begin());
+            return burst::radix_sort(std::forward<decltype(args)>(args)..., buffer.begin(), burst::to_ordered_integral);
         };
     auto radix_sort_par_max =
         [& buffer] (auto && ... args)
         {
             const auto par = burst::par(std::max(std::thread::hardware_concurrency(), 2u));
-            return burst::radix_sort(par, std::forward<decltype(args)>(args)..., buffer.begin());
+            return burst::radix_sort(par, std::forward<decltype(args)>(args)..., buffer.begin(), burst::to_ordered_integral);
         };
     auto radix_sort_par_2 =
         [& buffer] (auto && ... args)
         {
-            return burst::radix_sort(burst::par(2), std::forward<decltype(args)>(args)..., buffer.begin());
+            return burst::radix_sort(burst::par(2), std::forward<decltype(args)>(args)..., buffer.begin(), burst::to_ordered_integral);
         };
     auto radix_sort_par_4 =
         [& buffer] (auto && ... args)
         {
-            return burst::radix_sort(burst::par(4), std::forward<decltype(args)>(args)..., buffer.begin());
+            return burst::radix_sort(burst::par(4), std::forward<decltype(args)>(args)..., buffer.begin(), burst::to_ordered_integral);
         };
     auto radix_sort_par_8 =
         [& buffer] (auto && ... args)
         {
-            return burst::radix_sort(burst::par(8), std::forward<decltype(args)>(args)..., buffer.begin());
+            return burst::radix_sort(burst::par(8), std::forward<decltype(args)>(args)..., buffer.begin(), burst::to_ordered_integral);
         };
     auto radix_sort_par_16 =
         [& buffer] (auto && ... args)
         {
-            return burst::radix_sort(burst::par(16), std::forward<decltype(args)>(args)..., buffer.begin());
+            return burst::radix_sort(burst::par(16), std::forward<decltype(args)>(args)..., buffer.begin(), burst::to_ordered_integral);
         };
     auto std_sort =
         [] (auto && ... args)
@@ -135,13 +136,13 @@ void
         {
             return std::stable_sort(std::forward<decltype(args)>(args)...);
         };
-    auto boost_int_sort =
+    auto boost_spreadsort =
         [] (auto && ... args)
         {
-            return boost::sort::spreadsort::integer_sort(std::forward<decltype(args)>(args)...);
+            return boost::sort::spreadsort::spreadsort(std::forward<decltype(args)>(args)...);
         };
 
-    using iterator_type = typename std::vector<Integer>::iterator;
+    using iterator_type = typename std::vector<Value>::iterator;
     using sort_call_type = std::function<void(iterator_type, iterator_type)>;
     auto sort_calls =
         std::unordered_map<std::string, std::pair<std::string, sort_call_type>>
@@ -154,7 +155,7 @@ void
             {burst_radix_sort_par_16_title, {burst_radix_sort_par_16_call_name, radix_sort_par_16}},
             {std_sort_title, {std_sort_call_name, std_sort}},
             {std_stable_sort_title, {std_stable_sort_call_name, std_stable_sort}},
-            {boost_integer_sort_title, {boost_integer_sort_call_name, boost_int_sort}}
+            {boost_spreadsort_title, {boost_spreadsort_call_name, boost_spreadsort}}
         };
 
     for (const auto & sort_call_title: to_bench)
@@ -309,28 +310,28 @@ struct mean_fn
     }
 };
 
-template <typename Integer, typename UnaryFunction1, typename UnaryFunction2>
+template <typename Value, typename UnaryFunction1, typename UnaryFunction2>
 test_call_type make_test_all (UnaryFunction1 statistic, UnaryFunction2 prepare)
 {
     return
         [statistic, prepare]
             (const std::vector<std::string> & algorithm_set, std::size_t attempts)
             {
-                return test_all<Integer>(algorithm_set, attempts, statistic, prepare);
+                return test_all<Value>(algorithm_set, attempts, statistic, prepare);
             };
 }
 
 template <typename T>
 using containter_for_t = std::vector<T>;
 
-template <typename Integer>
-using prepare_function_for_t = std::function<containter_for_t<Integer> (containter_for_t<Integer>)>;
+template <typename Value>
+using prepare_function_for_t = std::function<containter_for_t<Value> (containter_for_t<Value>)>;
 
-template <typename Integer>
-prepare_function_for_t<Integer> prepare_for (const std::string & prepare_type)
+template <typename Value>
+prepare_function_for_t<Value> prepare_for (const std::string & prepare_type)
 {
     static const auto prepare_functions =
-        std::unordered_map<std::string, prepare_function_for_t<Integer>>
+        std::unordered_map<std::string, prepare_function_for_t<Value>>
         {
             {"shuffle", shuffle_fn{}},
             {"ascending", sort_fn<std::less<>>{}},
@@ -383,16 +384,16 @@ statistic_function_for_t<Duration> statistic_for (const std::string & statistic)
 using dispatch_parameters_call_type =
     std::function<test_call_type (const std::string &, const std::string &)>;
 
-template <typename Integer>
+template <typename Value>
 test_call_type dispatch_parameters (const std::string & statistic, const std::string & prepare_type)
 {
     auto statistic_function = statistic_for<clock_type::duration>(statistic);
-    auto prepare_funcion = prepare_for<Integer>(prepare_type);
+    auto prepare_funcion = prepare_for<Value>(prepare_type);
 
-    return make_test_all<Integer>(statistic_function, prepare_funcion);
+    return make_test_all<Value>(statistic_function, prepare_funcion);
 }
 
-dispatch_parameters_call_type dispatch_integer (const std::string & integer_type)
+dispatch_parameters_call_type dispatch_type (const std::string & value_type)
 {
     static const auto dispatch_statistic_calls =
         std::unordered_map<std::string, dispatch_parameters_call_type>
@@ -404,17 +405,19 @@ dispatch_parameters_call_type dispatch_integer (const std::string & integer_type
             {"int8", &dispatch_parameters<std::int8_t>},
             {"int16", &dispatch_parameters<std::int16_t>},
             {"int32", &dispatch_parameters<std::int32_t>},
-            {"int64", &dispatch_parameters<std::int64_t>}
+            {"int64", &dispatch_parameters<std::int64_t>},
+            {"float", &dispatch_parameters<float>},
+            {"double", &dispatch_parameters<double>}
         };
 
-    auto call = dispatch_statistic_calls.find(integer_type);
+    auto call = dispatch_statistic_calls.find(value_type);
     if (call != dispatch_statistic_calls.end())
     {
         return call->second;
     }
     else
     {
-        auto error_message = u8"Неверная разрядность сортируемых чисел: "_u8s + integer_type;
+        auto error_message = u8"Неверная разрядность сортируемых чисел: "_u8s + value_type;
         throw boost::program_options::error(error_message);
     }
 }
@@ -422,12 +425,12 @@ dispatch_parameters_call_type dispatch_integer (const std::string & integer_type
 test_call_type
     dispatch_call
     (
-        const std::string & integer_type,
+        const std::string & value_type,
         const std::string & statistic,
         const std::string & prepare_type
     )
 {
-    return dispatch_integer(integer_type)(statistic, prepare_type);
+    return dispatch_type(value_type)(statistic, prepare_type);
 }
 
 int main (int argc, const char * argv[])
@@ -439,9 +442,10 @@ int main (int argc, const char * argv[])
         ("help,h", "Подсказка")
         ("attempts", bpo::value<std::size_t>()->default_value(1000),
             "Количество испытаний")
-        ("integer", bpo::value<std::string>()->default_value("uint32"),
+        ("type", bpo::value<std::string>()->default_value("uint32"),
             "Тип сортируемых чисел.\n"
-            "Допустимые значения: uint8, uint16, uint32, uint64, int8, int16, int32, int64")
+            "Допустимые значения: uint8, uint16, uint32, uint64, int8, int16, int32, int64, "
+            "float, double")
         ("prepare", bpo::value<std::string>()->required(),
             "Тип подготовки массива перед каждым испытанием.\n"
             "Допустимые значения: shuffle, ascending, descending, outlier, pipe-organ")
@@ -466,12 +470,12 @@ int main (int argc, const char * argv[])
         else
         {
             std::size_t attempts = vm["attempts"].as<std::size_t>();
-            auto integer_type = vm["integer"].as<std::string>();
+            auto value_type = vm["type"].as<std::string>();
             auto statistic = vm["stat"].as<std::string>();
             auto prepare_type = vm["prepare"].as<std::string>();
             auto algorithm_set = vm["algo"].as<std::vector<std::string>>();
 
-            auto test = dispatch_call(integer_type, statistic, prepare_type);
+            auto test = dispatch_call(value_type, statistic, prepare_type);
             test(algorithm_set, attempts);
         }
     }
