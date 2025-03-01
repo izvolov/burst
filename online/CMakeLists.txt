@@ -1,4 +1,4 @@
-find_package(Boost 1.66.0 REQUIRED)
+find_package(Boost 1.71.0 REQUIRED CONFIG)
 
 add_executable(burst-example burst_example.cpp)
 target_link_libraries(burst-example
