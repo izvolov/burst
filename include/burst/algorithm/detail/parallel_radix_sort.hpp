@@ -1,7 +1,6 @@
 #ifndef BURST__ALGORITHM__DETAIL__PARALLEL_RADIX_SORT_HPP
 #define BURST__ALGORITHM__DETAIL__PARALLEL_RADIX_SORT_HPP
 
-#include <burst/algorithm/detail/move_assign_please.hpp>
 #include <burst/algorithm/detail/nth_radix.hpp>
 #include <burst/algorithm/detail/parallel_counting_sort.hpp>
 #include <burst/algorithm/detail/radix_sort.hpp>
@@ -37,13 +36,13 @@ namespace burst
         ::type radix_sort_impl (boost::asio::thread_pool & pool, const std::array<std::size_t, 2> & shape, RandomAccessIterator1 first, RandomAccessIterator1 last, RandomAccessIterator2 buffer, Map map, Radix radix)
         {
             auto buffer_end =
-                counting_sort_impl(pool, shape, move_assign_please(first), move_assign_please(last), buffer,
+                counting_sort_impl(pool, shape, std::make_move_iterator(first), std::make_move_iterator(last), buffer,
                     [& map, & radix] (const auto & value)
                     {
                         return radix(map(value));
                     });
 
-            std::copy(move_assign_please(buffer), move_assign_please(buffer_end), first);
+            std::move(buffer, buffer_end, first);
         }
 
         template <typename RandomAccessIterator1, typename RandomAccessIterator2, typename Map, typename Radix>
@@ -73,10 +72,10 @@ namespace burst
             for (auto radix_number = 0ul; radix_number < traits::radix_count; radix_number += 2)
             {
                 auto nth = compose(nth_radix(radix_number, radix), map);
-                counting_sort_impl(pool, chunk_size, move_assign_please(first), move_assign_please(last), buffer_begin, nth, counters_view[radix_number]);
+                counting_sort_impl(pool, chunk_size, std::make_move_iterator(first), std::make_move_iterator(last), buffer_begin, nth, counters_view[radix_number]);
 
                 auto n1th = compose(nth_radix(radix_number + 1, radix), map);
-                counting_sort_impl(pool, chunk_size, move_assign_please(buffer_begin), move_assign_please(buffer_end), first, n1th, counters_view[radix_number + 1]);
+                counting_sort_impl(pool, chunk_size, std::make_move_iterator(buffer_begin), std::make_move_iterator(buffer_end), first, n1th, counters_view[radix_number + 1]);
             }
         }
     } // namespace detail
