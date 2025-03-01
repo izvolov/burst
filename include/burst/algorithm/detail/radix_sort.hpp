@@ -2,7 +2,6 @@
 #define BURST__ALGORITHM__DETAIL__RADIX_SORT_HPP
 
 #include <burst/algorithm/detail/counting_sort.hpp>
-#include <burst/algorithm/detail/move_assign_please.hpp>
 #include <burst/algorithm/detail/nth_radix.hpp>
 #include <burst/algorithm/detail/radix_sort_traits.hpp>
 #include <burst/algorithm/partial_sum_max.hpp>
@@ -103,13 +102,13 @@ namespace burst
         {
             using counter_type = Counter;
             auto buffer_end =
-                counting_sort_impl<counter_type>(move_assign_please(first), move_assign_please(last), buffer,
+                counting_sort_impl<counter_type>(std::make_move_iterator(first), std::make_move_iterator(last), buffer,
                     [& map, & radix] (const auto & value)
                     {
                         return radix(map(value));
                     });
 
-            std::copy(move_assign_please(buffer), move_assign_please(buffer_end), first);
+            std::move(buffer, buffer_end, first);
         }
 
         /*!
@@ -166,20 +165,20 @@ namespace burst
 
             if (nth_is_single)
             {
-                std::copy(move_assign_please(first), move_assign_please(last), buffer_begin);
+                std::move(first, last, buffer_begin);
             }
             else
             {
-                dispose_backward(move_assign_please(first), move_assign_please(last), buffer_begin, compose(nth_radix(radix_number, radix), map), std::begin(counters[radix_number]));
+                dispose_backward(std::make_move_iterator(first), std::make_move_iterator(last), buffer_begin, compose(nth_radix(radix_number, radix), map), std::begin(counters[radix_number]));
             }
 
             if (n1th_is_single)
             {
-                std::copy(move_assign_please(buffer_begin), move_assign_please(buffer_end), first);
+                std::move(buffer_begin, buffer_end, first);
             }
             else
             {
-                dispose_backward(move_assign_please(buffer_begin), move_assign_please(buffer_end), first, compose(nth_radix(radix_number + 1, radix), map), std::begin(counters[radix_number + 1]));
+                dispose_backward(std::make_move_iterator(buffer_begin), std::make_move_iterator(buffer_end), first, compose(nth_radix(radix_number + 1, radix), map), std::begin(counters[radix_number + 1]));
             }
         }
 
