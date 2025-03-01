@@ -3,6 +3,7 @@
 #include <utility/silly_iterator.hpp>
 
 #include <burst/algorithm/radix_sort.hpp>
+#include <burst/integer/to_ordered_integral.hpp>
 
 #include <doctest/doctest.h>
 
@@ -335,6 +336,19 @@ TEST_SUITE("radix_sort")
 
             CHECK(values == expected);
         }
+    }
+
+    TEST_CASE("С помощью аргумента `map` можно сортировать объекты, которые не являются целыми "
+        "числами")
+    {
+        const auto inf = 1.0 / 0.0;
+        auto doubles = std::vector<double>{0.0, inf, -1.3, -5e12, 12e-3, -inf, 100500.0};
+        auto buffer = std::vector<double>(doubles.size());
+
+        burst::radix_sort(doubles, buffer.begin(), burst::to_ordered_integral);
+
+        const auto expected = std::vector<double>{-inf, -5e12, -1.3, 0.0, 12e-3, 100500.0, inf};
+        CHECK(doubles == expected);
     }
 
     TEST_CASE("Возможно сортировать некопируемые объекты")
