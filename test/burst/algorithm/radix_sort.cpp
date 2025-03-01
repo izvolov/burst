@@ -146,11 +146,11 @@ TEST_SUITE("radix_sort")
 
     TEST_CASE("Возможна сортировка по убыванию")
     {
-        std::vector<std::uint32_t> expected{100500, 99999, 1000, 42, 0};
-        std::vector<std::uint32_t> buffer(expected.size());
+        std::vector<std::int32_t> expected{100500, 99999, 1000, 42, 0, -1, -999};
+        std::vector<std::int32_t> buffer(expected.size());
         SUBCASE("при последовательной сортировке")
         {
-            std::vector<std::uint32_t> numbers{100500, 42, 99999, 1000, 0};
+            std::vector<std::int32_t> numbers{100500, -1, 42, 99999, 1000, -999, 0};
             burst::radix_sort(numbers.begin(), numbers.end(), buffer.begin(),
                 [] (auto x)
                 {
@@ -161,7 +161,7 @@ TEST_SUITE("radix_sort")
         }
         SUBCASE("при параллельной сортировке")
         {
-            std::vector<std::uint32_t> numbers{100500, 42, 99999, 1000, 0};
+            std::vector<std::int32_t> numbers{100500, -1, 42, 99999, 1000, -999, 0};
             burst::radix_sort(burst::par(3), numbers.begin(), numbers.end(), buffer.begin(),
                 [] (auto x)
                 {
