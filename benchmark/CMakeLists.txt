@@ -1,4 +1,4 @@
-find_package(Boost 1.66.0 COMPONENTS program_options system REQUIRED)
+find_package(Boost 1.71.0 COMPONENTS program_options system REQUIRED CONFIG)
 find_package(Threads)
 
 add_library(benchIO INTERFACE)
