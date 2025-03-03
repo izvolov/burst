@@ -50,7 +50,7 @@ namespace burst
             ->
                 std::enable_if_t
                 <
-                    std::is_floating_point<Floating>::value,
+                    std::numeric_limits<Floating>::is_iec559,
                     unsigned_integer_of_size_t<sizeof(Floating)>
                 >
         {
@@ -62,19 +62,6 @@ namespace burst
             const auto u = bit_cast<integral_type>(f);
 
             return static_cast<integral_type>((u & sign_bit_mask) ? ~u : u ^ sign_bit_mask);
-        }
-
-        template <typename Enum>
-        constexpr auto to_ordered_integral_impl (Enum e)
-            -> std::enable_if_t<std::is_enum<Enum>::value, std::underlying_type_t<Enum>>
-        {
-            return static_cast<std::underlying_type_t<Enum>>(e);
-        }
-
-        template <typename Pointer>
-        constexpr auto to_ordered_integral_impl (Pointer * pointer)
-        {
-            return bit_cast<unsigned_integer_of_size_t<sizeof(Pointer *)>>(pointer);
         }
     } // namespace detail
 } // namespace burst
