@@ -351,7 +351,7 @@ namespace burst
     private:
         outer_range_iterator m_begin;
         outer_range_iterator m_end;
-        std::size_t m_min_items;
+        std::size_t m_min_items = 0;
         compare_type m_compare;
     };
 

@@ -469,7 +469,7 @@ TEST_SUITE("radix_sort")
 
         ~implicitly_nonmovable () = default;
 
-        Integer n;
+        Integer n = 0;
     };
 
     TEST_CASE("Может сортировать объекты с неявно удалённым операциями переноса")
