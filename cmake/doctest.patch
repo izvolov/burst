@@ -4,7 +4,7 @@ index 6d384fa..0f6166b 100644
 +++ b/CMakeLists.txt
 @@ -1,4 +1,4 @@
 -cmake_minimum_required(VERSION 3.0)
-+cmake_minimum_required(VERSION 3.5)
++cmake_minimum_required(VERSION 3.10)
  
  if(POLICY CMP0077)
      cmake_policy(SET CMP0077 NEW)
