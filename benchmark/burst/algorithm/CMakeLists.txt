@@ -6,7 +6,6 @@ target_link_libraries(radix
     PRIVATE
         benchIO
         Boost::program_options
-        Boost::system
         Burst::burst
         Threads::Threads
 )

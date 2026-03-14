@@ -1,5 +1,5 @@
 include(${Burst_SOURCE_DIR}/cmake/doctest.cmake)
-find_package(Boost 1.71.0 COMPONENTS system REQUIRED CONFIG)
+find_package(Boost 1.71.0 REQUIRED CONFIG)
 find_package(Threads)
 
 add_library(testutility INTERFACE)
@@ -9,7 +9,6 @@ add_executable(burst-unit-tests test_main.cpp)
 target_link_libraries(burst-unit-tests
     PRIVATE
         Boost::boost
-        Boost::system
         Burst::burst
         doctest::doctest
         testutility
