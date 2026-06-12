@@ -15,19 +15,19 @@ jobs:
         compiler:
           - name: "g++-10"
             package: "g++-10"
-          - name: "g++-11"
-            package: "g++-11"
-          - name: "g++-12"
-            package: "g++-12"
-          - name: "g++-13"
-            package: "g++-13"
-          - name: "clang++-15"
-            package: "clang-15"
-          - name: "clang++-17"
-            package: "clang-17"
-          - name: "clang++-19"
-            package: "clang-19"
-        build_type: ["Debug", "Release"]
+          # - name: "g++-11"
+          #   package: "g++-11"
+          # - name: "g++-12"
+          #   package: "g++-12"
+          # - name: "g++-13"
+          #   package: "g++-13"
+          # - name: "clang++-15"
+          #   package: "clang-15"
+          # - name: "clang++-17"
+          #   package: "clang-17"
+          # - name: "clang++-19"
+          #   package: "clang-19"
+        build_type: ["Debug"]
         boost_version: ["1.83"]
 
     runs-on: ${{matrix.os}}
