@@ -32,7 +32,7 @@ jobs:
         # OPTIONAL: Specify a platform version
         platform_version: 2025
         # OPTIONAL: Specify a toolset
-        # toolset: msvc
+        toolset: msvc
 
     # - name: Install doctest
     #   run: |
