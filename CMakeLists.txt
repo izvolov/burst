@@ -25,26 +25,30 @@ option(BURST_BENCHMARKING "Включить сборку программ для
 ##
 ###################################################################################################
 
-add_compile_options(
-    -Werror
-    -pedantic-errors
+if((CMAKE_CXX_COMPILER_ID MATCHES "GNU") OR (CMAKE_CXX_COMPILER_ID MATCHES "Clang"))
+    add_compile_options(
+        -Werror
+        -pedantic-errors
 
-    -Wall
-    -Wextra
-    -Wpedantic
+        -Wall
+        -Wextra
+        -Wpedantic
 
-    -Wcast-align
-    -Wcast-qual
-    -Wconversion
-    -Wctor-dtor-privacy
-    -Wfloat-equal
-    -Wnon-virtual-dtor
-    -Wold-style-cast
-    -Woverloaded-virtual
-    -Wredundant-decls
-    -Wsign-conversion
-    -Wsign-promo
-)
+        -Wcast-align
+        -Wcast-qual
+        -Wconversion
+        -Wctor-dtor-privacy
+        -Wfloat-equal
+        -Wnon-virtual-dtor
+        -Wold-style-cast
+        -Woverloaded-virtual
+        -Wredundant-decls
+        -Wsign-conversion
+        -Wsign-promo
+    )
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    add_compile_options(/W4 /WX)
+endif()
 
 if(NOT CMAKE_CXX_EXTENSIONS)
     set(CMAKE_CXX_EXTENSIONS OFF)

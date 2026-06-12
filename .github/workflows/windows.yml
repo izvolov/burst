@@ -1,0 +1,53 @@
+name: Windows
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2025]
+        platform: [Win32, x64]
+        build_type: ["Debug", "Release"]
+
+    runs-on: ${{matrix.os}}
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install boost
+      uses: MarkusJx/install-boost@v2
+      id: install-boost
+      with:
+        # REQUIRED: Specify the required boost version
+        # A list of supported versions can be found here:
+        # https://github.com/MarkusJx/prebuilt-boost/blob/main/versions-manifest.json
+        boost_version: 1.84.0
+        # OPTIONAL: Specify a custon install location
+        # boost_install_dir: third_party\boost
+        # OPTIONAL: Specify a platform version
+        platform_version: 2022
+        # OPTIONAL: Specify a toolset
+        # toolset: msvc
+
+    # - name: Install doctest
+    #   run: |
+    #     git clone https://github.com/onqtam/doctest.git third_party\doctest
+    #     git -C third_party\doctest checkout 2.4.11
+    #     cmake -S third_party\doctest -B Build\third_party\doctest -A ${{matrix.platform}} -DDOCTEST_WITH_TESTS=OFF
+    #     cmake --build Build\third_party\doctest --config Release --target install
+
+    - name: Configure and build
+      run: |
+        cmake -S . -B Build\burst -A ${{matrix.platform}}
+        cmake --build Build\burst --config ${{matrix.build_type}} --target burst-unit-tests
+      env:
+        BOOST_ROOT: ${{steps.install-boost.outputs.BOOST_ROOT}}
+
+    - name: Test
+      run: |
+        cmake --build Build\burst --config ${{matrix.build_type}} --target check
