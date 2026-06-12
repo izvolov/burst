@@ -30,7 +30,7 @@ jobs:
         # OPTIONAL: Specify a custon install location
         # boost_install_dir: third_party\boost
         # OPTIONAL: Specify a platform version
-        platform_version: 2022
+        platform_version: 2025
         # OPTIONAL: Specify a toolset
         # toolset: msvc
 
