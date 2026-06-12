@@ -43,7 +43,7 @@ jobs:
 
     - name: Configure and build
       run: |
-        cmake -S . -B Build\burst -A ${{matrix.platform}} -DBoost_DIR=${{steps.install-boost.outputs.BOOST_ROOT}}
+        cmake -S . -B Build\burst -A ${{matrix.platform}} -DBoost_ROOT=${{steps.install-boost.outputs.BOOST_ROOT}}
         cmake --build Build\burst --config ${{matrix.build_type}} --target burst-unit-tests
       env:
         BOOST_ROOT: ${{steps.install-boost.outputs.BOOST_ROOT}}
