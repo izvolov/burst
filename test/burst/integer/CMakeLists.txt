@@ -1,4 +1,5 @@
 target_sources(burst-unit-tests PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/bitwise_not.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/divceil.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/intceil.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/intlog.cpp
